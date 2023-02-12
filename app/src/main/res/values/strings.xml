@@ -1,3 +1,41 @@
 <resources>
     <string name="app_name">KMA Tool</string>
+    <string name="item_menu_score">score</string>
+    <string name="item_menu_schedule">schedule</string>
+    <string name="item_menu_note">note</string>
+    <string name="item_menu_information">information</string>
+    <string name="open_nav_drawer">open navDrawer</string>
+    <string name="close_nav_drawer">close navDrawer</string>
+
+    <!--SCORE FEATURE-->
+    <string name="title_kma_score">./kma_score</string>
+    <string name="title_intro_statistics_fragment">Công cụ tra cứu điểm dành cho sinh viên KMA</string>
+    <string name="slogan_app">Tổng hợp điểm nhanh chóng và chính xác, sử dụng đơn giản, mã nguồn mở.</string>
+    <string name="tong_so_sv">Tổng số sinh viên</string>
+    <string name="so_sv_no_mon">Số sinh viên nợ môn</string>
+    <string name="so_mon_hoc">Số môn học</string>
+    <string name="so_mon_hoan_thanh">Số môn đã hoàn thành</string>
+    <string name="so_mon_con_no">Số môn còn nợ</string>
+    <string name="gpa">GPA</string>
+    <string name="ten_mon_hoc">Tên môn học</string>
+    <string name="diem_tp_1">Điểm TP 1</string>
+    <string name="diem_tp_2">Điểm TP 2</string>
+    <string name="diem_thi">Điểm thi</string>
+    <string name="diem_tong_ket">Điểm TK</string>
+    <string name="diem_chu">Điểm chữ</string>
+    <string name="src_kma_score_mobile">https://github.com/cuocdart18/Kma-Score</string>
+    <string name="ket_qua_tim_kiem">Kết quả tìm kiếm</string>
+    <string name="lich_su_tim_kiem">Lịch sử tìm kiếm</string>
+    <string name="hint_search_data">Tìm kiếm theo tên, mã sinh viên, …</string>
+    <string name="with_luv">  with ❤</string>
+    <string name="kma_score_from">./kma_score from  </string>
+    <string name="kit">\@KIT</string>
+    <string name="link_gr_kit">https://www.facebook.com/kitclubKMA</string>
+    <string name="from_author">do something</string>
+    <string name="designed_by_author">Designed by KIT</string>
+    <string name="failed_students">Failed students</string>
+    <string name="passed_students">Passed students</string>
+    <string name="btn_tra_cuu_diem">Tra cứu điểm</string>
+
+
 </resources>
