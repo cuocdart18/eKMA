@@ -33,9 +33,10 @@
     <string name="link_gr_kit">https://www.facebook.com/kitclubKMA</string>
     <string name="from_author">do something</string>
     <string name="designed_by_author">Designed by KIT</string>
-    <string name="failed_students">Failed students</string>
-    <string name="passed_students">Passed students</string>
+    <string name="failed_students">Chưa hoàn thành môn</string>
+    <string name="passed_students">Đã hoàn thành môn</string>
     <string name="btn_tra_cuu_diem">Tra cứu điểm</string>
+    <string name="so_sinh_vien">Số sinh viên</string>
 
 
 </resources>

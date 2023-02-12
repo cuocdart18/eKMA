@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kmatool.databinding.ItemSubjectScoreBinding
 import com.example.kmatool.models.score.Score
 
-class StudentDetailAdapter : RecyclerView.Adapter<StudentDetailAdapter.StudentDetailViewHolder>() {
+class StudentDetailAdapter(private val callback: (score: Score) -> Unit) :
+    RecyclerView.Adapter<StudentDetailAdapter.StudentDetailViewHolder>() {
     private lateinit var scores: List<Score>
     private lateinit var binding: ItemSubjectScoreBinding
 
@@ -20,7 +21,7 @@ class StudentDetailAdapter : RecyclerView.Adapter<StudentDetailAdapter.StudentDe
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentDetailViewHolder {
         binding =
             ItemSubjectScoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return StudentDetailViewHolder(binding)
+        return StudentDetailViewHolder(binding, callback)
     }
 
     override fun getItemCount(): Int = scores.size
@@ -33,7 +34,17 @@ class StudentDetailAdapter : RecyclerView.Adapter<StudentDetailAdapter.StudentDe
         holder.binding.score = score
     }
 
-    inner class StudentDetailViewHolder(val binding: ItemSubjectScoreBinding) :
+    inner class StudentDetailViewHolder(
+        val binding: ItemSubjectScoreBinding,
+        callback: (score: Score) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener() {
+                val position = adapterPosition
+                callback(scores[position])
+            }
+        }
     }
 }

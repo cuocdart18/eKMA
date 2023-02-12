@@ -8,9 +8,13 @@ import kotlinx.coroutines.flow.*
 
 // Constants
 const val KIT_URL = "https://www.facebook.com/kitclubKMA"
-const val TAG_SHOW_DIALOG_FRAGMENT = "search_data_dialog"
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
+const val KEY_PASS_STATISTIC_SUBJECT = "statistic_subject"
 const val DATABASE_MINISTUDENT_NAME = "mini_student.db"
+const val SCALE_LAYOUT_STATISTIC_SUBJECT_DIALOG_X = 0.80
+const val SCALE_LAYOUT_STATISTIC_SUBJECT_DIALOG_Y = 0.25
+const val SCALE_LAYOUT_SEARCH_DATA_DIALOG_X = 0.80
+const val SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y = 0.60
 
 // Global method
 fun EditText.textChanges(): Flow<CharSequence?> {
