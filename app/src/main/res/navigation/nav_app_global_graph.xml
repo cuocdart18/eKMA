@@ -14,25 +14,20 @@
             app:destination="@id/scoreMainFragment"
             app:restoreState="true" />
         <action
-            android:id="@+id/action_introAppFragment_to_scheduleMainFragment"
-            app:destination="@id/scheduleMainFragment" />
-        <action
             android:id="@+id/action_introAppFragment_to_noteMainFragment"
             app:destination="@id/noteMainFragment" />
         <action
             android:id="@+id/action_introAppFragment_to_informationFragment2"
             app:destination="@id/informationFragment" />
+        <action
+            android:id="@+id/action_introAppFragment_to_scheduleIntroFragment"
+            app:destination="@id/scheduleIntroFragment" />
     </fragment>
     <fragment
         android:id="@+id/noteMainFragment"
         android:name="com.example.kmatool.fragments.note.NoteMainFragment"
         android:label="NoteMainFragment"
         tools:layout="@layout/fragment_note_main" />
-    <fragment
-        android:id="@+id/scheduleMainFragment"
-        android:name="com.example.kmatool.fragments.schedule.ScheduleMainFragment"
-        android:label="ScheduleMainFragment"
-        tools:layout="@layout/fragment_schedule_main" />
     <fragment
         android:id="@+id/scoreMainFragment"
         android:name="com.example.kmatool.fragments.score.ScoreMainFragment"
@@ -52,4 +47,26 @@
         android:name="com.example.kmatool.fragments.infor.InformationFragment"
         android:label="InformationFragment"
         tools:layout="@layout/fragment_information" />
+    <fragment
+        android:id="@+id/scheduleIntroFragment"
+        android:name="com.example.kmatool.fragments.schedule.ScheduleIntroFragment"
+        android:label="ScheduleIntroFragment"
+        tools:layout="@layout/fragment_schedule_intro">
+        <action
+            android:id="@+id/action_scheduleIntroFragment_to_scheduleLoginFragment"
+            app:destination="@id/scheduleLoginFragment" />
+        <action
+            android:id="@+id/action_scheduleIntroFragment_to_scheduleMainFragment2"
+            app:destination="@id/scheduleMainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scheduleLoginFragment"
+        android:name="com.example.kmatool.fragments.schedule.ScheduleLoginFragment"
+        android:label="ScheduleLoginFragment"
+        tools:layout="@layout/fragment_schedule_login" />
+    <fragment
+        android:id="@+id/scheduleMainFragment"
+        android:name="com.example.kmatool.fragments.schedule.ScheduleMainFragment"
+        android:label="ScheduleMainFragment"
+        tools:layout="@layout/fragment_schedule_main" />
 </navigation>

@@ -26,6 +26,8 @@ android {
         }
     }
     compileOptions {
+        // Enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -80,4 +82,9 @@ dependencies {
     // glide
     implementation "com.github.bumptech.glide:glide:4.14.2"
     annotationProcessor "com.github.bumptech.glide:compiler:4.14.2"
+
+    // calendar theme
+    implementation "com.kizitonwose.calendar:view:2.0.2"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+
 }

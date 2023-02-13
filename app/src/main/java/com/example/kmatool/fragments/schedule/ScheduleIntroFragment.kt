@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.example.kmatool.databinding.FragmentScheduleMainBinding
+import com.example.kmatool.databinding.FragmentScheduleIntroBinding
 
-class ScheduleMainFragment : Fragment() {
-    private val TAG = ScheduleMainFragment::class.java.simpleName
-    private lateinit var binding: FragmentScheduleMainBinding
+class ScheduleIntroFragment : Fragment() {
+    private val TAG = ScheduleIntroFragment::class.java.simpleName
+    private lateinit var binding: FragmentScheduleIntroBinding
     private val navController: NavController by lazy { findNavController() }
 
     override fun onCreateView(
@@ -20,7 +20,7 @@ class ScheduleMainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentScheduleMainBinding.inflate(inflater, container, false)
+        binding = FragmentScheduleIntroBinding.inflate(inflater, container, false)
         return binding.root
     }
 
