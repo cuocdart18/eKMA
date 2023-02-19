@@ -1,8 +1,13 @@
 package com.example.kmatool.utils
 
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import com.google.gson.Gson
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import java.math.BigInteger
@@ -11,8 +16,17 @@ import java.security.MessageDigest
 // Constants
 const val KIT_URL = "https://www.facebook.com/kitclubKMA"
 const val TAG_SHOW_DIALOG_FRAGMENT = "search_data_dialog"
+
+// for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
 const val DATABASE_MINISTUDENT_NAME = "mini_student.db"
+
+// for data store
+const val NAME_DATASTORE_PREFS = "datastore_prefs"
+const val KEY_STUDENT_PROFILE = "student_profile"
+const val KEY_IS_LOGIN = "is_login"
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = NAME_DATASTORE_PREFS)
 
 // Global method
 fun EditText.textChanges(): Flow<CharSequence?> {
@@ -38,4 +52,14 @@ fun EditText.textChanges(): Flow<CharSequence?> {
 fun md5(input: String): String {
     val md = MessageDigest.getInstance("MD5")
     return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
+}
+
+fun jsonObjectToString(data: Any): String {
+    val gson = Gson()
+    return gson.toJson(data)
+}
+
+inline fun <reified T> jsonStringToObject(data: String): T {
+    val gson = Gson()
+    return gson.fromJson(data, T::class.java)
 }

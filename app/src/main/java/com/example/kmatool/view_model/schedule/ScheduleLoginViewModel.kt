@@ -1,20 +1,18 @@
 package com.example.kmatool.view_model.schedule
 
+import android.content.Context
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.api_service.ScheduleRepository
+import com.example.kmatool.local.DataStoreManager
 import com.example.kmatool.models.schedule.Period
 import com.example.kmatool.models.schedule.Profile
 import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
-import com.example.kmatool.utils.AUTHOR_MESSAGE_SUCCESS
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.example.kmatool.utils.jsonObjectToString
+import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
-import kotlin.time.measureTime
 
 class ScheduleLoginViewModel : ViewModel() {
     private val TAG = ScheduleLoginViewModel::class.java.simpleName
@@ -23,7 +21,13 @@ class ScheduleLoginViewModel : ViewModel() {
     // observable field
     var isValid = ObservableField<Boolean>()
 
+    init {
+        // hide text view invalid author
+        isValid.set(true)
+    }
+
     fun handleOnClickBtnLogin(
+        context: Context,
         username: String,
         password: String,
         callback: () -> Unit
@@ -32,8 +36,21 @@ class ScheduleLoginViewModel : ViewModel() {
         // action
         if (username.isNotBlank() && password.isNotBlank()) {
             Log.d(TAG, "valid input")
-            // query api
-            makeCallApiScheduleData(username, password, callback)
+            viewModelScope.launch(Dispatchers.IO) {
+                // call profile
+                val profileCallState = async { callProfileApi(context, username, password) }
+                // call schedule
+                val scheduleCallState = async { callScheduleApi(context, username, password) }
+                // callback
+                if (profileCallState.await() && scheduleCallState.await()) {
+                    withContext(Dispatchers.Main) {
+                        callback()
+                    }
+                } else {
+                    Log.d(TAG, "login denied")
+                    isValid.set(false)
+                }
+            }
         } else {
             Log.d(TAG, "invalid input")
             // if invalid input
@@ -41,61 +58,87 @@ class ScheduleLoginViewModel : ViewModel() {
         }
     }
 
-    private fun makeCallApiScheduleData(
+    private suspend fun callProfileApi(
+        context: Context,
         username: String,
-        password: String,
-        callback: () -> Unit
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            // call profile
-            val profileAsync = async {
-                scheduleRepository.getProfile(username, password, true)
-            }
-            // call schedule data
-            val scheduleAsync = async {
-                scheduleRepository.getScheduleData(username, password, true)
-            }
-            val profileResult = profileAsync.await()
-            val scheduleResult = scheduleAsync.await()
+        password: String
+    ): Boolean {
+        val profileResult = scheduleRepository.getProfile(username, password, true)
+        Log.i(TAG, "profile message = ${profileResult.message}")
 
-            Log.i(TAG, "profile message = ${profileResult.message}")
-            Log.i(TAG, "schedule data message = ${scheduleResult.message}")
-
-            // if invalid
-            if (
-                profileResult.message == AUTHOR_MESSAGE_ERROR ||
-                scheduleResult.message == AUTHOR_MESSAGE_ERROR
-            ) {
-                isValid.set(false)
-            } else {    // if valid
-                Log.d(TAG, "profile = $profileResult")
-                Log.d(TAG, "schedule periods = ${scheduleResult.periods}")
-                // save profile to local
-                val saveProfileAsync = async {
-                    saveProfileToLocal(profileResult)
-                }
-                // save periods data to database
-                val savePeriodsAsync = async {
-                    savePeriodsToDatabase(scheduleResult.periods)
-                }
-                saveProfileAsync.await()
-                savePeriodsAsync.await()
-
-                // update UI
-                withContext(Dispatchers.Main) {
-                    callback()
-                }
-            }
+        if (profileResult.message == AUTHOR_MESSAGE_ERROR) {
+            return false
+        } else {
+            Log.d(TAG, "profile = $profileResult")
+            // save profile to local
+            Log.d(TAG, "save profile to local")
+            saveProfileToLocal(context, profileResult) {
+                Log.d(TAG, "save profile successfully")
+            }.join()
+            // save login state
+            Log.d(TAG, "save login state to local")
+            saveLoginStateToLocal(context, true) {
+                Log.d(TAG, "save login state successfully")
+            }.join()
+            return true
         }
     }
 
-    private fun saveProfileToLocal(profile: Profile) {
-        Log.d(TAG, "save profile to local")
-        // action
+    private suspend fun callScheduleApi(
+        context: Context,
+        username: String,
+        password: String
+    ): Boolean {
+        val scheduleResult = scheduleRepository.getScheduleData(username, password, true)
+        Log.i(TAG, "schedule message = ${scheduleResult.message}")
+
+        if (scheduleResult.message == AUTHOR_MESSAGE_ERROR) {
+            return false
+        } else {
+            Log.d(TAG, "schedule = $scheduleResult")
+            // save schedule to database
+            Log.d(TAG, "save schedule to database")
+            savePeriodsToDatabase(context, scheduleResult.periods) {
+                Log.d(TAG, "save schedule successfully")
+            }
+            return true
+        }
     }
 
-    private fun savePeriodsToDatabase(data: List<Period>) {
-        Log.d(TAG, "save periods to database")
+    private suspend fun saveProfileToLocal(
+        context: Context,
+        data: Profile,
+        callback: () -> Unit
+    ): Job {
+        // convert to json string
+        return viewModelScope.launch(Dispatchers.IO) {
+            val dataStringType = async { jsonObjectToString(data) }
+            // save
+            val dataStoreManager = DataStoreManager(context)
+            dataStoreManager.storeProfile(dataStringType.await())
+            callback()
+        }
+    }
+
+    private suspend fun saveLoginStateToLocal(
+        context: Context,
+        data: Boolean,
+        callback: () -> Unit
+    ): Job {
+        // save
+        return viewModelScope.launch(Dispatchers.IO) {
+            val dataStoreManager = DataStoreManager(context)
+            dataStoreManager.storeIsLogin(data)
+            callback()
+        }
+    }
+
+    private suspend fun savePeriodsToDatabase(
+        context: Context,
+        data: List<Period>,
+        callback: () -> Unit
+    ) {
         // action
+        callback()
     }
 }

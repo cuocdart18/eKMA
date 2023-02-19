@@ -30,8 +30,6 @@ class ScheduleLoginFragment : Fragment() {
         Log.d(TAG, "on create view $TAG")
         binding = FragmentScheduleLoginBinding.inflate(inflater, container, false)
         binding.scheduleLoginVM = scheduleLoginViewModel
-        // hide text view invalid author
-        scheduleLoginViewModel.isValid.set(true)
         // handleOnCLick
         handleOnClick()
         return binding.root
@@ -51,7 +49,11 @@ class ScheduleLoginFragment : Fragment() {
         val username = binding.edtUsername.text.toString().uppercase()
         val password = md5(binding.edtPassword.text.toString())
         Log.d(TAG, "on click request log in")
-        scheduleLoginViewModel.handleOnClickBtnLogin(username, password) {
+        scheduleLoginViewModel.handleOnClickBtnLogin(
+            requireContext().applicationContext,
+            username,
+            password
+        ) {
             handleValidResponseFromApi()
         }
     }
