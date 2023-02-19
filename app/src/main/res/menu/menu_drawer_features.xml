@@ -5,7 +5,7 @@
         android:id="@+id/scoreMainFragment"
         android:title="@string/item_menu_score" />
     <item
-        android:id="@+id/scheduleMainFragment"
+        android:id="@+id/scheduleIntroFragment"
         android:title="@string/item_menu_schedule" />
     <item
         android:id="@+id/noteMainFragment"

@@ -5,6 +5,8 @@ import android.text.TextWatcher
 import android.widget.EditText
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
+import java.math.BigInteger
+import java.security.MessageDigest
 
 // Constants
 const val KIT_URL = "https://www.facebook.com/kitclubKMA"
@@ -31,4 +33,9 @@ fun EditText.textChanges(): Flow<CharSequence?> {
         addTextChangedListener(listener)
         awaitClose { removeTextChangedListener(listener) }
     }.onStart { emit(text) }
+}
+
+fun md5(input: String): String {
+    val md = MessageDigest.getInstance("MD5")
+    return BigInteger(1, md.digest(input.toByteArray())).toString(16).padStart(32, '0')
 }

@@ -36,6 +36,11 @@
     <string name="failed_students">Failed students</string>
     <string name="passed_students">Passed students</string>
     <string name="btn_tra_cuu_diem">Tra cứu điểm</string>
+    <string name="log_in_title_schedule">Đăng nhập</string>
+    <string name="edt_hint_username">Tài khoản</string>
+    <string name="edt_hint_password">Mật khẩu</string>
+    <string name="invalid_username_password">Sai tài khoản hoặc mật khẩu</string>
+    <string name="btn_login">Bắt đầu</string>
 
 
 </resources>

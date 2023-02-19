@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.example.kmatool.R
 import com.example.kmatool.databinding.FragmentScheduleIntroBinding
 
 class ScheduleIntroFragment : Fragment() {
@@ -20,17 +21,20 @@ class ScheduleIntroFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG, "create view $TAG")
         binding = FragmentScheduleIntroBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i(TAG, "show $TAG")
+        Log.d(TAG, "show $TAG")
+
+        navController.navigate(R.id.scheduleLoginFragment)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i(TAG, "destroy $TAG")
+        Log.d(TAG, "destroy $TAG")
     }
 }

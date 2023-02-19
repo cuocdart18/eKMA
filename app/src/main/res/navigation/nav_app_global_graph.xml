@@ -63,7 +63,11 @@
         android:id="@+id/scheduleLoginFragment"
         android:name="com.example.kmatool.fragments.schedule.ScheduleLoginFragment"
         android:label="ScheduleLoginFragment"
-        tools:layout="@layout/fragment_schedule_login" />
+        tools:layout="@layout/fragment_schedule_login" >
+        <action
+            android:id="@+id/action_scheduleLoginFragment_to_scheduleMainFragment"
+            app:destination="@id/scheduleMainFragment" />
+    </fragment>
     <fragment
         android:id="@+id/scheduleMainFragment"
         android:name="com.example.kmatool.fragments.schedule.ScheduleMainFragment"
