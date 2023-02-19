@@ -52,6 +52,7 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:padding="16dp"
+                android:text="ct060407"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="20sp" />
@@ -68,6 +69,7 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:padding="16dp"
+                android:text="lucifer2003Dat"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="20sp"

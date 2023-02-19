@@ -39,7 +39,7 @@
     <string name="log_in_title_schedule">Đăng nhập</string>
     <string name="edt_hint_username">Tài khoản</string>
     <string name="edt_hint_password">Mật khẩu</string>
-    <string name="invalid_username_password">Sai tài khoản hoặc mật khẩu</string>
+    <string name="invalid_username_password">Đăng nhập bị từ chối</string>
     <string name="btn_login">Bắt đầu</string>
 
 

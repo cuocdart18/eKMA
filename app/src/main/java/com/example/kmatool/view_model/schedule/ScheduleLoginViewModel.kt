@@ -6,11 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.api_service.ScheduleRepository
 import com.example.kmatool.models.schedule.Period
+import com.example.kmatool.models.schedule.Profile
 import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
 import com.example.kmatool.utils.AUTHOR_MESSAGE_SUCCESS
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.system.measureTimeMillis
+import kotlin.time.measureTime
 
 class ScheduleLoginViewModel : ViewModel() {
     private val TAG = ScheduleLoginViewModel::class.java.simpleName
@@ -43,16 +47,40 @@ class ScheduleLoginViewModel : ViewModel() {
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = scheduleRepository.getScheduleData(username, password, true)
-            Log.i(TAG, "login result = ${result.message}")
+            // call profile
+            val profileAsync = async {
+                scheduleRepository.getProfile(username, password, true)
+            }
+            // call schedule data
+            val scheduleAsync = async {
+                scheduleRepository.getScheduleData(username, password, true)
+            }
+            val profileResult = profileAsync.await()
+            val scheduleResult = scheduleAsync.await()
+
+            Log.i(TAG, "profile message = ${profileResult.message}")
+            Log.i(TAG, "schedule data message = ${scheduleResult.message}")
 
             // if invalid
-            if (result.message == AUTHOR_MESSAGE_ERROR) {
+            if (
+                profileResult.message == AUTHOR_MESSAGE_ERROR ||
+                scheduleResult.message == AUTHOR_MESSAGE_ERROR
+            ) {
                 isValid.set(false)
-            } else if (result.message == AUTHOR_MESSAGE_SUCCESS) {    // if valid
-                Log.d(TAG, "schedule periods = ${result.periods}")
-                // save data to database
-                savePeriodsToDatabase(result.periods)
+            } else {    // if valid
+                Log.d(TAG, "profile = $profileResult")
+                Log.d(TAG, "schedule periods = ${scheduleResult.periods}")
+                // save profile to local
+                val saveProfileAsync = async {
+                    saveProfileToLocal(profileResult)
+                }
+                // save periods data to database
+                val savePeriodsAsync = async {
+                    savePeriodsToDatabase(scheduleResult.periods)
+                }
+                saveProfileAsync.await()
+                savePeriodsAsync.await()
+
                 // update UI
                 withContext(Dispatchers.Main) {
                     callback()
@@ -61,7 +89,12 @@ class ScheduleLoginViewModel : ViewModel() {
         }
     }
 
-    private fun savePeriodsToDatabase(data: List<Period>?) {
+    private fun saveProfileToLocal(profile: Profile) {
+        Log.d(TAG, "save profile to local")
+        // action
+    }
+
+    private fun savePeriodsToDatabase(data: List<Period>) {
         Log.d(TAG, "save periods to database")
         // action
     }
