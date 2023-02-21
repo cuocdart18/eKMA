@@ -6,12 +6,19 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kmatool.R
 import com.example.kmatool.adapter.score.SearchDataAdapter
 import com.example.kmatool.databinding.DialogSearchBinding
 import com.example.kmatool.models.score.MiniStudent
+import com.example.kmatool.utils.KEY_PASS_MINISTUDENT_ID
+import com.example.kmatool.utils.SCALE_LAYOUT_SEARCH_DATA_DIALOG_X
+import com.example.kmatool.utils.SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y
 import com.example.kmatool.utils.textChanges
 import com.example.kmatool.view_model.score.SearchDataViewModel
 import kotlinx.coroutines.*
@@ -20,15 +27,16 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flowOn
 
-class SearchDataDialogFragment(private val callback: (id: String) -> Unit) :
+class SearchDataDialogFragment :
     DialogFragment() {
     private val TAG = SearchDataDialogFragment::class.java.simpleName
     private lateinit var binding: DialogSearchBinding
+    private val navController: NavController by lazy { findNavController() }
     private val searchDataViewModel: SearchDataViewModel by lazy {
         ViewModelProvider(requireActivity())[SearchDataViewModel::class.java]
     }
     private val searchDataAdapter: SearchDataAdapter by lazy {
-        SearchDataAdapter() { miniStudent ->
+        SearchDataAdapter { miniStudent ->
             onClickListItem(
                 miniStudent
             )
@@ -39,7 +47,7 @@ class SearchDataDialogFragment(private val callback: (id: String) -> Unit) :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.d(TAG, "on create view $TAG")
         binding = DialogSearchBinding.inflate(inflater, container, false)
         // set search async for EditText
@@ -92,7 +100,10 @@ class SearchDataDialogFragment(private val callback: (id: String) -> Unit) :
         val size = Point()
         val display = window?.windowManager?.defaultDisplay
         display?.getSize(size)
-        window?.setLayout(((size.x * 0.80).toInt()), ((size.y * 0.60).toInt()))
+        window?.setLayout(
+            ((size.x * SCALE_LAYOUT_SEARCH_DATA_DIALOG_X).toInt()),
+            ((size.y * SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y).toInt())
+        )
         window?.setGravity(Gravity.CENTER)
     }
 
@@ -114,11 +125,23 @@ class SearchDataDialogFragment(private val callback: (id: String) -> Unit) :
     private fun onClickListItem(miniStudent: MiniStudent) {
         Log.i(TAG, "on click student = $miniStudent")
         // insert student into recent db
-        context?.applicationContext?.let { searchDataViewModel.insertMiniStudentToDb(it, miniStudent) }
-        // query data, pass to ScoreMainFragment
-        callback(miniStudent.id)
-        // cancel dialog
-        this.dismiss()
+        context?.applicationContext?.let {
+            searchDataViewModel.insertMiniStudentToDb(
+                it,
+                miniStudent
+            )
+        }
+        // navigate
+        navigateStudentDetailFragment(miniStudent.id)
+    }
+
+    private fun navigateStudentDetailFragment(id: String) {
+        Log.d(TAG, "navigate detail fragment with student = $id")
+        // action
+        val bundle = bundleOf(
+            KEY_PASS_MINISTUDENT_ID to id
+        )
+        navController.navigate(R.id.studentDetailFragment, bundle)
     }
 
     override fun onDestroy() {

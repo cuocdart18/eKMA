@@ -7,94 +7,107 @@
             name="score"
             type="com.example.kmatool.models.score.Score" />
 
+        <variable
+            name="subject"
+            type="com.example.kmatool.models.score.Subject" />
+
         <import type="android.view.View" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@{score.index % 2 == 0 ? @color/gray_1 : @color/gray_2}"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:weightSum="13">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_subject_name"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="3"
-            android:text="@{score.subject.name}"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="normal" />
+            android:background="@{score.index % 2 == 0 ? @color/gray_1 : @color/gray_2}"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:weightSum="13">
 
-        <TextView
-            android:id="@+id/tv_first_component_score"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="2"
-            android:text="@{score.firstComponentScore}"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="normal" />
+            <TextView
+                android:id="@+id/tv_subject_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="3"
+                android:text="@{score.subject.name}"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="normal" />
 
-        <TextView
-            android:id="@+id/tv_second_component_score"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="2"
-            android:text="@{score.secondComponentScore}"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="normal" />
+            <TextView
+                android:id="@+id/tv_first_component_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="@{score.firstComponentScore}"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="normal" />
 
-        <TextView
-            android:id="@+id/tv_exam_score"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="2"
-            android:text="@{score.examScore}"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="normal" />
+            <TextView
+                android:id="@+id/tv_second_component_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="@{score.secondComponentScore}"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="normal" />
 
-        <TextView
-            android:id="@+id/tv_avg_score"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="2"
-            android:text="@{score.avgScore}"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="normal" />
+            <TextView
+                android:id="@+id/tv_exam_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="@{score.examScore}"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="normal" />
 
-        <TextView
-            android:id="@+id/tv_alphabet_score"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="2"
-            android:text="@{score.alphabetScore}"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="normal" />
+            <TextView
+                android:id="@+id/tv_avg_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="@{score.avgScore}"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/tv_alphabet_score"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:text="@{score.alphabetScore}"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
+
 </layout>
