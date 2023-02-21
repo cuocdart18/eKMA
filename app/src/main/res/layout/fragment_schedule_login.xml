@@ -52,7 +52,6 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:padding="16dp"
-                android:text="ct060407"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="20sp" />
@@ -69,7 +68,6 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:padding="16dp"
-                android:text="lucifer2003Dat"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="20sp"
@@ -87,6 +85,13 @@
                 android:textSize="18sp"
                 android:visibility="@{scheduleLoginVM.isValid() ? View.GONE : View.VISIBLE}" />
 
+            <ProgressBar
+                android:id="@+id/google_progress"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center"
+                android:visibility="@{scheduleLoginVM.isShowProgress() ? View.VISIBLE : View.GONE}" />
+
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="wrap_content"
@@ -95,7 +100,7 @@
                 android:layout_marginTop="24dp"
                 android:background="@drawable/bgr_rectangle_green_32dp"
                 android:drawableEnd="@drawable/navigate_next_72"
-                android:padding="8dp" />
+                android:padding="6dp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

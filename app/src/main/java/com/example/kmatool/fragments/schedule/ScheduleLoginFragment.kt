@@ -13,6 +13,7 @@ import com.example.kmatool.R
 import com.example.kmatool.databinding.FragmentScheduleLoginBinding
 import com.example.kmatool.utils.md5
 import com.example.kmatool.view_model.schedule.ScheduleLoginViewModel
+import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
 
 class ScheduleLoginFragment : Fragment() {
     private val TAG = ScheduleLoginFragment::class.java.simpleName
@@ -30,6 +31,8 @@ class ScheduleLoginFragment : Fragment() {
         Log.d(TAG, "on create view $TAG")
         binding = FragmentScheduleLoginBinding.inflate(inflater, container, false)
         binding.scheduleLoginVM = scheduleLoginViewModel
+        // setup google progress
+        setupGoogleProgress()
         // handleOnCLick
         handleOnClick()
         return binding.root
@@ -38,6 +41,13 @@ class ScheduleLoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "show $TAG")
+    }
+
+    private fun setupGoogleProgress() {
+        binding.googleProgress.indeterminateDrawable =
+            ChromeFloatingCirclesDrawable.Builder(requireContext())
+                .colors(resources.getIntArray(R.array.google_colors))
+                .build()
     }
 
     private fun handleOnClick() {

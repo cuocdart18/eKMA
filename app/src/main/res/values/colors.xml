@@ -11,9 +11,17 @@
     <color name="gray_1">#757575</color>
     <color name="gray_2">#494949</color>
     <color name="green_nhat">#00C565</color>
+    <color name="yellow_nhat">#FFEB3B</color>
     <color name="red_nhat">#FF5252</color>
     <color name="blue_nhat">#448AFF</color>
     <color name="blue_nhat_hon">#03A9F4</color>
     <color name="color_gray_of_dialog">#9E9E9E</color>
     <color name="gray_dam">#424242</color>
+
+    <array name="google_colors">
+        <item>@color/green_nhat</item>
+        <item>@color/red_nhat</item>
+        <item>@color/blue_nhat</item>
+        <item>@color/yellow_nhat</item>
+    </array>
 </resources>

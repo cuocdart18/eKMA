@@ -21,10 +21,13 @@ class ScheduleLoginViewModel : ViewModel() {
 
     // observable field
     var isValid = ObservableField<Boolean>()
+    var isShowProgress = ObservableField<Boolean>()
 
     init {
         // hide text view invalid author
         isValid.set(true)
+        // hide progress
+        isShowProgress.set(false)
     }
 
     fun handleOnClickBtnLogin(
@@ -34,6 +37,10 @@ class ScheduleLoginViewModel : ViewModel() {
         callback: () -> Unit
     ) {
         Log.i(TAG, "handle input username = $username, password (md5 hashed) = $password")
+        // show progress
+        isShowProgress.set(true)
+        // hide text view invalid author
+        isValid.set(true)
         // action
         if (username.isNotBlank() && password.isNotBlank()) {
             Log.d(TAG, "valid input")
@@ -47,17 +54,22 @@ class ScheduleLoginViewModel : ViewModel() {
                     withContext(Dispatchers.Main) {
                         // hide text view invalid author
                         isValid.set(true)
+                        isShowProgress.set(false)
                         callback()
                     }
                 } else {
                     Log.d(TAG, "login denied")
                     isValid.set(false)
+                    // hide progress
+                    isShowProgress.set(false)
                 }
             }
         } else {
             Log.d(TAG, "invalid input")
             // if invalid input
             isValid.set(false)
+            // hide progress
+            isShowProgress.set(false)
         }
     }
 
