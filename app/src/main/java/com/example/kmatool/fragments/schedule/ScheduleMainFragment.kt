@@ -25,13 +25,14 @@ class ScheduleMainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d(TAG, "on create $TAG")
         binding = FragmentScheduleMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i(TAG, "show $TAG")
+        Log.d(TAG, "show $TAG")
 
         // test read data
         val dataStoreManager = DataStoreManager(requireContext())
@@ -53,6 +54,6 @@ class ScheduleMainFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i(TAG, "destroy $TAG")
+        Log.d(TAG, "destroy $TAG")
     }
 }

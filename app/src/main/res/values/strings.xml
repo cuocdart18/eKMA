@@ -41,6 +41,8 @@
     <string name="edt_hint_password">Mật khẩu</string>
     <string name="invalid_username_password">Đăng nhập bị từ chối</string>
     <string name="btn_login">Bắt đầu</string>
+    <string name="btn_view_schedule">Xem thời khóa biểu</string>
+    <string name="title_intro_schedule_fragment">Công cụ xem thời khóa biểu cho các bạn sinh viên KMA</string>
 
 
 </resources>

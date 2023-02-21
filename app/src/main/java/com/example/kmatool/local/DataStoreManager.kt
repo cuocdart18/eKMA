@@ -8,6 +8,7 @@ import com.example.kmatool.utils.KEY_IS_LOGIN
 import com.example.kmatool.utils.KEY_STUDENT_PROFILE
 import com.example.kmatool.utils.dataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.map
 
 class DataStoreManager(private val context: Context) {
@@ -32,6 +33,7 @@ class DataStoreManager(private val context: Context) {
     }
 
     val isLoginDataStoreFlow: Flow<Boolean> = context.dataStore.data
+        .cancellable()
         .map {
             it[IS_LOGIN] ?: false
         }

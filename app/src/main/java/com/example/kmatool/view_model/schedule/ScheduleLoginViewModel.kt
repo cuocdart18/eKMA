@@ -44,6 +44,8 @@ class ScheduleLoginViewModel : ViewModel() {
                 // callback
                 if (profileCallState.await() && scheduleCallState.await()) {
                     withContext(Dispatchers.Main) {
+                        // hide text view invalid author
+                        isValid.set(true)
                         callback()
                     }
                 } else {

@@ -60,10 +60,8 @@ class ScheduleLoginFragment : Fragment() {
 
     private fun handleValidResponseFromApi() {
         Log.d(TAG, "handle valid response from Api")
-        // hide text view invalid author
-        scheduleLoginViewModel.isValid.set(true)
         // action something
-        navController.navigate(R.id.scheduleMainFragment)
+        navController.popBackStack(R.id.scheduleIntroFragment, false)
     }
 
     override fun onDestroy() {
