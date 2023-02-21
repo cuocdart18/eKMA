@@ -7,19 +7,27 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kmatool.R
 import com.example.kmatool.adapter.score.StudentDetailAdapter
 import com.example.kmatool.databinding.FragmentScoreStudentDetailBinding
+import com.example.kmatool.models.score.Score
+import com.example.kmatool.models.score.StatisticSubject
 import com.example.kmatool.models.score.Student
 import com.example.kmatool.utils.KEY_PASS_MINISTUDENT_ID
+import com.example.kmatool.utils.KEY_PASS_STATISTIC_SUBJECT
 import com.example.kmatool.utils.KIT_URL
 import com.example.kmatool.view_model.score.StudentDetailViewModel
 
 class StudentDetailFragment : Fragment() {
     private val TAG = StudentDetailFragment::class.java.simpleName
     private lateinit var binding: FragmentScoreStudentDetailBinding
+    private val navController: NavController by lazy { findNavController() }
     private val studentDetailViewModel: StudentDetailViewModel by lazy {
         ViewModelProvider(requireActivity())[StudentDetailViewModel::class.java]
     }
@@ -62,7 +70,9 @@ class StudentDetailFragment : Fragment() {
         Log.d(TAG, "show to UI detail student id = ${student.id}")
         binding.student = student
         // set adapter data for rcv
-        val studentDetailAdapter = StudentDetailAdapter()
+        val studentDetailAdapter = StudentDetailAdapter() { score ->
+            onClickScoreItemInList(score)
+        }
         studentDetailAdapter.setScores(student.scores)
 
         // update list to UI
@@ -70,6 +80,23 @@ class StudentDetailFragment : Fragment() {
         binding.rvScores.isFocusable = false
         binding.rvScores.isNestedScrollingEnabled = false
         binding.rvScores.adapter = studentDetailAdapter
+    }
+
+    private fun onClickScoreItemInList(score: Score) {
+        Log.i(TAG, "show subject score = $score")
+        // action (get statistic subject)
+        studentDetailViewModel.getStatisticSubject(score) { statisticSubject ->
+            showStatisticSubject(statisticSubject)
+        }
+    }
+
+    private fun showStatisticSubject(statisticSubject: StatisticSubject) {
+        Log.d(TAG, "show statistic subject to dialog")
+        // action (show data to dialog)
+        val bundle = bundleOf(
+            KEY_PASS_STATISTIC_SUBJECT to statisticSubject
+        )
+        navController.navigate(R.id.statisticSubjectDialogFragment, bundle)
     }
 
     private fun onClickTagFooter() {

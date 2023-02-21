@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -15,9 +14,7 @@ import com.example.kmatool.databinding.FragmentScoreMainBinding
 import com.example.kmatool.view_model.score.ScoreMainViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.kmatool.R
-import com.example.kmatool.utils.KEY_PASS_MINISTUDENT_ID
 import com.example.kmatool.utils.KIT_URL
-import com.example.kmatool.utils.TAG_SHOW_DIALOG_FRAGMENT
 
 class ScoreMainFragment : Fragment() {
     private val TAG = ScoreMainFragment::class.java.simpleName
@@ -31,12 +28,12 @@ class ScoreMainFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.d(TAG, "on create view $TAG")
         binding = FragmentScoreMainBinding.inflate(inflater, container, false)
         // mapping to UI
-        binding.btnSearchFeature.setOnClickListener() { onClickShowSearchDialog() }
-        binding.tvKit.setOnClickListener() { onClickTagFooter() }
+        binding.btnSearchFeature.setOnClickListener { onClickShowSearchDialog() }
+        binding.tvKit.setOnClickListener { onClickTagFooter() }
         binding.scoreMainViewModel = scoreMainViewModel
 
         return binding.root
@@ -52,22 +49,8 @@ class ScoreMainFragment : Fragment() {
 
     private fun onClickShowSearchDialog() {
         Log.d(TAG, "on click show search dialog")
-        // action (open dialog -> search -> callback to main fragment -> receive data -> nav detail fragment)
-        val searchDataDialogFragment = SearchDataDialogFragment() { id ->
-            navigateStudentDetailFragment(id)
-        }
-        activity?.supportFragmentManager?.let {
-            searchDataDialogFragment.show(it, TAG_SHOW_DIALOG_FRAGMENT)
-        }
-    }
-
-    private fun navigateStudentDetailFragment(id: String) {
-        Log.d(TAG, "navigate detail fragment with student = $id")
-        // action
-        val bundle = bundleOf(
-            KEY_PASS_MINISTUDENT_ID to id
-        )
-        navController.navigate(R.id.studentDetailFragment, bundle)
+        // action (open dialog)
+        navController.navigate(R.id.searchDataDialogFragment)
     }
 
     private fun onClickTagFooter() {
