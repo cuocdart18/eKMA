@@ -6,6 +6,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.api_service.ScheduleRepository
+import com.example.kmatool.database.PeriodRepository
 import com.example.kmatool.local.DataStoreManager
 import com.example.kmatool.models.schedule.Period
 import com.example.kmatool.models.schedule.Profile
@@ -140,7 +141,10 @@ class ScheduleLoginViewModel : ViewModel() {
         data: List<Period>,
         callback: () -> Unit
     ) {
+        val periodRepository = PeriodRepository(context)
         // action
+        periodRepository.insertPeriods(data)
+        // success
         callback()
     }
 }

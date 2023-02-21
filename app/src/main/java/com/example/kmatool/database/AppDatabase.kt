@@ -5,29 +5,31 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.kmatool.models.schedule.Period
 import com.example.kmatool.models.score.MiniStudent
-import com.example.kmatool.utils.DATABASE_MINISTUDENT_NAME
+import com.example.kmatool.utils.DATABASE_NAME
 
 @Database(
-    entities = [MiniStudent::class],
+    entities = [MiniStudent::class, Period::class],
     version = 1
 )
 @TypeConverters(Converters::class)
-abstract class MiniStudentDatabase : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
     abstract fun miniStudentDao(): MiniStudentDao
+    abstract fun periodDao(): PeriodDao
 
     companion object {
 
         @Volatile
-        private var instance: MiniStudentDatabase? = null
+        private var instance: AppDatabase? = null
 
-        fun getInstance(context: Context): MiniStudentDatabase {
+        fun getInstance(context: Context): AppDatabase {
             if (instance == null) {
                 synchronized(this) {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
-                        MiniStudentDatabase::class.java,
-                        DATABASE_MINISTUDENT_NAME
+                        AppDatabase::class.java,
+                        DATABASE_NAME
                     ).allowMainThreadQueries()
                         .build()
                 }

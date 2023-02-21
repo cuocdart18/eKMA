@@ -19,14 +19,15 @@ class IntroAppFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        Log.d(TAG, "on create view $TAG")
         binding = FragmentAppIntroBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i(TAG, "show $TAG")
+        Log.d(TAG, "show $TAG")
         navController = findNavController()
     }
 }

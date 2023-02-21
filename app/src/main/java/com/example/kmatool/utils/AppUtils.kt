@@ -19,7 +19,7 @@ const val TAG_SHOW_DIALOG_FRAGMENT = "search_data_dialog"
 
 // for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
-const val DATABASE_MINISTUDENT_NAME = "mini_student.db"
+const val DATABASE_NAME = "app_database.db"
 
 // for data store
 const val NAME_DATASTORE_PREFS = "datastore_prefs"

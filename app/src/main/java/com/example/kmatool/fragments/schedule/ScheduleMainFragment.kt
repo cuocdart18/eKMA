@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.example.kmatool.database.PeriodRepository
 import com.example.kmatool.databinding.FragmentScheduleMainBinding
 import com.example.kmatool.local.DataStoreManager
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +37,7 @@ class ScheduleMainFragment : Fragment() {
 
         // test read data
         val dataStoreManager = DataStoreManager(requireContext())
-        CoroutineScope(Dispatchers.Main).launch {
+        CoroutineScope(Dispatchers.IO).launch {
             // get login state
             launch {
                 dataStoreManager.isLoginDataStoreFlow.collect {
@@ -48,6 +49,12 @@ class ScheduleMainFragment : Fragment() {
                 dataStoreManager.profileDataStoreFlow.collect {
                     Log.i(TAG, "profile = $it")
                 }
+            }
+            // get schedule
+            launch {
+                val periodRepository = PeriodRepository(requireContext())
+                val data = periodRepository.getPeriods()
+                Log.i(TAG, "periods from database = $data")
             }
         }
     }
