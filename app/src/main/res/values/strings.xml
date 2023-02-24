@@ -43,6 +43,7 @@
     <string name="btn_login">Bắt đầu</string>
     <string name="btn_view_schedule">Xem thời khóa biểu</string>
     <string name="title_intro_schedule_fragment">Công cụ xem thời khóa biểu cho các bạn sinh viên KMA</string>
+    <string name="title_schedule_detail">Môn học</string>
 
 
 </resources>
