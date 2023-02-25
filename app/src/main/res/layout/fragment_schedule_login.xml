@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/bgr_rectangle_gray_1_radius_8dp"
-                android:drawableStart="@drawable/person_28dp"
+                android:drawableStart="@drawable/ic_person_28dp"
                 android:drawablePadding="12dp"
                 android:hint="@string/edt_hint_username"
                 android:importantForAutofill="no"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/bgr_rectangle_gray_1_radius_8dp"
-                android:drawableStart="@drawable/lock_28"
+                android:drawableStart="@drawable/ic_lock_28"
                 android:drawablePadding="12dp"
                 android:hint="@string/edt_hint_password"
                 android:inputType="textPassword"
@@ -73,24 +73,30 @@
                 android:textSize="20sp"
                 tools:ignore="Autofill" />
 
-            <TextView
-                android:id="@+id/tv_invalid_username_password"
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/invalid_username_password"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/red_nhat"
-                android:textSize="18sp"
-                android:visibility="@{scheduleLoginVM.isValid() ? View.GONE : View.VISIBLE}" />
+                android:layout_gravity="center">
 
-            <ProgressBar
-                android:id="@+id/google_progress"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:layout_gravity="center"
-                android:visibility="@{scheduleLoginVM.isShowProgress() ? View.VISIBLE : View.GONE}" />
+                <TextView
+                    android:id="@+id/tv_invalid_username_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/invalid_username_password"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/red_nhat"
+                    android:textSize="18sp"
+                    android:visibility="@{scheduleLoginVM.isValid() ? View.GONE : View.VISIBLE}" />
+
+                <ProgressBar
+                    android:id="@+id/google_progress"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"
+                    android:visibility="@{scheduleLoginVM.isShowProgress() ? View.VISIBLE : View.GONE}" />
+            </FrameLayout>
 
             <Button
                 android:id="@+id/btn_login"
@@ -99,7 +105,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/bgr_rectangle_green_32dp"
-                android:drawableEnd="@drawable/navigate_next_72"
+                android:drawableEnd="@drawable/ic_navigate_next_72"
                 android:padding="6dp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

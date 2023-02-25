@@ -27,6 +27,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
+                    android:theme="@style/Theme.AppCompat"
                     android:layout_height="?actionBarSize" />
             </com.google.android.material.appbar.AppBarLayout>
 

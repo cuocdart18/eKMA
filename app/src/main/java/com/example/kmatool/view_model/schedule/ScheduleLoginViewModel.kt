@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.api_service.ScheduleRepository
 import com.example.kmatool.database.PeriodRepository
+import com.example.kmatool.fragments.schedule.convertPeriodsToStartEndTime
 import com.example.kmatool.local.DataStoreManager
 import com.example.kmatool.models.schedule.Period
 import com.example.kmatool.models.schedule.Profile
@@ -113,10 +114,20 @@ class ScheduleLoginViewModel : ViewModel() {
             Log.d(TAG, "schedule = $scheduleResult")
             // save schedule to database
             Log.d(TAG, "save schedule to database")
+            // format start and end time of period
+            formatStartEndTime(scheduleResult.periods)
             savePeriodsToDatabase(context, scheduleResult.periods) {
                 Log.d(TAG, "save schedule successfully")
             }
             return true
+        }
+    }
+
+    private fun formatStartEndTime(periods: List<Period>) {
+        periods.forEach {
+            val timeMap = convertPeriodsToStartEndTime(it.lesson)
+            it.startTime = timeMap["start"]
+            it.endTime = timeMap["end"]
         }
     }
 

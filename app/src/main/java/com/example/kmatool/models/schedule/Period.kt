@@ -10,6 +10,8 @@ data class Period(
     @PrimaryKey
     val id: Int,
     val lesson: String,
+    var startTime: String?,
+    var endTime: String?,
     val room: String?,
     val subjectCode: String,
     val subjectName: String,

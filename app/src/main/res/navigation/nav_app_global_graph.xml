@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/introAppFragment"
         android:name="com.example.kmatool.fragments.IntroAppFragment"
-        android:label="IntroAppFragment"
+        android:label="in cho"
         tools:layout="@layout/fragment_app_intro">
         <action
             android:id="@+id/action_introAppFragment_to_scoreMainFragment"
@@ -26,12 +26,12 @@
     <fragment
         android:id="@+id/noteMainFragment"
         android:name="com.example.kmatool.fragments.note.NoteMainFragment"
-        android:label="NoteMainFragment"
+        android:label="note"
         tools:layout="@layout/fragment_note_main" />
     <fragment
         android:id="@+id/scoreMainFragment"
         android:name="com.example.kmatool.fragments.score.ScoreMainFragment"
-        android:label="ScoreMainFragment"
+        android:label="@string/label_name_score"
         tools:layout="@layout/fragment_score_main">
         <action
             android:id="@+id/action_scoreMainFragment_to_studentDetailFragment"
@@ -40,17 +40,17 @@
     <fragment
         android:id="@+id/studentDetailFragment"
         android:name="com.example.kmatool.fragments.score.StudentDetailFragment"
-        android:label="StudentDetailFragment"
+        android:label="@string/label_name_score"
         tools:layout="@layout/fragment_score_student_detail" />
     <fragment
         android:id="@+id/informationFragment"
         android:name="com.example.kmatool.fragments.infor.InformationFragment"
-        android:label="InformationFragment"
+        android:label="thong tin"
         tools:layout="@layout/fragment_information" />
     <fragment
         android:id="@+id/scheduleIntroFragment"
         android:name="com.example.kmatool.fragments.schedule.ScheduleIntroFragment"
-        android:label="ScheduleIntroFragment"
+        android:label="@string/label_name_schedule"
         tools:layout="@layout/fragment_schedule_intro">
         <action
             android:id="@+id/action_scheduleIntroFragment_to_scheduleLoginFragment"
@@ -62,11 +62,11 @@
     <fragment
         android:id="@+id/scheduleLoginFragment"
         android:name="com.example.kmatool.fragments.schedule.ScheduleLoginFragment"
-        android:label="ScheduleLoginFragment"
+        android:label="@string/label_name_schedule"
         tools:layout="@layout/fragment_schedule_login" />
     <fragment
         android:id="@+id/scheduleMainFragment"
         android:name="com.example.kmatool.fragments.schedule.ScheduleMainFragment"
-        android:label="ScheduleMainFragment"
+        android:label="@string/label_name_schedule"
         tools:layout="@layout/fragment_schedule_main" />
 </navigation>

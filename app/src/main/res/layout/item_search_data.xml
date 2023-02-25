@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
-                    android:src="@drawable/person_circle_outline" />
+                    android:src="@drawable/ic_person_circle_outline" />
 
                 <TextView
                     android:id="@+id/tv_id"
@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
-                    android:src="@drawable/flag_outline" />
+                    android:src="@drawable/ic_flag_outline" />
 
                 <TextView
                     android:id="@+id/tv_class_in_school"
