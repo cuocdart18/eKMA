@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black">
+        android:background="@color/white">
 
         <LinearLayout
             android:id="@+id/login_layout"
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="48dp"
                 android:text="@string/log_in_title_schedule"
-                android:textColor="@color/white"
+                android:textColor="@color/blue"
                 android:textSize="48sp"
                 android:textStyle="bold" />
 
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:background="@drawable/bgr_rectangle_gray_1_radius_8dp"
+                android:background="@drawable/bgr_rectangle_blue_stroke_corner_8dp"
                 android:drawableStart="@drawable/ic_person_28dp"
                 android:drawablePadding="12dp"
                 android:hint="@string/edt_hint_username"
@@ -52,8 +52,8 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:padding="16dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:textColor="@color/blue"
+                android:textColorHint="@color/gray_2"
                 android:textSize="20sp" />
 
             <EditText
@@ -61,15 +61,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:background="@drawable/bgr_rectangle_gray_1_radius_8dp"
+                android:background="@drawable/bgr_rectangle_blue_stroke_corner_8dp"
                 android:drawableStart="@drawable/ic_lock_28"
                 android:drawablePadding="12dp"
                 android:hint="@string/edt_hint_password"
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:padding="16dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
+                android:textColor="@color/blue"
+                android:textColorHint="@color/gray_2"
                 android:textSize="20sp"
                 tools:ignore="Autofill" />
 
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/bgr_rectangle_green_32dp"
+                android:background="@drawable/bgr_rectangle_blue_32dp"
                 android:drawableEnd="@drawable/ic_navigate_next_72"
                 android:padding="6dp" />
         </LinearLayout>

@@ -17,7 +17,7 @@
             android:id="@+id/ll_app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/red_nhat"
+            android:background="@color/blue_nhat"
             android:orientation="vertical">
 
             <LinearLayout
