@@ -26,7 +26,7 @@ class ScheduleMainViewModel : ViewModel() {
 
     fun getListPeriodFromDatabase(
         context: Context,
-        callback: () -> Unit
+        callback: (setEventsDay: List<String>) -> Unit
     ) {
         Log.d(TAG, "get and filter periods from database")
         // action
@@ -35,24 +35,30 @@ class ScheduleMainViewModel : ViewModel() {
             val periods = periodRepository.getPeriods()
             // add to Map
             filterListToAddPeriodsDayMap(periods)
+            // filter events day
+            distinctEventsDay(periods, callback)
             // notify to fragment
-            withContext(Dispatchers.Main) {
-                callback()
-            }
+            Log.d(TAG, "get periods successfully")
         }
     }
 
     private suspend fun filterListToAddPeriodsDayMap(periods: List<Period>) {
         withContext(Dispatchers.Default) {
             periodsDayMap = periods.groupBy { it.day }
-            /*val daySet = mutableSetOf<String>()
-            periods.forEach {
-                daySet.add(it.day)
+        }
+    }
+
+    private suspend fun distinctEventsDay(
+        periods: List<Period>,
+        callback: (eventsDay: List<String>) -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.Default) {
+            val eventsDay = mutableListOf<String>()
+            periods.distinctBy { it.day }.forEach { eventsDay.add(it.day) }
+            Log.d(TAG, "distinct periods events day = $eventsDay")
+            withContext(Dispatchers.Main) {
+                callback(eventsDay)
             }
-            daySet.forEach { day ->
-                val periodsDay = periods.filterList { day == this.day }
-                periodsDayMap[day] = periodsDay
-            }*/
         }
     }
 
@@ -62,6 +68,7 @@ class ScheduleMainViewModel : ViewModel() {
     ) {
         viewModelScope.launch(Dispatchers.Main) {
             if (getListJob.isActive) {
+                Log.d(TAG, "getListJob is active")
                 getListJob.join()
             }
             val dateFormatted = date.syncFormatJsonApi()

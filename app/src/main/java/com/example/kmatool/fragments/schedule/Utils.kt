@@ -25,6 +25,11 @@ fun DayOfWeek.displayText(uppercase: Boolean = false): String {
 
 fun LocalDate.syncFormatJsonApi(): String = this.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
+fun LocalDate.toYearMonth(): String = this.format(DateTimeFormatter.ofPattern("yyyy-MM"))
+
+fun String.toLocalDate(): LocalDate =
+    LocalDate.parse(this, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+
 fun convertPeriodToTime(data: String): String =
     when (data) {
         "1" -> "07:00"

@@ -21,5 +21,6 @@
         android:layout_height="7dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/bgr_circular_yellow" />
+        android:background="@drawable/bgr_circular_yellow"
+        android:visibility="invisible" />
 </FrameLayout>

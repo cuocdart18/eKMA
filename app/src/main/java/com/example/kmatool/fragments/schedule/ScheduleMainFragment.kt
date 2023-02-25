@@ -18,7 +18,12 @@ import com.example.kmatool.models.schedule.Period
 import com.example.kmatool.utils.setTextColorRes
 import com.example.kmatool.view_model.schedule.ScheduleMainViewModel
 import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -32,6 +37,10 @@ class ScheduleMainFragment : Fragment() {
         ViewModelProvider(requireActivity())[ScheduleMainViewModel::class.java]
     }
     private val periodsDayAdapter: PeriodsDayAdapter by lazy { PeriodsDayAdapter() }
+    private val dayBinder: MonthDayBinderImpl by lazy {
+        MonthDayBinderImpl(
+            { binding.calendarView.notifyDateChanged(it) }, { onDateClicked(it) })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,11 +49,17 @@ class ScheduleMainFragment : Fragment() {
     ): View {
         Log.d(TAG, "on create $TAG")
         binding = FragmentScheduleMainBinding.inflate(inflater, container, false)
-        // setup google progress
-        setupGoogleProgress()
+        CoroutineScope(Dispatchers.Main).launch {
+            // setup google progress
+            setupGoogleProgress()
+            // setup rcv
+            setupRecyclerViewPeriods()
+            // setup calendar
+            setupCalendar()
+        }
         // get all of periods from database
         scheduleMainViewModel.getListPeriodFromDatabase(requireContext()) {
-            Log.d(TAG, "get periods successfully")
+            showDotViewEventsDayInDayBinder(it)
         }
         return binding.root
     }
@@ -52,10 +67,6 @@ class ScheduleMainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "show $TAG")
-        // setup calendar
-        setupCalendar()
-        // setup rcv
-        setupRecyclerViewPeriods()
     }
 
     private fun setupGoogleProgress() {
@@ -65,6 +76,15 @@ class ScheduleMainFragment : Fragment() {
                 .build()
         // show load progress
         binding.googleProgress.visibility = View.VISIBLE
+    }
+
+    private fun setupRecyclerViewPeriods() {
+        binding.rcvListSubject.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun showPeriodsDay(periods: List<Period>) {
+        periodsDayAdapter.setData(periods)
+        binding.rcvListSubject.adapter = periodsDayAdapter
     }
 
     private fun setupCalendar() {
@@ -80,47 +100,48 @@ class ScheduleMainFragment : Fragment() {
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(100)
         val endMonth = currentMonth.plusMonths(100)
-        binding.calendarView.dayBinder = MonthDayBinderImpl({
-            binding.calendarView.notifyDateChanged(it)
-        }, {
-            onDateClicked(it)
-        })
+        binding.calendarView.dayBinder = dayBinder
         binding.calendarView.monthScrollListener = { updateTitle() }
         binding.calendarView.setup(startMonth, endMonth, daysOfWeek.first())
         binding.calendarView.scrollToMonth(currentMonth)
         // show events of in current day
-        onDateClicked(LocalDate.now())
+        onDateClicked(CalendarDay(LocalDate.now(), DayPosition.MonthDate))
     }
 
-    private fun setupRecyclerViewPeriods() {
-        binding.rcvListSubject.layoutManager = LinearLayoutManager(requireContext())
-    }
-
-    private fun onDateClicked(date: LocalDate) {
+    private fun onDateClicked(day: CalendarDay) {
+        val date = day.date
         Log.d(TAG, "receive click date = $date listener")
-        binding.googleProgress.visibility = View.VISIBLE
-        // action
-        scheduleMainViewModel.showPeriodsWithDate(date) {
-            Log.d(TAG, "date = $date - periods = $it")
-            // show load progress
-            binding.googleProgress.visibility = View.GONE
-            if (it == null) {
-                // notify to UI
-                binding.tvPeriodsEmpty.visibility = View.VISIBLE
-                binding.rcvListSubject.visibility = View.GONE
-                binding.tvSumOfSubject.text = "0"
-            } else {
-                binding.tvPeriodsEmpty.visibility = View.GONE
-                binding.rcvListSubject.visibility = View.VISIBLE
-                binding.tvSumOfSubject.text = it.size.toString()
-                showPeriodsDay(it)
+
+        if (day.position == DayPosition.MonthDate) {
+            binding.googleProgress.visibility = View.VISIBLE
+            // action
+            scheduleMainViewModel.showPeriodsWithDate(date) {
+                Log.d(TAG, "date = $date - periods = $it")
+                // show load progress
+                binding.googleProgress.visibility = View.GONE
+                if (it == null) {
+                    // notify to UI
+                    binding.tvPeriodsEmpty.visibility = View.VISIBLE
+                    binding.rcvListSubject.visibility = View.GONE
+                    binding.tvSumOfSubject.text = "0"
+                } else {
+                    binding.tvPeriodsEmpty.visibility = View.GONE
+                    binding.rcvListSubject.visibility = View.VISIBLE
+                    binding.tvSumOfSubject.text = it.size.toString()
+                    showPeriodsDay(it)
+                }
             }
+        } else {
+            binding.calendarView.scrollToMonth(YearMonth.parse(date.toYearMonth()))
+            onDateClicked(CalendarDay(date, DayPosition.MonthDate))
         }
     }
 
-    private fun showPeriodsDay(periods: List<Period>) {
-        periodsDayAdapter.setData(periods)
-        binding.rcvListSubject.adapter = periodsDayAdapter
+    private fun showDotViewEventsDayInDayBinder(eventsDay: List<String>) {
+        CoroutineScope(Dispatchers.Main).launch {
+            dayBinder.initEventsDay(eventsDay)
+            binding.calendarView.notifyCalendarChanged()
+        }
     }
 
     @SuppressLint("SetTextI18n")
