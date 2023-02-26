@@ -1,18 +1,18 @@
 package com.example.kmatool.api_service
 
-class ScoreRepository : ApiService {
+class ScoreRepository : ApiScoreService {
     override suspend fun getStatistics() =
-        ApiConfig.apiService.getStatistics()
+        ApiConfig.apiScoreService.getStatistics()
 
     override suspend fun getStudentStatistics(studentId: String) =
-        ApiConfig.apiService.getStudentStatistics(studentId)
+        ApiConfig.apiScoreService.getStudentStatistics(studentId)
 
     override suspend fun getSubjectStatistics(subjectId: String) =
-        ApiConfig.apiService.getSubjectStatistics(subjectId)
+        ApiConfig.apiScoreService.getSubjectStatistics(subjectId)
 
     override suspend fun getSubjects() =
-        ApiConfig.apiService.getSubjects()
+        ApiConfig.apiScoreService.getSubjects()
 
     override suspend fun search(data: String) =
-        ApiConfig.apiService.search(data)
+        ApiConfig.apiScoreService.search(data)
 }

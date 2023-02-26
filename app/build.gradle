@@ -26,6 +26,8 @@ android {
         }
     }
     compileOptions {
+        // Enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -69,6 +71,9 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
 
+    // okhttp
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+
     //gson
     implementation "com.google.code.gson:gson:2.10.1"
 
@@ -80,4 +85,15 @@ dependencies {
     // glide
     implementation "com.github.bumptech.glide:glide:4.14.2"
     annotationProcessor "com.github.bumptech.glide:compiler:4.14.2"
+
+    // calendar theme
+    implementation "com.kizitonwose.calendar:view:2.0.2"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+
+    // progress bar
+    implementation "com.jpardogo.googleprogressbar:library:1.2.0"
+
+    // data store
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation "androidx.datastore:datastore-preferences-core:1.0.0"
 }

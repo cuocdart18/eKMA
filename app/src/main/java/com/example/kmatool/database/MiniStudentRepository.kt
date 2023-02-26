@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.kmatool.models.score.MiniStudent
 
 class MiniStudentRepository(context: Context) : MiniStudentDao {
-    private val db: MiniStudentDao = MiniStudentDatabase.getInstance(context).miniStudentDao()
+    private val db: MiniStudentDao = AppDatabase.getInstance(context).miniStudentDao()
 
     override suspend fun insertStudent(miniStudent: MiniStudent) {
         db.insertStudent(miniStudent)

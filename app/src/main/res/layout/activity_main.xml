@@ -27,6 +27,7 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
+                    android:theme="@style/Theme.AppCompat"
                     android:layout_height="?actionBarSize" />
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -49,6 +50,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:headerLayout="@layout/layout_drawer_header"
-            app:menu="@menu/menu_drawer_features" />
+            app:menu="@menu/menu_features" />
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

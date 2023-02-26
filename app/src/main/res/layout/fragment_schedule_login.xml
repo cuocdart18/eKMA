@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="scheduleLoginVM"
+            type="com.example.kmatool.view_model.schedule.ScheduleLoginViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/login_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="32dp"
+            android:paddingTop="48dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="72dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="48dp"
+                android:text="@string/log_in_title_schedule"
+                android:textColor="@color/blue"
+                android:textSize="48sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edt_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bgr_rectangle_blue_stroke_corner_8dp"
+                android:drawableStart="@drawable/ic_person_28dp"
+                android:drawablePadding="12dp"
+                android:hint="@string/edt_hint_username"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="16dp"
+                android:textColor="@color/blue"
+                android:textColorHint="@color/gray_2"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/edt_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bgr_rectangle_blue_stroke_corner_8dp"
+                android:drawableStart="@drawable/ic_lock_28"
+                android:drawablePadding="12dp"
+                android:hint="@string/edt_hint_password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="16dp"
+                android:textColor="@color/blue"
+                android:textColorHint="@color/gray_2"
+                android:textSize="20sp"
+                tools:ignore="Autofill" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_invalid_username_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/invalid_username_password"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/red_nhat"
+                    android:textSize="18sp"
+                    android:visibility="@{scheduleLoginVM.isValid() ? View.GONE : View.VISIBLE}" />
+
+                <ProgressBar
+                    android:id="@+id/google_progress"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_gravity="center"
+                    android:visibility="@{scheduleLoginVM.isShowProgress() ? View.VISIBLE : View.GONE}" />
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bgr_rectangle_blue_32dp"
+                android:drawableEnd="@drawable/ic_navigate_next_72"
+                android:padding="6dp" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

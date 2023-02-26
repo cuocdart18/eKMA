@@ -7,36 +7,31 @@
     <fragment
         android:id="@+id/introAppFragment"
         android:name="com.example.kmatool.fragments.IntroAppFragment"
-        android:label="IntroAppFragment"
+        android:label="in cho"
         tools:layout="@layout/fragment_app_intro">
         <action
             android:id="@+id/action_introAppFragment_to_scoreMainFragment"
             app:destination="@id/scoreMainFragment"
             app:restoreState="true" />
         <action
-            android:id="@+id/action_introAppFragment_to_scheduleMainFragment"
-            app:destination="@id/scheduleMainFragment" />
-        <action
             android:id="@+id/action_introAppFragment_to_noteMainFragment"
             app:destination="@id/noteMainFragment" />
         <action
             android:id="@+id/action_introAppFragment_to_informationFragment2"
             app:destination="@id/informationFragment" />
+        <action
+            android:id="@+id/action_introAppFragment_to_scheduleIntroFragment"
+            app:destination="@id/scheduleIntroFragment" />
     </fragment>
     <fragment
         android:id="@+id/noteMainFragment"
         android:name="com.example.kmatool.fragments.note.NoteMainFragment"
-        android:label="NoteMainFragment"
+        android:label="note"
         tools:layout="@layout/fragment_note_main" />
-    <fragment
-        android:id="@+id/scheduleMainFragment"
-        android:name="com.example.kmatool.fragments.schedule.ScheduleMainFragment"
-        android:label="ScheduleMainFragment"
-        tools:layout="@layout/fragment_schedule_main" />
     <fragment
         android:id="@+id/scoreMainFragment"
         android:name="com.example.kmatool.fragments.score.ScoreMainFragment"
-        android:label="ScoreMainFragment"
+        android:label="@string/label_name_score"
         tools:layout="@layout/fragment_score_main">
         <action
             android:id="@+id/action_scoreMainFragment_to_searchDataDialogFragment"
@@ -54,7 +49,7 @@
     <fragment
         android:id="@+id/informationFragment"
         android:name="com.example.kmatool.fragments.infor.InformationFragment"
-        android:label="InformationFragment"
+        android:label="thong tin"
         tools:layout="@layout/fragment_information" />
     <dialog
         android:id="@+id/searchDataDialogFragment"
@@ -70,4 +65,26 @@
         android:name="com.example.kmatool.fragments.score.StatisticSubjectDialogFragment"
         android:label="StatisticSubjectDialogFragment"
         tools:layout="@layout/dialog_statistic_subject" />
+    <fragment
+        android:id="@+id/scheduleIntroFragment"
+        android:name="com.example.kmatool.fragments.schedule.ScheduleIntroFragment"
+        android:label="@string/label_name_schedule"
+        tools:layout="@layout/fragment_schedule_intro">
+        <action
+            android:id="@+id/action_scheduleIntroFragment_to_scheduleLoginFragment"
+            app:destination="@id/scheduleLoginFragment" />
+        <action
+            android:id="@+id/action_scheduleIntroFragment_to_scheduleMainFragment2"
+            app:destination="@id/scheduleMainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scheduleLoginFragment"
+        android:name="com.example.kmatool.fragments.schedule.ScheduleLoginFragment"
+        android:label="@string/label_name_schedule"
+        tools:layout="@layout/fragment_schedule_login" />
+    <fragment
+        android:id="@+id/scheduleMainFragment"
+        android:name="com.example.kmatool.fragments.schedule.ScheduleMainFragment"
+        android:label="@string/label_name_schedule"
+        tools:layout="@layout/fragment_schedule_main" />
 </navigation>

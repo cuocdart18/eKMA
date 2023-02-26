@@ -10,7 +10,8 @@
     <!--SCORE FEATURE-->
     <string name="title_kma_score">./kma_score</string>
     <string name="title_intro_statistics_fragment">Công cụ tra cứu điểm dành cho sinh viên KMA</string>
-    <string name="slogan_app">Tổng hợp điểm nhanh chóng và chính xác, sử dụng đơn giản, mã nguồn mở.</string>
+    <string name="slogan_score">Tổng hợp điểm nhanh chóng và chính xác, sử dụng đơn giản, mã nguồn mở.</string>
+    <string name="slogan_schedule">Cập nhật thời khóa biểu trực tiếp từ hệ thống, thông tin bảo mật, an toàn.</string>
     <string name="tong_so_sv">Tổng số sinh viên</string>
     <string name="so_sv_no_mon">Số sinh viên nợ môn</string>
     <string name="so_mon_hoc">Số môn học</string>
@@ -36,6 +37,17 @@
     <string name="failed_students">Chưa hoàn thành môn</string>
     <string name="passed_students">Đã hoàn thành môn</string>
     <string name="btn_tra_cuu_diem">Tra cứu điểm</string>
+    <string name="log_in_title_schedule">Đăng nhập</string>
+    <string name="edt_hint_username">Tài khoản</string>
+    <string name="edt_hint_password">Mật khẩu</string>
+    <string name="invalid_username_password">Đăng nhập bị từ chối</string>
+    <string name="btn_login">Bắt đầu</string>
+    <string name="btn_view_schedule">Xem thời khóa biểu</string>
+    <string name="title_intro_schedule_fragment">Công cụ xem thời khóa biểu dành cho sinh viên KMA</string>
+    <string name="title_schedule_detail">Môn học</string>
+    <string name="label_name_schedule">Thời khóa biểu</string>
+    <string name="label_name_score">Tra cứu điểm</string>
+    <string name="tv_notify_periods_empty">Không có môn học nào</string>
     <string name="so_sinh_vien">Số sinh viên</string>
 
 

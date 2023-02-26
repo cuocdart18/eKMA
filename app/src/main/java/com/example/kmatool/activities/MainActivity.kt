@@ -9,7 +9,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.kmatool.R
-import com.example.kmatool.database.MiniStudentDatabase
+import com.example.kmatool.database.AppDatabase
 import com.example.kmatool.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Log.d(TAG, "on destroy $TAG")
         // clear database ref
-        Log.d(TAG, "clear MiniStudentDatabase")
-        MiniStudentDatabase.destroyInstance()
+        Log.d(TAG, "clear AppDatabase")
+        AppDatabase.destroyInstance()
     }
 }
