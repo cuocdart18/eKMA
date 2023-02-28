@@ -112,6 +112,7 @@ class ScheduleMainFragment : Fragment() {
         val date = day.date
         Log.d(TAG, "receive click date = $date listener")
 
+        // if select day in Month
         if (day.position == DayPosition.MonthDate) {
             binding.googleProgress.visibility = View.VISIBLE
             // action

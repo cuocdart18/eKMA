@@ -61,14 +61,16 @@ class MonthDayBinderImpl(
 
     private fun selectedDate(day: CalendarDay) {
         val date = day.date
-            if (selectedDate != date) {
-                Log.d(TAG, "clicked date = $date")
-                val oldDate = selectedDate
-                selectedDate = date
-                oldDate?.let { notifyDateChanged(it) }
-                notifyDateChanged(date)
-                callbackOnClick(day)
-            }
+        if (selectedDate != date) {
+            Log.d(TAG, "clicked date = $date")
+            val oldDate = selectedDate
+            selectedDate = date
+            oldDate?.let { notifyDateChanged(it) }
+            notifyDateChanged(date)
+            callbackOnClick(day)
+        } else if (day.position != DayPosition.MonthDate) {
+            callbackOnClick(day)
+        }
     }
 
     private fun bindDate(
