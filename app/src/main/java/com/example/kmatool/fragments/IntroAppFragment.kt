@@ -30,4 +30,9 @@ class IntroAppFragment : Fragment() {
         Log.d(TAG, "show $TAG")
         navController = findNavController()
     }
+
+    override fun onDestroy() {
+        Log.d(TAG, "destroy $TAG")
+        super.onDestroy()
+    }
 }

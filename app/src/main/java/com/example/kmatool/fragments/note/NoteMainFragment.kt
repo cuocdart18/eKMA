@@ -16,18 +16,19 @@ class NoteMainFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        Log.d(TAG, "on create view $TAG")
         binding = FragmentNoteMainBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.i(TAG, "show $TAG")
+        Log.d(TAG, "show $TAG")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i(TAG, "destroy $TAG")
+        Log.d(TAG, "destroy $TAG")
     }
 }

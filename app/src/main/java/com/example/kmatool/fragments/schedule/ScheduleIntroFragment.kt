@@ -30,7 +30,7 @@ class ScheduleIntroFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "create view $TAG")
+        Log.d(TAG, "on create view $TAG")
         binding = FragmentScheduleIntroBinding.inflate(inflater, container, false)
         // handle on click
         binding.btnViewSchedule.setOnClickListener { onClickBtnViewSchedule() }

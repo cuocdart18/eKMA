@@ -47,7 +47,7 @@ class ScheduleMainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "on create $TAG")
+        Log.d(TAG, "on create view $TAG")
         binding = FragmentScheduleMainBinding.inflate(inflater, container, false)
         CoroutineScope(Dispatchers.Main).launch {
             // setup google progress

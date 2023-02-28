@@ -33,7 +33,7 @@ class ScoreMainFragment : Fragment() {
         binding = FragmentScoreMainBinding.inflate(inflater, container, false)
         // mapping to UI
         binding.btnSearchFeature.setOnClickListener { onClickShowSearchDialog() }
-        binding.tvKit.setOnClickListener { onClickTagFooter() }
+//        binding.tvKit.setOnClickListener { onClickTagFooter() }
         binding.scoreMainViewModel = scoreMainViewModel
 
         return binding.root

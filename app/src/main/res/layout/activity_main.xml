@@ -8,48 +8,33 @@
 
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drw_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:openDrawer="start">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/frm_host"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navGraph="@navigation/nav_app_global_graph" />
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appbar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:theme="@style/Theme.AppCompat"
-                    android:layout_height="?actionBarSize" />
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <!-- Layout to contain contents of main body of screen (drawer will slide over this) -->
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/frm_host"
-                android:name="androidx.navigation.fragment.NavHostFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:defaultNavHost="true"
-                app:navGraph="@navigation/nav_app_global_graph" />
-
-        </LinearLayout>
-
-        <!-- Container for contents of drawer -->
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:headerLayout="@layout/layout_drawer_header"
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/green_nhat"
+            app:itemIconTint="@color/custom_color_bot_nav"
+            app:itemTextColor="@color/custom_color_bot_nav"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/frm_host"
             app:menu="@menu/menu_features" />
-    </androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

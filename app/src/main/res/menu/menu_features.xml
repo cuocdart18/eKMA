@@ -2,15 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/scoreMainFragment"
+        android:id="@+id/score"
+        android:icon="@drawable/ic_menu_book_24"
         android:title="@string/item_menu_score" />
     <item
-        android:id="@+id/scheduleIntroFragment"
+        android:id="@+id/schedule"
+        android:icon="@drawable/ic_calendar_month_24"
         android:title="@string/item_menu_schedule" />
     <item
-        android:id="@+id/noteMainFragment"
+        android:id="@+id/note"
+        android:icon="@drawable/ic_event_note_24"
         android:title="@string/item_menu_note" />
     <item
-        android:id="@+id/informationFragment"
-        android:title="@string/item_menu_information" />
+        android:id="@+id/information"
+        android:icon="@drawable/ic_person_24"
+        android:title="@string/item_menu_account" />
 </menu>

@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">KMA Tool</string>
-    <string name="item_menu_score">score</string>
-    <string name="item_menu_schedule">schedule</string>
-    <string name="item_menu_note">note</string>
-    <string name="item_menu_information">information</string>
+    <string name="item_menu_score">Điểm</string>
+    <string name="item_menu_schedule">Lịch học</string>
+    <string name="item_menu_note">Ghi chú</string>
+    <string name="item_menu_account">Tài khoản</string>
     <string name="open_nav_drawer">open navDrawer</string>
     <string name="close_nav_drawer">close navDrawer</string>
 

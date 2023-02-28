@@ -37,10 +37,10 @@ class StudentDetailFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         Log.d(TAG, "on create view $TAG")
         binding = FragmentScoreStudentDetailBinding.inflate(inflater, container, false)
-        binding.tvKit.setOnClickListener() { onClickTagFooter() }
+//        binding.tvKit.setOnClickListener() { onClickTagFooter() }
         // set view model
         binding.studentDetailVM = studentDetailViewModel
         return binding.root
