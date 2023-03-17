@@ -4,14 +4,16 @@ import android.content.Context
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.api_service.ScoreRepository
 import com.example.kmatool.database.MiniStudentRepository
 import com.example.kmatool.models.score.MiniStudent
 import com.example.kmatool.utils.OK
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import java.util.*
 
 class SearchDataViewModel : ViewModel() {
@@ -21,12 +23,21 @@ class SearchDataViewModel : ViewModel() {
     // data layer UI
     var isUserTyped = ObservableField<Boolean>()
 
-    fun onSearchEditTextEmitted(
+    // instant EditText
+    internal val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
+    private val internalSearchResult = queryChannel
+        .asFlow()
+        .debounce(500L)
+        .filterNot { it.isBlank() }
+        .distinctUntilChanged()
+    val searchResult = internalSearchResult.asLiveData()
+
+    fun onSearchEditTextObserved(
         text: String,
         callback: (ministudents: List<MiniStudent>) -> Unit
     ) {
         isUserTyped.set(true)
-        makeCallApi(text, callback)
+//        makeCallApi(text, callback)
     }
 
     fun showRecentSearchHistory(
