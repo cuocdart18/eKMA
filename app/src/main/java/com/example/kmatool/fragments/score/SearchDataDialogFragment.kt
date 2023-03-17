@@ -1,5 +1,7 @@
 package com.example.kmatool.fragments.score
 
+import android.annotation.SuppressLint
+import android.app.appsearch.SearchResult
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
@@ -7,8 +9,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.core.os.bundleOf
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,10 +26,7 @@ import com.example.kmatool.utils.SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y
 import com.example.kmatool.utils.textChanges
 import com.example.kmatool.view_model.score.SearchDataViewModel
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 
 class SearchDataDialogFragment :
     DialogFragment() {
@@ -36,11 +37,7 @@ class SearchDataDialogFragment :
         ViewModelProvider(requireActivity())[SearchDataViewModel::class.java]
     }
     private val searchDataAdapter: SearchDataAdapter by lazy {
-        SearchDataAdapter { miniStudent ->
-            onClickListItem(
-                miniStudent
-            )
-        }
+        SearchDataAdapter { miniStudent -> onClickListItem(miniStudent) }
     }
 
     override fun onCreateView(
@@ -52,9 +49,16 @@ class SearchDataDialogFragment :
         binding = DialogSearchBinding.inflate(inflater, container, false)
         // set search async for EditText
         setSearchAsyncEditText()
-
         // set theme for dialog
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        // setup rcv
+        setRecyclerViewProperties()
+        // setup viewModel, callback
+        binding.searchDataVM = searchDataViewModel
+        // show recent search history from Room
+        searchDataViewModel.showRecentSearchHistory(requireContext()) { ministudents ->
+            showMiniStudentToUI(ministudents)
+        }
         return binding.root
     }
 
@@ -63,33 +67,21 @@ class SearchDataDialogFragment :
         Log.d(TAG, "show $TAG")
         // setup UI
         setScaleUI()
-        setRecyclerViewProperties()
-
-        // setup viewModel, callback
-        binding.searchDataVM = searchDataViewModel
-
-        // show recent search history from Room
-        context?.applicationContext?.let {
-            searchDataViewModel.showRecentSearchHistory(it) { ministudents ->
-                showMiniStudentToUI(ministudents)
-            }
-        }
     }
 
-    @OptIn(FlowPreview::class, DelicateCoroutinesApi::class)
     private fun setSearchAsyncEditText() {
         Log.d(TAG, "setting search async edit text")
-        GlobalScope.launch {
-            binding.edtSearchData.textChanges()
-                .debounce(500)
-                .filterNot { it.isNullOrBlank() }
-                .distinctUntilChanged()
-                .flowOn(Dispatchers.IO)
-                .collect { text ->
-                    searchDataViewModel.onSearchEditTextEmitted(text.toString()) { ministudents ->
-                        showMiniStudentToUI(ministudents)
-                    }
-                }
+        // get data
+        searchDataViewModel.searchResult.observe(this) { query ->
+            Log.e(TAG, "observe query = $query")
+            searchDataViewModel.onSearchEditTextObserved(query) { data ->
+                showMiniStudentToUI(data)
+            }
+        }
+        binding.edtSearchData.doAfterTextChanged {
+            lifecycleScope.launch {
+                searchDataViewModel.queryChannel.send(it.toString())
+            }
         }
     }
 
@@ -110,7 +102,7 @@ class SearchDataDialogFragment :
     private fun setRecyclerViewProperties() {
         Log.d(TAG, "setting rcv properties")
         // set recycler view
-        val linearLayoutManager = LinearLayoutManager(context)
+        val linearLayoutManager = LinearLayoutManager(requireContext())
         binding.rvSearchQuery.layoutManager = linearLayoutManager
         binding.rvSearchQuery.isFocusable = false
         binding.rvSearchQuery.isNestedScrollingEnabled = false
@@ -125,12 +117,7 @@ class SearchDataDialogFragment :
     private fun onClickListItem(miniStudent: MiniStudent) {
         Log.i(TAG, "on click student = $miniStudent")
         // insert student into recent db
-        context?.applicationContext?.let {
-            searchDataViewModel.insertMiniStudentToDb(
-                it,
-                miniStudent
-            )
-        }
+        searchDataViewModel.insertMiniStudentToDb(requireContext(), miniStudent)
         // navigate
         navigateStudentDetailFragment(miniStudent.id)
     }

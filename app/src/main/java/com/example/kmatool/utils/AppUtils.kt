@@ -3,34 +3,30 @@ package com.example.kmatool.utils
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.CheckResult
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import java.math.BigInteger
 import java.security.MessageDigest
-import java.time.DayOfWeek
-import java.time.Month
-import java.time.YearMonth
-import java.time.format.TextStyle
-import java.util.*
 
 // Constants
 const val KIT_URL = "https://www.facebook.com/kitclubKMA"
-const val TAG_SHOW_DIALOG_FRAGMENT = "search_data_dialog"
 
 // for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
 const val DATABASE_NAME = "app_database.db"
 const val KEY_PASS_STATISTIC_SUBJECT = "statistic_subject"
-const val DATABASE_MINISTUDENT_NAME = "mini_student.db"
 const val SCALE_LAYOUT_STATISTIC_SUBJECT_DIALOG_X = 0.80
 const val SCALE_LAYOUT_STATISTIC_SUBJECT_DIALOG_Y = 0.25
 const val SCALE_LAYOUT_SEARCH_DATA_DIALOG_X = 0.80
@@ -44,25 +40,6 @@ const val KEY_IS_LOGIN = "is_login"
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = NAME_DATASTORE_PREFS)
 
 // Global method
-fun EditText.textChanges(): Flow<CharSequence?> {
-    return callbackFlow<CharSequence?> {
-        val listener = object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) = Unit
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
-            ) = Unit
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                trySend(s)
-            }
-        }
-        addTextChangedListener(listener)
-        awaitClose { removeTextChangedListener(listener) }
-    }.onStart { emit(text) }
-}
 
 fun md5(input: String): String {
     val md = MessageDigest.getInstance("MD5")

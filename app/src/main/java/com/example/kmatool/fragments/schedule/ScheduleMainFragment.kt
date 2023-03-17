@@ -15,6 +15,8 @@ import com.example.kmatool.R
 import com.example.kmatool.adapter.schedule.PeriodsDayAdapter
 import com.example.kmatool.databinding.FragmentScheduleMainBinding
 import com.example.kmatool.models.schedule.Period
+import com.example.kmatool.utils.makeGone
+import com.example.kmatool.utils.makeVisible
 import com.example.kmatool.utils.setTextColorRes
 import com.example.kmatool.view_model.schedule.ScheduleMainViewModel
 import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
@@ -75,7 +77,7 @@ class ScheduleMainFragment : Fragment() {
                 .colors(resources.getIntArray(R.array.google_colors))
                 .build()
         // show load progress
-        binding.googleProgress.visibility = View.VISIBLE
+        binding.googleProgress.makeVisible()
     }
 
     private fun setupRecyclerViewPeriods() {
@@ -114,20 +116,20 @@ class ScheduleMainFragment : Fragment() {
 
         // if select day in Month
         if (day.position == DayPosition.MonthDate) {
-            binding.googleProgress.visibility = View.VISIBLE
+            binding.googleProgress.makeVisible()
             // action
             scheduleMainViewModel.showPeriodsWithDate(date) {
                 Log.d(TAG, "date = $date - periods = $it")
                 // show load progress
-                binding.googleProgress.visibility = View.GONE
+                binding.googleProgress.makeGone()
                 if (it == null) {
                     // notify to UI
-                    binding.tvPeriodsEmpty.visibility = View.VISIBLE
-                    binding.rcvListSubject.visibility = View.GONE
+                    binding.tvPeriodsEmpty.makeVisible()
+                    binding.rcvListSubject.makeGone()
                     binding.tvSumOfSubject.text = "0"
                 } else {
-                    binding.tvPeriodsEmpty.visibility = View.GONE
-                    binding.rcvListSubject.visibility = View.VISIBLE
+                    binding.tvPeriodsEmpty.makeGone()
+                    binding.rcvListSubject.makeVisible()
                     binding.tvSumOfSubject.text = it.size.toString()
                     showPeriodsDay(it)
                 }

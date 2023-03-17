@@ -44,7 +44,7 @@ class ScoreMainFragment : Fragment() {
         Log.d(TAG, "show $TAG")
 
         // show statistical data
-        scoreMainViewModel.getStatisticData()
+//        scoreMainViewModel.getStatisticData()
     }
 
     private fun onClickShowSearchDialog() {
