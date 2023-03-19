@@ -5,7 +5,7 @@
 
         <variable
             name="period"
-            type="com.example.kmatool.models.schedule.Period" />
+            type="com.example.kmatool.data.models.Period" />
     </data>
 
     <LinearLayout

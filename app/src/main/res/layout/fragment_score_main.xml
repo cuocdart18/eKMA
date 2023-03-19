@@ -6,7 +6,7 @@
 
         <variable
             name="scoreMainViewModel"
-            type="com.example.kmatool.view_model.score.ScoreMainViewModel" />
+            type="com.example.kmatool.ui.score.main_scr.ScoreMainViewModel" />
     </data>
 
     <LinearLayout

@@ -6,11 +6,11 @@
 
         <variable
             name="studentDetailVM"
-            type="com.example.kmatool.view_model.score.StudentDetailViewModel" />
+            type="com.example.kmatool.ui.score.details.StudentDetailViewModel" />
 
         <variable
             name="student"
-            type="com.example.kmatool.models.score.Student" />
+            type="com.example.kmatool.data.models.Student" />
     </data>
 
     <androidx.core.widget.NestedScrollView

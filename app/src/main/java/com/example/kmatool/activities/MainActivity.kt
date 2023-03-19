@@ -7,7 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.kmatool.R
-import com.example.kmatool.database.AppDatabase
+import com.example.kmatool.data.database.AppDatabase
 import com.example.kmatool.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

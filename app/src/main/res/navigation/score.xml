@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/scoreMainFragment"
-        android:name="com.example.kmatool.fragments.score.ScoreMainFragment"
+        android:name="com.example.kmatool.ui.score.main_scr.ScoreMainFragment"
         android:label="@string/label_name_score"
         tools:layout="@layout/fragment_score_main">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/studentDetailFragment"
-        android:name="com.example.kmatool.fragments.score.StudentDetailFragment"
+        android:name="com.example.kmatool.ui.score.details.StudentDetailFragment"
         android:label="StudentDetailFragment"
         tools:layout="@layout/fragment_score_student_detail">
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <dialog
         android:id="@+id/searchDataDialogFragment"
-        android:name="com.example.kmatool.fragments.score.SearchDataDialogFragment"
+        android:name="com.example.kmatool.ui.score.search.SearchDataDialogFragment"
         android:label="SearchDataDialogFragment"
         tools:layout="@layout/dialog_search">
         <action
@@ -34,7 +34,7 @@
     </dialog>
     <dialog
         android:id="@+id/statisticSubjectDialogFragment"
-        android:name="com.example.kmatool.fragments.score.StatisticSubjectDialogFragment"
+        android:name="com.example.kmatool.ui.score.subject.StatisticSubjectDialogFragment"
         android:label="StatisticSubjectDialogFragment"
         tools:layout="@layout/dialog_statistic_subject" />
 </navigation>

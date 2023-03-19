@@ -5,7 +5,7 @@
 
         <variable
             name="miniStudent"
-            type="com.example.kmatool.models.score.MiniStudent" />
+            type="com.example.kmatool.data.models.MiniStudent" />
     </data>
 
     <LinearLayout

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/noteMainFragment"
-        android:name="com.example.kmatool.fragments.note.NoteMainFragment"
+        android:name="com.example.kmatool.ui.note.main_scr.NoteMainFragment"
         android:label="note"
         tools:layout="@layout/fragment_note_main" />
 </navigation>

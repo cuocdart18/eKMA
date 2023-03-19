@@ -5,11 +5,11 @@
 
         <variable
             name="score"
-            type="com.example.kmatool.models.score.Score" />
+            type="com.example.kmatool.data.models.Score" />
 
         <variable
             name="subject"
-            type="com.example.kmatool.models.score.Subject" />
+            type="com.example.kmatool.data.models.Subject" />
 
         <import type="android.view.View" />
     </data>
