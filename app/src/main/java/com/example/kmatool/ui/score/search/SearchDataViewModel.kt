@@ -1,11 +1,10 @@
 package com.example.kmatool.ui.score.search
 
 import android.content.Context
-import android.util.Log
 import androidx.databinding.ObservableField
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.data.repositories.ScoreRepository
 import com.example.kmatool.data.repositories.MiniStudentRepository
 import com.example.kmatool.data.models.MiniStudent
@@ -16,8 +15,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import java.util.*
 
-class SearchDataViewModel : ViewModel() {
-    private val TAG = SearchDataViewModel::class.java.simpleName
+class SearchDataViewModel : BaseViewModel() {
+    override val TAG = SearchDataViewModel::class.java.simpleName
     private val scoreRepository = ScoreRepository()
 
     // data layer UI
@@ -37,7 +36,6 @@ class SearchDataViewModel : ViewModel() {
         callback: (ministudents: List<MiniStudent>) -> Unit
     ) {
         isUserTyped.set(true)
-//        makeCallApi(text, callback)
     }
 
     fun showRecentSearchHistory(
@@ -56,16 +54,16 @@ class SearchDataViewModel : ViewModel() {
         text: String,
         callback: (ministudents: List<MiniStudent>) -> Unit
     ) {
-        Log.d(TAG, "START call api with text = $text")
+        logDebug("START call api with text = $text")
         // action
         viewModelScope.launch(Dispatchers.IO) {
             val result = scoreRepository.search(text)
-            Log.d(TAG, "makeCallApi score status code = ${result.statusCode}")
+            logDebug("makeCallApi score status code = ${result.statusCode}")
 
             withContext(Dispatchers.Main) {
                 if (result.statusCode == OK) {
                     val data = result.data
-                    Log.i(TAG, "search student data = $data")
+                    logInfo("search student data = $data")
                     // update data to UI, pass to fragment
                     data?.let {
                         callback(it)
@@ -80,14 +78,14 @@ class SearchDataViewModel : ViewModel() {
         context: Context,
         callback: (ministudents: List<MiniStudent>) -> Unit
     ) {
-        Log.d(TAG, "get list student from Db")
+        logDebug("get list student from Db")
         // action
         val miniStudentRepository = MiniStudentRepository(context)
         viewModelScope.launch(Dispatchers.IO) {
             val result = miniStudentRepository.getRecentHistorySearch()
 
             withContext(Dispatchers.Main) {
-                Log.i(TAG, "list miniStudent recently = $result")
+                logInfo("list miniStudent recently = $result")
                 // update data to UI, pass to fragment
                 callback(result)
             }
@@ -96,14 +94,14 @@ class SearchDataViewModel : ViewModel() {
 
     // set date modified and update in database
     private fun saveMiniStudentsIntoDatabase(context: Context, miniStudent: MiniStudent) {
-        Log.d(TAG, "update student id = ${miniStudent.id}")
+        logDebug("update student id = ${miniStudent.id}")
         // action
         miniStudent.dateModified = Calendar.getInstance().time
 
         val miniStudentRepository = MiniStudentRepository(context)
         viewModelScope.launch(Dispatchers.IO) {
             miniStudentRepository.insertStudent(miniStudent)
-            Log.d(TAG, "complete insert student = $miniStudent")
+            logDebug("complete insert student = $miniStudent")
         }
     }
 }

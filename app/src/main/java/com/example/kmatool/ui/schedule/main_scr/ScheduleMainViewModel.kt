@@ -1,9 +1,8 @@
 package com.example.kmatool.ui.schedule.main_scr
 
 import android.content.Context
-import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.data.repositories.PeriodRepository
 import com.example.kmatool.fragments.schedule.syncFormatJsonApi
 import com.example.kmatool.data.models.Period
@@ -13,22 +12,22 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
-class ScheduleMainViewModel : ViewModel() {
-    private val TAG = ScheduleMainViewModel::class.java.simpleName
+class ScheduleMainViewModel : BaseViewModel() {
+    override val TAG = ScheduleMainViewModel::class.java.simpleName
 
     // global periods
     private lateinit var getListJob: Job
     private lateinit var periodsDayMap: Map<String, List<Period>>
 
     init {
-        Log.d(TAG, "init $TAG")
+        logDebug("init $TAG")
     }
 
     fun getListPeriodFromDatabase(
         context: Context,
         callback: (setEventsDay: List<String>) -> Unit
     ) {
-        Log.d(TAG, "get and filter periods from database")
+        logDebug("get and filter periods from database")
         // action
         getListJob = viewModelScope.launch(Dispatchers.IO) {
             val periodRepository = PeriodRepository(context)
@@ -38,7 +37,7 @@ class ScheduleMainViewModel : ViewModel() {
             // filter events day
             distinctEventsDay(periods, callback)
             // notify to fragment
-            Log.d(TAG, "get periods successfully")
+            logDebug("get periods successfully")
         }
     }
 
@@ -55,7 +54,7 @@ class ScheduleMainViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.Default) {
             val eventsDay = mutableListOf<String>()
             periods.distinctBy { it.day }.forEach { eventsDay.add(it.day) }
-            Log.d(TAG, "distinct periods events day = $eventsDay")
+            logDebug("distinct periods events day = $eventsDay")
             withContext(Dispatchers.Main) {
                 callback(eventsDay)
             }
@@ -68,11 +67,11 @@ class ScheduleMainViewModel : ViewModel() {
     ) {
         viewModelScope.launch(Dispatchers.Main) {
             if (getListJob.isActive) {
-                Log.d(TAG, "getListJob is active")
+                logDebug("getListJob is active")
                 getListJob.join()
             }
             val dateFormatted = date.syncFormatJsonApi()
-            Log.d(TAG, "get periods with date formatted = $dateFormatted")
+            logDebug("get periods with date formatted = $dateFormatted")
             // pass to UI
             callback(periodsDayMap[dateFormatted])
         }

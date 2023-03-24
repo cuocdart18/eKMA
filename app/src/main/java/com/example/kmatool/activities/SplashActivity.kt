@@ -1,11 +1,7 @@
 package com.example.kmatool.activities
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.example.kmatool.base.activities.BaseActivity
 
-class SplashActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+class SplashActivity : BaseActivity() {
+    override val TAG = SplashActivity::class.java.simpleName
 }

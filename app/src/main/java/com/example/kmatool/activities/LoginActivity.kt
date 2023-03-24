@@ -2,18 +2,15 @@ package com.example.kmatool.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.kmatool.R
+import com.example.kmatool.base.activities.BaseActivity
 import com.example.kmatool.databinding.ActivityLoginBinding
 import com.example.kmatool.utils.md5
 import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
-class LoginActivity : AppCompatActivity() {
-    private val TAG = LoginActivity::class.java.simpleName
+class LoginActivity : BaseActivity() {
+    override val TAG = LoginActivity::class.java.simpleName
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by lazy {
         ViewModelProvider(this)[LoginViewModel::class.java]
@@ -21,7 +18,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "on create $TAG")
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.viewModel = viewModel
@@ -36,11 +32,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d(TAG, "on start $TAG")
-    }
-
     private fun setupGoogleProgress() {
         binding.googleProgress.indeterminateDrawable =
             ChromeFloatingCirclesDrawable.Builder(this)
@@ -49,14 +40,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleOnClick() {
-        Log.d(TAG, "handle on click")
+        logDebug("handle on click")
         binding.btnLogin.setOnClickListener { onClickBtnLogin() }
     }
 
     private fun onClickBtnLogin() {
+        logDebug("on click request log in")
         val username = binding.edtUsername.text.toString().uppercase()
         val password = md5(binding.edtPassword.text.toString())
-        Log.d(TAG, "on click request log in")
         viewModel.handleOnClickBtnLogin(
             this,
             username,
@@ -71,10 +62,5 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "on destroy $TAG")
     }
 }

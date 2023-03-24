@@ -2,16 +2,15 @@ package com.example.kmatool.ui.schedule.main_scr
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.children
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kmatool.R
+import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.databinding.FragmentScheduleMainBinding
 import com.example.kmatool.fragments.schedule.MonthDayBinderImpl
 import com.example.kmatool.fragments.schedule.displayText
@@ -33,8 +32,8 @@ import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.*
 
-class ScheduleMainFragment : Fragment() {
-    private val TAG = ScheduleMainFragment::class.java.simpleName
+class ScheduleMainFragment : BaseFragment() {
+    override val TAG = ScheduleMainFragment::class.java.simpleName
     private lateinit var binding: FragmentScheduleMainBinding
     private val scheduleMainViewModel: ScheduleMainViewModel by lazy {
         ViewModelProvider(requireActivity())[ScheduleMainViewModel::class.java]
@@ -50,7 +49,6 @@ class ScheduleMainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "on create view $TAG")
         binding = FragmentScheduleMainBinding.inflate(inflater, container, false)
         CoroutineScope(Dispatchers.Main).launch {
             // setup google progress
@@ -65,11 +63,6 @@ class ScheduleMainFragment : Fragment() {
             showDotViewEventsDayInDayBinder(it)
         }
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "show $TAG")
     }
 
     private fun setupGoogleProgress() {
@@ -113,14 +106,14 @@ class ScheduleMainFragment : Fragment() {
 
     private fun onDateClicked(day: CalendarDay) {
         val date = day.date
-        Log.d(TAG, "receive click date = $date listener")
+        logDebug("onDateClicked = $date")
 
         // if select day in Month
         if (day.position == DayPosition.MonthDate) {
             binding.googleProgress.makeVisible()
             // action
             scheduleMainViewModel.showPeriodsWithDate(date) {
-                Log.d(TAG, "date = $date - periods = $it")
+                logDebug("date = $date - periods = $it")
                 // show load progress
                 binding.googleProgress.makeGone()
                 if (it == null) {
@@ -151,13 +144,8 @@ class ScheduleMainFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun updateTitle() {
         val month = binding.calendarView.findFirstVisibleMonth()?.yearMonth ?: return
-        Log.d(TAG, "month = $month")
+        logDebug("updateTitle month = $month")
         binding.tvYearTitle.text = month.year.toString()
         binding.tvMonthTitle.text = month.month.displayText(short = false)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "destroy $TAG")
     }
 }

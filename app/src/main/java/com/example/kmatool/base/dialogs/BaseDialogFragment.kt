@@ -1,15 +1,18 @@
-package com.example.kmatool.base.fragment
+package com.example.kmatool.base.dialogs
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Point
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.view.*
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
+import com.example.kmatool.utils.SCALE_LAYOUT_SEARCH_DATA_DIALOG_X
+import com.example.kmatool.utils.SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y
 
-open class BaseFragment : Fragment() {
+open class BaseDialogFragment : DialogFragment() {
     protected open val TAG = ""
 
     // LIFECYCLE
@@ -29,12 +32,16 @@ open class BaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         logLifecycle("onCreateView")
+        // set theme for dialog
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         logLifecycle("onViewCreated")
+        // setup UI
+        setScaleUI()
     }
 
     override fun onStart() {
@@ -93,12 +100,26 @@ open class BaseFragment : Fragment() {
         Log.w(TAG, msg)
     }
 
-    // FUN
     protected fun navigateToFragment(id: Int) {
         findNavController().navigate(id)
     }
 
     protected fun navigateToFragment(id: Int, data: Bundle) {
         findNavController().navigate(id, data)
+    }
+
+    // FUN
+    private fun setScaleUI() {
+        logDebug("setting scale UI")
+        val window = dialog?.window
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val size = Point()
+        val display = window?.windowManager?.defaultDisplay
+        display?.getSize(size)
+        window?.setLayout(
+            ((size.x * SCALE_LAYOUT_SEARCH_DATA_DIALOG_X).toInt()),
+            ((size.y * SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y).toInt())
+        )
+        window?.setGravity(Gravity.CENTER)
     }
 }

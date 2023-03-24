@@ -3,8 +3,8 @@ package com.example.kmatool.activities
 import android.content.Context
 import android.util.Log
 import androidx.databinding.ObservableField
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.repositories.DataStoreManager
@@ -15,8 +15,8 @@ import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
 import com.example.kmatool.utils.jsonObjectToString
 import kotlinx.coroutines.*
 
-class LoginViewModel : ViewModel() {
-    private val TAG = LoginViewModel::class.java.simpleName
+class LoginViewModel : BaseViewModel() {
+    override val TAG = LoginViewModel::class.java.simpleName
     private val scheduleRepository: ScheduleRepository by lazy { ScheduleRepository() }
 
     // observable field
@@ -34,13 +34,13 @@ class LoginViewModel : ViewModel() {
         context: Context,
         callback: (res: Boolean) -> Unit
     ) {
-        Log.d(TAG, "get login state")
+        logDebug("get login state")
         isShowProgress.set(true)
         viewModelScope.launch(Dispatchers.IO) {
             val dataStoreManager = DataStoreManager(context)
             dataStoreManager.isLoginDataStoreFlow.collect { state ->
                 withContext(Dispatchers.Main) {
-                    Log.d(TAG, "login state = $state")
+                    logDebug( "login state = $state")
                     if (state) {
                         delay(1500)
                         isShowProgress.set(false)
@@ -60,14 +60,14 @@ class LoginViewModel : ViewModel() {
         password: String,
         callback: () -> Unit
     ) {
-        Log.i(TAG, "handle input username = $username, password (md5 hashed) = $password")
+        logInfo("handle input username = $username, password (md5 hashed) = $password")
         // show progress
         isShowProgress.set(true)
         // hide text view invalid author
         isValid.set(true)
         // action
         if (username.isNotBlank() && password.isNotBlank()) {
-            Log.d(TAG, "valid input")
+            logDebug("valid input")
             viewModelScope.launch(Dispatchers.IO) {
                 // call profile
                 val profileCallState = async { callProfileApi(context, username, password) }
@@ -79,18 +79,18 @@ class LoginViewModel : ViewModel() {
                         // hide text view invalid author
                         isValid.set(true)
                         isShowProgress.set(false)
-                        Log.d(TAG, "handle valid response from Api")
+                        logDebug("handle valid response from Api")
                         callback()
                     }
                 } else {
-                    Log.d(TAG, "login denied")
+                    logDebug("login denied")
                     isValid.set(false)
                     // hide progress
                     isShowProgress.set(false)
                 }
             }
         } else {
-            Log.d(TAG, "invalid input")
+            logDebug("invalid input")
             // if invalid input
             isValid.set(false)
             // hide progress
@@ -104,21 +104,21 @@ class LoginViewModel : ViewModel() {
         password: String
     ): Boolean {
         val profileResult = scheduleRepository.getProfile(username, password, true)
-        Log.i(TAG, "profile message = ${profileResult.message}")
+        logInfo("profile message = ${profileResult.message}")
 
         if (profileResult.message == AUTHOR_MESSAGE_ERROR) {
             return false
         } else {
-            Log.d(TAG, "profile = $profileResult")
+            logDebug("profile = $profileResult")
             // save profile to local
-            Log.d(TAG, "save profile to local")
+            logDebug("save profile to local")
             saveProfileToLocal(context, profileResult) {
                 Log.d(TAG, "save profile successfully")
             }.join()
             // save login state
-            Log.d(TAG, "save login state to local")
+            logDebug("save login state to local")
             saveLoginStateToLocal(context, true) {
-                Log.d(TAG, "save login state successfully")
+                logDebug("save login state successfully")
             }.join()
             return true
         }
@@ -130,18 +130,18 @@ class LoginViewModel : ViewModel() {
         password: String
     ): Boolean {
         val scheduleResult = scheduleRepository.getScheduleData(username, password, true)
-        Log.i(TAG, "schedule message = ${scheduleResult.message}")
+        logInfo("schedule message = ${scheduleResult.message}")
 
         if (scheduleResult.message == AUTHOR_MESSAGE_ERROR) {
             return false
         } else {
-            Log.d(TAG, "schedule = $scheduleResult")
+            logDebug("schedule = $scheduleResult")
             // save schedule to database
-            Log.d(TAG, "save schedule to database")
+            logDebug("save schedule to database")
             // format start and end time of period
             formatStartEndTime(scheduleResult.periods)
             savePeriodsToDatabase(context, scheduleResult.periods) {
-                Log.d(TAG, "save schedule successfully")
+                logDebug("save schedule successfully")
             }
             return true
         }
@@ -193,10 +193,5 @@ class LoginViewModel : ViewModel() {
         periodRepository.insertPeriods(data)
         // success
         callback()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.d(TAG, "on cleared $TAG")
     }
 }

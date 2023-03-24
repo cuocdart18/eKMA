@@ -3,17 +3,14 @@ package com.example.kmatool.ui.score.details
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kmatool.R
+import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.databinding.FragmentScoreStudentDetailBinding
 import com.example.kmatool.data.models.Score
 import com.example.kmatool.data.models.StatisticSubject
@@ -22,10 +19,9 @@ import com.example.kmatool.utils.KEY_PASS_MINISTUDENT_ID
 import com.example.kmatool.utils.KEY_PASS_STATISTIC_SUBJECT
 import com.example.kmatool.utils.KIT_URL
 
-class StudentDetailFragment : Fragment() {
-    private val TAG = StudentDetailFragment::class.java.simpleName
+class StudentDetailFragment : BaseFragment() {
+    override val TAG = StudentDetailFragment::class.java.simpleName
     private lateinit var binding: FragmentScoreStudentDetailBinding
-    private val navController: NavController by lazy { findNavController() }
     private val studentDetailViewModel: StudentDetailViewModel by lazy {
         ViewModelProvider(requireActivity())[StudentDetailViewModel::class.java]
     }
@@ -36,18 +32,13 @@ class StudentDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d(TAG, "on create view $TAG")
         binding = FragmentScoreStudentDetailBinding.inflate(inflater, container, false)
-//        binding.tvKit.setOnClickListener() { onClickTagFooter() }
-        // set view model
         binding.studentDetailVM = studentDetailViewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "show $TAG")
-
         // receive data from main fragment
         receiveDataFromScoreMainFragment()
         // show detail student
@@ -61,11 +52,11 @@ class StudentDetailFragment : Fragment() {
         bundle?.let {
             studentId = it.getString(KEY_PASS_MINISTUDENT_ID).toString()
         }
-        Log.i(TAG, "receive student id = $studentId")
+        logInfo("receiveDataFromScoreMainFragment student id = $studentId")
     }
 
     private fun showDetailStudent(student: Student) {
-        Log.d(TAG, "show to UI detail student id = ${student.id}")
+        logDebug("showDetailStudent id = ${student.id}")
         binding.student = student
         // set adapter data for rcv
         val studentDetailAdapter = StudentDetailAdapter() { score ->
@@ -81,7 +72,7 @@ class StudentDetailFragment : Fragment() {
     }
 
     private fun onClickScoreItemInList(score: Score) {
-        Log.i(TAG, "show subject score = $score")
+        logInfo("onClickScoreItemInList score = $score")
         // action (get statistic subject)
         studentDetailViewModel.getStatisticSubject(score) { statisticSubject ->
             showStatisticSubject(statisticSubject)
@@ -89,24 +80,19 @@ class StudentDetailFragment : Fragment() {
     }
 
     private fun showStatisticSubject(statisticSubject: StatisticSubject) {
-        Log.d(TAG, "show statistic subject to dialog")
+        logDebug("showStatisticSubject")
         // action (show data to dialog)
         val bundle = bundleOf(
             KEY_PASS_STATISTIC_SUBJECT to statisticSubject
         )
-        navController.navigate(R.id.statisticSubjectDialogFragment, bundle)
+        navigateToFragment(R.id.statisticSubjectDialogFragment, bundle)
     }
 
     private fun onClickTagFooter() {
-        Log.d(TAG, "on click tag footer")
+        logDebug("onClickTagFooter")
         // action
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(KIT_URL)
         startActivity(intent)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(TAG, "destroy $TAG")
     }
 }
