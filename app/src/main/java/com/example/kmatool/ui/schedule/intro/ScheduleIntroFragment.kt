@@ -43,12 +43,12 @@ class ScheduleIntroFragment : Fragment() {
         // check login state
         scheduleIntroViewModel.getLoginState(requireContext()) {
             Log.i(TAG, "callback login state = $it")
-            // navigate
+            /*// navigate
             if (it) {
                 navController.navigate(R.id.scheduleMainFragment)
             } else {
                 navController.navigate(R.id.scheduleLoginFragment)
-            }
+            }*/
         }
     }
 

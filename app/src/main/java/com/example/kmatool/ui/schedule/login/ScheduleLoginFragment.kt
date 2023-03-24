@@ -69,8 +69,8 @@ class ScheduleLoginFragment : Fragment() {
 
     private fun handleValidResponseFromApi() {
         Log.d(TAG, "handle valid response from Api")
-        // action something
-        navController.popBackStack(R.id.scheduleIntroFragment, false)
+        /*// action something
+        navController.popBackStack(R.id.scheduleIntroFragment, false)*/
     }
 
     override fun onDestroy() {

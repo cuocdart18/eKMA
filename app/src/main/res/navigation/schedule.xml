@@ -3,25 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/schedule"
-    app:startDestination="@+id/scheduleIntroFragment">
+    app:startDestination="@+id/scheduleMainFragment">
 
-    <fragment
-        android:id="@+id/scheduleIntroFragment"
-        android:name="com.example.kmatool.ui.schedule.intro.ScheduleIntroFragment"
-        android:label="@string/label_name_schedule"
-        tools:layout="@layout/fragment_schedule_intro">
-        <action
-            android:id="@+id/action_scheduleIntroFragment_to_scheduleLoginFragment"
-            app:destination="@id/scheduleLoginFragment" />
-        <action
-            android:id="@+id/action_scheduleIntroFragment_to_scheduleMainFragment2"
-            app:destination="@id/scheduleMainFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/scheduleLoginFragment"
-        android:name="com.example.kmatool.ui.schedule.login.ScheduleLoginFragment"
-        android:label="@string/label_name_schedule"
-        tools:layout="@layout/fragment_schedule_login" />
     <fragment
         android:id="@+id/scheduleMainFragment"
         android:name="com.example.kmatool.ui.schedule.main_scr.ScheduleMainFragment"
