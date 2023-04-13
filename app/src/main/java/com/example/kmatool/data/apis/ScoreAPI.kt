@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ApiScoreService {
+interface ScoreAPI {
 
     @GET("/statistics")
     suspend fun getStatistics(): Result<Statistic>

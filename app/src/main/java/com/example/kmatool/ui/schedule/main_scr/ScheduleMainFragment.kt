@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.children
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
@@ -23,6 +23,7 @@ import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawa
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,12 +33,11 @@ import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.*
 
+@AndroidEntryPoint
 class ScheduleMainFragment : BaseFragment() {
     override val TAG = ScheduleMainFragment::class.java.simpleName
     private lateinit var binding: FragmentScheduleMainBinding
-    private val scheduleMainViewModel: ScheduleMainViewModel by lazy {
-        ViewModelProvider(requireActivity())[ScheduleMainViewModel::class.java]
-    }
+    private val scheduleMainViewModel by viewModels<ScheduleMainViewModel>()
     private val periodsDayAdapter: PeriodsDayAdapter by lazy { PeriodsDayAdapter() }
     private val dayBinder: MonthDayBinderImpl by lazy {
         MonthDayBinderImpl(
@@ -59,7 +59,7 @@ class ScheduleMainFragment : BaseFragment() {
             setupCalendar()
         }
         // get all of periods from database
-        scheduleMainViewModel.getListPeriodFromDatabase(requireContext()) {
+        scheduleMainViewModel.getListPeriod {
             showDotViewEventsDayInDayBinder(it)
         }
         return binding.root

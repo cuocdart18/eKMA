@@ -3,10 +3,12 @@ package com.example.kmatool.ui.schedule.intro
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.data.repositories.DataStoreManager
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
-class ScheduleIntroViewModel : BaseViewModel() {
+@HiltViewModel
+class ScheduleIntroViewModel @Inject constructor() : BaseViewModel() {
     override val TAG = ScheduleIntroViewModel::class.java.simpleName
 
     fun getLoginState(
@@ -15,13 +17,13 @@ class ScheduleIntroViewModel : BaseViewModel() {
     ) {
         logDebug("getLoginState")
         viewModelScope.launch(Dispatchers.IO) {
-            val dataStoreManager = DataStoreManager(context)
+            /*val dataStoreManager = DataStoreManager(context)
             dataStoreManager.isLoginDataStoreFlow.collect {
                 withContext(Dispatchers.Main) {
                     callback(it)
                 }
                 cancel()
-            }
+            }*/
         }
     }
 }

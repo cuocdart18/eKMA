@@ -1,29 +1,33 @@
 package com.example.kmatool.ui.score.search
 
-import android.content.Context
 import androidx.databinding.ObservableField
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.data.repositories.ScoreRepository
-import com.example.kmatool.data.repositories.MiniStudentRepository
 import com.example.kmatool.data.models.MiniStudent
-import com.example.kmatool.utils.OK
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import java.util.*
+import javax.inject.Inject
 
-class SearchDataViewModel : BaseViewModel() {
+@HiltViewModel
+class SearchDataViewModel @Inject constructor(
+    private val scoreRepository: ScoreRepository
+) : BaseViewModel() {
     override val TAG = SearchDataViewModel::class.java.simpleName
-    private val scoreRepository = ScoreRepository()
 
     // data layer UI
     var isUserTyped = ObservableField<Boolean>()
 
     // instant EditText
+    @OptIn(ObsoleteCoroutinesApi::class)
     internal val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
+
+    @OptIn(ObsoleteCoroutinesApi::class, FlowPreview::class)
     private val internalSearchResult = queryChannel
         .asFlow()
         .debounce(500L)
@@ -38,70 +42,34 @@ class SearchDataViewModel : BaseViewModel() {
         isUserTyped.set(true)
     }
 
-    fun showRecentSearchHistory(
-        context: Context,
-        callback: (ministudents: List<MiniStudent>) -> Unit
-    ) {
-        getListMiniStudentFromDatabase(context, callback)
-    }
-
-    fun insertMiniStudentToDb(context: Context, miniStudent: MiniStudent) {
-        saveMiniStudentsIntoDatabase(context, miniStudent)
-    }
-
-    // call API with fresh query
     private fun makeCallApi(
         text: String,
         callback: (ministudents: List<MiniStudent>) -> Unit
     ) {
-        logDebug("START call api with text = $text")
-        // action
         viewModelScope.launch(Dispatchers.IO) {
-            val result = scoreRepository.search(text)
-            logDebug("makeCallApi score status code = ${result.statusCode}")
-
-            withContext(Dispatchers.Main) {
-                if (result.statusCode == OK) {
-                    val data = result.data
-                    logInfo("search student data = $data")
-                    // update data to UI, pass to fragment
-                    data?.let {
-                        callback(it)
-                    }
+            scoreRepository.getSearchStudentData(text) { result ->
+                CoroutineScope(Dispatchers.Main).launch {
+                    callback(result)
                 }
             }
         }
     }
 
-    // get data from Db
-    private fun getListMiniStudentFromDatabase(
-        context: Context,
+    fun showRecentSearchHistory(
         callback: (ministudents: List<MiniStudent>) -> Unit
     ) {
-        logDebug("get list student from Db")
-        // action
-        val miniStudentRepository = MiniStudentRepository(context)
         viewModelScope.launch(Dispatchers.IO) {
-            val result = miniStudentRepository.getRecentHistorySearch()
-
-            withContext(Dispatchers.Main) {
-                logInfo("list miniStudent recently = $result")
-                // update data to UI, pass to fragment
-                callback(result)
+            scoreRepository.getListMiniStudentFromDatabase { result ->
+                CoroutineScope(Dispatchers.Main).launch {
+                    callback(result)
+                }
             }
         }
     }
 
-    // set date modified and update in database
-    private fun saveMiniStudentsIntoDatabase(context: Context, miniStudent: MiniStudent) {
-        logDebug("update student id = ${miniStudent.id}")
-        // action
-        miniStudent.dateModified = Calendar.getInstance().time
-
-        val miniStudentRepository = MiniStudentRepository(context)
+    fun insertMiniStudentToDb(miniStudent: MiniStudent) {
         viewModelScope.launch(Dispatchers.IO) {
-            miniStudentRepository.insertStudent(miniStudent)
-            logDebug("complete insert student = $miniStudent")
+            scoreRepository.saveMiniStudentsIntoDatabase(miniStudent)
         }
     }
 }

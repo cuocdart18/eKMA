@@ -1,23 +1,16 @@
 package com.example.kmatool.ui.schedule.login
 
-import android.content.Context
-import android.util.Log
 import androidx.databinding.ObservableField
-import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.data.repositories.ScheduleRepository
-import com.example.kmatool.data.repositories.PeriodRepository
-import com.example.kmatool.fragments.schedule.convertPeriodsToStartEndTime
-import com.example.kmatool.data.repositories.DataStoreManager
-import com.example.kmatool.data.models.Period
-import com.example.kmatool.data.models.Profile
-import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
-import com.example.kmatool.utils.jsonObjectToString
-import kotlinx.coroutines.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ScheduleLoginViewModel : BaseViewModel() {
+@HiltViewModel
+class ScheduleLoginViewModel @Inject constructor(
+    private val scheduleRepository: ScheduleRepository
+) : BaseViewModel() {
     override val TAG = ScheduleLoginViewModel::class.java.simpleName
-    private val scheduleRepository: ScheduleRepository by lazy { ScheduleRepository() }
 
     // observable field
     var isValid = ObservableField<Boolean>()
@@ -30,7 +23,7 @@ class ScheduleLoginViewModel : BaseViewModel() {
         isShowProgress.set(false)
     }
 
-    fun handleOnClickBtnLogin(
+    /*fun handleOnClickBtnLogin(
         context: Context,
         username: String,
         password: String,
@@ -168,5 +161,5 @@ class ScheduleLoginViewModel : BaseViewModel() {
         periodRepository.insertPeriods(data)
         // success
         callback()
-    }
+    }*/
 }

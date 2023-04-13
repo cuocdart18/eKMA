@@ -8,7 +8,9 @@ import com.example.kmatool.R
 import com.example.kmatool.base.activities.BaseActivity
 import com.example.kmatool.data.database.AppDatabase
 import com.example.kmatool.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
     override val TAG = MainActivity::class.java.simpleName
     private lateinit var binding: ActivityMainBinding

@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.databinding.FragmentScheduleIntroBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ScheduleIntroFragment : BaseFragment() {
     override val TAG = ScheduleIntroFragment::class.java.simpleName
     private lateinit var binding: FragmentScheduleIntroBinding
-    private val scheduleIntroViewModel: ScheduleIntroViewModel by lazy {
-        ViewModelProvider(requireActivity())[ScheduleIntroViewModel::class.java]
-    }
+    private val scheduleIntroViewModel by viewModels<ScheduleIntroViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
