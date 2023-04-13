@@ -6,18 +6,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.example.kmatool.databinding.FragmentScoreMainBinding
-import androidx.lifecycle.ViewModelProvider
 import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.utils.KIT_URL
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ScoreMainFragment : BaseFragment() {
     override val TAG = ScoreMainFragment::class.java.simpleName
     private lateinit var binding: FragmentScoreMainBinding
-    private val scoreMainViewModel: ScoreMainViewModel by lazy {
-        ViewModelProvider(requireActivity())[ScoreMainViewModel::class.java]
-    }
+    private val scoreMainViewModel by viewModels<ScoreMainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +34,6 @@ class ScoreMainFragment : BaseFragment() {
 
     private fun onClickShowSearchDialog() {
         logDebug("onClickShowSearchDialog")
-        // action (open dialog)
         navigateToFragment(R.id.searchDataDialogFragment)
     }
 

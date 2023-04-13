@@ -1,10 +1,11 @@
-package com.example.kmatool.fragments.schedule
+package com.example.kmatool.ui.schedule.main_scr
 
 import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import com.example.kmatool.R
 import com.example.kmatool.databinding.LayoutCalendarDayBinding
+import com.example.kmatool.ui.schedule.syncFormatJsonApi
 import com.example.kmatool.utils.makeInVisible
 import com.example.kmatool.utils.setTextColorRes
 import com.kizitonwose.calendar.core.CalendarDay

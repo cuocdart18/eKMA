@@ -1,21 +1,99 @@
 package com.example.kmatool.data.repositories
 
-import com.example.kmatool.data.apis.ApiConfig
-import com.example.kmatool.data.apis.ApiScoreService
+import com.example.kmatool.base.repositories.BaseRepositories
+import com.example.kmatool.data.models.*
+import com.example.kmatool.data.services.MiniStudentLocalService
+import com.example.kmatool.data.services.ScoreRemoteService
+import com.example.kmatool.utils.OK
+import kotlinx.coroutines.coroutineScope
+import java.util.*
+import javax.inject.Inject
 
-class ScoreRepository : ApiScoreService {
-    override suspend fun getStatistics() =
-        ApiConfig.apiScoreService.getStatistics()
+class ScoreRepository @Inject constructor(
+    private val scoreRemoteService: ScoreRemoteService,
+    private val miniStudentLocalService: MiniStudentLocalService
+) : BaseRepositories() {
+    override val TAG: String = ScoreRepository::class.java.simpleName
 
-    override suspend fun getStudentStatistics(studentId: String) =
-        ApiConfig.apiScoreService.getStudentStatistics(studentId)
+    suspend fun getDetailStudent(
+        id: String,
+        callback: (student: Student) -> Unit
+    ) {
+        logDebug("get detail of student")
+        coroutineScope {
+            val result = scoreRemoteService.getStudentStatistics(id)
+            logDebug("getDetailStudent status code = ${result.statusCode}")
+            if (result.statusCode == OK) {
+                val data = result.data
+                logInfo("student detail data = $data")
+                data?.let { callback(it) }
+            }
+        }
+    }
 
-    override suspend fun getSubjectStatistics(subjectId: String) =
-        ApiConfig.apiScoreService.getSubjectStatistics(subjectId)
+    suspend fun getStatisticSubject(
+        subjectId: String,
+        callback: (statisticSubject: StatisticSubject) -> Unit
+    ) {
+        logDebug("get statistic subject")
+        coroutineScope {
+            val result = scoreRemoteService.getSubjectStatistics(subjectId)
+            logDebug("getStatisticSubject status code = ${result.statusCode}")
+            if (result.statusCode == OK) {
+                val data = result.data
+                logInfo("subject statistic data = $data")
+                data?.let { callback(it) }
+            }
+        }
+    }
 
-    override suspend fun getSubjects() =
-        ApiConfig.apiScoreService.getSubjects()
+    suspend fun getStatisticData(
+        callback: (statistic: Statistic) -> Unit
+    ) {
+        coroutineScope {
+            val result = scoreRemoteService.getStatistics()
+            logDebug("getStatisticData status code = ${result.statusCode}")
+            if (result.statusCode == OK) {
+                val data = result.data
+                logInfo("student statistic data = $data")
+                data?.let { callback(it) }
+            }
+        }
+    }
 
-    override suspend fun search(data: String) =
-        ApiConfig.apiScoreService.search(data)
+    suspend fun getSearchStudentData(
+        text: String,
+        callback: (ministudents: List<MiniStudent>) -> Unit
+    ) {
+        logDebug("START call api with text = $text")
+        coroutineScope {
+            val result = scoreRemoteService.search(text)
+            logDebug("makeCallApi score status code = ${result.statusCode}")
+            if (result.statusCode == OK) {
+                val data = result.data
+                logInfo("search student data = $data")
+                data?.let { callback(it) }
+            }
+        }
+    }
+
+    suspend fun getListMiniStudentFromDatabase(
+        callback: (ministudents: List<MiniStudent>) -> Unit
+    ) {
+        logDebug("get list student from Db")
+        coroutineScope {
+            val result = miniStudentLocalService.getRecentHistorySearch()
+            logInfo("list miniStudent recently = $result")
+            callback(result)
+        }
+    }
+
+    suspend fun saveMiniStudentsIntoDatabase(miniStudent: MiniStudent) {
+        logDebug("update student id = ${miniStudent.id}")
+        miniStudent.dateModified = Calendar.getInstance().time
+        coroutineScope {
+            miniStudentLocalService.insertStudent(miniStudent)
+            logDebug("complete insert student = $miniStudent")
+        }
+    }
 }

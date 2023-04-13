@@ -8,30 +8,28 @@ import com.example.kmatool.data.models.StatisticSubject
 import com.example.kmatool.data.models.Student
 import com.example.kmatool.utils.OK
 import com.example.kmatool.ui.score.search.SearchDataViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class StudentDetailViewModel : BaseViewModel() {
+@HiltViewModel
+class StudentDetailViewModel @Inject constructor(
+    private val scoreRepository: ScoreRepository
+) : BaseViewModel() {
     override val TAG = SearchDataViewModel::class.java.simpleName
-    private val scoreRepository = ScoreRepository()
 
     fun getDetailStudent(
         id: String,
         callback: (student: Student) -> Unit
     ) {
-        logDebug("get detail of student")
-        // action
         viewModelScope.launch(Dispatchers.IO) {
-            val result = scoreRepository.getStudentStatistics(id)
-            logDebug("getDetailStudent status code = ${result.statusCode}")
-
-            withContext(Dispatchers.Main) {
-                if (result.statusCode == OK) {
-                    val data = result.data
-                    logInfo("data = $data")
+            scoreRepository.getDetailStudent(id) { result ->
+                CoroutineScope(Dispatchers.Main).launch {
                     // update data to UI
-                    data?.let { callback(it) }
+                    callback(result)
                 }
             }
         }
@@ -41,19 +39,12 @@ class StudentDetailViewModel : BaseViewModel() {
         score: Score,
         callback: (statisticSubject: StatisticSubject) -> Unit
     ) {
-        logDebug("get statistic subject")
-        // action
         viewModelScope.launch(Dispatchers.IO) {
             val id = score.subject.id
-            val result = scoreRepository.getSubjectStatistics(id)
-            logDebug("get statistic subject status code = ${result.statusCode}")
-
-            withContext(Dispatchers.Main) {
-                if (result.statusCode == OK) {
-                    val data = result.data
-                    logInfo("data = $data")
+            scoreRepository.getStatisticSubject(id) { result ->
+                CoroutineScope(Dispatchers.Main).launch {
                     // update data to UI
-                    data?.let { callback(it) }
+                    callback(result)
                 }
             }
         }

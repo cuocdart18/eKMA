@@ -1,22 +1,52 @@
 package com.example.kmatool.data.repositories
 
-import android.content.Context
-import com.example.kmatool.data.database.AppDatabase
-import com.example.kmatool.data.database.daos.PeriodDao
+import com.example.kmatool.base.repositories.BaseRepositories
 import com.example.kmatool.data.models.Period
+import com.example.kmatool.data.services.PeriodLocalService
+import kotlinx.coroutines.*
+import javax.inject.Inject
 
-class PeriodRepository(context: Context) : PeriodDao {
-    private val db: PeriodDao = AppDatabase.getInstance(context).periodDao()
+class PeriodRepository @Inject constructor(
+    private val periodLocalService: PeriodLocalService
+) : BaseRepositories() {
+    override val TAG: String = PeriodRepository::class.java.simpleName
 
-    override suspend fun insertPeriods(periods: List<Period>) {
-        db.insertPeriods(periods)
+    // global periods
+    lateinit var periodsDayMap: Map<String, List<Period>>
+
+    suspend fun getListPeriodFromDatabase(
+        callback: (setEventsDay: List<String>) -> Unit
+    ) {
+        logDebug("get and filter periods from database")
+        // action
+        coroutineScope {
+            val periods = periodLocalService.getPeriods()
+            // add to Map
+            filterListToAddPeriodsDayMap(periods)
+            // filter events day
+            distinctEventsDay(periods) { setEventsDay ->
+                callback(setEventsDay)
+            }
+        }
     }
 
-    override suspend fun deleteAllPeriods(periods: List<Period>) {
-        db.deleteAllPeriods(periods)
+    private suspend fun filterListToAddPeriodsDayMap(
+        periods: List<Period>
+    ) {
+        withContext(Dispatchers.Default) {
+            periodsDayMap = periods.groupBy { it.day }
+        }
     }
 
-    override suspend fun getPeriods(): List<Period> {
-        return db.getPeriods()
+    private suspend fun distinctEventsDay(
+        periods: List<Period>,
+        callback: (eventsDay: List<String>) -> Unit
+    ) {
+        withContext(Dispatchers.Default) {
+            val setEventsDay = mutableListOf<String>()
+            periods.distinctBy { it.day }.forEach { setEventsDay.add(it.day) }
+            logDebug("distinct periods events day = $setEventsDay")
+            callback(setEventsDay)
+        }
     }
 }

@@ -1,16 +1,11 @@
 package com.example.kmatool.data.repositories
 
-import android.content.Context
-import com.example.kmatool.data.database.AppDatabase
-import com.example.kmatool.data.database.daos.MiniStudentDao
-import com.example.kmatool.data.models.MiniStudent
+import com.example.kmatool.base.repositories.BaseRepositories
+import com.example.kmatool.data.services.MiniStudentLocalService
+import javax.inject.Inject
 
-class MiniStudentRepository(context: Context) : MiniStudentDao {
-    private val db: MiniStudentDao = AppDatabase.getInstance(context).miniStudentDao()
-
-    override suspend fun insertStudent(miniStudent: MiniStudent) {
-        db.insertStudent(miniStudent)
-    }
-
-    override suspend fun getRecentHistorySearch(): List<MiniStudent> = db.getRecentHistorySearch()
+class MiniStudentRepository @Inject constructor(
+    private val miniStudentLocalService: MiniStudentLocalService
+) : BaseRepositories() {
+    override val TAG: String = MiniStudentRepository::class.java.simpleName
 }

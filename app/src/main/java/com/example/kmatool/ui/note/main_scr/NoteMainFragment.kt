@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.databinding.FragmentNoteMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NoteMainFragment : BaseFragment() {
     override val TAG = NoteMainFragment::class.java.simpleName
     private lateinit var binding: FragmentNoteMainBinding

@@ -1,4 +1,4 @@
-package com.example.kmatool.fragments.schedule
+package com.example.kmatool.ui.schedule
 
 import java.time.DayOfWeek
 import java.time.LocalDate

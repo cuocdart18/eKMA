@@ -5,7 +5,7 @@ import com.example.kmatool.data.models.Schedule
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ApiScheduleService {
+interface ScheduleAPI {
 
     @GET("/schedule")
     suspend fun getScheduleData(

@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
@@ -18,13 +18,13 @@ import com.example.kmatool.data.models.Student
 import com.example.kmatool.utils.KEY_PASS_MINISTUDENT_ID
 import com.example.kmatool.utils.KEY_PASS_STATISTIC_SUBJECT
 import com.example.kmatool.utils.KIT_URL
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StudentDetailFragment : BaseFragment() {
     override val TAG = StudentDetailFragment::class.java.simpleName
     private lateinit var binding: FragmentScoreStudentDetailBinding
-    private val studentDetailViewModel: StudentDetailViewModel by lazy {
-        ViewModelProvider(requireActivity())[StudentDetailViewModel::class.java]
-    }
+    private val studentDetailViewModel by viewModels<StudentDetailViewModel>()
     private var studentId: String = ""
 
     override fun onCreateView(

@@ -5,14 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.data.repositories.ScoreRepository
 import com.example.kmatool.data.models.Statistic
-import com.example.kmatool.utils.OK
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ScoreMainViewModel : BaseViewModel() {
+@HiltViewModel
+class ScoreMainViewModel @Inject constructor(
+    private val scoreRepository: ScoreRepository
+) : BaseViewModel() {
     override val TAG = ScoreMainViewModel::class.java.simpleName
-    private val scoreRepository = ScoreRepository()
     private var restoreStatistic: Statistic? = null
 
     val statisticOF = ObservableField<Statistic>()
@@ -27,19 +30,12 @@ class ScoreMainViewModel : BaseViewModel() {
 
         // action
         viewModelScope.launch(Dispatchers.IO) {
-            val result = scoreRepository.getStatistics()
-            logDebug("getStatisticData status code = ${result.statusCode}")
-
-            withContext(Dispatchers.Main) {
-                if (result.statusCode == OK) {
-                    val data = result.data
-                    // restore data
-                    if (data != null) {
-                        restoreStatistic = data
-                    }
-                    logInfo("data = $data")
+            val result = scoreRepository.getStatisticData() { result ->
+                CoroutineScope(Dispatchers.Main).launch {
+                    // assign restore data
+                    restoreStatistic = result
                     // update data to UI
-                    statisticOF.set(data)
+                    statisticOF.set(result)
                 }
             }
         }

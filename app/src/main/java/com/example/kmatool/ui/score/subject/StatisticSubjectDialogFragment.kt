@@ -6,7 +6,9 @@ import com.example.kmatool.base.dialogs.BaseDialogFragment
 import com.example.kmatool.databinding.DialogStatisticSubjectBinding
 import com.example.kmatool.data.models.StatisticSubject
 import com.example.kmatool.utils.KEY_PASS_STATISTIC_SUBJECT
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StatisticSubjectDialogFragment : BaseDialogFragment() {
     override val TAG = StatisticSubjectDialogFragment::class.java.simpleName
     private lateinit var binding: DialogStatisticSubjectBinding
@@ -23,9 +25,7 @@ class StatisticSubjectDialogFragment : BaseDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // receive data from main fragment
         receiveDataFromStudentDetailFragment()
-        // show data to UI
         showStatisticSubjectDataToUI()
     }
 
