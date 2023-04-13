@@ -33,7 +33,6 @@ class MainActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // clear database ref
         logDebug("clear AppDatabase")
         AppDatabase.destroyInstance()
     }

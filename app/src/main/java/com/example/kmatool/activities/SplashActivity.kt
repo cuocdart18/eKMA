@@ -1,6 +1,5 @@
 package com.example.kmatool.activities
 
-import android.annotation.SuppressLint
 import com.example.kmatool.base.activities.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 

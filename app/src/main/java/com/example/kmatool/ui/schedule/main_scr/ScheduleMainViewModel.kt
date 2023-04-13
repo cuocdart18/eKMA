@@ -3,7 +3,7 @@ package com.example.kmatool.ui.schedule.main_scr
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.data.repositories.PeriodRepository
-import com.example.kmatool.fragments.schedule.syncFormatJsonApi
+import com.example.kmatool.ui.schedule.syncFormatJsonApi
 import com.example.kmatool.data.models.Period
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -25,15 +25,12 @@ class ScheduleMainViewModel @Inject constructor(
     fun getListPeriod(
         callback: (setEventsDay: List<String>) -> Unit
     ) {
-        logDebug("get and filter periods from database")
-        // action
         getListPeriodJob = viewModelScope.launch(Dispatchers.IO) {
             periodRepository.getListPeriodFromDatabase { setEventsDay ->
                 CoroutineScope(Dispatchers.Main).launch {
                     callback(setEventsDay)
                 }
             }
-            // notify to fragment
             logDebug("get periods successfully")
         }
     }

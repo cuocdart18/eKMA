@@ -7,7 +7,7 @@ import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.services.PeriodLocalService
 import com.example.kmatool.data.services.ScheduleRemoteService
-import com.example.kmatool.fragments.schedule.convertPeriodsToStartEndTime
+import com.example.kmatool.ui.schedule.convertPeriodsToStartEndTime
 import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
 import com.example.kmatool.utils.jsonObjectToString
 import kotlinx.coroutines.*
@@ -41,12 +41,12 @@ class ScheduleRepository @Inject constructor(
             return false
         } else {
             logDebug("profile = $profileResult")
-            // save profile to local
+
             logDebug("save profile to local")
             saveProfileToLocal(profileResult) {
                 Log.d(TAG, "save profile successfully")
             }.join()
-            // save login state
+
             logDebug("save login state to local")
             saveLoginStateToLocal(true) {
                 logDebug("save login state successfully")
@@ -66,9 +66,8 @@ class ScheduleRepository @Inject constructor(
             return false
         } else {
             logDebug("schedule = $scheduleResult")
-            // save schedule to database
             logDebug("save schedule to database")
-            // format start and end time of period
+
             formatStartEndTime(scheduleResult.periods)
             savePeriodsToDatabase(scheduleResult.periods) {
                 logDebug("save schedule successfully")
@@ -81,8 +80,8 @@ class ScheduleRepository @Inject constructor(
         data: Profile,
         callback: () -> Unit
     ): Job {
-        // convert to json string
         return CoroutineScope(Dispatchers.IO).launch {
+            // convert to json string
             val dataStringType = async { jsonObjectToString(data) }
             // save
             dataStoreManager.storeProfile(dataStringType.await())

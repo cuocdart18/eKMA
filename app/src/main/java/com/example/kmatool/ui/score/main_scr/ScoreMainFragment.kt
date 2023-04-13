@@ -34,7 +34,6 @@ class ScoreMainFragment : BaseFragment() {
 
     private fun onClickShowSearchDialog() {
         logDebug("onClickShowSearchDialog")
-        // action (open dialog)
         navigateToFragment(R.id.searchDataDialogFragment)
     }
 

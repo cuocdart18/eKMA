@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.databinding.FragmentScheduleMainBinding
-import com.example.kmatool.fragments.schedule.MonthDayBinderImpl
-import com.example.kmatool.fragments.schedule.displayText
-import com.example.kmatool.fragments.schedule.toYearMonth
+import com.example.kmatool.ui.schedule.displayText
+import com.example.kmatool.ui.schedule.toYearMonth
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.utils.makeGone
 import com.example.kmatool.utils.makeVisible
@@ -51,11 +50,8 @@ class ScheduleMainFragment : BaseFragment() {
     ): View {
         binding = FragmentScheduleMainBinding.inflate(inflater, container, false)
         CoroutineScope(Dispatchers.Main).launch {
-            // setup google progress
             setupGoogleProgress()
-            // setup rcv
             setupRecyclerViewPeriods()
-            // setup calendar
             setupCalendar()
         }
         // get all of periods from database
@@ -70,7 +66,6 @@ class ScheduleMainFragment : BaseFragment() {
             ChromeFloatingCirclesDrawable.Builder(requireContext())
                 .colors(resources.getIntArray(R.array.google_colors))
                 .build()
-        // show load progress
         binding.googleProgress.makeVisible()
     }
 

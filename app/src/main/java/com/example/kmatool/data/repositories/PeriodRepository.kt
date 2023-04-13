@@ -17,6 +17,8 @@ class PeriodRepository @Inject constructor(
     suspend fun getListPeriodFromDatabase(
         callback: (setEventsDay: List<String>) -> Unit
     ) {
+        logDebug("get and filter periods from database")
+        // action
         coroutineScope {
             val periods = periodLocalService.getPeriods()
             // add to Map

@@ -31,11 +31,8 @@ class SearchDataDialogFragment :
         savedInstanceState: Bundle?
     ): View {
         binding = DialogSearchBinding.inflate(inflater, container, false)
-        // set search async for EditText
         setSearchAsyncEditText()
-        // setup rcv
         setRecyclerViewProperties()
-        // setup viewModel, callback
         binding.searchDataVM = searchDataViewModel
         // show recent search history from Room
         searchDataViewModel.showRecentSearchHistory { ministudents ->
@@ -63,7 +60,6 @@ class SearchDataDialogFragment :
 
     private fun setRecyclerViewProperties() {
         logDebug("setting rcv properties")
-        // set recycler view
         val linearLayoutManager = LinearLayoutManager(requireContext())
         binding.rvSearchQuery.layoutManager = linearLayoutManager
         binding.rvSearchQuery.isFocusable = false
@@ -78,9 +74,7 @@ class SearchDataDialogFragment :
 
     private fun onClickListItem(miniStudent: MiniStudent) {
         logDebug("on click student = $miniStudent")
-        // insert student into recent db
         searchDataViewModel.insertMiniStudentToDb(miniStudent)
-        // navigate
         navigateStudentDetailFragment(miniStudent.id)
     }
 

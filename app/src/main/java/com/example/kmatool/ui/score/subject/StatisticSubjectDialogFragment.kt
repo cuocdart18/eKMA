@@ -25,9 +25,7 @@ class StatisticSubjectDialogFragment : BaseDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // receive data from main fragment
         receiveDataFromStudentDetailFragment()
-        // show data to UI
         showStatisticSubjectDataToUI()
     }
 
