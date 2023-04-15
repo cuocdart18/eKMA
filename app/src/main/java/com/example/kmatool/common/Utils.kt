@@ -1,7 +1,9 @@
-package com.example.kmatool.ui.schedule
+package com.example.kmatool.common
 
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.Month
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -23,12 +25,21 @@ fun DayOfWeek.displayText(uppercase: Boolean = false): String {
     }
 }
 
-fun LocalDate.syncFormatJsonApi(): String = this.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+fun LocalDate.toDayMonthYear(): String =
+    this.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+
+fun LocalTime.toHourMinute(): String =
+    this.format(DateTimeFormatter.ofPattern("HH:mm"))
 
 fun LocalDate.toYearMonth(): String = this.format(DateTimeFormatter.ofPattern("yyyy-MM"))
 
 fun String.toLocalDate(): LocalDate =
     LocalDate.parse(this, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+
+fun Int.formatDoubleChar(): String {
+    return if (this >= 10) "$this"
+    else "0$this"
+}
 
 fun convertPeriodToTime(data: String): String =
     when (data) {

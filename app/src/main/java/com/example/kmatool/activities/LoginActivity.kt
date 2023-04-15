@@ -26,8 +26,11 @@ class LoginActivity : BaseActivity() {
         handleOnClick()
         // check login state
         viewModel.getLoginState {
-            // if login state = true
-            openMainActivity()
+            // get local data if already logged in
+            viewModel.getLocalData {
+                // if login successfully
+                openMainActivity()
+            }
         }
     }
 
@@ -47,8 +50,11 @@ class LoginActivity : BaseActivity() {
         val username = binding.edtUsername.text.toString().uppercase()
         val password = md5(binding.edtPassword.text.toString())
         viewModel.handleOnClickBtnLogin(username, password) {
-            // if login successfully
-            openMainActivity()
+            // get local data if already logged in
+            viewModel.getLocalData {
+                // if login successfully
+                openMainActivity()
+            }
         }
     }
 

@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.databinding.FragmentScheduleMainBinding
-import com.example.kmatool.ui.schedule.displayText
-import com.example.kmatool.ui.schedule.toYearMonth
+import com.example.kmatool.common.displayText
+import com.example.kmatool.common.toYearMonth
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.utils.makeGone
 import com.example.kmatool.utils.makeVisible
@@ -23,9 +23,6 @@ import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -36,7 +33,7 @@ import java.util.*
 class ScheduleMainFragment : BaseFragment() {
     override val TAG = ScheduleMainFragment::class.java.simpleName
     private lateinit var binding: FragmentScheduleMainBinding
-    private val scheduleMainViewModel by viewModels<ScheduleMainViewModel>()
+    private val viewModel by viewModels<ScheduleMainViewModel>()
     private val periodsDayAdapter: PeriodsDayAdapter by lazy { PeriodsDayAdapter() }
     private val dayBinder: MonthDayBinderImpl by lazy {
         MonthDayBinderImpl(
@@ -49,15 +46,9 @@ class ScheduleMainFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentScheduleMainBinding.inflate(inflater, container, false)
-        CoroutineScope(Dispatchers.Main).launch {
-            setupGoogleProgress()
-            setupRecyclerViewPeriods()
-            setupCalendar()
-        }
-        // get all of periods from database
-        scheduleMainViewModel.getListPeriod {
-            showDotViewEventsDayInDayBinder(it)
-        }
+        setupGoogleProgress()
+        setupRecyclerViewPeriods()
+        setupCalendar()
         return binding.root
     }
 
@@ -107,7 +98,7 @@ class ScheduleMainFragment : BaseFragment() {
         if (day.position == DayPosition.MonthDate) {
             binding.googleProgress.makeVisible()
             // action
-            scheduleMainViewModel.showPeriodsWithDate(date) {
+            viewModel.showEventsWithDate(date) {
                 logDebug("date = $date - periods = $it")
                 // show load progress
                 binding.googleProgress.makeGone()
@@ -126,13 +117,6 @@ class ScheduleMainFragment : BaseFragment() {
         } else {
             binding.calendarView.scrollToMonth(YearMonth.parse(date.toYearMonth()))
             onDateClicked(CalendarDay(date, DayPosition.MonthDate))
-        }
-    }
-
-    private fun showDotViewEventsDayInDayBinder(eventsDay: List<String>) {
-        CoroutineScope(Dispatchers.Main).launch {
-            dayBinder.initEventsDay(eventsDay)
-            binding.calendarView.notifyCalendarChanged()
         }
     }
 

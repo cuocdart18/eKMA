@@ -12,15 +12,33 @@
         android:layout_margin="5dp"
         android:gravity="center"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="16sp"
         tools:text="22" />
 
-    <View
-        android:id="@+id/v_noti_dot"
-        android:layout_width="7dp"
-        android:layout_height="7dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bgr_circular_yellow"
-        android:visibility="invisible" />
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/v_noti_period_dot"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bgr_periods_circular_yellow"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/v_noti_note_dot"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bgr_notes_circular_blue"
+            android:visibility="gone" />
+    </LinearLayout>
 </FrameLayout>

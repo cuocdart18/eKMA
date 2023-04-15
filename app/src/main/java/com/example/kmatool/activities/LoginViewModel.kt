@@ -13,6 +13,7 @@ class LoginViewModel @Inject constructor(
     private val scheduleRepository: ScheduleRepository
 ) : BaseViewModel() {
     override val TAG = LoginViewModel::class.java.simpleName
+    private val DELAY_TIME = 1500L
 
     // observable field
     var isValid = ObservableField<Boolean>()
@@ -31,12 +32,23 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             scheduleRepository.getLoginState { state ->
                 CoroutineScope(Dispatchers.Main).launch {
-                    delay(1500)
-                    isShowProgress.set(false)
+                    delay(DELAY_TIME)
                     if (state) {
                         callback()
                     }
+                    isShowProgress.set(false)
                 }
+            }
+        }
+    }
+
+    fun getLocalData(
+        callback: () -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            scheduleRepository.getLocalData()
+            withContext(Dispatchers.Main) {
+                callback()
             }
         }
     }

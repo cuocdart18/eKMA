@@ -4,8 +4,9 @@ import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import com.example.kmatool.R
+import com.example.kmatool.common.Data
+import com.example.kmatool.common.toDayMonthYear
 import com.example.kmatool.databinding.LayoutCalendarDayBinding
-import com.example.kmatool.ui.schedule.syncFormatJsonApi
 import com.example.kmatool.utils.makeInVisible
 import com.example.kmatool.utils.setTextColorRes
 import com.kizitonwose.calendar.core.CalendarDay
@@ -38,15 +39,10 @@ class MonthDayBinderImpl(
 ) : MonthDayBinder<DayViewContainer> {
 
     private val TAG = MonthDayBinderImpl::class.simpleName
-    private var eventsDay: List<String>? = null
 
     // setup calendar
     private var selectedDate: LocalDate? = null
     private val today = LocalDate.now()
-
-    init {
-        Log.d(TAG, "init $TAG")
-    }
 
     override fun create(view: View): DayViewContainer {
         return DayViewContainer(view) {
@@ -81,7 +77,8 @@ class MonthDayBinderImpl(
         CoroutineScope(Dispatchers.Main).launch {
             val date: LocalDate = data.date
             val textView = binding.tvDay
-            val dotView = binding.vNotiDot
+            val dotViewPeriods = binding.vNotiPeriodDot
+            val dotViewNotes = binding.vNotiNoteDot
 
             textView.text = date.dayOfMonth.toString()
             if (data.position == DayPosition.MonthDate) {
@@ -90,39 +87,37 @@ class MonthDayBinderImpl(
                         Log.d(TAG, "set background date clicked = $date")
                         textView.setTextColorRes(R.color.white)
                         textView.setBackgroundResource(R.drawable.bgr_day_selected)
-                        dotView.makeInVisible()
+                        dotViewPeriods.makeInVisible()
+                        dotViewNotes.makeInVisible()
                     }
                     today -> {
                         Log.d(TAG, "set background current date = $date")
                         textView.setTextColorRes(R.color.white)
                         textView.setBackgroundResource(R.drawable.bgr_today)
-                        dotView.isVisible = isDateInEventList(date)
+                        dotViewPeriods.isVisible = isDateInPeriodList(date)
+                        dotViewNotes.isVisible = isDateInNoteList(date)
                     }
                     else -> {
                         textView.setTextColorRes(R.color.black)
                         textView.background = null
-                        dotView.isVisible = isDateInEventList(date)
+                        dotViewPeriods.isVisible = isDateInPeriodList(date)
+                        dotViewNotes.isVisible = isDateInNoteList(date)
                     }
                 }
             } else {
                 textView.setTextColorRes(R.color.gray)
                 textView.background = null
-                dotView.isVisible = isDateInEventList(date)
+                dotViewPeriods.isVisible = isDateInPeriodList(date)
+                dotViewNotes.isVisible = isDateInNoteList(date)
             }
         }
     }
 
-    fun initEventsDay(eventsDay: List<String>) {
-        Log.d(TAG, "init events day")
-        this.eventsDay = eventsDay
+    private fun isDateInPeriodList(date: LocalDate): Boolean {
+        return Data.periodsDayMap.value?.get(date.toDayMonthYear()) != null
     }
 
-    private fun isDateInEventList(date: LocalDate): Boolean {
-        if (eventsDay == null) {
-            return false
-        } else {
-            val dateFormatted = date.syncFormatJsonApi()
-            return eventsDay!!.contains(dateFormatted)
-        }
+    private fun isDateInNoteList(date: LocalDate): Boolean {
+        return Data.notesDayMap.value?.get(date.toDayMonthYear()) != null
     }
 }

@@ -7,19 +7,22 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.kmatool.common.Converters
 import com.example.kmatool.data.database.daos.MiniStudentDao
+import com.example.kmatool.data.database.daos.NoteDao
 import com.example.kmatool.data.database.daos.PeriodDao
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.MiniStudent
+import com.example.kmatool.data.models.Note
 import com.example.kmatool.utils.DATABASE_NAME
 
 @Database(
-    entities = [MiniStudent::class, Period::class],
-    version = 1
+    entities = [MiniStudent::class, Period::class, Note::class],
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun miniStudentDao(): MiniStudentDao
     abstract fun periodDao(): PeriodDao
+    abstract fun noteDao(): NoteDao
 
     companion object {
 

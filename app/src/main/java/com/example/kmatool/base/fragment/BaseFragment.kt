@@ -1,13 +1,21 @@
 package com.example.kmatool.base.fragment
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
+import android.widget.TimePicker
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import java.time.LocalDate
+import java.time.LocalTime
 
 open class BaseFragment : Fragment() {
     protected open val TAG = ""
@@ -100,5 +108,41 @@ open class BaseFragment : Fragment() {
 
     protected fun navigateToFragment(id: Int, data: Bundle) {
         findNavController().navigate(id, data)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    internal fun openDatePickerDialog(
+        callback: (view: DatePicker, year: Int, month: Int, dayOfMonth: Int) -> Unit
+    ) {
+        val currentYear = LocalDate.now().year
+        val currentMonth = LocalDate.now().month.value - 1
+        val currentDayOfMonth = LocalDate.now().dayOfMonth
+        DatePickerDialog(
+            requireContext(),
+            { view, year, month, dayOfMonth ->
+                logInfo("pick day=$dayOfMonth - month=${month + 1} - year=$year")
+                callback(view, year, month + 1, dayOfMonth)
+            },
+            currentYear,
+            currentMonth,
+            currentDayOfMonth
+        ).show()
+    }
+
+    internal fun openTimePickerDialog(
+        callback: (view: TimePicker, hourOfDay: Int, minute: Int) -> Unit
+    ) {
+        val currentHour = LocalTime.now().hour
+        val currentMinute = LocalTime.now().minute
+        TimePickerDialog(
+            requireContext(),
+            { view, hourOfDay, minute ->
+                logInfo("pick hour=$hourOfDay - minute=$minute")
+                callback(view, hourOfDay, minute)
+            },
+            currentHour,
+            currentMinute,
+            true
+        ).show()
     }
 }

@@ -3,6 +3,7 @@ package com.example.kmatool.di
 import android.app.Application
 import com.example.kmatool.data.database.AppDatabase
 import com.example.kmatool.data.database.daos.MiniStudentDao
+import com.example.kmatool.data.database.daos.NoteDao
 import com.example.kmatool.data.database.daos.PeriodDao
 import dagger.Module
 import dagger.Provides
@@ -30,5 +31,11 @@ object DatabaseModule {
     @Provides
     fun providePeriodDao(appDatabase: AppDatabase): PeriodDao {
         return appDatabase.periodDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideNoteDao(appDatabase: AppDatabase): NoteDao {
+        return appDatabase.noteDao()
     }
 }

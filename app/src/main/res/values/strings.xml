@@ -49,6 +49,13 @@
     <string name="label_name_score">Tra cứu điểm</string>
     <string name="tv_notify_periods_empty">Không có môn học nào</string>
     <string name="so_sinh_vien">Số sinh viên</string>
+    <string name="create_note">Tạo ghi chú</string>
+    <string name="note_title">Tiêu đề</string>
+    <string name="note_date">Ngày</string>
+    <string name="note_time">Thời gian</string>
+    <string name="note_content">Nội dung</string>
+    <string name="note_save">Lưu</string>
+    <string name="empty_title_notify">Thông tin này không được bỏ trống</string>
 
 
 </resources>

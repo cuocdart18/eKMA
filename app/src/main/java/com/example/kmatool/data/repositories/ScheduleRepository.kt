@@ -2,12 +2,14 @@ package com.example.kmatool.data.repositories
 
 import android.util.Log
 import com.example.kmatool.base.repositories.BaseRepositories
+import com.example.kmatool.common.Data
 import com.example.kmatool.data.local.DataStoreManager
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.services.PeriodLocalService
 import com.example.kmatool.data.services.ScheduleRemoteService
-import com.example.kmatool.ui.schedule.convertPeriodsToStartEndTime
+import com.example.kmatool.common.convertPeriodsToStartEndTime
+import com.example.kmatool.data.services.NoteLocalService
 import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
 import com.example.kmatool.utils.jsonObjectToString
 import kotlinx.coroutines.*
@@ -15,6 +17,7 @@ import javax.inject.Inject
 
 class ScheduleRepository @Inject constructor(
     private val periodLocalService: PeriodLocalService,
+    private val noteLocalService: NoteLocalService,
     private val scheduleRemoteService: ScheduleRemoteService,
     private val dataStoreManager: DataStoreManager,
 ) : BaseRepositories() {
@@ -27,6 +30,26 @@ class ScheduleRepository @Inject constructor(
                 callback(state)
                 cancel()
             }
+        }
+    }
+
+    suspend fun getLocalData() {
+        coroutineScope {
+            val job1 = launch {
+                val result = periodLocalService.getPeriods()
+                withContext(Dispatchers.Main) {
+                    Data.periodsDayMap.value = result.groupBy { it.day }
+                }
+            }
+            val job2 = launch {
+                val result = noteLocalService.getNotes()
+                withContext(Dispatchers.Main) {
+                    Data.notesDayMap.value = result.groupBy { it.date }
+                }
+            }
+            job1.join()
+            job2.join()
+            logDebug("get data from local successfully")
         }
     }
 
