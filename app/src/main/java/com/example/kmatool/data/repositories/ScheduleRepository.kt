@@ -3,7 +3,7 @@ package com.example.kmatool.data.repositories
 import android.util.Log
 import com.example.kmatool.base.repositories.BaseRepositories
 import com.example.kmatool.common.Data
-import com.example.kmatool.data.local.DataStoreManager
+import com.example.kmatool.common.DataStoreManager
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.services.PeriodLocalService

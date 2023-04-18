@@ -1,4 +1,4 @@
-package com.example.kmatool.data.local
+package com.example.kmatool.common
 
 import javax.inject.Inject
 import javax.inject.Singleton

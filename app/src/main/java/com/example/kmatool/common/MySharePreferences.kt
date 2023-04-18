@@ -1,4 +1,4 @@
-package com.example.kmatool.data.local
+package com.example.kmatool.common
 
 import android.app.Application
 import android.content.Context
