@@ -3,11 +3,9 @@ package com.example.kmatool.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.example.kmatool.R
 import com.example.kmatool.base.activities.BaseActivity
 import com.example.kmatool.databinding.ActivityLoginBinding
 import com.example.kmatool.utils.md5
-import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
