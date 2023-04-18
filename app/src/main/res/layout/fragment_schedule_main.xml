@@ -8,6 +8,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/layout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -29,28 +30,26 @@
                 android:padding="8dp">
 
                 <TextView
+                    android:id="@+id/tv_year_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_marginEnd="16dp"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    tools:text="2018" />
+
+                <TextView
                     android:id="@+id/tv_month_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
                     android:ellipsize="marquee"
                     android:fontFamily="sans-serif-light"
                     android:gravity="end"
                     android:singleLine="true"
                     android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    tools:text="April" />
-
-                <TextView
-                    android:id="@+id/tv_year_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:textSize="20sp"
-                    tools:text="2019" />
-
-
+                    tools:text="November" />
             </LinearLayout>
 
             <include

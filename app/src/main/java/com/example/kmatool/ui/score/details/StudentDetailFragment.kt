@@ -33,15 +33,13 @@ class StudentDetailFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentScoreStudentDetailBinding.inflate(inflater, container, false)
-        binding.studentDetailVM = studentDetailViewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // receive data from main fragment
+        binding.studentDetailVM = studentDetailViewModel
         receiveDataFromScoreMainFragment()
-        // show detail student
         studentDetailViewModel.getDetailStudent(studentId) { student ->
             showDetailStudent(student)
         }
@@ -73,7 +71,6 @@ class StudentDetailFragment : BaseFragment() {
 
     private fun onClickScoreItemInList(score: Score) {
         logInfo("onClickScoreItemInList score = $score")
-        // action (get statistic subject)
         studentDetailViewModel.getStatisticSubject(score) { statisticSubject ->
             showStatisticSubject(statisticSubject)
         }

@@ -25,11 +25,13 @@ class ScoreMainFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentScoreMainBinding.inflate(inflater, container, false)
-        // mapping to UI
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.btnSearchFeature.setOnClickListener { onClickShowSearchDialog() }
         binding.scoreMainViewModel = scoreMainViewModel
-
-        return binding.root
     }
 
     private fun onClickShowSearchDialog() {

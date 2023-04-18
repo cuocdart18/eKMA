@@ -16,13 +16,17 @@ import com.example.kmatool.common.displayText
 import com.example.kmatool.common.toYearMonth
 import com.example.kmatool.data.models.Event
 import com.example.kmatool.utils.makeGone
+import com.example.kmatool.utils.makeInVisible
 import com.example.kmatool.utils.makeVisible
 import com.example.kmatool.utils.setTextColorRes
-import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -46,21 +50,19 @@ class ScheduleMainFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentScheduleMainBinding.inflate(inflater, container, false)
-        setupGoogleProgress()
-        setupRecyclerViewPeriods()
-        setupCalendar()
         return binding.root
     }
 
-    private fun setupGoogleProgress() {
-        binding.googleProgress.indeterminateDrawable =
-            ChromeFloatingCirclesDrawable.Builder(requireContext())
-                .colors(resources.getIntArray(R.array.google_colors))
-                .build()
-        binding.googleProgress.makeVisible()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        CoroutineScope(Dispatchers.Main).launch {
+            setupGoogleProgress(binding.googleProgress)
+            setupRecyclerViewEvents()
+            setupCalendar()
+        }
     }
 
-    private fun setupRecyclerViewPeriods() {
+    private fun setupRecyclerViewEvents() {
         binding.rcvListEvent.layoutManager = LinearLayoutManager(requireContext())
     }
 
@@ -100,10 +102,10 @@ class ScheduleMainFragment : BaseFragment() {
                     binding.rcvListEvent.makeGone()
                     binding.tvSumOfEvent.text = "0"
                 } else {
+                    showEventsDay(events)
                     binding.tvEventsEmpty.makeGone()
                     binding.rcvListEvent.makeVisible()
                     binding.tvSumOfEvent.text = events.size.toString()
-                    showEventsDay(events)
                 }
             }
         } else {

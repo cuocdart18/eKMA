@@ -2,7 +2,11 @@ package com.example.kmatool.base.activities
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import com.example.kmatool.R
+import com.example.kmatool.utils.makeVisible
+import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
 
 open class BaseActivity : AppCompatActivity() {
     protected open val TAG = ""
@@ -57,5 +61,13 @@ open class BaseActivity : AppCompatActivity() {
 
     open fun logWarning(msg: String) {
         Log.w(TAG, msg)
+    }
+
+    // METHOD
+    internal fun setupGoogleProgress(progressBar: ProgressBar) {
+        progressBar.indeterminateDrawable =
+            ChromeFloatingCirclesDrawable.Builder(this)
+                .colors(resources.getIntArray(R.array.google_colors))
+                .build()
     }
 }

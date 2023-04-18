@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.example.kmatool.base.fragment.BaseFragment
@@ -22,15 +23,19 @@ class NoteMainFragment : BaseFragment() {
     private lateinit var binding: FragmentNoteMainBinding
     private val viewModel by viewModels<NoteMainViewModel>()
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentNoteMainBinding.inflate(inflater, container, false)
-        setUpViews()
         return binding.root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpViews()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -77,7 +82,7 @@ class NoteMainFragment : BaseFragment() {
                 }
             }
         } else {
-            if (!binding.tvEmptyTitleNotify.isVisible) {
+            if (!binding.tvEmptyTitleNotify.isVisible || !binding.tvEmptyTitleNotify.isGone) {
                 binding.tvEmptyTitleNotify.makeVisible()
             }
         }

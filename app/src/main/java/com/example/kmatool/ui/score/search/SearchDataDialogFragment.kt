@@ -31,14 +31,17 @@ class SearchDataDialogFragment :
         savedInstanceState: Bundle?
     ): View {
         binding = DialogSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setSearchAsyncEditText()
         setRecyclerViewProperties()
         binding.searchDataVM = searchDataViewModel
-        // show recent search history from Room
         searchDataViewModel.showRecentSearchHistory { ministudents ->
             showMiniStudentToUI(ministudents)
         }
-        return binding.root
     }
 
     @OptIn(ObsoleteCoroutinesApi::class)

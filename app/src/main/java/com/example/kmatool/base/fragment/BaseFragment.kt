@@ -10,10 +10,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import android.widget.ProgressBar
 import android.widget.TimePicker
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.kmatool.R
+import com.example.kmatool.utils.makeVisible
+import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
+import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -144,5 +149,13 @@ open class BaseFragment : Fragment() {
             currentMinute,
             true
         ).show()
+    }
+
+    internal fun setupGoogleProgress(progressBar: ProgressBar) {
+        progressBar.indeterminateDrawable =
+            ChromeFloatingCirclesDrawable.Builder(requireContext())
+                .colors(resources.getIntArray(R.array.google_colors))
+                .build()
+        progressBar.makeVisible()
     }
 }

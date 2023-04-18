@@ -21,7 +21,7 @@ class ScheduleMainViewModel @Inject constructor(
         date: LocalDate,
         callback: (events: List<Event>) -> Unit
     ) {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.Default) {
             val dateFormatted = date.toDayMonthYear()
             logDebug("get events with date formatted = $dateFormatted")
 
@@ -30,8 +30,10 @@ class ScheduleMainViewModel @Inject constructor(
             Data.notesDayMap[dateFormatted]?.let { events.addAll(it) }
             val eventsSorted = events.sortedBy { it.getTimeCompare() }
 
-            // pass to UI
-            callback(eventsSorted)
+            withContext(Dispatchers.Main) {
+                // pass to UI
+                callback(eventsSorted)
+            }
         }
     }
 }

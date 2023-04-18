@@ -22,7 +22,7 @@ class LoginActivity : BaseActivity() {
         setContentView(binding.root)
         binding.viewModel = viewModel
 
-        setupGoogleProgress()
+        setupGoogleProgress(binding.googleProgress)
         handleOnClick()
         // check login state
         viewModel.getLoginState {
@@ -32,13 +32,6 @@ class LoginActivity : BaseActivity() {
                 openMainActivity()
             }
         }
-    }
-
-    private fun setupGoogleProgress() {
-        binding.googleProgress.indeterminateDrawable =
-            ChromeFloatingCirclesDrawable.Builder(this)
-                .colors(resources.getIntArray(R.array.google_colors))
-                .build()
     }
 
     private fun handleOnClick() {
