@@ -14,6 +14,8 @@ import java.security.MessageDigest
 
 // Constants
 const val KIT_URL = "https://www.facebook.com/kitclubKMA"
+const val PERIOD_TYPE = 0
+const val NOTE_TYPE = 1
 
 // for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"

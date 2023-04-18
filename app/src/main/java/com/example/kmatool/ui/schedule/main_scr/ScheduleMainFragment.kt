@@ -14,7 +14,7 @@ import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.databinding.FragmentScheduleMainBinding
 import com.example.kmatool.common.displayText
 import com.example.kmatool.common.toYearMonth
-import com.example.kmatool.data.models.Period
+import com.example.kmatool.data.models.Event
 import com.example.kmatool.utils.makeGone
 import com.example.kmatool.utils.makeVisible
 import com.example.kmatool.utils.setTextColorRes
@@ -34,7 +34,7 @@ class ScheduleMainFragment : BaseFragment() {
     override val TAG = ScheduleMainFragment::class.java.simpleName
     private lateinit var binding: FragmentScheduleMainBinding
     private val viewModel by viewModels<ScheduleMainViewModel>()
-    private val periodsDayAdapter: PeriodsDayAdapter by lazy { PeriodsDayAdapter() }
+    private val eventsDayAdapter: EventsDayAdapter by lazy { EventsDayAdapter() }
     private val dayBinder: MonthDayBinderImpl by lazy {
         MonthDayBinderImpl(
             { binding.calendarView.notifyDateChanged(it) }, { onDateClicked(it) })
@@ -61,12 +61,7 @@ class ScheduleMainFragment : BaseFragment() {
     }
 
     private fun setupRecyclerViewPeriods() {
-        binding.rcvListSubject.layoutManager = LinearLayoutManager(requireContext())
-    }
-
-    private fun showPeriodsDay(periods: List<Period>) {
-        periodsDayAdapter.setData(periods)
-        binding.rcvListSubject.adapter = periodsDayAdapter
+        binding.rcvListEvent.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun setupCalendar() {
@@ -93,31 +88,33 @@ class ScheduleMainFragment : BaseFragment() {
     private fun onDateClicked(day: CalendarDay) {
         val date = day.date
         logDebug("onDateClicked = $date")
-
         // if select day in Month
         if (day.position == DayPosition.MonthDate) {
             binding.googleProgress.makeVisible()
             // action
-            viewModel.showEventsWithDate(date) {
-                logDebug("date = $date - periods = $it")
-                // show load progress
+            viewModel.showEventsWithDate(date) { events ->
+                logInfo("date = $date - periods/notes = $events")
                 binding.googleProgress.makeGone()
-                if (it == null) {
-                    // notify to UI
-                    binding.tvPeriodsEmpty.makeVisible()
-                    binding.rcvListSubject.makeGone()
-                    binding.tvSumOfSubject.text = "0"
+                if (events.isEmpty()) {
+                    binding.tvEventsEmpty.makeVisible()
+                    binding.rcvListEvent.makeGone()
+                    binding.tvSumOfEvent.text = "0"
                 } else {
-                    binding.tvPeriodsEmpty.makeGone()
-                    binding.rcvListSubject.makeVisible()
-                    binding.tvSumOfSubject.text = it.size.toString()
-                    showPeriodsDay(it)
+                    binding.tvEventsEmpty.makeGone()
+                    binding.rcvListEvent.makeVisible()
+                    binding.tvSumOfEvent.text = events.size.toString()
+                    showEventsDay(events)
                 }
             }
         } else {
             binding.calendarView.scrollToMonth(YearMonth.parse(date.toYearMonth()))
             onDateClicked(CalendarDay(date, DayPosition.MonthDate))
         }
+    }
+
+    private fun showEventsDay(events: List<Event>) {
+        eventsDayAdapter.setData(events)
+        binding.rcvListEvent.adapter = eventsDayAdapter
     }
 
     @SuppressLint("SetTextI18n")

@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.toDayMonthYear
+import com.example.kmatool.data.models.Event
+import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.models.Period
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -17,13 +19,19 @@ class ScheduleMainViewModel @Inject constructor(
 
     fun showEventsWithDate(
         date: LocalDate,
-        callback: (periods: List<Period>?) -> Unit
+        callback: (events: List<Event>) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.Main) {
             val dateFormatted = date.toDayMonthYear()
             logDebug("get events with date formatted = $dateFormatted")
+
+            val events = mutableListOf<Event>()
+            Data.periodsDayMap[dateFormatted]?.let { events.addAll(it) }
+            Data.notesDayMap[dateFormatted]?.let { events.addAll(it) }
+            val eventsSorted = events.sortedBy { it.getTimeCompare() }
+
             // pass to UI
-            callback(Data.periodsDayMap.value?.get(dateFormatted))
+            callback(eventsSorted)
         }
     }
 }

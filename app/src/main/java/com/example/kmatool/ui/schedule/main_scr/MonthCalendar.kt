@@ -114,10 +114,10 @@ class MonthDayBinderImpl(
     }
 
     private fun isDateInPeriodList(date: LocalDate): Boolean {
-        return Data.periodsDayMap.value?.get(date.toDayMonthYear()) != null
+        return Data.periodsDayMap[date.toDayMonthYear()] != null
     }
 
     private fun isDateInNoteList(date: LocalDate): Boolean {
-        return Data.notesDayMap.value?.get(date.toDayMonthYear()) != null
+        return Data.notesDayMap[date.toDayMonthYear()] != null
     }
 }

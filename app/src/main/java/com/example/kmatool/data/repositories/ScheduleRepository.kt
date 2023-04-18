@@ -9,6 +9,7 @@ import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.services.PeriodLocalService
 import com.example.kmatool.data.services.ScheduleRemoteService
 import com.example.kmatool.common.convertPeriodsToStartEndTime
+import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.services.NoteLocalService
 import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
 import com.example.kmatool.utils.jsonObjectToString
@@ -38,18 +39,38 @@ class ScheduleRepository @Inject constructor(
             val job1 = launch {
                 val result = periodLocalService.getPeriods()
                 withContext(Dispatchers.Main) {
-                    Data.periodsDayMap.value = result.groupBy { it.day }
+                    Data.periodsDayMap =
+                        result.groupBy { it.day } as MutableMap<String, List<Period>>
+                    // sort periods on a day by startTime
+                    sortPeriodsValueByStartTime()
                 }
             }
             val job2 = launch {
                 val result = noteLocalService.getNotes()
                 withContext(Dispatchers.Main) {
-                    Data.notesDayMap.value = result.groupBy { it.date }
+                    Data.notesDayMap =
+                        result.groupBy { it.date } as MutableMap<String, List<Note>>
+                    // sort notes on a day by startTime
+                    sortNotesValueByTime()
                 }
             }
             job1.join()
             job2.join()
-            logDebug("get data from local successfully")
+            logDebug("get/sort data from local successfully")
+        }
+    }
+
+    private fun sortPeriodsValueByStartTime() {
+        Data.periodsDayMap.forEach { (t, u) ->
+            val newPeriods = u.sortedBy { it.startTime }
+            Data.periodsDayMap[t] = newPeriods
+        }
+    }
+
+    private fun sortNotesValueByTime() {
+        Data.notesDayMap.forEach { (t, u) ->
+            val newNotes = u.sortedBy { it.time }
+            Data.notesDayMap[t] = newNotes
         }
     }
 
@@ -126,8 +147,8 @@ class ScheduleRepository @Inject constructor(
     private fun formatStartEndTime(periods: List<Period>) {
         periods.forEach {
             val timeMap = convertPeriodsToStartEndTime(it.lesson)
-            it.startTime = timeMap["start"]
-            it.endTime = timeMap["end"]
+            it.startTime = timeMap["start"]!!
+            it.endTime = timeMap["end"]!!
         }
     }
 

@@ -70,6 +70,10 @@ class NoteMainFragment : BaseFragment() {
                     // on success
                     Toast.makeText(requireContext(), "Tạo ghi chú thành công", Toast.LENGTH_SHORT)
                         .show()
+                    // clear data in fragment
+                    binding.edtTitle.text.clear()
+                    binding.edtContent.text.clear()
+                    binding.edtTitle.requestFocus()
                 }
             }
         } else {

@@ -69,7 +69,7 @@ class NoteMainViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            noteRepository.updateLocalDataObject()
+            noteRepository.updateLocalDataRuntime()
             withContext(Dispatchers.Main) {
                 callback()
             }

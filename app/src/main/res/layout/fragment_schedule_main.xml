@@ -24,28 +24,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:orientation="vertical"
+                android:gravity="center"
+                android:orientation="horizontal"
                 android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/tv_month_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:ellipsize="marquee"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="end"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    tools:text="April" />
 
                 <TextView
                     android:id="@+id/tv_year_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     tools:text="2019" />
 
-                <TextView
-                    android:id="@+id/tv_month_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="marquee"
-                    android:fontFamily="sans-serif-light"
-                    android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textSize="38sp"
-                    android:textStyle="bold"
-                    tools:text="April" />
 
             </LinearLayout>
 
@@ -54,7 +58,6 @@
                 layout="@layout/layout_calendar_day_titles_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp" />
         </LinearLayout>
 
@@ -67,7 +70,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="32dp"
+            android:layout_margin="16dp"
             android:background="@drawable/bgr_rectangle_blue_corner"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -85,20 +88,20 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp"
-                    android:text="@string/title_schedule_detail"
+                    android:text="@string/title_event_detail"
                     android:textColor="@color/blue"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_sum_of_subject"
+                    android:id="@+id/tv_sum_of_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bgr_circular_blue"
                     android:gravity="center"
                     android:text="3"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <FrameLayout
@@ -113,18 +116,18 @@
                     android:visibility="gone" />
 
                 <TextView
-                    android:id="@+id/tv_periods_empty"
+                    android:id="@+id/tv_events_empty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/tv_notify_periods_empty"
+                    android:text="@string/tv_notify_events_empty"
                     android:textColor="@color/blue"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="normal"
                     android:visibility="gone" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rcv_list_subject"
+                    android:id="@+id/rcv_list_event"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"

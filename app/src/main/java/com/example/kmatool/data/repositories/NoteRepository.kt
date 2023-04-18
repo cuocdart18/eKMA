@@ -24,13 +24,23 @@ class NoteRepository @Inject constructor(
         callback()
     }
 
-    suspend fun updateLocalDataObject() {
+    suspend fun updateLocalDataRuntime() {
         coroutineScope {
             val result = noteLocalService.getNotes()
             withContext(Dispatchers.Main) {
-                Data.notesDayMap.value = result.groupBy { it.date }
+                Data.notesDayMap =
+                    result.groupBy { it.date } as MutableMap<String, List<Note>>
+                // sort notes on a day by startTime
+                sortNotesValueByTime()
             }
             logDebug("update data object successfully")
+        }
+    }
+
+    private fun sortNotesValueByTime() {
+        Data.notesDayMap.forEach { (t, u) ->
+            val newNotes = u.sortedBy { it.time }
+            Data.notesDayMap[t] = newNotes
         }
     }
 }

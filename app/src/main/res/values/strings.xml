@@ -44,10 +44,10 @@
     <string name="btn_login">Bắt đầu</string>
     <string name="btn_view_schedule">Xem thời khóa biểu</string>
     <string name="title_intro_schedule_fragment">Công cụ xem thời khóa biểu dành cho sinh viên KMA</string>
-    <string name="title_schedule_detail">Môn học</string>
+    <string name="title_event_detail">Sự kiện</string>
     <string name="label_name_schedule">Thời khóa biểu</string>
     <string name="label_name_score">Tra cứu điểm</string>
-    <string name="tv_notify_periods_empty">Không có môn học nào</string>
+    <string name="tv_notify_events_empty">Không có sự kiện nào</string>
     <string name="so_sinh_vien">Số sinh viên</string>
     <string name="create_note">Tạo ghi chú</string>
     <string name="note_title">Tiêu đề</string>
