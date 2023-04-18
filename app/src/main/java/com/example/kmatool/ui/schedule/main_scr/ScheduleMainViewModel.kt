@@ -5,8 +5,6 @@ import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.toDayMonthYear
 import com.example.kmatool.data.models.Event
-import com.example.kmatool.data.models.Note
-import com.example.kmatool.data.models.Period
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.time.LocalDate

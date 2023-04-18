@@ -42,7 +42,7 @@ class ScheduleRepository @Inject constructor(
                     Data.periodsDayMap =
                         result.groupBy { it.day } as MutableMap<String, List<Period>>
                     // sort periods on a day by startTime
-                    sortPeriodsValueByStartTime()
+                    sortPeriodsDayByStartTime()
                 }
             }
             val job2 = launch {
@@ -51,7 +51,7 @@ class ScheduleRepository @Inject constructor(
                     Data.notesDayMap =
                         result.groupBy { it.date } as MutableMap<String, List<Note>>
                     // sort notes on a day by startTime
-                    sortNotesValueByTime()
+                    sortNotesDayByTime()
                 }
             }
             job1.join()
@@ -60,17 +60,15 @@ class ScheduleRepository @Inject constructor(
         }
     }
 
-    private fun sortPeriodsValueByStartTime() {
+    private fun sortPeriodsDayByStartTime() {
         Data.periodsDayMap.forEach { (t, u) ->
-            val newPeriods = u.sortedBy { it.startTime }
-            Data.periodsDayMap[t] = newPeriods
+            Data.periodsDayMap[t] = u.sortedBy { it.startTime }
         }
     }
 
-    private fun sortNotesValueByTime() {
+    private fun sortNotesDayByTime() {
         Data.notesDayMap.forEach { (t, u) ->
-            val newNotes = u.sortedBy { it.time }
-            Data.notesDayMap[t] = newNotes
+            Data.notesDayMap[t] = u.sortedBy { it.time }
         }
     }
 
