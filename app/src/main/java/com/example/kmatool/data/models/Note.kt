@@ -3,6 +3,10 @@ package com.example.kmatool.data.models
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.kmatool.common.toDateTime
+import com.example.kmatool.common.toLocalDate
+import com.example.kmatool.common.toLocalTime
+import com.example.kmatool.common.toMilli
 import com.example.kmatool.utils.NOTE_TYPE
 
 @Entity(tableName = "note")
@@ -17,5 +21,11 @@ data class Note(
 
     @Ignore
     override val type: Int = NOTE_TYPE
+
     override fun getTimeCompare(): String = time
+
+    override fun getTimeMillis() =
+        toDateTime(date.toLocalDate(), time.toLocalTime()).toMilli()
+
+    override fun getDateTime(): String = date
 }

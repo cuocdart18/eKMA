@@ -3,6 +3,10 @@ package com.example.kmatool.data.models
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.kmatool.common.toDateTime
+import com.example.kmatool.common.toLocalDate
+import com.example.kmatool.common.toLocalTime
+import com.example.kmatool.common.toMilli
 import com.example.kmatool.utils.PERIOD_TYPE
 
 @Entity(tableName = "period")
@@ -21,5 +25,11 @@ data class Period(
 ) : Event {
     @Ignore
     override val type: Int = PERIOD_TYPE
+
     override fun getTimeCompare(): String = startTime
+
+    override fun getTimeMillis() =
+        toDateTime(day.toLocalDate(), startTime.toLocalTime()).toMilli()
+
+    override fun getDateTime(): String = day
 }

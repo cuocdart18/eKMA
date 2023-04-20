@@ -50,7 +50,7 @@ class ScheduleRepository @Inject constructor(
                 withContext(Dispatchers.Main) {
                     Data.notesDayMap =
                         result.groupBy { it.date } as MutableMap<String, List<Note>>
-                    // sort notes on a day by startTime
+                    // sort notes on a day by day
                     sortNotesDayByTime()
                 }
             }

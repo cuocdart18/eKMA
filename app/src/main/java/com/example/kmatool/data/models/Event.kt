@@ -4,4 +4,8 @@ interface Event {
     val type: Int
 
     fun getTimeCompare(): String
+
+    fun getTimeMillis(): Long
+
+    fun getDateTime(): String
 }

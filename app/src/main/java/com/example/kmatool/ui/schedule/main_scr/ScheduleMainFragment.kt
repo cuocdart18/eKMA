@@ -95,7 +95,7 @@ class ScheduleMainFragment : BaseFragment() {
             binding.googleProgress.makeVisible()
             // action
             viewModel.showEventsWithDate(date) { events ->
-                logInfo("date = $date - periods/notes = $events")
+                logInfo("day = $date - periods/notes = $events")
                 binding.googleProgress.makeGone()
                 if (events.isEmpty()) {
                     binding.tvEventsEmpty.makeVisible()
