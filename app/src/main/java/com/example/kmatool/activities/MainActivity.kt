@@ -1,36 +1,34 @@
 package com.example.kmatool.activities
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
+import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.kmatool.R
 import com.example.kmatool.base.activities.BaseActivity
-import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.common.Data
-import com.example.kmatool.common.DataStoreManager
 import com.example.kmatool.data.database.AppDatabase
 import com.example.kmatool.databinding.ActivityMainBinding
+import com.example.kmatool.utils.TIRAMISU_PERMISSION_REQUEST_CODE
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
     override val TAG = MainActivity::class.java.simpleName
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private val viewModel by viewModels<MainViewModel>()
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUiTemplates()
-        setAlarmForLocalEvents()
+//        requestPostNotifyPermission()
+        viewModel.listenAlarmLocalEventsState(application, this)
     }
 
     private fun setUiTemplates() {
@@ -41,34 +39,36 @@ class MainActivity : BaseActivity() {
         binding.bottomNav.setupWithNavController(navController)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun setAlarmForLocalEvents() {
-        CoroutineScope(Dispatchers.Default).launch {
-            DataStoreManager(application).isNotifyEventsDataStoreFlow.collect() { state ->
-                val alarmScheduler = AlarmEventsScheduler(this@MainActivity)
-                if (state) {
-                    launch {
-                        Data.periodsDayMap.forEach { (t, u) ->
-                            u.forEach { alarmScheduler.scheduleEvents(it) }
-                        }
-                    }
-                    launch {
-                        Data.notesDayMap.forEach { (t, u) ->
-                            u.forEach { alarmScheduler.scheduleEvents(it) }
-                        }
-                    }
-                } else {
-                    launch {
-                        Data.periodsDayMap.forEach { (t, u) ->
-                            u.forEach { alarmScheduler.cancel(it) }
-                        }
-                    }
-                    launch {
-                        Data.notesDayMap.forEach { (t, u) ->
-                            u.forEach { alarmScheduler.cancel(it) }
-                        }
-                    }
+    private fun requestPostNotifyPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+            ) {
+                logDebug("Permission POST_NOTIFICATIONS granted")
+            } else {
+                requestPermissions(
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    TIRAMISU_PERMISSION_REQUEST_CODE
+                )
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            TIRAMISU_PERMISSION_REQUEST_CODE -> {
+                if ((grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                ) {
                 }
+                return
+            }
+
+            else -> {
+                logDebug("invalid requestCode = $requestCode")
             }
         }
     }

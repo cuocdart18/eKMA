@@ -1,9 +1,12 @@
 package com.example.kmatool.utils
 
+import android.Manifest
 import android.content.Context
+import android.os.Build
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -19,6 +22,9 @@ const val NOTE_TYPE = 1
 const val EVENTS_NOTIFY_CHANNEL = "Events"
 const val EVENTS_NOTIFY_CHANNEL_ID = "events_id"
 const val EVENTS_NOTIFY_ID = 1001
+const val TIRAMISU_PERMISSION_REQUEST_CODE = 33
+const val S_PERMISSION_REQUEST_CODE = 31
+const val M_PERMISSION_REQUEST_CODE = 23
 
 // for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"

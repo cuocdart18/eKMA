@@ -19,8 +19,7 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.d(TAG, "onReceive: test thong bao")
 
-        val notificationManager = context!!.getSystemService(Context.NOTIFICATION_SERVICE)
-        val builder = NotificationCompat.Builder(context, EVENTS_NOTIFY_CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context!!, EVENTS_NOTIFY_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_person_24)
             .setContentTitle("My notification")
             .setContentText("Much longer text that cannot fit one line...")
@@ -38,9 +37,9 @@ class AlarmReceiver : BroadcastReceiver() {
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                notify(EVENTS_NOTIFY_ID, builder.build())
                 return
             }
+            notify(EVENTS_NOTIFY_ID, builder.build())
         }
     }
 }

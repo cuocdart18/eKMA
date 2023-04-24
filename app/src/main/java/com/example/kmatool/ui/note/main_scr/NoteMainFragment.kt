@@ -72,6 +72,8 @@ class NoteMainFragment : BaseFragment() {
             viewModel.saveNoteToLocalDatabase(note) {
                 // refresh notesDayMap in Data object
                 viewModel.refreshNotesDayMapInDataObject {
+                    // set alarm
+                    viewModel.setAlarmForNote(requireActivity().application, requireContext(), note)
                     // on success
                     Toast.makeText(requireContext(), "Tạo ghi chú thành công", Toast.LENGTH_SHORT)
                         .show()
