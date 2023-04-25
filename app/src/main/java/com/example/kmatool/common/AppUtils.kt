@@ -1,12 +1,9 @@
-package com.example.kmatool.utils
+package com.example.kmatool.common
 
-import android.Manifest
 import android.content.Context
-import android.os.Build
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.ColorRes
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -21,6 +18,7 @@ const val PERIOD_TYPE = 0
 const val NOTE_TYPE = 1
 const val EVENTS_NOTIFY_CHANNEL = "Events"
 const val EVENTS_NOTIFY_CHANNEL_ID = "events_id"
+const val KEY_EVENT = "sent_event_from_AM_to_BR"
 const val EVENTS_NOTIFY_ID = 1001
 const val TIRAMISU_PERMISSION_REQUEST_CODE = 33
 const val S_PERMISSION_REQUEST_CODE = 31

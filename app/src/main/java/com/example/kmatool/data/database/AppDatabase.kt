@@ -12,7 +12,7 @@ import com.example.kmatool.data.database.daos.PeriodDao
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.MiniStudent
 import com.example.kmatool.data.models.Note
-import com.example.kmatool.utils.DATABASE_NAME
+import com.example.kmatool.common.DATABASE_NAME
 
 @Database(
     entities = [MiniStudent::class, Period::class, Note::class],

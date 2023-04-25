@@ -3,11 +3,12 @@ package com.example.kmatool.data.models
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.kmatool.R
 import com.example.kmatool.common.toDateTime
 import com.example.kmatool.common.toLocalDate
 import com.example.kmatool.common.toLocalTime
 import com.example.kmatool.common.toMilli
-import com.example.kmatool.utils.NOTE_TYPE
+import com.example.kmatool.common.NOTE_TYPE
 
 @Entity(tableName = "note")
 data class Note(
@@ -28,4 +29,10 @@ data class Note(
         toDateTime(date.toLocalDate(), time.toLocalTime()).toMilli()
 
     override fun getDateTime(): String = date
+
+    override fun getContentTitleNotify(): String = title
+    override fun getSubTextNotify(): String = "Ghi chú"
+    override fun getContentTextNotify(): String = content.toString()
+    override fun getContentBigTextNotify(): String = content.toString()
+    override fun getSmallIconNotify(): Int = R.drawable.ic_event_note_notify_24
 }

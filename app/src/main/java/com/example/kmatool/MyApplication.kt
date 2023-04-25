@@ -5,8 +5,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import com.example.kmatool.utils.EVENTS_NOTIFY_CHANNEL
-import com.example.kmatool.utils.EVENTS_NOTIFY_CHANNEL_ID
+import com.example.kmatool.common.EVENTS_NOTIFY_CHANNEL
+import com.example.kmatool.common.EVENTS_NOTIFY_CHANNEL_ID
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

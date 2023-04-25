@@ -5,7 +5,7 @@
 
         <import type="android.view.View" />
 
-        <import type="com.example.kmatool.utils.AppUtilsKt" />
+        <import type="com.example.kmatool.common.AppUtilsKt" />
 
         <variable
             name="event"

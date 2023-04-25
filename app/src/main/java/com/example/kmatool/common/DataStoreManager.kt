@@ -4,10 +4,6 @@ import android.app.Application
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.example.kmatool.utils.KEY_IS_LOGIN
-import com.example.kmatool.utils.KEY_IS_NOTIFY_EVENTS
-import com.example.kmatool.utils.KEY_STUDENT_PROFILE
-import com.example.kmatool.utils.dataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.map

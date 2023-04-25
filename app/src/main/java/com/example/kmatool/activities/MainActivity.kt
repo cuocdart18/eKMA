@@ -12,7 +12,7 @@ import com.example.kmatool.R
 import com.example.kmatool.base.activities.BaseActivity
 import com.example.kmatool.data.database.AppDatabase
 import com.example.kmatool.databinding.ActivityMainBinding
-import com.example.kmatool.utils.TIRAMISU_PERMISSION_REQUEST_CODE
+import com.example.kmatool.common.TIRAMISU_PERMISSION_REQUEST_CODE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import com.example.kmatool.databinding.FragmentScoreMainBinding
 import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
-import com.example.kmatool.utils.KIT_URL
+import com.example.kmatool.common.KIT_URL
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -20,7 +20,7 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
         Log.i("AlarmEventsScheduler", "set alarm ${event.getDateTime()}")
 
         val intent = Intent(context, AlarmReceiver::class.java).apply {
-            // put something
+            putExtra(KEY_EVENT, event)
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
@@ -39,7 +39,6 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
         Log.i("AlarmEventsScheduler", "cancel alarm ${event.getDateTime()}")
 
         val intent = Intent(context, AlarmReceiver::class.java).apply {
-            // put something
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,

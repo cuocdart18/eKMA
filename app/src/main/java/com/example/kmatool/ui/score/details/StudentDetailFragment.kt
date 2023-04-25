@@ -15,9 +15,9 @@ import com.example.kmatool.databinding.FragmentScoreStudentDetailBinding
 import com.example.kmatool.data.models.Score
 import com.example.kmatool.data.models.StatisticSubject
 import com.example.kmatool.data.models.Student
-import com.example.kmatool.utils.KEY_PASS_MINISTUDENT_ID
-import com.example.kmatool.utils.KEY_PASS_STATISTIC_SUBJECT
-import com.example.kmatool.utils.KIT_URL
+import com.example.kmatool.common.KEY_PASS_MINISTUDENT_ID
+import com.example.kmatool.common.KEY_PASS_STATISTIC_SUBJECT
+import com.example.kmatool.common.KIT_URL
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -12,7 +12,7 @@ import com.example.kmatool.common.convertPeriodsToStartEndTime
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.services.NoteLocalService
 import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
-import com.example.kmatool.utils.jsonObjectToString
+import com.example.kmatool.common.jsonObjectToString
 import kotlinx.coroutines.*
 import javax.inject.Inject
 

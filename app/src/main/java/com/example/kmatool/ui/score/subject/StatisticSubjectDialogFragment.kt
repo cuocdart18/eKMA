@@ -5,7 +5,7 @@ import android.view.*
 import com.example.kmatool.base.dialogs.BaseDialogFragment
 import com.example.kmatool.databinding.DialogStatisticSubjectBinding
 import com.example.kmatool.data.models.StatisticSubject
-import com.example.kmatool.utils.KEY_PASS_STATISTIC_SUBJECT
+import com.example.kmatool.common.KEY_PASS_STATISTIC_SUBJECT
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

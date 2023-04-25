@@ -11,7 +11,7 @@ import com.example.kmatool.R
 import com.example.kmatool.base.dialogs.BaseDialogFragment
 import com.example.kmatool.databinding.DialogSearchBinding
 import com.example.kmatool.data.models.MiniStudent
-import com.example.kmatool.utils.KEY_PASS_MINISTUDENT_ID
+import com.example.kmatool.common.KEY_PASS_MINISTUDENT_ID
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 

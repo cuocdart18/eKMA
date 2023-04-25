@@ -7,8 +7,8 @@ import com.example.kmatool.R
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.toDayMonthYear
 import com.example.kmatool.databinding.LayoutCalendarDayBinding
-import com.example.kmatool.utils.makeInVisible
-import com.example.kmatool.utils.setTextColorRes
+import com.example.kmatool.common.makeInVisible
+import com.example.kmatool.common.setTextColorRes
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.view.MonthDayBinder
