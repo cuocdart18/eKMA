@@ -13,8 +13,8 @@ import androidx.fragment.app.viewModels
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.databinding.FragmentNoteMainBinding
-import com.example.kmatool.utils.makeGone
-import com.example.kmatool.utils.makeVisible
+import com.example.kmatool.common.makeGone
+import com.example.kmatool.common.makeVisible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -72,6 +72,8 @@ class NoteMainFragment : BaseFragment() {
             viewModel.saveNoteToLocalDatabase(note) {
                 // refresh notesDayMap in Data object
                 viewModel.refreshNotesDayMapInDataObject {
+                    // set alarm
+                    viewModel.setAlarmForNote(requireContext(), note)
                     // on success
                     Toast.makeText(requireContext(), "Tạo ghi chú thành công", Toast.LENGTH_SHORT)
                         .show()

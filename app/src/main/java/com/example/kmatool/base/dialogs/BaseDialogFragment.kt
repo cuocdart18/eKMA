@@ -9,8 +9,8 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
-import com.example.kmatool.utils.SCALE_LAYOUT_SEARCH_DATA_DIALOG_X
-import com.example.kmatool.utils.SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y
+import com.example.kmatool.common.SCALE_LAYOUT_SEARCH_DATA_DIALOG_X
+import com.example.kmatool.common.SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y
 
 open class BaseDialogFragment : DialogFragment() {
     protected open val TAG = ""

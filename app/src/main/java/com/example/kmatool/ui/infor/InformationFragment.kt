@@ -5,13 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.kmatool.base.fragment.BaseFragment
+import com.example.kmatool.common.DataStoreManager
 import com.example.kmatool.databinding.FragmentInformationBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class InformationFragment : BaseFragment() {
     override val TAG = InformationFragment::class.java.simpleName
     private lateinit var binding: FragmentInformationBinding
+    @Inject
+    lateinit var dataStoreManager: DataStoreManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,5 +27,21 @@ class InformationFragment : BaseFragment() {
     ): View {
         binding = FragmentInformationBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnNotifyTrue.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                dataStoreManager.storeIsNotifyEvents(true)
+            }
+        }
+
+        binding.btnNotifyFalse.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                dataStoreManager.storeIsNotifyEvents(false)
+            }
+        }
     }
 }

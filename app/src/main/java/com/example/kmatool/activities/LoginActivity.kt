@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.example.kmatool.base.activities.BaseActivity
 import com.example.kmatool.databinding.ActivityLoginBinding
-import com.example.kmatool.utils.md5
+import com.example.kmatool.common.md5
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -8,8 +8,8 @@ import com.example.kmatool.data.models.Event
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.databinding.ItemEventDayBinding
-import com.example.kmatool.utils.NOTE_TYPE
-import com.example.kmatool.utils.PERIOD_TYPE
+import com.example.kmatool.common.NOTE_TYPE
+import com.example.kmatool.common.PERIOD_TYPE
 
 class EventsDayAdapter : RecyclerView.Adapter<EventsDayAdapter.PeriodViewHolder>() {
     private lateinit var binding: ItemEventDayBinding

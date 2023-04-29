@@ -3,9 +3,9 @@ package com.example.kmatool.base.activities
 import android.os.Bundle
 import android.util.Log
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kmatool.R
-import com.example.kmatool.utils.makeVisible
 import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
 
 open class BaseActivity : AppCompatActivity() {
@@ -64,6 +64,10 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     // METHOD
+    internal fun showToast(msg: String, type: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(this, msg, type).show()
+    }
+
     internal fun setupGoogleProgress(progressBar: ProgressBar) {
         progressBar.indeterminateDrawable =
             ChromeFloatingCirclesDrawable.Builder(this)

@@ -16,7 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.kmatool.R
-import com.example.kmatool.utils.makeVisible
+import com.example.kmatool.common.makeVisible
 import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
 import java.time.LocalDate

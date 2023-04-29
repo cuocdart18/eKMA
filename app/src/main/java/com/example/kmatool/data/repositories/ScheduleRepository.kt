@@ -12,7 +12,7 @@ import com.example.kmatool.common.convertPeriodsToStartEndTime
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.services.NoteLocalService
 import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
-import com.example.kmatool.utils.jsonObjectToString
+import com.example.kmatool.common.jsonObjectToString
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -50,7 +50,7 @@ class ScheduleRepository @Inject constructor(
                 withContext(Dispatchers.Main) {
                     Data.notesDayMap =
                         result.groupBy { it.date } as MutableMap<String, List<Note>>
-                    // sort notes on a day by startTime
+                    // sort notes on a day by day
                     sortNotesDayByTime()
                 }
             }

@@ -7,8 +7,8 @@ import com.example.kmatool.R
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.toDayMonthYear
 import com.example.kmatool.databinding.LayoutCalendarDayBinding
-import com.example.kmatool.utils.makeInVisible
-import com.example.kmatool.utils.setTextColorRes
+import com.example.kmatool.common.makeInVisible
+import com.example.kmatool.common.setTextColorRes
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.view.MonthDayBinder
@@ -59,7 +59,7 @@ class MonthDayBinderImpl(
     private fun selectedDate(day: CalendarDay) {
         val date = day.date
         if (selectedDate != date) {
-            Log.d(TAG, "clicked date = $date")
+            Log.d(TAG, "clicked day = $date")
             val oldDate = selectedDate
             selectedDate = date
             oldDate?.let { notifyDateChanged(it) }
@@ -84,14 +84,14 @@ class MonthDayBinderImpl(
             if (data.position == DayPosition.MonthDate) {
                 when (date) {
                     selectedDate -> {
-                        Log.d(TAG, "set background date clicked = $date")
+                        Log.d(TAG, "set background day clicked = $date")
                         textView.setTextColorRes(R.color.white)
                         textView.setBackgroundResource(R.drawable.bgr_day_selected)
                         dotViewPeriods.makeInVisible()
                         dotViewNotes.makeInVisible()
                     }
                     today -> {
-                        Log.d(TAG, "set background current date = $date")
+                        Log.d(TAG, "set background current day = $date")
                         textView.setTextColorRes(R.color.white)
                         textView.setBackgroundResource(R.drawable.bgr_today)
                         dotViewPeriods.isVisible = isDateInPeriodList(date)

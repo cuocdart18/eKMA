@@ -1,4 +1,4 @@
-package com.example.kmatool.utils
+package com.example.kmatool.common
 
 import android.content.Context
 import android.view.View
@@ -16,6 +16,13 @@ import java.security.MessageDigest
 const val KIT_URL = "https://www.facebook.com/kitclubKMA"
 const val PERIOD_TYPE = 0
 const val NOTE_TYPE = 1
+const val EVENTS_NOTIFY_CHANNEL = "Events"
+const val EVENTS_NOTIFY_CHANNEL_ID = "events_id"
+const val KEY_EVENT = "sent_event_from_AM_to_BR"
+const val EVENTS_NOTIFY_ID = 1001
+const val TIRAMISU_PERMISSION_REQUEST_CODE = 33
+const val S_PERMISSION_REQUEST_CODE = 31
+const val M_PERMISSION_REQUEST_CODE = 23
 
 // for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
@@ -30,6 +37,7 @@ const val SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y = 0.60
 const val NAME_DATASTORE_PREFS = "datastore_prefs"
 const val KEY_STUDENT_PROFILE = "student_profile"
 const val KEY_IS_LOGIN = "is_login"
+const val KEY_IS_NOTIFY_EVENTS = "is_notify_events"
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = NAME_DATASTORE_PREFS)
 
