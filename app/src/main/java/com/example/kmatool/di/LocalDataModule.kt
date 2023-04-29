@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class LocalDataModule {
+object LocalDataModule {
 
     @Provides
     @Singleton
