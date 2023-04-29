@@ -1,6 +1,5 @@
 package com.example.kmatool.ui.note.main_scr
 
-import android.app.Application
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -16,7 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -25,7 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteMainViewModel @Inject constructor(
-    private val noteRepository: NoteRepository
+    private val noteRepository: NoteRepository,
+    private val dataStoreManager: DataStoreManager
 ) : BaseViewModel() {
     override val TAG: String = NoteMainViewModel::class.java.simpleName
     val selectDay = MutableLiveData<String>()
@@ -82,9 +81,9 @@ class NoteMainViewModel @Inject constructor(
         }
     }
 
-    fun setAlarmForNote(application: Application, context: Context, note: Note) {
+    fun setAlarmForNote(context: Context, note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
-            DataStoreManager(application).isNotifyEventsDataStoreFlow.collect() { state ->
+            dataStoreManager.isNotifyEventsDataStoreFlow.collect() { state ->
                 if (state) {
                     AlarmEventsScheduler(context).scheduleEvent(note)
                 }

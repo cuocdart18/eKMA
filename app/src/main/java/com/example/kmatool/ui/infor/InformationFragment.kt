@@ -11,11 +11,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class InformationFragment : BaseFragment() {
     override val TAG = InformationFragment::class.java.simpleName
     private lateinit var binding: FragmentInformationBinding
+    @Inject
+    lateinit var dataStoreManager: DataStoreManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,13 +34,13 @@ class InformationFragment : BaseFragment() {
 
         binding.btnNotifyTrue.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                DataStoreManager(requireActivity().application).storeIsNotifyEvents(true)
+                dataStoreManager.storeIsNotifyEvents(true)
             }
         }
 
         binding.btnNotifyFalse.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                DataStoreManager(requireActivity().application).storeIsNotifyEvents(false)
+                dataStoreManager.storeIsNotifyEvents(false)
             }
         }
     }

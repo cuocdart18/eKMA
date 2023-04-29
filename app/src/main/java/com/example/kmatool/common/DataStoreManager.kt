@@ -7,9 +7,8 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class DataStoreManager @Inject constructor(private val application: Application) {
+class DataStoreManager (private val application: Application) {
 
     companion object {
         // profile

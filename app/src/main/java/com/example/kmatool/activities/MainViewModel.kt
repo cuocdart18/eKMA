@@ -1,6 +1,5 @@
 package com.example.kmatool.activities
 
-import android.app.Application
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
@@ -13,15 +12,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : BaseViewModel() {
+class MainViewModel @Inject constructor(
+    private val dataStoreManager: DataStoreManager
+) : BaseViewModel() {
     override val TAG: String = MainViewModel::class.java.simpleName
 
     // this variable is used to check the first collect, if == 0 then don't anything
     private var collectNotifyStateCounter = 0
 
-    fun listenAlarmLocalEventsState(application: Application, context: Context) {
+    fun listenAlarmLocalEventsState(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
-            DataStoreManager(application).isNotifyEventsDataStoreFlow.collect { state ->
+            dataStoreManager.isNotifyEventsDataStoreFlow.collect { state ->
                 if (collectNotifyStateCounter == 0) {
                     collectNotifyStateCounter = 1
                 } else {

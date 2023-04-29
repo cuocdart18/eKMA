@@ -2,9 +2,8 @@ package com.example.kmatool.common
 
 import android.app.Application
 import android.content.Context
-import javax.inject.Inject
 
-class MySharePreferences @Inject constructor(private val application: Application) {
+class MySharePreferences (private val application: Application) {
     private val MY_SHARED_PREFERENCES = "MY_SHARED_PREFERENCES"
 
     fun putIntValue(key: String, value: Int) {

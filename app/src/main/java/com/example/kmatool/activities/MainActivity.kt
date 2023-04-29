@@ -28,7 +28,7 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         setUiTemplates()
 //        requestPostNotifyPermission()
-        viewModel.listenAlarmLocalEventsState(application, this)
+        viewModel.listenAlarmLocalEventsState(this)
     }
 
     private fun setUiTemplates() {

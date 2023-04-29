@@ -73,7 +73,7 @@ class NoteMainFragment : BaseFragment() {
                 // refresh notesDayMap in Data object
                 viewModel.refreshNotesDayMapInDataObject {
                     // set alarm
-                    viewModel.setAlarmForNote(requireActivity().application, requireContext(), note)
+                    viewModel.setAlarmForNote(requireContext(), note)
                     // on success
                     Toast.makeText(requireContext(), "Tạo ghi chú thành công", Toast.LENGTH_SHORT)
                         .show()

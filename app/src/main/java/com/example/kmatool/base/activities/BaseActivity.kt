@@ -6,15 +6,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kmatool.R
-import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.common.Data
-import com.example.kmatool.common.DataStoreManager
 import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 open class BaseActivity : AppCompatActivity() {
     protected open val TAG = ""
