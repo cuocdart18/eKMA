@@ -10,7 +10,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
+import com.example.kmatool.common.ADD_NOTE_MODE
+import com.example.kmatool.common.KEY_PASS_NOTE_MODE
+import com.example.kmatool.common.KEY_PASS_NOTE_OBJ
+import com.example.kmatool.common.UPDATE_NOTE_MODE
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.databinding.FragmentNoteMainBinding
 import com.example.kmatool.common.makeGone
@@ -35,11 +40,25 @@ class NoteMainFragment : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        receiveNote()
         setUpViews()
+    }
+
+    private fun receiveNote() {
+        val bundle = arguments
+        if (bundle != null) {
+            viewModel.noteMode = bundle.getInt(KEY_PASS_NOTE_MODE)
+            logInfo("receive note mode=${viewModel.noteMode}")
+            if (viewModel.noteMode == UPDATE_NOTE_MODE) {
+                viewModel.oldNote = bundle.get(KEY_PASS_NOTE_OBJ) as Note
+                logInfo("receive oldNote=${viewModel.oldNote}")
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setUpViews() {
+        // regis observes
         viewModel.selectDay.observe(viewLifecycleOwner) {
             binding.btnSelectDate.text = it
         }
@@ -47,19 +66,37 @@ class NoteMainFragment : BaseFragment() {
             binding.btnSelectTime.text = it
         }
 
+        // set text
+        if (viewModel.noteMode == ADD_NOTE_MODE) {
+            binding.tvNoteHead.text = getString(R.string.tv_note_head_add)
+            viewModel.getCurrentDayAndTime()
+        } else if (viewModel.noteMode == UPDATE_NOTE_MODE) {
+            binding.tvNoteHead.text = getString(R.string.tv_note_head_update)
+            binding.edtTitle.setText(viewModel.oldNote?.title)
+            binding.edtContent.setText(viewModel.oldNote?.content)
+            binding.btnSelectDate.text = viewModel.oldNote?.date
+            binding.btnSelectTime.text = viewModel.oldNote?.time
+        }
+
+        // regis click listeners
         binding.btnSave.setOnClickListener { saveNoteToLocalDatabase() }
         binding.btnSelectDate.setOnClickListener {
-            openDatePickerDialog { view, year, month, dayOfMonth ->
+            openDatePickerDialog { _, year, month, dayOfMonth ->
                 viewModel.updateSelectDay(year, month, dayOfMonth)
             }
         }
         binding.btnSelectTime.setOnClickListener {
-            openTimePickerDialog() { view, hourOfDay, minute ->
+            openTimePickerDialog() { _, hourOfDay, minute ->
                 viewModel.updateSelectTime(hourOfDay, minute)
             }
         }
     }
 
+    /*
+        action flow
+        get oldNote -> save -> refresh Data.notes -> set alarm -> notify to user
+        if update mode, cancel alarm before saved
+    */
     private fun saveNoteToLocalDatabase() {
         val title = binding.edtTitle.text.toString().trim()
         val content = binding.edtContent.text.toString().trim()
@@ -70,23 +107,34 @@ class NoteMainFragment : BaseFragment() {
             binding.tvEmptyTitleNotify.makeGone()
             val note = Note(title, content, date, time)
             viewModel.saveNoteToLocalDatabase(note) {
-                // refresh notesDayMap in Data object
+                if (viewModel.noteMode == UPDATE_NOTE_MODE) {
+                    viewModel.oldNote?.let { viewModel.cancelAlarmForOldNote(requireContext(), it) }
+                }
                 viewModel.refreshNotesDayMapInDataObject {
-                    // set alarm
                     viewModel.setAlarmForNote(requireContext(), note)
-                    // on success
-                    Toast.makeText(requireContext(), "Tạo ghi chú thành công", Toast.LENGTH_SHORT)
-                        .show()
-                    // clear data in fragment
-                    binding.edtTitle.text.clear()
-                    binding.edtContent.text.clear()
-                    binding.edtTitle.requestFocus()
+                    onUpdateOrAddSuccessfully()
                 }
             }
         } else {
             if (!binding.tvEmptyTitleNotify.isVisible || !binding.tvEmptyTitleNotify.isGone) {
                 binding.tvEmptyTitleNotify.makeVisible()
             }
+        }
+    }
+
+    private fun onUpdateOrAddSuccessfully() {
+        if (viewModel.noteMode == ADD_NOTE_MODE) {
+            Toast.makeText(requireContext(), "Add note successfully", Toast.LENGTH_SHORT)
+                .show()
+            // clear data in fragment
+            binding.edtTitle.text.clear()
+            binding.edtContent.text.clear()
+            binding.edtTitle.requestFocus()
+        } else if (viewModel.noteMode == UPDATE_NOTE_MODE) {
+            Toast.makeText(requireContext(), "Update note successfully", Toast.LENGTH_SHORT)
+                .show()
+            // reopen ScheduleMainFragment
+            navigateToFragment(R.id.action_noteMainFragment_to_scheduleMainFragment)
         }
     }
 }

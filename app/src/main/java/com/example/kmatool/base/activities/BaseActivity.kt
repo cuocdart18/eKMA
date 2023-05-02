@@ -44,7 +44,7 @@ open class BaseActivity : AppCompatActivity() {
 
     // LOG
     open fun logLifecycle(msg: String) {
-        Log.d(TAG, "$msg $TAG")
+        Log.d(TAG, msg)
     }
 
     open fun logError(msg: String) {

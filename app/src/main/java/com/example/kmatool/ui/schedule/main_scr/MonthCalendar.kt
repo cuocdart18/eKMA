@@ -2,7 +2,7 @@ package com.example.kmatool.ui.schedule.main_scr
 
 import android.util.Log
 import android.view.View
-import androidx.core.view.isVisible
+import androidx.core.view.isGone
 import com.example.kmatool.R
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.toDayMonthYear
@@ -51,12 +51,7 @@ class MonthDayBinderImpl(
         }
     }
 
-    override fun bind(container: DayViewContainer, data: CalendarDay) {
-        container.day = data
-        bindDate(data, container.binding)
-    }
-
-    private fun selectedDate(day: CalendarDay) {
+    fun selectedDate(day: CalendarDay) {
         val date = day.date
         if (selectedDate != date) {
             Log.d(TAG, "clicked day = $date")
@@ -68,6 +63,11 @@ class MonthDayBinderImpl(
         } else if (day.position != DayPosition.MonthDate) {
             callbackOnClick(day)
         }
+    }
+
+    override fun bind(container: DayViewContainer, data: CalendarDay) {
+        container.day = data
+        bindDate(data, container.binding)
     }
 
     private fun bindDate(
@@ -94,30 +94,30 @@ class MonthDayBinderImpl(
                         Log.d(TAG, "set background current day = $date")
                         textView.setTextColorRes(R.color.white)
                         textView.setBackgroundResource(R.drawable.bgr_today)
-                        dotViewPeriods.isVisible = isDateInPeriodList(date)
-                        dotViewNotes.isVisible = isDateInNoteList(date)
+                        dotViewPeriods.isGone = isDateInPeriodList(date)
+                        dotViewNotes.isGone = isDateInNoteList(date)
                     }
                     else -> {
                         textView.setTextColorRes(R.color.black)
                         textView.background = null
-                        dotViewPeriods.isVisible = isDateInPeriodList(date)
-                        dotViewNotes.isVisible = isDateInNoteList(date)
+                        dotViewPeriods.isGone = isDateInPeriodList(date)
+                        dotViewNotes.isGone = isDateInNoteList(date)
                     }
                 }
             } else {
                 textView.setTextColorRes(R.color.gray)
                 textView.background = null
-                dotViewPeriods.isVisible = isDateInPeriodList(date)
-                dotViewNotes.isVisible = isDateInNoteList(date)
+                dotViewPeriods.isGone = isDateInPeriodList(date)
+                dotViewNotes.isGone = isDateInNoteList(date)
             }
         }
     }
 
     private fun isDateInPeriodList(date: LocalDate): Boolean {
-        return Data.periodsDayMap[date.toDayMonthYear()] != null
+        return Data.periodsDayMap[date.toDayMonthYear()] == null
     }
 
     private fun isDateInNoteList(date: LocalDate): Boolean {
-        return Data.notesDayMap[date.toDayMonthYear()] != null
+        return Data.notesDayMap[date.toDayMonthYear()] == null
     }
 }

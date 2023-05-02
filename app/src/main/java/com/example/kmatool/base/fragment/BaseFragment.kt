@@ -87,7 +87,7 @@ open class BaseFragment : Fragment() {
 
     // LOG
     open fun logLifecycle(msg: String) {
-        Log.d(TAG, "$msg $TAG")
+        Log.d(TAG, msg)
     }
 
     open fun logError(msg: String) {
@@ -109,6 +109,10 @@ open class BaseFragment : Fragment() {
     // FUN
     protected fun navigateToFragment(id: Int) {
         findNavController().navigate(id)
+    }
+
+    protected fun popBackstack(id: Int, inclusive: Boolean) {
+        findNavController().popBackStack(id, inclusive)
     }
 
     protected fun navigateToFragment(id: Int, data: Bundle) {

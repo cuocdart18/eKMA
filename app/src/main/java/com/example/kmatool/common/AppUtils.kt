@@ -16,6 +16,8 @@ import java.security.MessageDigest
 const val KIT_URL = "https://www.facebook.com/kitclubKMA"
 const val PERIOD_TYPE = 0
 const val NOTE_TYPE = 1
+const val ADD_NOTE_MODE = 101
+const val UPDATE_NOTE_MODE = 102
 const val EVENTS_NOTIFY_CHANNEL = "Events"
 const val EVENTS_NOTIFY_CHANNEL_ID = "events_id"
 const val KEY_EVENT = "sent_event_from_AM_to_BR"
@@ -26,6 +28,8 @@ const val M_PERMISSION_REQUEST_CODE = 23
 
 // for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
+const val KEY_PASS_NOTE_OBJ = "note_obj"
+const val KEY_PASS_NOTE_MODE = "note_mode"
 const val DATABASE_NAME = "app_database.db"
 const val KEY_PASS_STATISTIC_SUBJECT = "statistic_subject"
 const val SCALE_LAYOUT_STATISTIC_SUBJECT_DIALOG_X = 0.80
