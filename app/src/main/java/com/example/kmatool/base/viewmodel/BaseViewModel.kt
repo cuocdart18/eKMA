@@ -13,8 +13,8 @@ open class BaseViewModel : ViewModel() {
     }
 
     // LOG
-    open fun logLifecycle(msg: String) {
-        Log.d(TAG, "$msg $TAG")
+    private fun logLifecycle(msg: String) {
+        Log.d(TAG, msg)
     }
 
     open fun logError(msg: String) {

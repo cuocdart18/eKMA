@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
+import com.example.kmatool.common.ADD_NOTE_MODE
 import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.DataStoreManager
+import com.example.kmatool.common.UPDATE_NOTE_MODE
 import com.example.kmatool.common.formatDoubleChar
 import com.example.kmatool.common.toDayMonthYear
 import com.example.kmatool.common.toHourMinute
@@ -30,11 +32,11 @@ class NoteMainViewModel @Inject constructor(
     val selectDay = MutableLiveData<String>()
     val selectTime = MutableLiveData<String>()
 
-    init {
-        getCurrentDayAndTime()
-    }
+    // default
+    var noteMode = ADD_NOTE_MODE
+    var oldNote: Note? = null
 
-    private fun getCurrentDayAndTime() {
+    fun getCurrentDayAndTime() {
         logDebug("get current day and time of device")
         viewModelScope.launch(Dispatchers.Main) {
             val day = LocalDate.now().toDayMonthYear()
@@ -60,11 +62,21 @@ class NoteMainViewModel @Inject constructor(
         note: Note,
         callback: () -> Unit
     ) {
+        if (noteMode == UPDATE_NOTE_MODE) {
+            oldNote?.let { note.id = it.id }
+        }
         viewModelScope.launch(Dispatchers.IO) {
-            noteRepository.insertNote(note) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    // on success
-                    callback()
+            if (noteMode == ADD_NOTE_MODE) {
+                noteRepository.insertNote(note) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        callback()
+                    }
+                }
+            } else if (noteMode == UPDATE_NOTE_MODE) {
+                noteRepository.updateNote(note) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        callback()
+                    }
                 }
             }
         }
@@ -82,10 +94,25 @@ class NoteMainViewModel @Inject constructor(
     }
 
     fun setAlarmForNote(context: Context, note: Note) {
+        if (noteMode == UPDATE_NOTE_MODE) {
+            oldNote?.let { note.id = it.id }
+        }
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreManager.isNotifyEventsDataStoreFlow.collect() { state ->
                 if (state) {
                     AlarmEventsScheduler(context).scheduleEvent(note)
+                }
+                cancel()
+            }
+        }
+    }
+
+    fun cancelAlarmForOldNote(context: Context, note: Note) {
+        oldNote?.let { note.id = it.id }
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreManager.isNotifyEventsDataStoreFlow.collect() { state ->
+                if (state) {
+                    AlarmEventsScheduler(context).cancelEvent(note)
                 }
                 cancel()
             }

@@ -9,6 +9,30 @@
         android:id="@+id/scheduleMainFragment"
         android:name="com.example.kmatool.ui.schedule.main_scr.ScheduleMainFragment"
         android:label="@string/label_name_schedule"
-        tools:layout="@layout/fragment_schedule_main" />
+        tools:layout="@layout/fragment_schedule_main">
+        <action
+            android:id="@+id/action_scheduleMainFragment_to_noteDetailDialogFragment"
+            app:destination="@id/noteDetailDialogFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/noteDetailDialogFragment"
+        android:name="com.example.kmatool.ui.note.detail.NoteDetailDialogFragment"
+        android:label="NoteDetailDialogFragment"
+        tools:layout="@layout/dialog_note_detail">
+        <action
+            android:id="@+id/action_noteDetailDialogFragment_to_noteMainFragment"
+            app:destination="@id/noteMainFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/noteMainFragment"
+        android:name="com.example.kmatool.ui.note.main_scr.NoteMainFragment"
+        android:label="NoteMainFragment"
+        tools:layout="@layout/fragment_note_main">
+        <action
+            android:id="@+id/action_noteMainFragment_to_scheduleMainFragment"
+            app:destination="@id/scheduleMainFragment"
+            app:popUpTo="@id/scheduleMainFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

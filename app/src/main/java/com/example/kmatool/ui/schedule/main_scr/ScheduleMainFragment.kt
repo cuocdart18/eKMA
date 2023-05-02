@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
+import com.example.kmatool.common.Data
+import com.example.kmatool.common.KEY_PASS_NOTE_OBJ
 import com.example.kmatool.databinding.FragmentScheduleMainBinding
 import com.example.kmatool.common.displayText
 import com.example.kmatool.common.toYearMonth
@@ -18,15 +21,12 @@ import com.example.kmatool.data.models.Event
 import com.example.kmatool.common.makeGone
 import com.example.kmatool.common.makeVisible
 import com.example.kmatool.common.setTextColorRes
+import com.example.kmatool.data.models.Note
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.time.DayOfWeek
-import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.*
@@ -36,10 +36,10 @@ class ScheduleMainFragment : BaseFragment() {
     override val TAG = ScheduleMainFragment::class.java.simpleName
     private lateinit var binding: FragmentScheduleMainBinding
     private val viewModel by viewModels<ScheduleMainViewModel>()
-    private val eventsDayAdapter: EventsDayAdapter by lazy { EventsDayAdapter() }
+    private val eventsDayAdapter: EventsDayAdapter by lazy { EventsDayAdapter { onNoteClicked(it) } }
     private val dayBinder: MonthDayBinderImpl by lazy {
         MonthDayBinderImpl(
-            { binding.calendarView.notifyDateChanged(it) }, { onDateClicked(it) })
+            { binding.calendarView.notifyDateChanged(it) }, { getEventsDay(it) })
     }
 
     override fun onCreateView(
@@ -53,11 +53,10 @@ class ScheduleMainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.Main).launch {
-            setupGoogleProgress(binding.googleProgress)
-            setupRecyclerViewEvents()
-            setupCalendar()
-        }
+        setupGoogleProgress(binding.googleProgress)
+        setupRecyclerViewEvents()
+        setupCalendar()
+        refreshDataAfterUpdatedOrDeleted()
     }
 
     private fun setupRecyclerViewEvents() {
@@ -74,24 +73,24 @@ class ScheduleMainFragment : BaseFragment() {
                 val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 textView.text = title
             }
-        val currentMonth = YearMonth.now()
+        val currentMonth = YearMonth.from(Data.saveDateClicked.date)
         val startMonth = currentMonth.minusMonths(100)
         val endMonth = currentMonth.plusMonths(100)
         binding.calendarView.dayBinder = dayBinder
         binding.calendarView.monthScrollListener = { updateTitle() }
         binding.calendarView.setup(startMonth, endMonth, daysOfWeek.first())
         binding.calendarView.scrollToMonth(currentMonth)
-        // show events of in current day
-        onDateClicked(CalendarDay(LocalDate.now(), DayPosition.MonthDate))
+        dayBinder.selectedDate(Data.saveDateClicked)
     }
 
-    private fun onDateClicked(day: CalendarDay) {
+    private fun getEventsDay(day: CalendarDay) {
+        Data.saveDateClicked = day
+        // action
         val date = day.date
         logDebug("onDateClicked = $date")
         // if select day in Month
         if (day.position == DayPosition.MonthDate) {
             binding.googleProgress.makeVisible()
-            // action
             viewModel.showEventsWithDate(date) { events ->
                 logInfo("day = $date - periods/notes = $events")
                 binding.googleProgress.makeGone()
@@ -108,13 +107,32 @@ class ScheduleMainFragment : BaseFragment() {
             }
         } else {
             binding.calendarView.scrollToMonth(YearMonth.parse(date.toYearMonth()))
-            onDateClicked(CalendarDay(date, DayPosition.MonthDate))
+            getEventsDay(CalendarDay(date, DayPosition.MonthDate))
         }
     }
 
     private fun showEventsDay(events: List<Event>) {
         eventsDayAdapter.setData(events)
         binding.rcvListEvent.adapter = eventsDayAdapter
+    }
+
+    private fun onNoteClicked(note: Note) {
+        logDebug("on click note=${note.title}")
+        // pass data
+        val bundle = bundleOf(
+            KEY_PASS_NOTE_OBJ to note
+        )
+        // navigate
+        navigateToFragment(R.id.noteDetailDialogFragment, bundle)
+    }
+
+    private fun refreshDataAfterUpdatedOrDeleted() {
+        Data.isRefreshClickedEvents.observe(viewLifecycleOwner) { state ->
+            logDebug("refresh events state=$state")
+            if (state) {
+                getEventsDay(Data.saveDateClicked)
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")

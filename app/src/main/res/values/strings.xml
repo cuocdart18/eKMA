@@ -56,6 +56,13 @@
     <string name="note_content">Nội dung</string>
     <string name="note_save">Lưu</string>
     <string name="empty_title_notify">Thông tin này không được bỏ trống</string>
+    <string name="note_title_dialog">Chi tiết</string>
+    <string name="note_time_dialog">Thời gian: </string>
+    <string name="note_content_dialog">Ghi chú:</string>
+    <string name="btn_note_update_dialog">Update</string>
+    <string name="btn_note_delete_dialog">Delete</string>
+    <string name="tv_note_head_add">Tạo ghi chú</string>
+    <string name="tv_note_head_update">Sửa ghi chú</string>
 
 
 </resources>

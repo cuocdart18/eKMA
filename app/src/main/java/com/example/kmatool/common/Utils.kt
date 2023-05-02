@@ -86,8 +86,3 @@ fun convertPeriodsToStartEndTime(data: String): Map<String, String> {
         "end" to convertPeriodToTime(periods[periods.size - 1])
     )
 }
-
-fun main() {
-    val timeMap = convertPeriodsToStartEndTime("1,2,3")
-    println("${timeMap["start"]}")
-}
