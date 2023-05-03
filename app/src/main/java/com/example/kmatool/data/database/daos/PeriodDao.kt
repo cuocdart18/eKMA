@@ -17,4 +17,7 @@ interface PeriodDao {
 
     @Query("SELECT * FROM period")
     suspend fun getPeriods(): List<Period>
+
+    @Query("DELETE FROM period")
+    suspend fun deletePeriods()
 }

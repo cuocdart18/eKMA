@@ -15,6 +15,10 @@ class PeriodLocalService @Inject constructor(
         periodDao.deleteAllPeriods(periods)
     }
 
+    suspend fun deletePeriods() {
+        periodDao.deletePeriods()
+    }
+
     suspend fun getPeriods(): List<Period> {
         return periodDao.getPeriods()
     }

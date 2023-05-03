@@ -44,6 +44,14 @@ class NoteRepository @Inject constructor(
         callback()
     }
 
+    suspend fun deleteNotes(
+        callback: () -> Unit
+    ) {
+        noteLocalService.deleteNodes()
+        logDebug("delete notes successfully")
+        callback()
+    }
+
     suspend fun updateLocalDataRuntime() {
         coroutineScope {
             val result = noteLocalService.getNotes()

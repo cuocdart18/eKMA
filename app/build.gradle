@@ -103,4 +103,7 @@ dependencies {
     // notification support
     def core_version = "1.6.0"
     implementation "androidx.core:core:$core_version"
+
+    // CircleImageView
+    implementation "de.hdodenhof:circleimageview:3.1.0"
 }

@@ -159,4 +159,12 @@ class ScheduleRepository @Inject constructor(
         // success
         callback()
     }
+
+    suspend fun deletePeriods(
+        callback: () -> Unit
+    ) {
+        periodLocalService.deletePeriods()
+        logDebug("delete periods successfully")
+        callback()
+    }
 }

@@ -23,4 +23,8 @@ class NoteLocalService @Inject constructor(
     suspend fun updateNote(note: Note) {
         noteDao.updateNote(note)
     }
+
+    suspend fun deleteNodes() {
+        noteDao.deleteNotes()
+    }
 }

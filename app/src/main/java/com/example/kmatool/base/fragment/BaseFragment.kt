@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.ProgressBar
 import android.widget.TimePicker
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -161,5 +162,9 @@ open class BaseFragment : Fragment() {
                 .colors(resources.getIntArray(R.array.google_colors))
                 .build()
         progressBar.makeVisible()
+    }
+
+    internal fun showToast(msg: String, type: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(requireContext(), msg, type).show()
     }
 }

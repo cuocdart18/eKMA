@@ -11,5 +11,10 @@ class MiniStudentLocalService @Inject constructor(
         miniStudentDao.insertStudent(miniStudent)
     }
 
-    suspend fun getRecentHistorySearch(): List<MiniStudent> = miniStudentDao.getRecentHistorySearch()
+    suspend fun getRecentHistorySearch(): List<MiniStudent> =
+        miniStudentDao.getRecentHistorySearch()
+
+    suspend fun deleteRecentHistorySearch() {
+        miniStudentDao.deleteRecentHistorySearch()
+    }
 }

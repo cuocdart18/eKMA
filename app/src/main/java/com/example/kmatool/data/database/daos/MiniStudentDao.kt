@@ -14,4 +14,7 @@ interface MiniStudentDao {
 
     @Query("SELECT * FROM mini_student ORDER BY dateModified DESC LIMIT 20")
     suspend fun getRecentHistorySearch(): List<MiniStudent>
+
+    @Query("DELETE FROM mini_student")
+    suspend fun deleteRecentHistorySearch()
 }
