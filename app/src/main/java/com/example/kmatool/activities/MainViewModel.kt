@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.Data
-import com.example.kmatool.common.DataStoreManager
+import com.example.kmatool.common.DataLocalManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val dataStoreManager: DataStoreManager
+    private val dataLocalManager: DataLocalManager
 ) : BaseViewModel() {
     override val TAG: String = MainViewModel::class.java.simpleName
 
@@ -22,7 +22,7 @@ class MainViewModel @Inject constructor(
 
     fun listenAlarmLocalEventsState(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreManager.isNotifyEventsDataStoreFlow.collect { state ->
+            dataLocalManager.getIsNotifyEvents { state ->
                 if (collectNotifyStateCounter == 0) {
                     collectNotifyStateCounter = 1
                 } else {

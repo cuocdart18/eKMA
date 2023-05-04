@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.Data
-import com.example.kmatool.common.DataStoreManager
+import com.example.kmatool.common.DataLocalManager
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.repositories.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NoteDetailViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
-    private val dataStoreManager: DataStoreManager
+    private val dataLocalManager: DataLocalManager
 ) : BaseViewModel() {
     override val TAG = NoteDetailViewModel::class.java.simpleName
 
@@ -45,7 +45,7 @@ class NoteDetailViewModel @Inject constructor(
 
     fun cancelAlarm(context: Context, note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreManager.isNotifyEventsDataStoreFlow.collect() { state ->
+            dataLocalManager.getIsNotifyEvents { state ->
                 if (state) {
                     AlarmEventsScheduler(context).cancelEvent(note)
                     logDebug("cancel notify event state=$state")

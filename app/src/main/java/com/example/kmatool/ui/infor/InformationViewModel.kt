@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.Data
-import com.example.kmatool.common.DataStoreManager
+import com.example.kmatool.common.DataLocalManager
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
 import com.example.kmatool.common.jsonStringToObject
@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InformationViewModel @Inject constructor(
-    private val dataStoreManager: DataStoreManager,
+    private val dataLocalManager: DataLocalManager,
     private val noteRepository: NoteRepository,
     private val scheduleRepository: ScheduleRepository
 ) : BaseViewModel() {
@@ -39,10 +39,10 @@ class InformationViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreManager.profileDataStoreFlow.collect() {
+            dataLocalManager.getProfile {
                 profile = jsonStringToObject(it)
-                withContext(Dispatchers.Main) {
-                    logDebug("get profile=$profile")
+                logDebug("get profile=$profile")
+                CoroutineScope(Dispatchers.Main).launch {
                     callback(profile)
                 }
                 cancel()
@@ -54,10 +54,10 @@ class InformationViewModel @Inject constructor(
         callback: (uri: Uri) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreManager.imgFilePathDataStoreFlow.collect() { filePath ->
+            dataLocalManager.getImgFilePath { filePath ->
                 val file = File(filePath)
                 if (file.exists()) {
-                    withContext(Dispatchers.Main) {
+                    CoroutineScope(Dispatchers.Main).launch {
                         val uri = Uri.fromFile(file)
                         logDebug("uri=$uri")
                         callback(uri)
@@ -77,7 +77,7 @@ class InformationViewModel @Inject constructor(
                 CoroutineScope(Dispatchers.IO).launch {
                     // convert uri to file path and save it
                     val filePath = FileUtils.getRealPathFromURI(context, uri)
-                    dataStoreManager.storeImgFilePath(filePath)
+                    dataLocalManager.saveImgFilePath(filePath)
                     withContext(Dispatchers.Main) {
                         callback(uri)
                     }
@@ -91,7 +91,7 @@ class InformationViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreManager.storeIsNotifyEvents(data)
+            dataLocalManager.saveIsNotifyEvents(data)
             withContext(Dispatchers.Main) {
                 callback()
             }
@@ -104,10 +104,10 @@ class InformationViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val clearPeriods = launch { scheduleRepository.deletePeriods { } }
             val clearNotes = launch { noteRepository.deleteNotes { } }
-            val clearProfile = launch { dataStoreManager.storeProfile("") }
-            val clearImage = launch { dataStoreManager.storeImgFilePath("") }
-            val clearNotifyEvent = launch { dataStoreManager.storeIsNotifyEvents(false) }
-            val clearLoginState = launch { dataStoreManager.storeIsLogin(false) }
+            val clearProfile = launch { dataLocalManager.saveProfile("") }
+            val clearImage = launch { dataLocalManager.saveImgFilePath("") }
+            val clearNotifyEvent = launch { dataLocalManager.saveIsNotifyEvents(false) }
+            val clearLoginState = launch { dataLocalManager.saveIsLogin(false) }
             val clearDataRuntime = launch {
                 Data.notesDayMap.clear()
                 Data.periodsDayMap.clear()

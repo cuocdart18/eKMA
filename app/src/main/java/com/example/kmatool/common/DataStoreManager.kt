@@ -25,6 +25,7 @@ class DataStoreManager(private val application: Application) {
     }
 
     val profileDataStoreFlow: Flow<String> = application.applicationContext.dataStore.data
+        .cancellable()
         .map {
             it[PROFILE_DATA] ?: ""
         }
@@ -36,6 +37,7 @@ class DataStoreManager(private val application: Application) {
     }
 
     val imgFilePathDataStoreFlow: Flow<String> = application.applicationContext.dataStore.data
+        .cancellable()
         .map {
             it[IMG_FILE_PATH] ?: ""
         }

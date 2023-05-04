@@ -22,7 +22,7 @@ class BootCompletedReceiver : BroadcastReceiver() {
     lateinit var scheduleRepository: ScheduleRepository
 
     @Inject
-    lateinit var dataStoreManager: DataStoreManager
+    lateinit var dataLocalManager: DataLocalManager
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Intent.ACTION_BOOT_COMPLETED && context != null) {
@@ -36,8 +36,8 @@ class BootCompletedReceiver : BroadcastReceiver() {
             // Get local data here
             scheduleRepository.getLocalData()
             // Set the alarm here
-            dataStoreManager.isNotifyEventsDataStoreFlow.collect { state ->
-                withContext(Dispatchers.Default) {
+            dataLocalManager.getIsNotifyEvents { state ->
+                CoroutineScope(Dispatchers.Default).launch {
                     val alarmScheduler = AlarmEventsScheduler(context)
                     if (state) {
                         // get value of Map, set alarm it

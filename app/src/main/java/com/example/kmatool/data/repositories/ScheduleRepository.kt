@@ -3,6 +3,7 @@ package com.example.kmatool.data.repositories
 import android.util.Log
 import com.example.kmatool.base.repositories.BaseRepositories
 import com.example.kmatool.common.Data
+import com.example.kmatool.common.DataLocalManager
 import com.example.kmatool.common.DataStoreManager
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
@@ -20,13 +21,13 @@ class ScheduleRepository @Inject constructor(
     private val periodLocalService: PeriodLocalService,
     private val noteLocalService: NoteLocalService,
     private val scheduleRemoteService: ScheduleRemoteService,
-    private val dataStoreManager: DataStoreManager,
+    private val dataLocalManager: DataLocalManager
 ) : BaseRepositories() {
     override val TAG: String = ScheduleRepository::class.java.simpleName
 
     suspend fun getLoginState(callback: (res: Boolean) -> Unit) {
         coroutineScope {
-            dataStoreManager.isLoginDataStoreFlow.collect { state ->
+            dataLocalManager.getIsLogin { state ->
                 logDebug("login state = $state")
                 callback(state)
                 cancel()
@@ -126,7 +127,7 @@ class ScheduleRepository @Inject constructor(
             // convert to json string
             val dataStringType = async { jsonObjectToString(data) }
             // save
-            dataStoreManager.storeProfile(dataStringType.await())
+            dataLocalManager.saveProfile(dataStringType.await())
             callback()
         }
     }
@@ -137,7 +138,7 @@ class ScheduleRepository @Inject constructor(
     ): Job {
         // save
         return CoroutineScope(Dispatchers.IO).launch {
-            dataStoreManager.storeIsLogin(data)
+            dataLocalManager.saveIsLogin(data)
             callback()
         }
     }

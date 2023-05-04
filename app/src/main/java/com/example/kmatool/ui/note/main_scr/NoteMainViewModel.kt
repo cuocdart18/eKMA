@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.ADD_NOTE_MODE
 import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.common.DataStoreManager
+import com.example.kmatool.common.DataLocalManager
 import com.example.kmatool.common.UPDATE_NOTE_MODE
 import com.example.kmatool.common.formatDoubleChar
 import com.example.kmatool.common.toDayMonthYear
@@ -26,7 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NoteMainViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
-    private val dataStoreManager: DataStoreManager
+    private val dataLocalManager: DataLocalManager
 ) : BaseViewModel() {
     override val TAG: String = NoteMainViewModel::class.java.simpleName
     val selectDay = MutableLiveData<String>()
@@ -98,7 +98,7 @@ class NoteMainViewModel @Inject constructor(
             oldNote?.let { note.id = it.id }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreManager.isNotifyEventsDataStoreFlow.collect() { state ->
+            dataLocalManager.getIsNotifyEvents { state ->
                 if (state) {
                     AlarmEventsScheduler(context).scheduleEvent(note)
                     logDebug("set notify event state=$state")
@@ -111,7 +111,7 @@ class NoteMainViewModel @Inject constructor(
     fun cancelAlarmForOldNote(context: Context, note: Note) {
         oldNote?.let { note.id = it.id }
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreManager.isNotifyEventsDataStoreFlow.collect() { state ->
+            dataLocalManager.getIsNotifyEvents { state ->
                 if (state) {
                     AlarmEventsScheduler(context).cancelEvent(note)
                     logDebug("cancel notify event state=$state")

@@ -28,7 +28,10 @@ object LocalDataModule {
 
     @Provides
     @Singleton
-    fun provideDataLocalManager(mySharePreferences: MySharePreferences): DataLocalManager {
-        return DataLocalManager(mySharePreferences)
+    fun provideDataLocalManager(
+        mySharePreferences: MySharePreferences,
+        dataStoreManager: DataStoreManager
+    ): DataLocalManager {
+        return DataLocalManager(mySharePreferences, dataStoreManager)
     }
 }
