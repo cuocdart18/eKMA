@@ -14,10 +14,8 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
     override fun scheduleEvent(event: Event) {
         val dateTimeLong = event.getTimeMillis()
         if (dateTimeLong < System.currentTimeMillis()) {
-            Log.i("AlarmEventsScheduler", "unset ${event.getDateTime()}")
             return
         }
-        Log.i("AlarmEventsScheduler", "set alarm ${event.getDateTime()}")
 
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra(KEY_EVENT, event)
@@ -36,8 +34,6 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
     }
 
     override fun cancelEvent(event: Event) {
-        Log.i("AlarmEventsScheduler", "cancel alarm ${event.getDateTime()}")
-
         val intent = Intent(context, AlarmReceiver::class.java).apply {
         }
         val pendingIntent = PendingIntent.getBroadcast(

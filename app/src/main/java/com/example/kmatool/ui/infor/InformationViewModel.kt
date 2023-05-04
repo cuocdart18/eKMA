@@ -1,24 +1,24 @@
 package com.example.kmatool.ui.infor
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.DataStoreManager
+import com.example.kmatool.common.FileUtils
+import com.example.kmatool.common.TedImagePickerStarter
 import com.example.kmatool.common.jsonStringToObject
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.repositories.NoteRepository
 import com.example.kmatool.data.repositories.ScheduleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,22 +29,59 @@ class InformationViewModel @Inject constructor(
 ) : BaseViewModel() {
     override val TAG = InformationViewModel::class.java.simpleName
 
-    private val _profile = MutableLiveData<Profile>()
-    val profile: LiveData<Profile> = _profile
+    private lateinit var profile: Profile
 
-    init {
-        getProfile()
-    }
-
-    private fun getProfile() {
+    fun getProfile(
+        callback: (profile: Profile) -> Unit
+    ) {
+        if (this::profile.isInitialized) {
+            callback(profile)
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreManager.profileDataStoreFlow.collect() {
-                val parsedProfile = jsonStringToObject<Profile>(it)
+                profile = jsonStringToObject(it)
                 withContext(Dispatchers.Main) {
-                    _profile.value = parsedProfile
-                    logDebug("get profile=${_profile.value}")
+                    logDebug("get profile=$profile")
+                    callback(profile)
                 }
                 cancel()
+            }
+        }
+    }
+
+    fun getImageProfile(
+        callback: (uri: Uri) -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreManager.imgFilePathDataStoreFlow.collect() { filePath ->
+                val file = File(filePath)
+                if (file.exists()) {
+                    withContext(Dispatchers.Main) {
+                        val uri = Uri.fromFile(file)
+                        logDebug("uri=$uri")
+                        callback(uri)
+                    }
+                }
+                cancel()
+            }
+        }
+    }
+
+    fun onChangeProfileImage(
+        context: Context,
+        callback: (uri: Uri) -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.Main) {
+            TedImagePickerStarter.startImage(context) { uri ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    // convert uri to file path and save it
+                    val filePath = FileUtils.getRealPathFromURI(context, uri)
+                    dataStoreManager.storeImgFilePath(filePath)
+                    withContext(Dispatchers.Main) {
+                        callback(uri)
+                    }
+                }
             }
         }
     }
@@ -68,6 +105,7 @@ class InformationViewModel @Inject constructor(
             val clearPeriods = launch { scheduleRepository.deletePeriods { } }
             val clearNotes = launch { noteRepository.deleteNotes { } }
             val clearProfile = launch { dataStoreManager.storeProfile("") }
+            val clearImage = launch { dataStoreManager.storeImgFilePath("") }
             val clearNotifyEvent = launch { dataStoreManager.storeIsNotifyEvents(false) }
             val clearLoginState = launch { dataStoreManager.storeIsLogin(false) }
             val clearDataRuntime = launch {
@@ -78,6 +116,7 @@ class InformationViewModel @Inject constructor(
             clearPeriods.join()
             clearNotes.join()
             clearProfile.join()
+            clearImage.join()
             clearNotifyEvent.join()
             clearLoginState.join()
             clearDataRuntime.join()

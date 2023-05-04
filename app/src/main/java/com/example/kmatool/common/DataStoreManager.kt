@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.map
 
-class DataStoreManager (private val application: Application) {
+class DataStoreManager(private val application: Application) {
 
     companion object {
         // profile
@@ -19,6 +19,9 @@ class DataStoreManager (private val application: Application) {
 
         // is notify
         private val IS_NOTIFY_EVENTS = booleanPreferencesKey(KEY_IS_NOTIFY_EVENTS)
+
+        // uri path
+        private val IMG_FILE_PATH = stringPreferencesKey(KEY_IMG_FILE_PATH)
     }
 
     val profileDataStoreFlow: Flow<String> = application.applicationContext.dataStore.data
@@ -29,6 +32,17 @@ class DataStoreManager (private val application: Application) {
     suspend fun storeProfile(data: String) {
         application.applicationContext.dataStore.edit {
             it[PROFILE_DATA] = data
+        }
+    }
+
+    val imgFilePathDataStoreFlow: Flow<String> = application.applicationContext.dataStore.data
+        .map {
+            it[IMG_FILE_PATH] ?: ""
+        }
+
+    suspend fun storeImgFilePath(data: String) {
+        application.applicationContext.dataStore.edit {
+            it[IMG_FILE_PATH] = data
         }
     }
 

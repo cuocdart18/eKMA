@@ -82,7 +82,7 @@ dependencies {
 
     // glide
     implementation "com.github.bumptech.glide:glide:4.14.2"
-    annotationProcessor "com.github.bumptech.glide:compiler:4.14.2"
+    kapt "com.github.bumptech.glide:compiler:4.14.2"
 
     // calendar theme
     implementation "com.kizitonwose.calendar:view:2.0.2"
@@ -106,4 +106,7 @@ dependencies {
 
     // CircleImageView
     implementation "de.hdodenhof:circleimageview:3.1.0"
+
+    // TedImagePicker
+    implementation "io.github.ParkSangGwon:tedimagepicker:1.4.2"
 }

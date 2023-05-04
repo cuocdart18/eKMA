@@ -32,10 +32,12 @@ class MainViewModel @Inject constructor(
                             // get value of Map, set alarm it
                             launch { Data.periodsDayMap.forEach { alarmScheduler.scheduleEvents(it.value) } }
                             launch { Data.notesDayMap.forEach { alarmScheduler.scheduleEvents(it.value) } }
+                            logDebug("set notify event state=$state")
                         } else {
                             // get value of Map, cancel alarm it
                             launch { Data.periodsDayMap.forEach { alarmScheduler.cancelEvents(it.value) } }
                             launch { Data.notesDayMap.forEach { alarmScheduler.cancelEvents(it.value) } }
+                            logDebug("cancel notify event state=$state")
                         }
                     }
                 }

@@ -101,6 +101,7 @@ class NoteMainViewModel @Inject constructor(
             dataStoreManager.isNotifyEventsDataStoreFlow.collect() { state ->
                 if (state) {
                     AlarmEventsScheduler(context).scheduleEvent(note)
+                    logDebug("set notify event state=$state")
                 }
                 cancel()
             }
@@ -113,6 +114,7 @@ class NoteMainViewModel @Inject constructor(
             dataStoreManager.isNotifyEventsDataStoreFlow.collect() { state ->
                 if (state) {
                     AlarmEventsScheduler(context).cancelEvent(note)
+                    logDebug("cancel notify event state=$state")
                 }
                 cancel()
             }

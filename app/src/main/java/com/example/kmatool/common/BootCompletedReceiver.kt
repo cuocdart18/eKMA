@@ -49,6 +49,7 @@ class BootCompletedReceiver : BroadcastReceiver() {
                         launch { Data.notesDayMap.forEach { alarmScheduler.cancelEvents(it.value) } }
                     }
                 }
+                Log.d(TAG, "listen notify event state=$state")
                 Log.i(TAG, "resetAlarm: successfully")
                 cancel()
             }

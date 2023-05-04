@@ -42,6 +42,7 @@ const val NAME_DATASTORE_PREFS = "datastore_prefs"
 const val KEY_STUDENT_PROFILE = "student_profile"
 const val KEY_IS_LOGIN = "is_login"
 const val KEY_IS_NOTIFY_EVENTS = "is_notify_events"
+const val KEY_IMG_FILE_PATH = "img_file_path"
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = NAME_DATASTORE_PREFS)
 
