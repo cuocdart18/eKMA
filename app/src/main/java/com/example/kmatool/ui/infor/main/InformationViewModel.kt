@@ -104,7 +104,6 @@ class InformationViewModel @Inject constructor(
             val clearNotes = launch { noteRepository.deleteNotes { } }
             val clearProfile = launch { dataLocalManager.saveProfile("") }
             val clearImage = launch { dataLocalManager.saveImgFilePathSPref("") }
-//            val clearNotifyEvent = launch { dataLocalManager.saveIsNotifyEvents(false) }
             val clearLoginState = launch { dataLocalManager.saveLoginStateSPref(false) }
             val clearDataRuntime = launch {
                 Data.notesDayMap.clear()
@@ -115,7 +114,6 @@ class InformationViewModel @Inject constructor(
             clearNotes.join()
             clearProfile.join()
             clearImage.join()
-//            clearNotifyEvent.join()
             clearLoginState.join()
             clearDataRuntime.join()
 

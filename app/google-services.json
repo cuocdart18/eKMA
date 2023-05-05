@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "366258783314",
+    "project_id": "kma-tool",
+    "storage_bucket": "kma-tool.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366258783314:android:c4bbc94e8423356f7dcb8b",
+        "android_client_info": {
+          "package_name": "com.example.kmatool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366258783314-pn21okm17kgv1i5b1drfdt1vvgnah1sa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDQM3QNryWB4qFThgzh98LpFOsew7wqKk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366258783314-pn21okm17kgv1i5b1drfdt1vvgnah1sa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,7 +4,6 @@ import android.util.Log
 import com.example.kmatool.base.repositories.BaseRepositories
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.DataLocalManager
-import com.example.kmatool.common.DataStoreManager
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.services.PeriodLocalService
@@ -82,15 +81,8 @@ class ScheduleRepository @Inject constructor(
             return false
         } else {
             logDebug("profile = $profileResult")
-
-            logDebug("save profile to local")
             saveProfileToLocal(profileResult) {
                 Log.d(TAG, "save profile successfully")
-            }.join()
-
-            logDebug("save login state to local")
-            saveLoginStateToLocal(true) {
-                logDebug("save login state successfully")
             }.join()
             return true
         }
@@ -107,12 +99,10 @@ class ScheduleRepository @Inject constructor(
             return false
         } else {
             logDebug("schedule = $scheduleResult")
-            logDebug("save schedule to database")
-
             formatStartEndTime(scheduleResult.periods)
             savePeriodsToDatabase(scheduleResult.periods) {
                 logDebug("save schedule successfully")
-            }
+            }.join()
             return true
         }
     }
@@ -130,7 +120,7 @@ class ScheduleRepository @Inject constructor(
         }
     }
 
-    private suspend fun saveLoginStateToLocal(
+    suspend fun saveLoginStateToLocal(
         data: Boolean,
         callback: () -> Unit
     ): Job {
@@ -152,11 +142,13 @@ class ScheduleRepository @Inject constructor(
     private suspend fun savePeriodsToDatabase(
         data: List<Period>,
         callback: () -> Unit
-    ) {
-        // action
-        periodLocalService.insertPeriods(data)
-        // success
-        callback()
+    ): Job {
+        return CoroutineScope(Dispatchers.IO).launch {
+            // action
+            periodLocalService.insertPeriods(data)
+            // success
+            callback()
+        }
     }
 
     suspend fun deletePeriods(

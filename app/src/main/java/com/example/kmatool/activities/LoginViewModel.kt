@@ -13,7 +13,7 @@ class LoginViewModel @Inject constructor(
     private val scheduleRepository: ScheduleRepository
 ) : BaseViewModel() {
     override val TAG = LoginViewModel::class.java.simpleName
-    private val DELAY_TIME = 1500L
+    private val DELAY_TIME = 1200L
 
     // observable field
     var isValid = ObservableField<Boolean>()
@@ -73,6 +73,9 @@ class LoginViewModel @Inject constructor(
                     async { scheduleRepository.callScheduleApi(username, password) }
 
                 if (profileCallState.await() && scheduleCallState.await()) {
+                    scheduleRepository.saveLoginStateToLocal(true) {
+                        logDebug("save login state successfully")
+                    }.join()
                     withContext(Dispatchers.Main) {
                         isValid.set(true)
                         isShowProgress.set(false)
