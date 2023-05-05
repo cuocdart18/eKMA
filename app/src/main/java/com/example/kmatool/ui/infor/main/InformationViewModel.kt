@@ -1,4 +1,4 @@
-package com.example.kmatool.ui.infor
+package com.example.kmatool.ui.infor.main
 
 import android.content.Context
 import android.net.Uri
@@ -54,16 +54,14 @@ class InformationViewModel @Inject constructor(
         callback: (uri: Uri) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataLocalManager.getImgFilePath { filePath ->
-                val file = File(filePath)
-                if (file.exists()) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val uri = Uri.fromFile(file)
-                        logDebug("uri=$uri")
-                        callback(uri)
-                    }
+            val filePath = dataLocalManager.getImgFilePathSPref()
+            val file = File(filePath)
+            if (file.exists()) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val uri = Uri.fromFile(file)
+                    logDebug("uri=$uri")
+                    callback(uri)
                 }
-                cancel()
             }
         }
     }
@@ -77,7 +75,7 @@ class InformationViewModel @Inject constructor(
                 CoroutineScope(Dispatchers.IO).launch {
                     // convert uri to file path and save it
                     val filePath = FileUtils.getRealPathFromURI(context, uri)
-                    dataLocalManager.saveImgFilePath(filePath)
+                    dataLocalManager.saveImgFilePathSPref(filePath)
                     withContext(Dispatchers.Main) {
                         callback(uri)
                     }
@@ -105,9 +103,9 @@ class InformationViewModel @Inject constructor(
             val clearPeriods = launch { scheduleRepository.deletePeriods { } }
             val clearNotes = launch { noteRepository.deleteNotes { } }
             val clearProfile = launch { dataLocalManager.saveProfile("") }
-            val clearImage = launch { dataLocalManager.saveImgFilePath("") }
-            val clearNotifyEvent = launch { dataLocalManager.saveIsNotifyEvents(false) }
-            val clearLoginState = launch { dataLocalManager.saveIsLogin(false) }
+            val clearImage = launch { dataLocalManager.saveImgFilePathSPref("") }
+//            val clearNotifyEvent = launch { dataLocalManager.saveIsNotifyEvents(false) }
+            val clearLoginState = launch { dataLocalManager.saveLoginStateSPref(false) }
             val clearDataRuntime = launch {
                 Data.notesDayMap.clear()
                 Data.periodsDayMap.clear()
@@ -117,7 +115,7 @@ class InformationViewModel @Inject constructor(
             clearNotes.join()
             clearProfile.join()
             clearImage.join()
-            clearNotifyEvent.join()
+//            clearNotifyEvent.join()
             clearLoginState.join()
             clearDataRuntime.join()
 

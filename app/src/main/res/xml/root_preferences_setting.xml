@@ -1,0 +1,56 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:icon="@drawable/ic_settings_24_blue"
+        android:key="@string/key_my_score_pref"
+        android:title="Điểm của tôi" />
+
+    <Preference
+        android:icon="@drawable/ic_settings_24_blue"
+        android:key="@string/key_update_schedule_pref"
+        android:title="Cập nhật lịch học" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:icon="@drawable/ic_settings_24_blue"
+        android:key="@string/key_notify_event_pref"
+        android:title="Thông báo" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:icon="@drawable/ic_settings_24_blue"
+        android:key="@string/key_dark_mode_pref"
+        android:title="Chế độ tối" />
+
+    <ListPreference
+        android:defaultValue="Tiếng Việt"
+        android:icon="@drawable/ic_settings_24_blue"
+        android:title="Ngôn ngữ"
+        app:key="@string/key_language_pref"
+        app:useSimpleSummaryProvider="true" />
+
+    <Preference
+        android:icon="@drawable/ic_settings_24_blue"
+        android:title="Về chúng tôi"
+        app:key="@string/key_about_me_pref">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/cuocdart18" />
+    </Preference>
+
+    <Preference
+        android:icon="@drawable/ic_settings_24_blue"
+        android:title="Đánh giá"
+        app:key="@string/key_rating_pref">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://github.com/cuocdart18" />
+    </Preference>
+
+    <Preference
+        android:icon="@drawable/ic_settings_24_blue"
+        android:key="@string/key_log_out_pref"
+        android:title="Đăng xuất" />
+
+</PreferenceScreen>

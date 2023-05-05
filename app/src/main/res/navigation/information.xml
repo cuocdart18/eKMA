@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/informationFragment"
-        android:name="com.example.kmatool.ui.infor.InformationFragment"
+        android:name="com.example.kmatool.ui.infor.main.InformationFragment"
         android:label="thong tin"
         tools:layout="@layout/fragment_information" />
 </navigation>

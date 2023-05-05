@@ -64,5 +64,13 @@
     <string name="tv_note_head_add">Tạo ghi chú</string>
     <string name="tv_note_head_update">Sửa ghi chú</string>
 
+    <string name="key_my_score_pref">my_score</string>
+    <string name="key_update_schedule_pref">update_schedule</string>
+    <string name="key_notify_event_pref">notify_event</string>
+    <string name="key_dark_mode_pref">dark_mode</string>
+    <string name="key_language_pref">language</string>
+    <string name="key_about_me_pref">about_me</string>
+    <string name="key_rating_pref">rating</string>
+    <string name="key_log_out_pref">log_out</string>
 
 </resources>

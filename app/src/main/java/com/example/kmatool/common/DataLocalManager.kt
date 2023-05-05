@@ -8,12 +8,21 @@ class DataLocalManager(
     private val dataStoreManager: DataStoreManager
 ) {
     private val LOGIN_STATE = "login_state"
+    private val IMG_PATH = "img_path"
 
-    suspend fun saveLoginState(isLogin: Boolean) {
+    suspend fun saveImgFilePathSPref(data: String) {
+        mySharePreferences.putStringValue(IMG_PATH, data)
+    }
+
+    suspend fun getImgFilePathSPref(): String {
+        return mySharePreferences.getStringValue(IMG_PATH).toString()
+    }
+
+    suspend fun saveLoginStateSPref(isLogin: Boolean) {
         mySharePreferences.putBooleanValue(LOGIN_STATE, isLogin)
     }
 
-    suspend fun getLoginState(): Boolean {
+    suspend fun getLoginStateSPref(): Boolean {
         return mySharePreferences.getBooleanValue(LOGIN_STATE)
     }
 

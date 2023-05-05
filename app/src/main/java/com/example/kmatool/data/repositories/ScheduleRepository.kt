@@ -27,11 +27,9 @@ class ScheduleRepository @Inject constructor(
 
     suspend fun getLoginState(callback: (res: Boolean) -> Unit) {
         coroutineScope {
-            dataLocalManager.getIsLogin { state ->
-                logDebug("login state = $state")
-                callback(state)
-                cancel()
-            }
+            val state = dataLocalManager.getLoginStateSPref()
+            logDebug("login state = $state")
+            callback(state)
         }
     }
 
@@ -138,7 +136,7 @@ class ScheduleRepository @Inject constructor(
     ): Job {
         // save
         return CoroutineScope(Dispatchers.IO).launch {
-            dataLocalManager.saveIsLogin(data)
+            dataLocalManager.saveLoginStateSPref(data)
             callback()
         }
     }
