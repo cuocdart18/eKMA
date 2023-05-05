@@ -1,6 +1,5 @@
 package com.example.kmatool.ui.note.main_scr
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
@@ -16,7 +15,6 @@ import com.example.kmatool.data.repositories.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -26,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class NoteMainViewModel @Inject constructor(
     private val noteRepository: NoteRepository,
-    private val dataLocalManager: DataLocalManager
+    private val dataLocalManager: DataLocalManager,
+    private val alarmEventsScheduler: AlarmEventsScheduler
 ) : BaseViewModel() {
     override val TAG: String = NoteMainViewModel::class.java.simpleName
     val selectDay = MutableLiveData<String>()
@@ -93,30 +92,24 @@ class NoteMainViewModel @Inject constructor(
         }
     }
 
-    fun setAlarmForNote(context: Context, note: Note) {
+    fun setAlarmForNote(note: Note) {
         if (noteMode == UPDATE_NOTE_MODE) {
             oldNote?.let { note.id = it.id }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            dataLocalManager.getIsNotifyEvents { state ->
-                if (state) {
-                    AlarmEventsScheduler(context).scheduleEvent(note)
-                    logDebug("set notify event state=$state")
-                }
-                cancel()
+            val isNotify = dataLocalManager.getIsNotifyEventsSPref()
+            if (isNotify) {
+                alarmEventsScheduler.scheduleEvent(note)
             }
         }
     }
 
-    fun cancelAlarmForOldNote(context: Context, note: Note) {
+    fun cancelAlarmForOldNote(note: Note) {
         oldNote?.let { note.id = it.id }
         viewModelScope.launch(Dispatchers.IO) {
-            dataLocalManager.getIsNotifyEvents { state ->
-                if (state) {
-                    AlarmEventsScheduler(context).cancelEvent(note)
-                    logDebug("cancel notify event state=$state")
-                }
-                cancel()
+            val isNotify = dataLocalManager.getIsNotifyEventsSPref()
+            if (isNotify) {
+                alarmEventsScheduler.cancelEvent(note)
             }
         }
     }

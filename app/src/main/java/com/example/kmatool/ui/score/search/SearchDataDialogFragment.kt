@@ -20,7 +20,7 @@ class SearchDataDialogFragment :
     BaseDialogFragment() {
     override val TAG = SearchDataDialogFragment::class.java.simpleName
     private lateinit var binding: DialogSearchBinding
-    private val searchDataViewModel by viewModels<SearchDataViewModel>()
+    private val viewModel by viewModels<SearchDataViewModel>()
     private val searchDataAdapter: SearchDataAdapter by lazy {
         SearchDataAdapter { miniStudent -> onClickListItem(miniStudent) }
     }
@@ -38,8 +38,8 @@ class SearchDataDialogFragment :
         super.onViewCreated(view, savedInstanceState)
         setSearchAsyncEditText()
         setRecyclerViewProperties()
-        binding.searchDataVM = searchDataViewModel
-        searchDataViewModel.showRecentSearchHistory { ministudents ->
+        binding.searchDataVM = viewModel
+        viewModel.showRecentSearchHistory { ministudents ->
             showMiniStudentToUI(ministudents)
         }
     }
@@ -48,15 +48,15 @@ class SearchDataDialogFragment :
     private fun setSearchAsyncEditText() {
         logDebug("setSearchAsyncEditText")
         // get data
-        searchDataViewModel.searchResult.observe(this) { query ->
+        viewModel.searchResult.observe(this) { query ->
             logDebug("observe query = $query")
-            searchDataViewModel.onSearchEditTextObserved(query) { data ->
+            viewModel.onSearchEditTextObserved(query) { data ->
                 showMiniStudentToUI(data)
             }
         }
         binding.edtSearchData.doAfterTextChanged {
             lifecycleScope.launch {
-                searchDataViewModel.queryChannel.send(it.toString())
+                viewModel.queryChannel.send(it.toString())
             }
         }
     }
@@ -77,7 +77,7 @@ class SearchDataDialogFragment :
 
     private fun onClickListItem(miniStudent: MiniStudent) {
         logDebug("on click student = $miniStudent")
-        searchDataViewModel.insertMiniStudentToDb(miniStudent)
+        viewModel.insertMiniStudentToDb(miniStudent)
         navigateStudentDetailFragment(miniStudent.id)
     }
 

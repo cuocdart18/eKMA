@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ScoreMainFragment : BaseFragment() {
     override val TAG = ScoreMainFragment::class.java.simpleName
     private lateinit var binding: FragmentScoreMainBinding
-    private val scoreMainViewModel by viewModels<ScoreMainViewModel>()
+    private val viewModel by viewModels<ScoreMainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,19 +31,11 @@ class ScoreMainFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnSearchFeature.setOnClickListener { onClickShowSearchDialog() }
-        binding.scoreMainViewModel = scoreMainViewModel
+        binding.scoreMainViewModel = viewModel
     }
 
     private fun onClickShowSearchDialog() {
         logDebug("onClickShowSearchDialog")
         navigateToFragment(R.id.searchDataDialogFragment)
-    }
-
-    private fun onClickTagFooter() {
-        logDebug("onClickTagFooter")
-        // action
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(KIT_URL)
-        startActivity(intent)
     }
 }

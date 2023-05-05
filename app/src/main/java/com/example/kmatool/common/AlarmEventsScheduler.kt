@@ -8,7 +8,7 @@ import android.util.Log
 import com.example.kmatool.data.models.Event
 
 class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
-
+    private val TAG = AlarmEventsScheduler::class.java.simpleName
     private val alarmManager = context.getSystemService(AlarmManager::class.java)
 
     override fun scheduleEvent(event: Event) {
@@ -17,6 +17,7 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
             return
         }
 
+        Log.d(TAG, "schedule Event: ${event.getContentTitleNotify()}")
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra(KEY_EVENT, event)
         }
@@ -34,6 +35,12 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
     }
 
     override fun cancelEvent(event: Event) {
+        val dateTimeLong = event.getTimeMillis()
+        if (dateTimeLong < System.currentTimeMillis()) {
+            return
+        }
+
+        Log.d(TAG, "cancel Event: ${event.getContentTitleNotify()}")
         val intent = Intent(context, AlarmReceiver::class.java).apply {
         }
         val pendingIntent = PendingIntent.getBroadcast(
@@ -51,5 +58,15 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
 
     fun cancelEvents(events: List<Event>) {
         events.forEach { cancelEvent(it) }
+    }
+
+    fun scheduleAlarmEvents() {
+        Data.periodsDayMap.forEach { scheduleEvents(it.value) }
+        Data.notesDayMap.forEach { scheduleEvents(it.value) }
+    }
+
+    fun clearAlarmEvents() {
+        Data.periodsDayMap.forEach { cancelEvents(it.value) }
+        Data.notesDayMap.forEach { cancelEvents(it.value) }
     }
 }

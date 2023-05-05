@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.common.Data
+import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.DataLocalManager
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
@@ -15,7 +15,6 @@ import com.example.kmatool.data.repositories.ScheduleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -25,7 +24,8 @@ import javax.inject.Inject
 class InformationViewModel @Inject constructor(
     private val dataLocalManager: DataLocalManager,
     private val noteRepository: NoteRepository,
-    private val scheduleRepository: ScheduleRepository
+    private val scheduleRepository: ScheduleRepository,
+    private val alarmEventsScheduler: AlarmEventsScheduler
 ) : BaseViewModel() {
     override val TAG = InformationViewModel::class.java.simpleName
 
@@ -39,13 +39,9 @@ class InformationViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            dataLocalManager.getProfile {
-                profile = jsonStringToObject(it)
-                logDebug("get profile=$profile")
-                CoroutineScope(Dispatchers.Main).launch {
-                    callback(profile)
-                }
-                cancel()
+            profile = jsonStringToObject(dataLocalManager.getProfileSPref())
+            CoroutineScope(Dispatchers.Main).launch {
+                callback(profile)
             }
         }
     }
@@ -84,12 +80,17 @@ class InformationViewModel @Inject constructor(
         }
     }
 
-    fun storeIsNotifyEvents(
+    fun changedIsNotifyEvents(
         data: Boolean,
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataLocalManager.saveIsNotifyEvents(data)
+            dataLocalManager.saveIsNotifyEventsSPref(data)
+            if (data) {
+                alarmEventsScheduler.scheduleAlarmEvents()
+            } else {
+                alarmEventsScheduler.clearAlarmEvents()
+            }
             withContext(Dispatchers.Main) {
                 callback()
             }
@@ -102,20 +103,20 @@ class InformationViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val clearPeriods = launch { scheduleRepository.deletePeriods { } }
             val clearNotes = launch { noteRepository.deleteNotes { } }
-            val clearProfile = launch { dataLocalManager.saveProfile("") }
+            val clearAlarm = launch {
+                if (dataLocalManager.getIsNotifyEventsSPref())
+                    alarmEventsScheduler.clearAlarmEvents()
+            }
+            val clearProfile = launch { dataLocalManager.saveProfileSPref("") }
             val clearImage = launch { dataLocalManager.saveImgFilePathSPref("") }
             val clearLoginState = launch { dataLocalManager.saveLoginStateSPref(false) }
-            val clearDataRuntime = launch {
-                Data.notesDayMap.clear()
-                Data.periodsDayMap.clear()
-            }
 
             clearPeriods.join()
             clearNotes.join()
+            clearAlarm.join()
             clearProfile.join()
             clearImage.join()
             clearLoginState.join()
-            clearDataRuntime.join()
 
             withContext(Dispatchers.Main) {
                 callback()

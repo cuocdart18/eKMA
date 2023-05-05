@@ -3,6 +3,8 @@ package com.example.kmatool.activities
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
+import com.example.kmatool.common.AlarmEventsScheduler
+import com.example.kmatool.common.DataLocalManager
 import com.example.kmatool.data.repositories.ScheduleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -10,7 +12,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val scheduleRepository: ScheduleRepository
+    private val dataLocalManager: DataLocalManager,
+    private val scheduleRepository: ScheduleRepository,
+    private val alarmEventsScheduler: AlarmEventsScheduler
 ) : BaseViewModel() {
     override val TAG = LoginViewModel::class.java.simpleName
     private val DELAY_TIME = 1200L
@@ -68,9 +72,17 @@ class LoginViewModel @Inject constructor(
                 // call profile
                 val profileCallState =
                     async { scheduleRepository.callProfileApi(username, password) }
-                // call schedule
+                // call schedule -> set alarm if possible
                 val scheduleCallState =
-                    async { scheduleRepository.callScheduleApi(username, password) }
+                    async {
+                        scheduleRepository.callScheduleApi(username, password) {
+                            viewModelScope.launch {
+                                if (dataLocalManager.getIsNotifyEventsSPref()) {
+                                    alarmEventsScheduler.scheduleEvents(it)
+                                }
+                            }
+                        }
+                    }
 
                 if (profileCallState.await() && scheduleCallState.await()) {
                     scheduleRepository.saveLoginStateToLocal(true) {

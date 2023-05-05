@@ -1,15 +1,18 @@
 package com.example.kmatool.ui.infor.main
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import com.example.kmatool.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SettingFragment(
     private val listener: ICallbackOnPreferencesClickListener
-) : PreferenceFragmentCompat() {
+) : PreferenceFragmentCompat(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences_setting, rootKey)
@@ -17,6 +20,9 @@ class SettingFragment(
     }
 
     private fun setOnClickListenerForPreferences() {
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .registerOnSharedPreferenceChangeListener(this)
+
         findPreference<Preference>(getString(R.string.key_my_score_pref))?.let {
             it.setOnPreferenceClickListener {
                 listener.onClickMyScore()
@@ -39,9 +45,37 @@ class SettingFragment(
         }
     }
 
+    override fun onSharedPreferenceChanged(sPref: SharedPreferences?, key: String?) {
+        if (sPref == null) {
+            return
+        }
+        when (key) {
+            getString(R.string.key_notify_event_pref) -> {
+                listener.onChangedNotifyEvent(sPref.getBoolean(key, false))
+            }
+
+            getString(R.string.key_dark_mode_pref) -> {
+                listener.onChangedDarkMode(sPref.getBoolean(key, false))
+            }
+
+            getString(R.string.key_language_pref) -> {
+                listener.onChangedLanguage()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .unregisterOnSharedPreferenceChangeListener(this)
+    }
+
     interface ICallbackOnPreferencesClickListener {
         fun onClickMyScore()
         fun onClickUpdateSchedule()
         fun onClickLogOut()
+        fun onChangedNotifyEvent(data: Boolean)
+        fun onChangedDarkMode(data: Boolean)
+        fun onChangedLanguage()
     }
 }

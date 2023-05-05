@@ -24,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class StudentDetailFragment : BaseFragment() {
     override val TAG = StudentDetailFragment::class.java.simpleName
     private lateinit var binding: FragmentScoreStudentDetailBinding
-    private val studentDetailViewModel by viewModels<StudentDetailViewModel>()
+    private val viewModel by viewModels<StudentDetailViewModel>()
     private var studentId: String = ""
 
     override fun onCreateView(
@@ -38,14 +38,14 @@ class StudentDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.studentDetailVM = studentDetailViewModel
-        receiveDataFromScoreMainFragment()
-        studentDetailViewModel.getDetailStudent(studentId) { student ->
+        binding.studentDetailVM = viewModel
+        receiveData()
+        viewModel.getDetailStudent(studentId) { student ->
             showDetailStudent(student)
         }
     }
 
-    private fun receiveDataFromScoreMainFragment() {
+    private fun receiveData() {
         val bundle = arguments
         bundle?.let {
             studentId = it.getString(KEY_PASS_MINISTUDENT_ID).toString()
@@ -71,7 +71,7 @@ class StudentDetailFragment : BaseFragment() {
 
     private fun onClickScoreItemInList(score: Score) {
         logInfo("onClickScoreItemInList score = $score")
-        studentDetailViewModel.getStatisticSubject(score) { statisticSubject ->
+        viewModel.getStatisticSubject(score) { statisticSubject ->
             showStatisticSubject(statisticSubject)
         }
     }

@@ -13,6 +13,7 @@ import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.services.NoteLocalService
 import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
 import com.example.kmatool.common.jsonObjectToString
+import com.example.kmatool.data.models.Event
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -27,7 +28,6 @@ class ScheduleRepository @Inject constructor(
     suspend fun getLoginState(callback: (res: Boolean) -> Unit) {
         coroutineScope {
             val state = dataLocalManager.getLoginStateSPref()
-            logDebug("login state = $state")
             callback(state)
         }
     }
@@ -90,7 +90,8 @@ class ScheduleRepository @Inject constructor(
 
     suspend fun callScheduleApi(
         username: String,
-        password: String
+        password: String,
+        setAlarm: (events: List<Event>) -> Unit
     ): Boolean {
         val scheduleResult = scheduleRemoteService.getScheduleData(username, password, true)
         logInfo("schedule message = ${scheduleResult.message}")
@@ -100,6 +101,7 @@ class ScheduleRepository @Inject constructor(
         } else {
             logDebug("schedule = $scheduleResult")
             formatStartEndTime(scheduleResult.periods)
+            setAlarm(scheduleResult.periods)
             savePeriodsToDatabase(scheduleResult.periods) {
                 logDebug("save schedule successfully")
             }.join()
@@ -115,7 +117,7 @@ class ScheduleRepository @Inject constructor(
             // convert to json string
             val dataStringType = async { jsonObjectToString(data) }
             // save
-            dataLocalManager.saveProfile(dataStringType.await())
+            dataLocalManager.saveProfileSPref(dataStringType.await())
             callback()
         }
     }

@@ -9,5 +9,14 @@
         android:id="@+id/informationFragment"
         android:name="com.example.kmatool.ui.infor.main.InformationFragment"
         android:label="thong tin"
-        tools:layout="@layout/fragment_information" />
+        tools:layout="@layout/fragment_information" >
+        <action
+            android:id="@+id/action_informationFragment_to_studentDetailFragment2"
+            app:destination="@id/studentDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentDetailFragment"
+        android:name="com.example.kmatool.ui.score.details.StudentDetailFragment"
+        android:label="StudentDetailFragment"
+        tools:layout="@layout/fragment_score_student_detail"/>
 </navigation>

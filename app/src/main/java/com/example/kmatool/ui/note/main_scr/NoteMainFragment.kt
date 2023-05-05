@@ -108,10 +108,10 @@ class NoteMainFragment : BaseFragment() {
             val note = Note(title, content, date, time)
             viewModel.saveNoteToLocalDatabase(note) {
                 if (viewModel.noteMode == UPDATE_NOTE_MODE) {
-                    viewModel.oldNote?.let { viewModel.cancelAlarmForOldNote(requireContext(), it) }
+                    viewModel.oldNote?.let { viewModel.cancelAlarmForOldNote(it) }
                 }
                 viewModel.refreshNotesDayMapInDataObject {
-                    viewModel.setAlarmForNote(requireContext(), note)
+                    viewModel.setAlarmForNote(note)
                     onUpdateOrAddSuccessfully()
                 }
             }
