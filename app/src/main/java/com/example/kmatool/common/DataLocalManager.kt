@@ -13,6 +13,30 @@ class DataLocalManager(
     private val KEY_IMG_PATH = "img_path_sPref"
     private val KEY_PROFILE = "profile_sPref"
     private val KEY_NOTIFY_EVENTS = "notify_events_sPref"
+    private val KEY_USERNAME = "username_sPref"
+    private val KEY_PASSWORD = "password_sPref"
+
+    suspend fun savePassword(data: String) {
+        Log.d(TAG, "save password = $data")
+        mySharePreferences.putStringValue(KEY_PASSWORD, data)
+    }
+
+    suspend fun getPassword(): String {
+        val data = mySharePreferences.getStringValue(KEY_PASSWORD).toString()
+        Log.d(TAG, "get password = $data")
+        return data
+    }
+
+    suspend fun saveUsername(data: String) {
+        Log.d(TAG, "save username = $data")
+        mySharePreferences.putStringValue(KEY_USERNAME, data)
+    }
+
+    suspend fun getUsername(): String {
+        val data = mySharePreferences.getStringValue(KEY_USERNAME).toString()
+        Log.d(TAG, "get username = $data")
+        return data
+    }
 
     suspend fun saveImgFilePathSPref(data: String) {
         Log.d(TAG, "save image file path = $data")

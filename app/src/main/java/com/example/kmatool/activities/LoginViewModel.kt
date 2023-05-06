@@ -62,7 +62,11 @@ class LoginViewModel @Inject constructor(
         password: String,
         callback: () -> Unit
     ) {
-        logInfo("handle input username = $username, password (md5 hashed) = $password")
+        viewModelScope.launch(Dispatchers.IO) {
+            dataLocalManager.saveUsername(username)
+            dataLocalManager.savePassword(password)
+        }
+        logInfo("handle input")
         isShowProgress.set(true)
         isValid.set(true)
         // action
@@ -74,15 +78,7 @@ class LoginViewModel @Inject constructor(
                     async { scheduleRepository.callProfileApi(username, password) }
                 // call schedule -> set alarm if possible
                 val scheduleCallState =
-                    async {
-                        scheduleRepository.callScheduleApi(username, password) {
-                            viewModelScope.launch {
-                                if (dataLocalManager.getIsNotifyEventsSPref()) {
-                                    alarmEventsScheduler.scheduleEvents(it)
-                                }
-                            }
-                        }
-                    }
+                    async { scheduleRepository.callScheduleApi(username, password) }
 
                 if (profileCallState.await() && scheduleCallState.await()) {
                     scheduleRepository.saveLoginStateToLocal(true) {

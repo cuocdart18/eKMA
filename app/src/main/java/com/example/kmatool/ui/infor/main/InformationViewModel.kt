@@ -15,6 +15,7 @@ import com.example.kmatool.data.repositories.ScheduleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -80,6 +81,27 @@ class InformationViewModel @Inject constructor(
         }
     }
 
+    fun updateSchedule(callback: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val username = dataLocalManager.getUsername()
+            val password = dataLocalManager.getPassword()
+            // call API
+            val result = async { scheduleRepository.callScheduleApi(username, password) }
+            if (result.await()) {
+                // cancel alarm periods
+                if (dataLocalManager.getIsNotifyEventsSPref()) {
+                    alarmEventsScheduler.cancelPeriods()
+                }
+                // update Data runtime
+                scheduleRepository.getLocalPeriodsRuntime()
+                // update UI: dismiss dialog
+                withContext(Dispatchers.Main) {
+                    callback()
+                }
+            }
+        }
+    }
+
     fun changedIsNotifyEvents(
         data: Boolean,
         callback: () -> Unit
@@ -101,13 +123,15 @@ class InformationViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val clearPeriods = launch { scheduleRepository.deletePeriods { } }
-            val clearNotes = launch { noteRepository.deleteNotes { } }
+            val clearPeriods = launch { scheduleRepository.deletePeriods() }
+            val clearNotes = launch { noteRepository.deleteNotes() }
             val clearAlarm = launch {
                 if (dataLocalManager.getIsNotifyEventsSPref())
                     alarmEventsScheduler.clearAlarmEvents()
             }
             val clearProfile = launch { dataLocalManager.saveProfileSPref("") }
+            val clearUsername = launch { dataLocalManager.saveUsername("") }
+            val clearPassword = launch { dataLocalManager.savePassword("") }
             val clearImage = launch { dataLocalManager.saveImgFilePathSPref("") }
             val clearLoginState = launch { dataLocalManager.saveLoginStateSPref(false) }
 
@@ -115,6 +139,8 @@ class InformationViewModel @Inject constructor(
             clearNotes.join()
             clearAlarm.join()
             clearProfile.join()
+            clearUsername.join()
+            clearPassword.join()
             clearImage.join()
             clearLoginState.join()
 

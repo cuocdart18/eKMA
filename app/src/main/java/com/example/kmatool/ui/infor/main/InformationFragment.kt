@@ -1,5 +1,6 @@
 package com.example.kmatool.ui.infor.main
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -71,6 +72,19 @@ class InformationFragment : BaseFragment(),
 
     override fun onClickUpdateSchedule() {
         logDebug("on click update schedule")
+        var dialog: Dialog? = null
+        fun onClickYes() {
+            viewModel.updateSchedule {
+                dialog?.dismiss()
+            }
+        }
+
+        fun onClickNo() {
+            dialog?.dismiss()
+        }
+
+        dialog = showAlertDialog("Update", "Message", { onClickYes() }, { onClickNo() })
+        dialog.show()
     }
 
     override fun onChangedNotifyEvent(data: Boolean) {

@@ -61,12 +61,28 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
     }
 
     fun scheduleAlarmEvents() {
+        schedulePeriods()
+        scheduleNotes()
+    }
+
+    fun schedulePeriods() {
         Data.periodsDayMap.forEach { scheduleEvents(it.value) }
+    }
+
+    fun scheduleNotes() {
         Data.notesDayMap.forEach { scheduleEvents(it.value) }
     }
 
     fun clearAlarmEvents() {
+        cancelPeriods()
+        cancelNotes()
+    }
+
+    fun cancelPeriods() {
         Data.periodsDayMap.forEach { cancelEvents(it.value) }
+    }
+
+    fun cancelNotes() {
         Data.notesDayMap.forEach { cancelEvents(it.value) }
     }
 }

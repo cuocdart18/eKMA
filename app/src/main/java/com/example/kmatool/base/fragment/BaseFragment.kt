@@ -1,16 +1,22 @@
 package com.example.kmatool.base.fragment
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -153,6 +159,34 @@ open class BaseFragment : Fragment() {
             currentMinute,
             true
         ).show()
+    }
+
+    internal fun showAlertDialog(
+        title: String,
+        message: String,
+        callbackOnYes: () -> Unit,
+        callbackOnNo: () -> Unit
+    ): Dialog {
+        val dialog = Dialog(requireContext())
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_custom_alert_yes_or_no)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val tvTitle = dialog.findViewById<TextView>(R.id.tv_dialog_title)
+        val tvMessage = dialog.findViewById<TextView>(R.id.tv_dialog_message)
+        val btnYes = dialog.findViewById<Button>(R.id.btn_yes)
+        val btnNo = dialog.findViewById<Button>(R.id.btn_no)
+
+        tvTitle.text = title
+        tvMessage.text = message
+        btnYes.setOnClickListener {
+            callbackOnYes()
+        }
+        btnNo.setOnClickListener {
+            callbackOnNo()
+        }
+        return dialog
     }
 
     internal fun setupGoogleProgress(progressBar: ProgressBar) {

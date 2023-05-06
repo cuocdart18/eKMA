@@ -1,7 +1,7 @@
 package com.example.kmatool.data.repositories
 
-import android.util.Log
 import com.example.kmatool.base.repositories.BaseRepositories
+import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.DataLocalManager
 import com.example.kmatool.data.models.Period
@@ -21,7 +21,8 @@ class ScheduleRepository @Inject constructor(
     private val periodLocalService: PeriodLocalService,
     private val noteLocalService: NoteLocalService,
     private val scheduleRemoteService: ScheduleRemoteService,
-    private val dataLocalManager: DataLocalManager
+    private val dataLocalManager: DataLocalManager,
+    private val alarmEventsScheduler: AlarmEventsScheduler
 ) : BaseRepositories() {
     override val TAG: String = ScheduleRepository::class.java.simpleName
 
@@ -34,27 +35,31 @@ class ScheduleRepository @Inject constructor(
 
     suspend fun getLocalData() {
         coroutineScope {
-            val job1 = launch {
-                val result = periodLocalService.getPeriods()
-                withContext(Dispatchers.Main) {
-                    Data.periodsDayMap =
-                        result.groupBy { it.day } as MutableMap<String, List<Period>>
-                    // sort periods on a day by startTime
-                    sortPeriodsDayByStartTime()
-                }
-            }
-            val job2 = launch {
-                val result = noteLocalService.getNotes()
-                withContext(Dispatchers.Main) {
-                    Data.notesDayMap =
-                        result.groupBy { it.date } as MutableMap<String, List<Note>>
-                    // sort notes on a day by day
-                    sortNotesDayByTime()
-                }
-            }
+            val job1 = launch { getLocalPeriodsRuntime() }
+            val job2 = launch { getLocalNotesRuntime() }
             job1.join()
             job2.join()
             logDebug("get/sort data from local successfully")
+        }
+    }
+
+    suspend fun getLocalPeriodsRuntime() {
+        val result = periodLocalService.getPeriods()
+        withContext(Dispatchers.Default) {
+            Data.periodsDayMap =
+                result.groupBy { it.day } as MutableMap<String, List<Period>>
+            // sort periods on a day by startTime
+            sortPeriodsDayByStartTime()
+        }
+    }
+
+    suspend fun getLocalNotesRuntime() {
+        val result = noteLocalService.getNotes()
+        withContext(Dispatchers.Default) {
+            Data.notesDayMap =
+                result.groupBy { it.date } as MutableMap<String, List<Note>>
+            // sort notes on a day by day
+            sortNotesDayByTime()
         }
     }
 
@@ -74,62 +79,52 @@ class ScheduleRepository @Inject constructor(
         username: String,
         password: String
     ): Boolean {
-        val profileResult = scheduleRemoteService.getProfile(username, password, true)
-        logInfo("profile message = ${profileResult.message}")
-
-        if (profileResult.message == AUTHOR_MESSAGE_ERROR) {
-            return false
-        } else {
-            logDebug("profile = $profileResult")
-            saveProfileToLocal(profileResult) {
-                Log.d(TAG, "save profile successfully")
-            }.join()
-            return true
+        return coroutineScope {
+            val profileResult = scheduleRemoteService.getProfile(username, password, true)
+            logInfo("profile message = ${profileResult.message}")
+            if (profileResult.message == AUTHOR_MESSAGE_ERROR) {
+                return@coroutineScope false
+            } else {
+                logDebug("profile = $profileResult")
+                saveProfileToLocal(profileResult)
+                return@coroutineScope true
+            }
         }
     }
 
     suspend fun callScheduleApi(
         username: String,
-        password: String,
-        setAlarm: (events: List<Event>) -> Unit
+        password: String
     ): Boolean {
-        val scheduleResult = scheduleRemoteService.getScheduleData(username, password, true)
-        logInfo("schedule message = ${scheduleResult.message}")
-
-        if (scheduleResult.message == AUTHOR_MESSAGE_ERROR) {
-            return false
-        } else {
-            logDebug("schedule = $scheduleResult")
-            formatStartEndTime(scheduleResult.periods)
-            setAlarm(scheduleResult.periods)
-            savePeriodsToDatabase(scheduleResult.periods) {
-                logDebug("save schedule successfully")
-            }.join()
-            return true
+        return coroutineScope {
+            val scheduleResult = scheduleRemoteService.getScheduleData(username, password, true)
+            logInfo("schedule message = ${scheduleResult.message}")
+            if (scheduleResult.message == AUTHOR_MESSAGE_ERROR) {
+                return@coroutineScope false
+            } else {
+                logDebug("schedule = $scheduleResult")
+                formatStartEndTime(scheduleResult.periods)
+                setAlarmPeriodsInFirstTime(scheduleResult.periods)
+                deletePeriods() // delete old periods if conflict
+                savePeriodsToDatabase(scheduleResult.periods)
+                return@coroutineScope true
+            }
         }
     }
 
-    private suspend fun saveProfileToLocal(
-        data: Profile,
-        callback: () -> Unit
-    ): Job {
-        return CoroutineScope(Dispatchers.IO).launch {
+    private suspend fun setAlarmPeriodsInFirstTime(events: List<Event>) {
+        if (dataLocalManager.getIsNotifyEventsSPref()) {
+            alarmEventsScheduler.scheduleEvents(events)
+        }
+    }
+
+    private suspend fun saveProfileToLocal(data: Profile) {
+        coroutineScope {
             // convert to json string
             val dataStringType = async { jsonObjectToString(data) }
             // save
             dataLocalManager.saveProfileSPref(dataStringType.await())
-            callback()
-        }
-    }
-
-    suspend fun saveLoginStateToLocal(
-        data: Boolean,
-        callback: () -> Unit
-    ): Job {
-        // save
-        return CoroutineScope(Dispatchers.IO).launch {
-            dataLocalManager.saveLoginStateSPref(data)
-            callback()
+            logDebug("insert profile successfully")
         }
     }
 
@@ -141,23 +136,24 @@ class ScheduleRepository @Inject constructor(
         }
     }
 
-    private suspend fun savePeriodsToDatabase(
-        data: List<Period>,
-        callback: () -> Unit
-    ): Job {
-        return CoroutineScope(Dispatchers.IO).launch {
-            // action
-            periodLocalService.insertPeriods(data)
-            // success
-            callback()
-        }
+    private suspend fun savePeriodsToDatabase(data: List<Period>) {
+        periodLocalService.insertPeriods(data)
+        logDebug("insert periods successfully")
     }
 
-    suspend fun deletePeriods(
-        callback: () -> Unit
-    ) {
+    suspend fun deletePeriods() {
         periodLocalService.deletePeriods()
         logDebug("delete periods successfully")
-        callback()
+    }
+
+    suspend fun saveLoginStateToLocal(
+        data: Boolean,
+        callback: () -> Unit
+    ): Job {
+        // save
+        return CoroutineScope(Dispatchers.IO).launch {
+            dataLocalManager.saveLoginStateSPref(data)
+            callback()
+        }
     }
 }

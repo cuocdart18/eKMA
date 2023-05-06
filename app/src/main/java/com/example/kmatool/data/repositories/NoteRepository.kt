@@ -44,12 +44,9 @@ class NoteRepository @Inject constructor(
         callback()
     }
 
-    suspend fun deleteNotes(
-        callback: () -> Unit
-    ) {
+    suspend fun deleteNotes() {
         noteLocalService.deleteNodes()
         logDebug("delete notes successfully")
-        callback()
     }
 
     suspend fun updateLocalDataRuntime() {
