@@ -17,7 +17,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +29,7 @@ class InformationViewModel @Inject constructor(
     override val TAG = InformationViewModel::class.java.simpleName
 
     private lateinit var profile: Profile
+    private lateinit var uri: Uri
 
     fun getProfile(
         callback: (profile: Profile) -> Unit
@@ -49,15 +49,15 @@ class InformationViewModel @Inject constructor(
     fun getImageProfile(
         callback: (uri: Uri) -> Unit
     ) {
+        if (this::uri.isInitialized) {
+            callback(uri)
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
-            val filePath = dataLocalManager.getImgFilePathSPref()
-            val file = File(filePath)
-            if (file.exists()) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val uri = Uri.fromFile(file)
-                    logDebug("uri=$uri")
-                    callback(uri)
-                }
+            val uriString = dataLocalManager.getImgFilePathSPref()
+            uri = Uri.parse(uriString)
+            withContext(Dispatchers.Main) {
+                callback(uri)
             }
         }
     }
@@ -69,10 +69,10 @@ class InformationViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Main) {
             TedImagePickerStarter.startImage(context) { uri ->
                 CoroutineScope(Dispatchers.IO).launch {
-                    // convert uri to file path and save it
-                    val filePath = FileUtils.getRealPathFromURI(context, uri)
+                    val filePath = FileUtils.saveImageAndGetPath(context, uri)
                     dataLocalManager.saveImgFilePathSPref(filePath)
                     withContext(Dispatchers.Main) {
+                        this@InformationViewModel.uri = uri
                         callback(uri)
                     }
                 }
