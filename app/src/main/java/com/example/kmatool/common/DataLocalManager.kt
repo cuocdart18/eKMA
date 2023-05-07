@@ -18,22 +18,22 @@ class DataLocalManager(
 
     suspend fun savePassword(data: String) {
         Log.d(TAG, "save password = $data")
-        mySharePreferences.putStringValue(KEY_PASSWORD, data)
+        mySharePreferences.putStringValueEncrypted(KEY_PASSWORD, data)
     }
 
     suspend fun getPassword(): String {
-        val data = mySharePreferences.getStringValue(KEY_PASSWORD).toString()
+        val data = mySharePreferences.getStringValueEncrypted(KEY_PASSWORD).toString()
         Log.d(TAG, "get password = $data")
         return data
     }
 
     suspend fun saveUsername(data: String) {
         Log.d(TAG, "save username = $data")
-        mySharePreferences.putStringValue(KEY_USERNAME, data)
+        mySharePreferences.putStringValueEncrypted(KEY_USERNAME, data)
     }
 
     suspend fun getUsername(): String {
-        val data = mySharePreferences.getStringValue(KEY_USERNAME).toString()
+        val data = mySharePreferences.getStringValueEncrypted(KEY_USERNAME).toString()
         Log.d(TAG, "get username = $data")
         return data
     }
@@ -51,22 +51,22 @@ class DataLocalManager(
 
     suspend fun saveLoginStateSPref(isLogin: Boolean) {
         Log.d(TAG, "save login state = $isLogin")
-        mySharePreferences.putBooleanValue(KEY_LOGIN_STATE, isLogin)
+        mySharePreferences.putBooleanValueEncrypted(KEY_LOGIN_STATE, isLogin)
     }
 
     suspend fun getLoginStateSPref(): Boolean {
-        val data = mySharePreferences.getBooleanValue(KEY_LOGIN_STATE)
+        val data = mySharePreferences.getBooleanValueEncrypted(KEY_LOGIN_STATE)
         Log.d(TAG, "get login state = $data")
         return data
     }
 
     suspend fun saveProfileSPref(data: String) {
         Log.d(TAG, "save profile = $data")
-        mySharePreferences.putStringValue(KEY_PROFILE, data)
+        mySharePreferences.putStringValueEncrypted(KEY_PROFILE, data)
     }
 
     suspend fun getProfileSPref(): String {
-        val data = mySharePreferences.getStringValue(KEY_PROFILE).toString()
+        val data = mySharePreferences.getStringValueEncrypted(KEY_PROFILE).toString()
         Log.d(TAG, "get profile = $data")
         return data
     }
