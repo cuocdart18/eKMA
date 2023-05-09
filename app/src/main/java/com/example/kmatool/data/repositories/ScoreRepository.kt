@@ -19,14 +19,13 @@ class ScoreRepository @Inject constructor(
         id: String,
         callback: (student: Student) -> Unit
     ) {
-        logDebug("get detail of student")
+        logDebug("get detail of student with id=$id")
         coroutineScope {
             val result = scoreRemoteService.getStudentStatistics(id)
-            logDebug("getDetailStudent status code = ${result.statusCode}")
-            if (result.statusCode == OK) {
-                val data = result.data
-                logInfo("student detail data = $data")
-                data?.let { callback(it) }
+            if (result.__N_SSP) {
+                val student = result.pageProps.data
+                logDebug("student=$student")
+                callback(student)
             }
         }
     }

@@ -58,7 +58,7 @@ class StudentDetailFragment : BaseFragment() {
         binding.student = student
         // set adapter data for rcv
         val studentDetailAdapter = StudentDetailAdapter() { score ->
-            onClickScoreItemInList(score)
+//            onClickScoreItemInList(score)
         }
         studentDetailAdapter.setScores(student.scores)
 
