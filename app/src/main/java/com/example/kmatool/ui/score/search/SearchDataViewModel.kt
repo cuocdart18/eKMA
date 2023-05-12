@@ -30,7 +30,7 @@ class SearchDataViewModel @Inject constructor(
     @OptIn(ObsoleteCoroutinesApi::class, FlowPreview::class)
     private val internalSearchResult = queryChannel
         .asFlow()
-        .debounce(500L)
+        .debounce(600L)
         .filterNot { it.isBlank() }
         .distinctUntilChanged()
     val searchResult = internalSearchResult.asLiveData()
@@ -40,6 +40,7 @@ class SearchDataViewModel @Inject constructor(
         callback: (ministudents: List<MiniStudent>) -> Unit
     ) {
         isUserTyped.set(true)
+        makeCallApi(text, callback)
     }
 
     private fun makeCallApi(
