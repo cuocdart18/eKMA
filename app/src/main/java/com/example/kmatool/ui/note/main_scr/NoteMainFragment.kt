@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -27,6 +28,25 @@ class NoteMainFragment : BaseFragment() {
     override val TAG = NoteMainFragment::class.java.simpleName
     private lateinit var binding: FragmentNoteMainBinding
     private val viewModel by viewModels<NoteMainViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        regisOnBackPressed()
+    }
+
+    private fun regisOnBackPressed() {
+        // This callback will only be called when MyFragment is at least Started.
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    // Handle the back button event
+                    logDebug("on back pressed")
+                    navigateToFragment(R.id.action_noteMainFragment_to_scheduleMainFragment)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
