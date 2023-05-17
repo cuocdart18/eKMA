@@ -3,7 +3,7 @@ package com.example.kmatool.data.repositories
 import com.example.kmatool.base.repositories.BaseRepositories
 import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.Data
-import com.example.kmatool.data.app_data.DataLocalManager
+import com.example.kmatool.data.data_source.app_data.DataLocalManager
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.services.PeriodLocalService
@@ -11,7 +11,7 @@ import com.example.kmatool.data.services.ScheduleRemoteService
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.services.NoteLocalService
 import com.example.kmatool.data.models.Event
-import com.example.kmatool.data.toProfileShPref
+import com.example.kmatool.data.repository.toProfileShPref
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -24,19 +24,19 @@ class ScheduleRepository @Inject constructor(
 ) : BaseRepositories() {
     override val TAG: String = ScheduleRepository::class.java.simpleName
 
-    suspend fun getLoginState(callback: (res: Boolean) -> Unit) {
+    /*suspend fun getLoginState(callback: (res: Boolean) -> Unit) {
         coroutineScope {
             val state = dataLocalManager.getLoginStateSPref()
             callback(state)
         }
-    }
+    }*/
 
     suspend fun getLocalData() {
         coroutineScope {
-            val job1 = launch { getLocalPeriodsRuntime() }
-            val job2 = launch { getLocalNotesRuntime() }
-            job1.join()
-            job2.join()
+//            val job1 = launch { getLocalPeriodsRuntime() }
+//            val job2 = launch { getLocalNotesRuntime() }
+//            job1.join()
+//            job2.join()
         }
     }
 
@@ -46,7 +46,7 @@ class ScheduleRepository @Inject constructor(
             Data.periodsDayMap =
                 result.groupBy { it.day } as MutableMap<String, List<Period>>
             // sort periods on a day by startTime
-            sortPeriodsDayByStartTime()
+//            sortPeriodsDayByStartTime()
         }
     }
 
@@ -56,7 +56,7 @@ class ScheduleRepository @Inject constructor(
             Data.notesDayMap =
                 result.groupBy { it.date } as MutableMap<String, List<Note>>
             // sort notes on a day by day
-            sortNotesDayByTime()
+//            sortNotesDayByTime()
         }
     }
 
@@ -79,7 +79,7 @@ class ScheduleRepository @Inject constructor(
         return coroutineScope {
             val profileResult = scheduleRemoteService.getProfile(username, password, true)
             logDebug("profile = $profileResult")
-            saveProfileToLocal(profileResult)
+//            saveProfileToLocal(profileResult)
             return@coroutineScope true
         }
     }
@@ -90,34 +90,34 @@ class ScheduleRepository @Inject constructor(
     ): Boolean {
         return coroutineScope {
             val periods = scheduleRemoteService.getPeriods(username, password, true)
-            setAlarmPeriodsInFirstTime(periods)
-            deletePeriods() // delete old periods if conflict
-            savePeriodsToDatabase(periods)
+//            setAlarmPeriodsInFirstTime(periods)
+//            deletePeriods() // delete old periods if conflict
+//            savePeriodsToDatabase(periods)
             return@coroutineScope true
         }
     }
 
     private suspend fun setAlarmPeriodsInFirstTime(events: List<Event>) {
         if (dataLocalManager.getIsNotifyEventsSPref()) {
-            alarmEventsScheduler.scheduleEvents(events)
+//            alarmEventsScheduler.scheduleEvents(events)
         }
     }
 
     private suspend fun saveProfileToLocal(data: Profile) {
         coroutineScope {
-            dataLocalManager.saveProfileSPref(data.toProfileShPref())
+//            dataLocalManager.saveProfileSPref(data.toProfileShPref())
         }
     }
 
     private suspend fun savePeriodsToDatabase(data: List<Period>) {
-        periodLocalService.insertPeriods(data)
+//        periodLocalService.insertPeriods(data)
     }
 
     suspend fun deletePeriods() {
-        periodLocalService.deletePeriods()
+//        periodLocalService.deletePeriods()
     }
 
-    suspend fun saveLoginStateToLocal(
+    /*suspend fun saveLoginStateToLocal(
         data: Boolean,
         callback: () -> Unit
     ): Job {
@@ -126,5 +126,5 @@ class ScheduleRepository @Inject constructor(
             dataLocalManager.saveLoginStateSPref(data)
             callback()
         }
-    }
+    }*/
 }

@@ -1,9 +1,9 @@
 package com.example.kmatool.data.services
 
-import com.example.kmatool.data.database.daos.NoteDao
+import com.example.kmatool.data.data_source.database.daos.NoteDao
 import com.example.kmatool.data.models.Note
-import com.example.kmatool.data.toNote
-import com.example.kmatool.data.toNoteEntity
+import com.example.kmatool.data.repository.toNote
+import com.example.kmatool.data.repository.toNoteEntity
 import javax.inject.Inject
 
 class NoteLocalService @Inject constructor(

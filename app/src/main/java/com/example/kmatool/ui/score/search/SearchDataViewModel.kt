@@ -4,8 +4,8 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.data.repositories.ScoreRepository
 import com.example.kmatool.data.models.MiniStudent
+import com.example.kmatool.data.models.service.IScoreService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchDataViewModel @Inject constructor(
-    private val scoreRepository: ScoreRepository
+    private val scoreService: IScoreService
 ) : BaseViewModel() {
     override val TAG = SearchDataViewModel::class.java.simpleName
 
@@ -48,7 +48,7 @@ class SearchDataViewModel @Inject constructor(
         callback: (ministudents: List<MiniStudent>) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            scoreRepository.getSearchStudentData(text) { result ->
+            scoreService.getMiniStudentsByQuery(text) { result ->
                 CoroutineScope(Dispatchers.Main).launch {
                     callback(result)
                 }
@@ -57,10 +57,10 @@ class SearchDataViewModel @Inject constructor(
     }
 
     fun showRecentSearchHistory(
-        callback: (ministudents: List<MiniStudent>) -> Unit
+        callback: (miniStudents: List<MiniStudent>) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            scoreRepository.getListMiniStudentFromDatabase { result ->
+            scoreService.getMiniStudents { result ->
                 CoroutineScope(Dispatchers.Main).launch {
                     callback(result)
                 }
@@ -70,7 +70,7 @@ class SearchDataViewModel @Inject constructor(
 
     fun insertMiniStudentToDb(miniStudent: MiniStudent) {
         viewModelScope.launch(Dispatchers.IO) {
-            scoreRepository.saveMiniStudentsIntoDatabase(miniStudent)
+            scoreService.insertMiniStudent(miniStudent)
         }
     }
 }

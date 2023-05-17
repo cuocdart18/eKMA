@@ -5,7 +5,7 @@ import com.example.kmatool.data.models.*
 import com.example.kmatool.data.services.MiniStudentLocalService
 import com.example.kmatool.data.services.ScoreRemoteService
 import com.example.kmatool.common.OK
-import com.example.kmatool.data.toMiniStudent
+import com.example.kmatool.data.repository.toMiniStudent
 import kotlinx.coroutines.coroutineScope
 import java.util.*
 import javax.inject.Inject
@@ -61,7 +61,7 @@ class ScoreRepository @Inject constructor(
         callback: (ministudents: List<MiniStudent>) -> Unit
     ) {
         coroutineScope {
-            val result = scoreRemoteService.search(text)
+            val result = scoreRemoteService.getMiniStudents(text)
             if (result.statusCode == OK) {
                 val data = result.data.map {
                     it.toMiniStudent()

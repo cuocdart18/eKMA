@@ -1,9 +1,9 @@
 package com.example.kmatool.data.services
 
-import com.example.kmatool.data.database.daos.PeriodDao
+import com.example.kmatool.data.data_source.database.daos.PeriodDao
 import com.example.kmatool.data.models.Period
-import com.example.kmatool.data.toPeriod
-import com.example.kmatool.data.toPeriodEntity
+import com.example.kmatool.data.repository.toPeriod
+import com.example.kmatool.data.repository.toPeriodEntity
 import javax.inject.Inject
 
 class PeriodLocalService @Inject constructor(

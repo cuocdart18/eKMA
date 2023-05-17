@@ -1,10 +1,10 @@
 package com.example.kmatool.data.services
 
-import com.example.kmatool.data.apis.ScheduleAPI
+import com.example.kmatool.data.data_source.apis.ScheduleAPI
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
-import com.example.kmatool.data.toPeriod
-import com.example.kmatool.data.toProfile
+import com.example.kmatool.data.repository.toPeriod
+import com.example.kmatool.data.repository.toProfile
 import javax.inject.Inject
 
 class ScheduleRemoteService @Inject constructor(

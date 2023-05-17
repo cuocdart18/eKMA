@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.databinding.FragmentScoreStudentDetailBinding
-import com.example.kmatool.data.models.Score
 import com.example.kmatool.data.models.StatisticSubject
 import com.example.kmatool.data.models.Student
 import com.example.kmatool.common.KEY_PASS_MINISTUDENT_ID

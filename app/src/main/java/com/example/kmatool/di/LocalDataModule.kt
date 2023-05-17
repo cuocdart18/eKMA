@@ -1,9 +1,9 @@
 package com.example.kmatool.di
 
 import android.app.Application
-import com.example.kmatool.data.app_data.DataLocalManager
-import com.example.kmatool.data.app_data.DataStoreManager
-import com.example.kmatool.data.app_data.MySharePreferences
+import com.example.kmatool.data.data_source.app_data.DataLocalManager
+import com.example.kmatool.data.data_source.app_data.DataStoreManager
+import com.example.kmatool.data.data_source.app_data.MySharePreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

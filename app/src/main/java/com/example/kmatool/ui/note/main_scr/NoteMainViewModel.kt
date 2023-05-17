@@ -5,16 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.ADD_NOTE_MODE
 import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.data.app_data.DataLocalManager
+import com.example.kmatool.common.Data
 import com.example.kmatool.common.UPDATE_NOTE_MODE
 import com.example.kmatool.common.formatDoubleChar
 import com.example.kmatool.common.toDayMonthYear
 import com.example.kmatool.common.toHourMinute
+import com.example.kmatool.data.data_source.app_data.DataLocalManager
 import com.example.kmatool.data.models.Note
-import com.example.kmatool.data.repositories.NoteRepository
+import com.example.kmatool.data.models.service.INoteService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -23,9 +25,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteMainViewModel @Inject constructor(
-    private val noteRepository: NoteRepository,
     private val dataLocalManager: DataLocalManager,
-    private val alarmEventsScheduler: AlarmEventsScheduler
+    private val alarmEventsScheduler: AlarmEventsScheduler,
+    private val noteService: INoteService
 ) : BaseViewModel() {
     override val TAG: String = NoteMainViewModel::class.java.simpleName
     val selectDay = MutableLiveData<String>()
@@ -65,16 +67,14 @@ class NoteMainViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             if (noteMode == ADD_NOTE_MODE) {
-                noteRepository.insertNote(note) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        callback()
-                    }
+                noteService.insertNote(note)
+                withContext(Dispatchers.Main) {
+                    callback()
                 }
             } else if (noteMode == UPDATE_NOTE_MODE) {
-                noteRepository.updateNote(note) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        callback()
-                    }
+                noteService.updateNote(note)
+                withContext(Dispatchers.Main) {
+                    callback()
                 }
             }
         }
@@ -84,10 +84,29 @@ class NoteMainViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            noteRepository.updateLocalDataRuntime()
+            updateLocalDataRuntime()
             withContext(Dispatchers.Main) {
                 callback()
             }
+        }
+    }
+
+    private suspend fun updateLocalDataRuntime() {
+        coroutineScope {
+            val result = noteService.getNotes()
+            withContext(Dispatchers.Main) {
+                Data.notesDayMap =
+                    result.groupBy { it.date } as MutableMap<String, List<Note>>
+                // sort notes on a day by startTime
+                sortNotesValueByTime()
+            }
+        }
+    }
+
+    private fun sortNotesValueByTime() {
+        Data.notesDayMap.forEach { (t, u) ->
+            val newNotes = u.sortedBy { it.time }
+            Data.notesDayMap[t] = newNotes
         }
     }
 

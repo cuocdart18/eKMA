@@ -7,8 +7,8 @@ import android.util.Log
 import android.widget.Toast
 import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.Data
-import com.example.kmatool.data.app_data.DataLocalManager
-import com.example.kmatool.data.repositories.ScheduleRepository
+import com.example.kmatool.data.data_source.app_data.DataLocalManager
+import com.example.kmatool.data.models.service.IScheduleService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ class BootCompletedReceiver : BroadcastReceiver() {
     private val TAG = BootCompletedReceiver::class.java.simpleName
 
     @Inject
-    lateinit var scheduleRepository: ScheduleRepository
+    lateinit var scheduleService: IScheduleService
 
     @Inject
     lateinit var dataLocalManager: DataLocalManager
@@ -36,7 +36,7 @@ class BootCompletedReceiver : BroadcastReceiver() {
     private fun resetAlarm() {
         CoroutineScope(Dispatchers.IO).launch {
             // Get local data here
-            scheduleRepository.getLocalData()
+//            scheduleRepository.getLocalData()
             // Set the alarm here
             val isNotify = dataLocalManager.getIsNotifyEventsSPref()
             CoroutineScope(Dispatchers.IO).launch {
@@ -54,4 +54,6 @@ class BootCompletedReceiver : BroadcastReceiver() {
             }
         }
     }
+
+
 }

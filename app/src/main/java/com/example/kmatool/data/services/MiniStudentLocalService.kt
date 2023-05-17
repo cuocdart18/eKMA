@@ -1,9 +1,9 @@
 package com.example.kmatool.data.services
 
-import com.example.kmatool.data.database.daos.MiniStudentDao
+import com.example.kmatool.data.data_source.database.daos.MiniStudentDao
 import com.example.kmatool.data.models.MiniStudent
-import com.example.kmatool.data.toMiniStudent
-import com.example.kmatool.data.toMiniStudentEntity
+import com.example.kmatool.data.repository.toMiniStudent
+import com.example.kmatool.data.repository.toMiniStudentEntity
 import javax.inject.Inject
 
 class MiniStudentLocalService @Inject constructor(
@@ -13,7 +13,7 @@ class MiniStudentLocalService @Inject constructor(
         miniStudentDao.insertStudent(miniStudent.toMiniStudentEntity())
     }
 
-    suspend fun getRecentHistorySearch() =
+    suspend fun getRecentHistorySearch(): List<MiniStudent> =
         miniStudentDao.getRecentHistorySearch().map { it.toMiniStudent() }
 
     suspend fun deleteRecentHistorySearch() {

@@ -3,16 +3,28 @@ package com.example.kmatool.activities
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.data.app_data.DataLocalManager
-import com.example.kmatool.data.repositories.ScheduleRepository
+import com.example.kmatool.common.AlarmEventsScheduler
+import com.example.kmatool.common.Data
+import com.example.kmatool.data.data_source.app_data.DataLocalManager
+import com.example.kmatool.data.models.Event
+import com.example.kmatool.data.models.Note
+import com.example.kmatool.data.models.Period
+import com.example.kmatool.data.models.service.ILoginService
+import com.example.kmatool.data.models.service.INoteService
+import com.example.kmatool.data.models.service.IProfileService
+import com.example.kmatool.data.models.service.IScheduleService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val alarmEventsScheduler: AlarmEventsScheduler,
     private val dataLocalManager: DataLocalManager,
-    private val scheduleRepository: ScheduleRepository
+    private val noteService: INoteService,
+    private val scheduleService: IScheduleService,
+    private val loginService: ILoginService,
+    private val profileService: IProfileService
 ) : BaseViewModel() {
     override val TAG = LoginViewModel::class.java.simpleName
     private val DELAY_TIME = 1200L
@@ -32,14 +44,13 @@ class LoginViewModel @Inject constructor(
         logDebug("get login state")
         isShowProgress.set(true)
         viewModelScope.launch(Dispatchers.IO) {
-            scheduleRepository.getLoginState { state ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(DELAY_TIME)
-                    if (state) {
-                        callback()
-                    }
-                    isShowProgress.set(false)
+            val state = loginService.getLoginState()
+            delay(DELAY_TIME)
+            withContext(Dispatchers.Main) {
+                if (state) {
+                    callback()
                 }
+                isShowProgress.set(false)
             }
         }
     }
@@ -48,10 +59,45 @@ class LoginViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            scheduleRepository.getLocalData()
+            val job1 = launch { getLocalPeriodsRuntime() }
+            val job2 = launch { getLocalNotesRuntime() }
+            job1.join()
+            job2.join()
             withContext(Dispatchers.Main) {
                 callback()
             }
+        }
+    }
+
+    private suspend fun getLocalPeriodsRuntime() {
+        val result = scheduleService.getPeriods()
+        withContext(Dispatchers.Default) {
+            Data.periodsDayMap =
+                result.groupBy { it.day } as MutableMap<String, List<Period>>
+            // sort periods on a day by startTime
+            sortPeriodsDayByStartTime()
+        }
+    }
+
+    private fun sortPeriodsDayByStartTime() {
+        Data.periodsDayMap.forEach { (t, u) ->
+            Data.periodsDayMap[t] = u.sortedBy { it.startTime }
+        }
+    }
+
+    private suspend fun getLocalNotesRuntime() {
+        val result = noteService.getNotes()
+        withContext(Dispatchers.Default) {
+            Data.notesDayMap =
+                result.groupBy { it.date } as MutableMap<String, List<Note>>
+            // sort notes on a day by day
+            sortNotesDayByTime()
+        }
+    }
+
+    private fun sortNotesDayByTime() {
+        Data.notesDayMap.forEach { (t, u) ->
+            Data.notesDayMap[t] = u.sortedBy { it.time }
         }
     }
 
@@ -64,40 +110,42 @@ class LoginViewModel @Inject constructor(
             dataLocalManager.saveUsername(username)
             dataLocalManager.savePassword(password)
         }
-        logInfo("handle input")
+
         isShowProgress.set(true)
         isValid.set(true)
         // action
         if (username.isNotBlank() && password.isNotBlank()) {
-            logDebug("valid input")
             viewModelScope.launch(Dispatchers.IO) {
-                // call profile
-                val profileCallState =
-                    async { scheduleRepository.callProfileApi(username, password) }
-                // call schedule -> set alarm if possible
-                val scheduleCallState =
-                    async { scheduleRepository.callScheduleApi(username, password) }
+                // call and save profile
+                val callProfile = async { profileService.getProfile(username, password, true) }
+                profileService.saveProfile(callProfile.await())
 
-                if (profileCallState.await() && scheduleCallState.await()) {
-                    scheduleRepository.saveLoginStateToLocal(true) {
-                        logDebug("save login state successfully")
-                    }.join()
-                    withContext(Dispatchers.Main) {
-                        isValid.set(true)
-                        isShowProgress.set(false)
-                        logDebug("handle valid response from Api")
-                        callback()
-                    }
-                } else {
-                    logDebug("login denied")
-                    isValid.set(false)
+                // call schedule -> set alarm if possible
+                val callPeriods = async { scheduleService.getPeriods(username, password, true) }
+                scheduleService.deletePeriods()
+                setAlarmPeriodsInFirstTime(callPeriods.await())
+                scheduleService.insertPeriods(callPeriods.await())
+
+                callProfile.join()
+                callPeriods.join()
+
+                loginService.saveLoginState(true)
+
+                withContext(Dispatchers.Main) {
+                    isValid.set(true)
                     isShowProgress.set(false)
+                    callback()
                 }
             }
         } else {
-            logDebug("invalid input")
             isValid.set(false)
             isShowProgress.set(false)
+        }
+    }
+
+    private suspend fun setAlarmPeriodsInFirstTime(events: List<Event>) {
+        if (dataLocalManager.getIsNotifyEventsSPref()) {
+            alarmEventsScheduler.scheduleEvents(events)
         }
     }
 }

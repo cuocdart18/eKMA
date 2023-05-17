@@ -1,8 +1,8 @@
 package com.example.kmatool.data.services
 
-import com.example.kmatool.data.apis.ScoreAPI
+import com.example.kmatool.data.data_source.apis.ScoreAPI
 import com.example.kmatool.data.models.Student
-import com.example.kmatool.data.toStudent
+import com.example.kmatool.data.repository.toStudent
 import javax.inject.Inject
 
 class ScoreRemoteService @Inject constructor(
@@ -22,6 +22,6 @@ class ScoreRemoteService @Inject constructor(
     /*suspend fun getSubjects() =
         scoreAPI.getSubjects()*/
 
-    suspend fun search(data: String) =
-        scoreAPI.search(data)
+    suspend fun getMiniStudents(data: String) =
+        scoreAPI.getMiniStudents(data)
 }

@@ -2,10 +2,8 @@ package com.example.kmatool.ui.score.details
 
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.data.repositories.ScoreRepository
-import com.example.kmatool.data.models.Score
-import com.example.kmatool.data.models.StatisticSubject
 import com.example.kmatool.data.models.Student
+import com.example.kmatool.data.models.service.IScoreService
 import com.example.kmatool.ui.score.search.SearchDataViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StudentDetailViewModel @Inject constructor(
-    private val scoreRepository: ScoreRepository
+    private val scoreService: IScoreService
 ) : BaseViewModel() {
     override val TAG = SearchDataViewModel::class.java.simpleName
 
@@ -30,7 +28,7 @@ class StudentDetailViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            scoreRepository.getDetailStudent(id) { result ->
+            scoreService.getStudentById(id) { result ->
                 CoroutineScope(Dispatchers.Main).launch {
                     student = result
                     // update data to UI

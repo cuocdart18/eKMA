@@ -5,13 +5,18 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.data.app_data.DataLocalManager
+import com.example.kmatool.common.Data
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
 import com.example.kmatool.common.jsonStringToObject
+import com.example.kmatool.data.data_source.app_data.DataLocalManager
+import com.example.kmatool.data.models.Event
+import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
-import com.example.kmatool.data.repositories.NoteRepository
-import com.example.kmatool.data.repositories.ScheduleRepository
+import com.example.kmatool.data.models.service.ILoginService
+import com.example.kmatool.data.models.service.INoteService
+import com.example.kmatool.data.models.service.IProfileService
+import com.example.kmatool.data.models.service.IScheduleService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,11 +28,12 @@ import javax.inject.Inject
 @HiltViewModel
 class InformationViewModel @Inject constructor(
     private val dataLocalManager: DataLocalManager,
-    private val noteRepository: NoteRepository,
-    private val scheduleRepository: ScheduleRepository,
-    private val alarmEventsScheduler: AlarmEventsScheduler
+    private val alarmEventsScheduler: AlarmEventsScheduler,
+    private val noteService: INoteService,
+    private val scheduleService: IScheduleService,
+    private val loginService: ILoginService,
+    private val profileService: IProfileService
 ) : BaseViewModel() {
-    override val TAG = InformationViewModel::class.java.simpleName
 
     private lateinit var profile: Profile
     private lateinit var uri: Uri
@@ -86,19 +92,51 @@ class InformationViewModel @Inject constructor(
             val username = dataLocalManager.getUsername()
             val password = dataLocalManager.getPassword()
             // call API
-            val result = async { scheduleRepository.callScheduleApi(username, password) }
-            if (result.await()) {
-                // cancel alarm periods
-                if (dataLocalManager.getIsNotifyEventsSPref()) {
-                    alarmEventsScheduler.cancelPeriods()
-                }
-                // update Data runtime
-                scheduleRepository.getLocalPeriodsRuntime()
-                // update UI: dismiss dialog
-                withContext(Dispatchers.Main) {
-                    callback()
-                }
+            val callPeriods = async { scheduleService.getPeriods(username, password, true) }
+            scheduleService.deletePeriods()
+            setAlarmPeriodsInFirstTime(callPeriods.await())
+            scheduleService.insertPeriods(callPeriods.await())
+
+            callPeriods.join()
+
+            // cancel alarm periods
+            if (dataLocalManager.getIsNotifyEventsSPref()) {
+                alarmEventsScheduler.cancelPeriods()
             }
+            // update Data runtime
+            getLocalPeriodsRuntime()
+            // update UI: dismiss dialog
+            withContext(Dispatchers.Main) {
+                callback()
+            }
+        }
+    }
+
+    private suspend fun setAlarmPeriodsInFirstTime(events: List<Event>) {
+        if (dataLocalManager.getIsNotifyEventsSPref()) {
+            alarmEventsScheduler.scheduleEvents(events)
+        }
+    }
+
+    private suspend fun getLocalPeriodsRuntime() {
+        val result = scheduleService.getPeriods()
+        withContext(Dispatchers.Default) {
+            Data.periodsDayMap =
+                result.groupBy { it.day } as MutableMap<String, List<Period>>
+            // sort periods on a day by startTime
+            sortPeriodsDayByStartTime()
+        }
+    }
+
+    private fun sortPeriodsDayByStartTime() {
+        Data.periodsDayMap.forEach { (t, u) ->
+            Data.periodsDayMap[t] = u.sortedBy { it.startTime }
+        }
+    }
+
+    private fun sortNotesDayByTime() {
+        Data.notesDayMap.forEach { (t, u) ->
+            Data.notesDayMap[t] = u.sortedBy { it.time }
         }
     }
 
@@ -123,17 +161,17 @@ class InformationViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val clearPeriods = launch { scheduleRepository.deletePeriods() }
-            val clearNotes = launch { noteRepository.deleteNotes() }
+            val clearPeriods = launch { scheduleService.deletePeriods() }
+            val clearNotes = launch { noteService.deleteNotes() }
             val clearAlarm = launch {
                 if (dataLocalManager.getIsNotifyEventsSPref())
                     alarmEventsScheduler.clearAlarmEvents()
             }
-            val clearProfile = launch { dataLocalManager.saveProfileSPref("") }
+            val clearProfile = launch { profileService.clearProfile() }
             val clearUsername = launch { dataLocalManager.saveUsername("") }
             val clearPassword = launch { dataLocalManager.savePassword("") }
             val clearImage = launch { dataLocalManager.saveImgFilePathSPref("") }
-            val clearLoginState = launch { dataLocalManager.saveLoginStateSPref(false) }
+            val clearLoginState = launch { loginService.saveLoginState(false) }
 
             clearPeriods.join()
             clearNotes.join()
