@@ -37,7 +37,7 @@ class SearchDataViewModel @Inject constructor(
 
     fun onSearchEditTextObserved(
         text: String,
-        callback: (ministudents: List<MiniStudent>) -> Unit
+        callback: (miniStudents: List<MiniStudent>) -> Unit
     ) {
         isUserTyped.set(true)
         makeCallApi(text, callback)
@@ -45,13 +45,12 @@ class SearchDataViewModel @Inject constructor(
 
     private fun makeCallApi(
         text: String,
-        callback: (ministudents: List<MiniStudent>) -> Unit
+        callback: (miniStudents: List<MiniStudent>) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            scoreService.getMiniStudentsByQuery(text) { result ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    callback(result)
-                }
+            val miniStudents = scoreService.getMiniStudentsByQuery(text)
+            withContext(Dispatchers.Main) {
+                callback(miniStudents)
             }
         }
     }
@@ -60,10 +59,9 @@ class SearchDataViewModel @Inject constructor(
         callback: (miniStudents: List<MiniStudent>) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            scoreService.getMiniStudents { result ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    callback(result)
-                }
+            val miniStudents = scoreService.getMiniStudents()
+            withContext(Dispatchers.Main) {
+                callback(miniStudents)
             }
         }
     }

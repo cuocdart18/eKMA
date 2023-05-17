@@ -14,5 +14,5 @@ interface IProfileService {
 
     suspend fun clearProfile()
 
-    suspend fun getProfile(): String
+    suspend fun getProfile(): Profile
 }

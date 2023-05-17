@@ -5,11 +5,13 @@ import com.example.kmatool.data.models.service.INoteService
 import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.data.models.service.IScoreService
+import com.example.kmatool.data.models.service.IUserService
 import com.example.kmatool.data.service.LoginService
 import com.example.kmatool.data.service.NoteService
 import com.example.kmatool.data.service.ProfileService
 import com.example.kmatool.data.service.ScheduleService
 import com.example.kmatool.data.service.ScoreService
+import com.example.kmatool.data.service.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,5 +60,13 @@ object ServiceModule {
         scoreService: ScoreService
     ): IScoreService {
         return scoreService
+    }
+
+    @Provides
+    @Singleton
+    fun provideIUserService(
+        userService: UserService
+    ): IUserService {
+        return userService
     }
 }

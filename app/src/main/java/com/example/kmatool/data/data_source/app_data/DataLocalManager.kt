@@ -3,116 +3,71 @@ package com.example.kmatool.data.data_source.app_data
 import javax.inject.Singleton
 
 @Singleton
-class DataLocalManager(
+class DataLocalManager (
     private val mySharePreferences: MySharePreferences,
     private val dataStoreManager: DataStoreManager
-) {
+) : IDataLocalManager {
     private val KEY_LOGIN_STATE = "login_state_sPref"
     private val KEY_IMG_PATH = "img_path_sPref"
     private val KEY_PROFILE = "profile_sPref"
     private val KEY_NOTIFY_EVENTS = "notify_events_sPref"
     private val KEY_USERNAME = "username_sPref"
     private val KEY_PASSWORD = "password_sPref"
+    private val KEY_USER = "user_sPref"
 
-    suspend fun savePassword(data: String) {
+    override suspend fun saveUser(data: String) {
+        mySharePreferences.putStringValueEncrypted(KEY_USER, data)
+    }
+
+    override suspend fun getUser(): String {
+        return mySharePreferences.getStringValueEncrypted(KEY_USER).toString()
+    }
+
+    override suspend fun savePassword(data: String) {
         mySharePreferences.putStringValueEncrypted(KEY_PASSWORD, data)
     }
 
-    suspend fun getPassword(): String {
-        val data = mySharePreferences.getStringValueEncrypted(KEY_PASSWORD).toString()
-        return data
+    override suspend fun getPassword(): String {
+        return mySharePreferences.getStringValueEncrypted(KEY_PASSWORD).toString()
     }
 
-    suspend fun saveUsername(data: String) {
+    override suspend fun saveUsername(data: String) {
         mySharePreferences.putStringValueEncrypted(KEY_USERNAME, data)
     }
 
-    suspend fun getUsername(): String {
-        val data = mySharePreferences.getStringValueEncrypted(KEY_USERNAME).toString()
-        return data
+    override suspend fun getUsername(): String {
+        return mySharePreferences.getStringValueEncrypted(KEY_USERNAME).toString()
     }
 
-    suspend fun saveImgFilePathSPref(data: String) {
+    override suspend fun saveImgFilePath(data: String) {
         mySharePreferences.putStringValue(KEY_IMG_PATH, data)
     }
 
-    suspend fun getImgFilePathSPref(): String {
-        val data = mySharePreferences.getStringValue(KEY_IMG_PATH).toString()
-        return data
+    override suspend fun getImgFilePath(): String {
+        return mySharePreferences.getStringValue(KEY_IMG_PATH).toString()
     }
 
-    suspend fun saveLoginStateSPref(isLogin: Boolean) {
+    override suspend fun saveLoginState(isLogin: Boolean) {
         mySharePreferences.putBooleanValueEncrypted(KEY_LOGIN_STATE, isLogin)
     }
 
-    suspend fun getLoginStateSPref(): Boolean {
-        val data = mySharePreferences.getBooleanValueEncrypted(KEY_LOGIN_STATE)
-        return data
+    override suspend fun getLoginState(): Boolean {
+        return mySharePreferences.getBooleanValueEncrypted(KEY_LOGIN_STATE)
     }
 
-    suspend fun saveProfileSPref(data: String) {
+    override suspend fun saveProfile(data: String) {
         mySharePreferences.putStringValueEncrypted(KEY_PROFILE, data)
     }
 
-    suspend fun getProfileSPref(): String {
-        val data = mySharePreferences.getStringValueEncrypted(KEY_PROFILE).toString()
-        return data
+    override suspend fun getProfile(): String {
+        return mySharePreferences.getStringValueEncrypted(KEY_PROFILE).toString()
     }
 
-    suspend fun saveIsNotifyEventsSPref(data: Boolean) {
+    override suspend fun saveIsNotifyEvents(data: Boolean) {
         mySharePreferences.putBooleanValue(KEY_NOTIFY_EVENTS, data)
     }
 
-    suspend fun getIsNotifyEventsSPref(): Boolean {
-        val data = mySharePreferences.getBooleanValue(KEY_NOTIFY_EVENTS)
-        return data
-    }
-
-    suspend fun saveProfile(data: String) {
-        dataStoreManager.storeProfile(data)
-    }
-
-    suspend fun getProfile(
-        callback: (data: String) -> Unit
-    ) {
-        dataStoreManager.profileDataStoreFlow.collect() {
-            callback(it)
-        }
-    }
-
-    suspend fun saveImgFilePath(data: String) {
-        dataStoreManager.storeImgFilePath(data)
-    }
-
-    suspend fun getImgFilePath(
-        callback: (data: String) -> Unit
-    ) {
-        dataStoreManager.imgFilePathDataStoreFlow.collect() {
-            callback(it)
-        }
-    }
-
-    suspend fun saveIsLogin(data: Boolean) {
-        dataStoreManager.storeIsLogin(data)
-    }
-
-    suspend fun getIsLogin(
-        callback: (data: Boolean) -> Unit
-    ) {
-        dataStoreManager.isLoginDataStoreFlow.collect() {
-            callback(it)
-        }
-    }
-
-    suspend fun saveIsNotifyEvents(data: Boolean) {
-        dataStoreManager.storeIsNotifyEvents(data)
-    }
-
-    suspend fun getIsNotifyEvents(
-        callback: (data: Boolean) -> Unit
-    ) {
-        dataStoreManager.isNotifyEventsDataStoreFlow.collect() {
-            callback(it)
-        }
+    override suspend fun getIsNotifyEvents(): Boolean {
+        return mySharePreferences.getBooleanValue(KEY_NOTIFY_EVENTS)
     }
 }

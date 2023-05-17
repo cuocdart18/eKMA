@@ -15,9 +15,8 @@ class ScoreService @Inject constructor(
     private val miniStudentRepository: IMiniStudentRepository
 ) : IScoreService {
 
-    override suspend fun getStudentById(id: String, callback: (student: Student) -> Unit) {
-        val result = studentRepository.getStudentById(id)
-        callback(result)
+    override suspend fun getStudentById(id: String): Student {
+        return studentRepository.getStudentById(id)
     }
 
     override suspend fun getStatisticSubjectById(
@@ -29,17 +28,12 @@ class ScoreService @Inject constructor(
     override suspend fun getStatistic(callback: (statistic: Statistic) -> Unit) {
     }
 
-    override suspend fun getMiniStudentsByQuery(
-        query: String,
-        callback: (miniStudents: List<MiniStudent>) -> Unit
-    ) {
-        val result = miniStudentRepository.getMiniStudentsByQuery(query)
-        callback(result)
+    override suspend fun getMiniStudentsByQuery(query: String): List<MiniStudent> {
+        return miniStudentRepository.getMiniStudentsByQuery(query)
     }
 
-    override suspend fun getMiniStudents(callback: (miniStudents: List<MiniStudent>) -> Unit) {
-        val result = miniStudentRepository.getRecentMiniStudents()
-        callback(result)
+    override suspend fun getMiniStudents(): List<MiniStudent> {
+        return miniStudentRepository.getRecentMiniStudents()
     }
 
     override suspend fun insertMiniStudent(miniStudent: MiniStudent) {

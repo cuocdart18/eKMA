@@ -3,6 +3,7 @@ package com.example.kmatool.di
 import android.app.Application
 import com.example.kmatool.data.data_source.app_data.DataLocalManager
 import com.example.kmatool.data.data_source.app_data.DataStoreManager
+import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.data_source.app_data.MySharePreferences
 import dagger.Module
 import dagger.Provides
@@ -31,7 +32,7 @@ object LocalDataModule {
     fun provideDataLocalManager(
         mySharePreferences: MySharePreferences,
         dataStoreManager: DataStoreManager
-    ): DataLocalManager {
+    ): IDataLocalManager {
         return DataLocalManager(mySharePreferences, dataStoreManager)
     }
 }

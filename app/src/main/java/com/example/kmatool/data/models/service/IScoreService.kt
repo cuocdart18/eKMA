@@ -7,10 +7,7 @@ import com.example.kmatool.data.models.Student
 
 interface IScoreService {
 
-    suspend fun getStudentById(
-        id: String,
-        callback: (student: Student) -> Unit
-    )
+    suspend fun getStudentById(id: String): Student
 
     suspend fun getStatisticSubjectById(
         subjectId: String,
@@ -21,14 +18,9 @@ interface IScoreService {
         callback: (statistic: Statistic) -> Unit
     )
 
-    suspend fun getMiniStudentsByQuery(
-        query: String,
-        callback: (miniStudents: List<MiniStudent>) -> Unit
-    )
+    suspend fun getMiniStudentsByQuery(query: String): List<MiniStudent>
 
-    suspend fun getMiniStudents(
-        callback: (miniStudents: List<MiniStudent>) -> Unit
-    )
+    suspend fun getMiniStudents(): List<MiniStudent>
 
     suspend fun insertMiniStudent(miniStudent: MiniStudent)
 }

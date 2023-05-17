@@ -18,6 +18,7 @@ import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.Score
 import com.example.kmatool.data.models.Student
 import com.example.kmatool.data.models.Subject
+import com.example.kmatool.data.models.User
 import java.util.Date
 
 fun MiniStudentEntity.toMiniStudent() = MiniStudent(
@@ -116,13 +117,11 @@ fun ProfileDto.toProfile() = Profile(
 )
 
 fun Profile.toProfileShPref(): String {
-    val profile = Profile(
-        displayName = displayName,
-        studentCode = studentCode,
-        gender = gender,
-        birthday = birthday
-    )
-    return jsonObjectToString(profile)
+    return jsonObjectToString(this)
+}
+
+fun User.toUserShPref(): String {
+    return jsonObjectToString(this)
 }
 
 fun SubjectDto.toSubject() = Subject(

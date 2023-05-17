@@ -21,7 +21,7 @@ class ProfileService @Inject constructor(
         profileRepository.clearProfile()
     }
 
-    override suspend fun getProfile(): String {
+    override suspend fun getProfile(): Profile {
         return profileRepository.getProfile()
     }
 }

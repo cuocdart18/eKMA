@@ -39,8 +39,8 @@ class SearchDataDialogFragment :
         setSearchAsyncEditText()
         setRecyclerViewProperties()
         binding.searchDataVM = viewModel
-        viewModel.showRecentSearchHistory { ministudents ->
-            showMiniStudentToUI(ministudents)
+        viewModel.showRecentSearchHistory { miniStudents ->
+            showMiniStudentToUI(miniStudents)
         }
     }
 

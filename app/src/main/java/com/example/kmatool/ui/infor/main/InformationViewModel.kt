@@ -8,15 +8,14 @@ import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
-import com.example.kmatool.common.jsonStringToObject
-import com.example.kmatool.data.data_source.app_data.DataLocalManager
+import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Event
-import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.service.ILoginService
 import com.example.kmatool.data.models.service.INoteService
 import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScheduleService
+import com.example.kmatool.data.models.service.IUserService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,12 +26,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InformationViewModel @Inject constructor(
-    private val dataLocalManager: DataLocalManager,
+    private val dataLocalManager: IDataLocalManager,
     private val alarmEventsScheduler: AlarmEventsScheduler,
     private val noteService: INoteService,
     private val scheduleService: IScheduleService,
     private val loginService: ILoginService,
-    private val profileService: IProfileService
+    private val profileService: IProfileService,
+    private val userService: IUserService
 ) : BaseViewModel() {
 
     private lateinit var profile: Profile
@@ -46,7 +46,7 @@ class InformationViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            profile = jsonStringToObject(dataLocalManager.getProfileSPref())
+            profile = profileService.getProfile()
             CoroutineScope(Dispatchers.Main).launch {
                 callback(profile)
             }
@@ -61,7 +61,7 @@ class InformationViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            val uriString = dataLocalManager.getImgFilePathSPref()
+            val uriString = dataLocalManager.getImgFilePath()
             uri = Uri.parse(uriString)
             withContext(Dispatchers.Main) {
                 callback(uri)
@@ -77,7 +77,7 @@ class InformationViewModel @Inject constructor(
             TedImagePickerStarter.startImage(context) { uri ->
                 CoroutineScope(Dispatchers.IO).launch {
                     val filePath = FileUtils.saveImageAndGetPath(context, uri)
-                    dataLocalManager.saveImgFilePathSPref(filePath)
+                    dataLocalManager.saveImgFilePath(filePath)
                     withContext(Dispatchers.Main) {
                         this@InformationViewModel.uri = uri
                         callback(uri)
@@ -89,22 +89,21 @@ class InformationViewModel @Inject constructor(
 
     fun updateSchedule(callback: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
-            val username = dataLocalManager.getUsername()
-            val password = dataLocalManager.getPassword()
+            val user = userService.getUser()
             // call API
-            val callPeriods = async { scheduleService.getPeriods(username, password, true) }
+            val callPeriods =
+                async { scheduleService.getPeriods(user.username, user.password, user.hashed) }
+
             scheduleService.deletePeriods()
             setAlarmPeriodsInFirstTime(callPeriods.await())
             scheduleService.insertPeriods(callPeriods.await())
 
-            callPeriods.join()
-
             // cancel alarm periods
-            if (dataLocalManager.getIsNotifyEventsSPref()) {
+            if (dataLocalManager.getIsNotifyEvents()) {
                 alarmEventsScheduler.cancelPeriods()
             }
             // update Data runtime
-            getLocalPeriodsRuntime()
+            Data.getLocalPeriodsRuntime(scheduleService)
             // update UI: dismiss dialog
             withContext(Dispatchers.Main) {
                 callback()
@@ -113,30 +112,8 @@ class InformationViewModel @Inject constructor(
     }
 
     private suspend fun setAlarmPeriodsInFirstTime(events: List<Event>) {
-        if (dataLocalManager.getIsNotifyEventsSPref()) {
+        if (dataLocalManager.getIsNotifyEvents()) {
             alarmEventsScheduler.scheduleEvents(events)
-        }
-    }
-
-    private suspend fun getLocalPeriodsRuntime() {
-        val result = scheduleService.getPeriods()
-        withContext(Dispatchers.Default) {
-            Data.periodsDayMap =
-                result.groupBy { it.day } as MutableMap<String, List<Period>>
-            // sort periods on a day by startTime
-            sortPeriodsDayByStartTime()
-        }
-    }
-
-    private fun sortPeriodsDayByStartTime() {
-        Data.periodsDayMap.forEach { (t, u) ->
-            Data.periodsDayMap[t] = u.sortedBy { it.startTime }
-        }
-    }
-
-    private fun sortNotesDayByTime() {
-        Data.notesDayMap.forEach { (t, u) ->
-            Data.notesDayMap[t] = u.sortedBy { it.time }
         }
     }
 
@@ -145,7 +122,7 @@ class InformationViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataLocalManager.saveIsNotifyEventsSPref(data)
+            dataLocalManager.saveIsNotifyEvents(data)
             if (data) {
                 alarmEventsScheduler.scheduleAlarmEvents()
             } else {
@@ -164,21 +141,19 @@ class InformationViewModel @Inject constructor(
             val clearPeriods = launch { scheduleService.deletePeriods() }
             val clearNotes = launch { noteService.deleteNotes() }
             val clearAlarm = launch {
-                if (dataLocalManager.getIsNotifyEventsSPref())
+                if (dataLocalManager.getIsNotifyEvents())
                     alarmEventsScheduler.clearAlarmEvents()
             }
             val clearProfile = launch { profileService.clearProfile() }
-            val clearUsername = launch { dataLocalManager.saveUsername("") }
-            val clearPassword = launch { dataLocalManager.savePassword("") }
-            val clearImage = launch { dataLocalManager.saveImgFilePathSPref("") }
+            val clearUser = launch { userService.clearUser() }
+            val clearImage = launch { dataLocalManager.saveImgFilePath("") }
             val clearLoginState = launch { loginService.saveLoginState(false) }
 
             clearPeriods.join()
             clearNotes.join()
             clearAlarm.join()
             clearProfile.join()
-            clearUsername.join()
-            clearPassword.join()
+            clearUser.join()
             clearImage.join()
             clearLoginState.join()
 

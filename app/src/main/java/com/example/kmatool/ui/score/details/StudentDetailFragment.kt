@@ -1,22 +1,15 @@
 package com.example.kmatool.ui.score.details
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.databinding.FragmentScoreStudentDetailBinding
-import com.example.kmatool.data.models.StatisticSubject
 import com.example.kmatool.data.models.Student
 import com.example.kmatool.common.KEY_PASS_MINISTUDENT_ID
-import com.example.kmatool.common.KEY_PASS_STATISTIC_SUBJECT
-import com.example.kmatool.common.KIT_URL
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -75,20 +68,20 @@ class StudentDetailFragment : BaseFragment() {
         }
     }*/
 
-    private fun showStatisticSubject(statisticSubject: StatisticSubject) {
+    /*private fun showStatisticSubject(statisticSubject: StatisticSubject) {
         logDebug("showStatisticSubject")
         // action (show data to dialog)
         val bundle = bundleOf(
             KEY_PASS_STATISTIC_SUBJECT to statisticSubject
         )
         navigateToFragment(R.id.statisticSubjectDialogFragment, bundle)
-    }
+    }*/
 
-    private fun onClickTagFooter() {
+    /*private fun onClickTagFooter() {
         logDebug("onClickTagFooter")
         // action
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(KIT_URL)
         startActivity(intent)
-    }
+    }*/
 }

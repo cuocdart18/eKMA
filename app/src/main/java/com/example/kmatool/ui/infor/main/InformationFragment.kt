@@ -58,10 +58,8 @@ class InformationFragment : BaseFragment(),
     }
 
     override fun onClickMyScore() {
-        logDebug("on click open my score fragment")
         viewModel.getProfile {
             val id = it.studentCode
-            logDebug("navigate detail fragment with student = $id")
             // action
             val bundle = bundleOf(
                 KEY_PASS_MINISTUDENT_ID to id
@@ -71,7 +69,6 @@ class InformationFragment : BaseFragment(),
     }
 
     override fun onClickUpdateSchedule() {
-        logDebug("on click update schedule")
         var dialog: Dialog? = null
         fun onClickYes() {
             viewModel.updateSchedule {
@@ -92,11 +89,9 @@ class InformationFragment : BaseFragment(),
     }
 
     override fun onChangedDarkMode(data: Boolean) {
-        logDebug("changed dark mode data=$data")
     }
 
     override fun onChangedLanguage() {
-        logDebug("changed language")
     }
 
     override fun onClickLogOut() {
