@@ -21,7 +21,6 @@ class ScheduleMainViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.Default) {
             val dateFormatted = date.toDayMonthYear()
-            logDebug("get events with day formatted = $dateFormatted")
 
             val events = mutableListOf<Event>()
             Data.periodsDayMap[dateFormatted]?.let { events.addAll(it) }

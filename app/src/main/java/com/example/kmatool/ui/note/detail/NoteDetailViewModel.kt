@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.Data
-import com.example.kmatool.common.DataLocalManager
+import com.example.kmatool.data.app_data.DataLocalManager
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.repositories.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

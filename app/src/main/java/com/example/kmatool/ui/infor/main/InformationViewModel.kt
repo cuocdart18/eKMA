@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.common.DataLocalManager
+import com.example.kmatool.data.app_data.DataLocalManager
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
 import com.example.kmatool.common.jsonStringToObject

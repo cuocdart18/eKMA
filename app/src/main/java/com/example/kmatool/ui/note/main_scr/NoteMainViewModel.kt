@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.ADD_NOTE_MODE
 import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.common.DataLocalManager
+import com.example.kmatool.data.app_data.DataLocalManager
 import com.example.kmatool.common.UPDATE_NOTE_MODE
 import com.example.kmatool.common.formatDoubleChar
 import com.example.kmatool.common.toDayMonthYear
@@ -36,7 +36,6 @@ class NoteMainViewModel @Inject constructor(
     var oldNote: Note? = null
 
     fun getCurrentDayAndTime() {
-        logDebug("get current day and time of device")
         viewModelScope.launch(Dispatchers.Main) {
             val day = LocalDate.now().toDayMonthYear()
             selectDay.value = day

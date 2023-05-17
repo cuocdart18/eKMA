@@ -1,4 +1,4 @@
-package com.example.kmatool.common
+package com.example.kmatool.broadcast_receiver
 
 import android.Manifest
 import android.content.BroadcastReceiver
@@ -8,6 +8,8 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.kmatool.common.EVENTS_NOTIFY_CHANNEL_ID
+import com.example.kmatool.common.KEY_EVENT
 import com.example.kmatool.data.models.Event
 
 class AlarmReceiver : BroadcastReceiver() {

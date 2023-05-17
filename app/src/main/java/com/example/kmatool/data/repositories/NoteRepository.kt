@@ -18,9 +18,7 @@ class NoteRepository @Inject constructor(
         note: Note,
         callback: () -> Unit
     ) {
-        logDebug("insert note=$note to database")
         noteLocalService.insertNote(note)
-        logDebug("insert note successfully")
         callback()
     }
 
@@ -28,9 +26,7 @@ class NoteRepository @Inject constructor(
         note: Note,
         callback: () -> Unit
     ) {
-        logDebug("delete note=$note")
         noteLocalService.deleteNote(note)
-        logDebug("delete note successfully")
         callback()
     }
 
@@ -38,15 +34,12 @@ class NoteRepository @Inject constructor(
         note: Note,
         callback: () -> Unit
     ) {
-        logDebug("update note=$note")
         noteLocalService.updateNote(note)
-        logDebug("update note successfully")
         callback()
     }
 
     suspend fun deleteNotes() {
         noteLocalService.deleteNodes()
-        logDebug("delete notes successfully")
     }
 
     suspend fun updateLocalDataRuntime() {
@@ -58,7 +51,6 @@ class NoteRepository @Inject constructor(
                 // sort notes on a day by startTime
                 sortNotesValueByTime()
             }
-            logDebug("update data object successfully")
         }
     }
 

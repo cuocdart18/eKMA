@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.example.kmatool.broadcast_receiver.AlarmReceiver
 import com.example.kmatool.data.models.Event
 
 class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {

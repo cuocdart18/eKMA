@@ -40,7 +40,7 @@ class StudentDetailViewModel @Inject constructor(
         }
     }
 
-    fun getStatisticSubject(
+    /*fun getStatisticSubject(
         score: Score,
         callback: (statisticSubject: StatisticSubject) -> Unit
     ) {
@@ -53,5 +53,5 @@ class StudentDetailViewModel @Inject constructor(
                 }
             }
         }
-    }
+    }*/
 }

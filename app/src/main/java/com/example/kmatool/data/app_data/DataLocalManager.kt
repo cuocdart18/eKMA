@@ -1,4 +1,4 @@
-package com.example.kmatool.common
+package com.example.kmatool.data.app_data
 
 import android.util.Log
 import javax.inject.Singleton

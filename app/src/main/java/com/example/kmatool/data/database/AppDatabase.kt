@@ -9,14 +9,14 @@ import com.example.kmatool.common.Converters
 import com.example.kmatool.data.database.daos.MiniStudentDao
 import com.example.kmatool.data.database.daos.NoteDao
 import com.example.kmatool.data.database.daos.PeriodDao
-import com.example.kmatool.data.models.Period
-import com.example.kmatool.data.models.MiniStudent
-import com.example.kmatool.data.models.Note
 import com.example.kmatool.common.DATABASE_NAME
+import com.example.kmatool.data.database.entities.MiniStudentEntity
+import com.example.kmatool.data.database.entities.NoteEntity
+import com.example.kmatool.data.database.entities.PeriodEntity
 
 @Database(
-    entities = [MiniStudent::class, Period::class, Note::class],
-    version = 2
+    entities = [MiniStudentEntity::class, PeriodEntity::class, NoteEntity::class],
+    version = 3
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

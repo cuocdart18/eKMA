@@ -1,5 +1,13 @@
 package com.example.kmatool.common
 
+import android.content.Context
+import android.view.View
+import android.widget.TextView
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -9,7 +17,9 @@ import java.time.YearMonth
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
-import java.util.*
+import java.util.Locale
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = NAME_DATASTORE_PREFS)
 
 fun YearMonth.displayText(short: Boolean = false): String {
     return "${this.month.displayText(short = short)} ${this.year}"
@@ -42,47 +52,25 @@ fun String.toLocalDate(): LocalDate =
 fun String.toLocalTime(): LocalTime =
     LocalTime.parse(this, DateTimeFormatter.ofPattern("HH:mm"))
 
-fun toDateTime(date: LocalDate, time: LocalTime): LocalDateTime =
-    LocalDateTime.of(date, time)
-
 fun Int.formatDoubleChar(): String {
     return if (this >= 10) "$this"
     else "0$this"
 }
 
-fun convertPeriodToTime(data: String): String =
-    when (data) {
-        "1" -> "07:00"
-//        "2" -> "7:00"
-        "3" -> "09:25"
-        "4" -> "09:35"
-//        "5" -> "7:00"
-        "6" -> "12:00"
-        "7" -> "12:30"
-//        "8" -> "7:00"
-        "9" -> "14:55"
-        "10" -> "15:05"
-//        "11" -> "7:00"
-        "12" -> "17:30"
-        "13" -> "18:00"
-//        "14" -> "7:00"
-//        "15" -> "7:00"
-        "16" -> "21:15"
-        else -> "invalid data"
-    }
+internal fun Context.getColorCompat(@ColorRes color: Int) =
+    ContextCompat.getColor(this, color)
 
-/*
-*   get
-*   start time with key = "start"
-*   end time with key = "end"
-* */
-fun convertPeriodsToStartEndTime(data: String): Map<String, String> {
-    val periods = data
-        .trim()
-        .splitToSequence(',')
-        .toList()
-    return mapOf(
-        "start" to convertPeriodToTime(periods[0]),
-        "end" to convertPeriodToTime(periods[periods.size - 1])
-    )
+internal fun TextView.setTextColorRes(@ColorRes color: Int) =
+    setTextColor(context.getColorCompat(color))
+
+fun View.makeVisible() {
+    visibility = View.VISIBLE
+}
+
+fun View.makeInVisible() {
+    visibility = View.INVISIBLE
+}
+
+fun View.makeGone() {
+    visibility = View.GONE
 }

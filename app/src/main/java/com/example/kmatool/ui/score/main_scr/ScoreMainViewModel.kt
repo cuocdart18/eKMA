@@ -20,7 +20,7 @@ class ScoreMainViewModel @Inject constructor(
 
     val statisticOF = ObservableField<Statistic>()
 
-    fun getStatisticData() {
+    /*fun getStatisticData() {
         logDebug("init statistics data")
 
         restoreStatistic?.let { data ->
@@ -39,5 +39,5 @@ class ScoreMainViewModel @Inject constructor(
                 }
             }
         }
-    }
+    }*/
 }

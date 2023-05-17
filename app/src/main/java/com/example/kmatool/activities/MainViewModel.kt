@@ -1,7 +1,7 @@
 package com.example.kmatool.activities
 
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.common.DataLocalManager
+import com.example.kmatool.data.app_data.DataLocalManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.example.kmatool.utils
+package com.example.kmatool.common
 
 const val OK = 200
 const val NOT_FOUND = 404

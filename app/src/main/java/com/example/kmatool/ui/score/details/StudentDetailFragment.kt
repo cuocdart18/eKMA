@@ -69,12 +69,12 @@ class StudentDetailFragment : BaseFragment() {
         binding.rvScores.adapter = studentDetailAdapter
     }
 
-    private fun onClickScoreItemInList(score: Score) {
+    /*private fun onClickScoreItemInList(score: Score) {
         logInfo("onClickScoreItemInList score = $score")
         viewModel.getStatisticSubject(score) { statisticSubject ->
             showStatisticSubject(statisticSubject)
         }
-    }
+    }*/
 
     private fun showStatisticSubject(statisticSubject: StatisticSubject) {
         logDebug("showStatisticSubject")

@@ -4,20 +4,21 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.kmatool.data.models.Period
+import com.example.kmatool.data.database.entities.PeriodEntity
+import com.example.kmatool.data.database.entities.PeriodEntityEntry
 
 @Dao
 interface PeriodDao {
 
     @Insert
-    suspend fun insertPeriods(periods: List<Period>)
+    suspend fun insertPeriods(periods: List<PeriodEntity>)
 
     @Delete
-    suspend fun deleteAllPeriods(periods: List<Period>)
+    suspend fun deleteAllPeriods(periods: List<PeriodEntity>)
 
-    @Query("SELECT * FROM period")
-    suspend fun getPeriods(): List<Period>
+    @Query("SELECT * FROM ${PeriodEntityEntry.TBL_NAME}")
+    suspend fun getPeriods(): List<PeriodEntity>
 
-    @Query("DELETE FROM period")
+    @Query("DELETE FROM ${PeriodEntityEntry.TBL_NAME}")
     suspend fun deletePeriods()
 }

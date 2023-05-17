@@ -1,9 +1,14 @@
-package com.example.kmatool.common
+package com.example.kmatool.data.app_data
 
 import android.app.Application
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.kmatool.common.KEY_IMG_FILE_PATH
+import com.example.kmatool.common.KEY_IS_LOGIN
+import com.example.kmatool.common.KEY_IS_NOTIFY_EVENTS
+import com.example.kmatool.common.KEY_STUDENT_PROFILE
+import com.example.kmatool.common.dataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.map

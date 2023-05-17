@@ -1,23 +1,23 @@
 package com.example.kmatool.data.apis
 
-import com.example.kmatool.data.models.Profile
-import com.example.kmatool.data.models.Schedule
+import com.example.kmatool.data.apis.dto.ProfileDto
+import com.example.kmatool.data.apis.dto.ScheduleDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ScheduleAPI {
 
     @GET("/schedule")
-    suspend fun getScheduleData(
+    suspend fun getPeriods(
         @Query("username") username: String,
         @Query("password") password: String,
         @Query("hashed") hashed: Boolean
-    ): Schedule
+    ): ScheduleDto
 
     @GET("/profile")
     suspend fun getProfile(
         @Query("username") username: String,
         @Query("password") password: String,
         @Query("hashed") hashed: Boolean
-    ): Profile
+    ): ProfileDto
 }

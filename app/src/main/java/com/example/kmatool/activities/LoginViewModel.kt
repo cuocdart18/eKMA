@@ -3,8 +3,7 @@ package com.example.kmatool.activities
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.common.DataLocalManager
+import com.example.kmatool.data.app_data.DataLocalManager
 import com.example.kmatool.data.repositories.ScheduleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -13,8 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val dataLocalManager: DataLocalManager,
-    private val scheduleRepository: ScheduleRepository,
-    private val alarmEventsScheduler: AlarmEventsScheduler
+    private val scheduleRepository: ScheduleRepository
 ) : BaseViewModel() {
     override val TAG = LoginViewModel::class.java.simpleName
     private val DELAY_TIME = 1200L

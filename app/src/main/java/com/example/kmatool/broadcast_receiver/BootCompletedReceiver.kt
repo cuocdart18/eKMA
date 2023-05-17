@@ -1,18 +1,19 @@
-package com.example.kmatool.common
+package com.example.kmatool.broadcast_receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import com.example.kmatool.common.AlarmEventsScheduler
+import com.example.kmatool.common.Data
+import com.example.kmatool.data.app_data.DataLocalManager
 import com.example.kmatool.data.repositories.ScheduleRepository
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class BootCompletedReceiver : BroadcastReceiver() {
     private val TAG = BootCompletedReceiver::class.java.simpleName
 
@@ -28,7 +29,7 @@ class BootCompletedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Intent.ACTION_BOOT_COMPLETED && context != null) {
             Toast.makeText(context, "boot completed", Toast.LENGTH_SHORT).show()
-            resetAlarm()
+//            resetAlarm()
         }
     }
 

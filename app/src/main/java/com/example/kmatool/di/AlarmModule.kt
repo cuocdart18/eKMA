@@ -3,7 +3,6 @@ package com.example.kmatool.di
 import android.app.Application
 import android.content.Context
 import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.common.MySharePreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -3,17 +3,15 @@ package com.example.kmatool.data.repositories
 import com.example.kmatool.base.repositories.BaseRepositories
 import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.Data
-import com.example.kmatool.common.DataLocalManager
+import com.example.kmatool.data.app_data.DataLocalManager
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.services.PeriodLocalService
 import com.example.kmatool.data.services.ScheduleRemoteService
-import com.example.kmatool.common.convertPeriodsToStartEndTime
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.services.NoteLocalService
-import com.example.kmatool.utils.AUTHOR_MESSAGE_ERROR
-import com.example.kmatool.common.jsonObjectToString
 import com.example.kmatool.data.models.Event
+import com.example.kmatool.data.toProfileShPref
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -39,7 +37,6 @@ class ScheduleRepository @Inject constructor(
             val job2 = launch { getLocalNotesRuntime() }
             job1.join()
             job2.join()
-            logDebug("get/sort data from local successfully")
         }
     }
 
@@ -53,7 +50,7 @@ class ScheduleRepository @Inject constructor(
         }
     }
 
-    suspend fun getLocalNotesRuntime() {
+    private suspend fun getLocalNotesRuntime() {
         val result = noteLocalService.getNotes()
         withContext(Dispatchers.Default) {
             Data.notesDayMap =
@@ -81,14 +78,9 @@ class ScheduleRepository @Inject constructor(
     ): Boolean {
         return coroutineScope {
             val profileResult = scheduleRemoteService.getProfile(username, password, true)
-            logInfo("profile message = ${profileResult.message}")
-            if (profileResult.message == AUTHOR_MESSAGE_ERROR) {
-                return@coroutineScope false
-            } else {
-                logDebug("profile = $profileResult")
-                saveProfileToLocal(profileResult)
-                return@coroutineScope true
-            }
+            logDebug("profile = $profileResult")
+            saveProfileToLocal(profileResult)
+            return@coroutineScope true
         }
     }
 
@@ -97,18 +89,11 @@ class ScheduleRepository @Inject constructor(
         password: String
     ): Boolean {
         return coroutineScope {
-            val scheduleResult = scheduleRemoteService.getScheduleData(username, password, true)
-            logInfo("schedule message = ${scheduleResult.message}")
-            if (scheduleResult.message == AUTHOR_MESSAGE_ERROR) {
-                return@coroutineScope false
-            } else {
-                logDebug("schedule = $scheduleResult")
-                formatStartEndTime(scheduleResult.periods)
-                setAlarmPeriodsInFirstTime(scheduleResult.periods)
-                deletePeriods() // delete old periods if conflict
-                savePeriodsToDatabase(scheduleResult.periods)
-                return@coroutineScope true
-            }
+            val periods = scheduleRemoteService.getPeriods(username, password, true)
+            setAlarmPeriodsInFirstTime(periods)
+            deletePeriods() // delete old periods if conflict
+            savePeriodsToDatabase(periods)
+            return@coroutineScope true
         }
     }
 
@@ -120,30 +105,16 @@ class ScheduleRepository @Inject constructor(
 
     private suspend fun saveProfileToLocal(data: Profile) {
         coroutineScope {
-            // convert to json string
-            val dataStringType = async { jsonObjectToString(data) }
-            // save
-            dataLocalManager.saveProfileSPref(dataStringType.await())
-            logDebug("insert profile successfully")
-        }
-    }
-
-    private fun formatStartEndTime(periods: List<Period>) {
-        periods.forEach {
-            val timeMap = convertPeriodsToStartEndTime(it.lesson)
-            it.startTime = timeMap["start"]!!
-            it.endTime = timeMap["end"]!!
+            dataLocalManager.saveProfileSPref(data.toProfileShPref())
         }
     }
 
     private suspend fun savePeriodsToDatabase(data: List<Period>) {
         periodLocalService.insertPeriods(data)
-        logDebug("insert periods successfully")
     }
 
     suspend fun deletePeriods() {
         periodLocalService.deletePeriods()
-        logDebug("delete periods successfully")
     }
 
     suspend fun saveLoginStateToLocal(

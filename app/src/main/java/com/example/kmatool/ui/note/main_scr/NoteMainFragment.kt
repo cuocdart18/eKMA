@@ -29,25 +29,6 @@ class NoteMainFragment : BaseFragment() {
     private lateinit var binding: FragmentNoteMainBinding
     private val viewModel by viewModels<NoteMainViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        regisOnBackPressed()
-    }
-
-    private fun regisOnBackPressed() {
-        // This callback will only be called when MyFragment is at least Started.
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                    // Handle the back button event
-                    logDebug("on back pressed")
-                    navigateToFragment(R.id.action_noteMainFragment_to_scheduleMainFragment)
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,12 +49,23 @@ class NoteMainFragment : BaseFragment() {
         val bundle = arguments
         if (bundle != null) {
             viewModel.noteMode = bundle.getInt(KEY_PASS_NOTE_MODE)
-            logInfo("receive note mode=${viewModel.noteMode}")
             if (viewModel.noteMode == UPDATE_NOTE_MODE) {
+                regisOnBackPressed()
                 viewModel.oldNote = bundle.get(KEY_PASS_NOTE_OBJ) as Note
-                logInfo("receive oldNote=${viewModel.oldNote}")
             }
         }
+    }
+
+    private fun regisOnBackPressed() {
+        // This callback will only be called when MyFragment is at least Started.
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    // Handle the back button event
+                    navigateToFragment(R.id.action_noteMainFragment_to_scheduleMainFragment)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
