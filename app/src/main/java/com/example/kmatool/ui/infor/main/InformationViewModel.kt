@@ -3,23 +3,26 @@ package com.example.kmatool.ui.infor.main
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.common.Data
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
-import com.example.kmatool.data.models.Event
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.service.ILoginService
 import com.example.kmatool.data.models.service.INoteService
 import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.data.models.service.IUserService
+import com.example.kmatool.work.UpdateScheduleWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -37,6 +40,9 @@ class InformationViewModel @Inject constructor(
 
     private lateinit var profile: Profile
     private lateinit var uri: Uri
+
+    private val UPDATE_SCHEDULE_WORKER_TAG = "schedule_tag"
+    private val UNIQUE_SCHEDULE_WORK_NAME = "update_schedule"
 
     fun getProfile(
         callback: (profile: Profile) -> Unit
@@ -87,33 +93,30 @@ class InformationViewModel @Inject constructor(
         }
     }
 
-    fun updateSchedule(callback: () -> Unit) {
+    fun updateSchedule(
+        context: Context,
+        callback: () -> Unit
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val user = userService.getUser()
-            // call API
-            val callPeriods =
-                async { scheduleService.getPeriods(user.username, user.password, user.hashed) }
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+            val updateWorkRequest =
+                OneTimeWorkRequestBuilder<UpdateScheduleWorker>()
+                    .addTag(UPDATE_SCHEDULE_WORKER_TAG)
+                    .setConstraints(constraints)
+                    .build()
+            WorkManager.getInstance(context)
+                .enqueueUniqueWork(
+                    UNIQUE_SCHEDULE_WORK_NAME,
+                    ExistingWorkPolicy.REPLACE,
+                    updateWorkRequest
+                )
 
-            scheduleService.deletePeriods()
-            setAlarmPeriodsInFirstTime(callPeriods.await())
-            scheduleService.insertPeriods(callPeriods.await())
-
-            // cancel alarm periods
-            if (dataLocalManager.getIsNotifyEvents()) {
-                alarmEventsScheduler.cancelPeriods()
-            }
-            // update Data runtime
-            Data.getLocalPeriodsRuntime(scheduleService)
             // update UI: dismiss dialog
             withContext(Dispatchers.Main) {
                 callback()
             }
-        }
-    }
-
-    private suspend fun setAlarmPeriodsInFirstTime(events: List<Event>) {
-        if (dataLocalManager.getIsNotifyEvents()) {
-            alarmEventsScheduler.scheduleEvents(events)
         }
     }
 

@@ -71,7 +71,7 @@ class InformationFragment : BaseFragment(),
     override fun onClickUpdateSchedule() {
         var dialog: Dialog? = null
         fun onClickYes() {
-            viewModel.updateSchedule {
+            viewModel.updateSchedule(requireContext()) {
                 dialog?.dismiss()
             }
         }
