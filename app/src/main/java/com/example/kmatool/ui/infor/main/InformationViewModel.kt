@@ -12,6 +12,8 @@ import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.AlarmEventsScheduler
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
+import com.example.kmatool.common.UNIQUE_SCHEDULE_WORK_NAME
+import com.example.kmatool.common.UPDATE_SCHEDULE_WORKER_TAG
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.service.ILoginService
@@ -40,9 +42,6 @@ class InformationViewModel @Inject constructor(
 
     private lateinit var profile: Profile
     private lateinit var uri: Uri
-
-    private val UPDATE_SCHEDULE_WORKER_TAG = "schedule_tag"
-    private val UNIQUE_SCHEDULE_WORK_NAME = "update_schedule"
 
     fun getProfile(
         callback: (profile: Profile) -> Unit

@@ -17,6 +17,10 @@ const val TIRAMISU_PERMISSION_REQUEST_CODE = 33
 const val S_PERMISSION_REQUEST_CODE = 31
 const val M_PERMISSION_REQUEST_CODE = 23
 
+// for WorkManager
+const val UPDATE_SCHEDULE_WORKER_TAG = "schedule_tag"
+const val UNIQUE_SCHEDULE_WORK_NAME = "update_schedule"
+
 // for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
 const val KEY_PASS_NOTE_OBJ = "note_obj"

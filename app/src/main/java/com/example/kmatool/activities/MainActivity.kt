@@ -28,6 +28,7 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         setUiTemplates()
 //        requestPostNotifyPermission()
+        viewModel.runWorkerIfFailure(this)
     }
 
     private fun setUiTemplates() {

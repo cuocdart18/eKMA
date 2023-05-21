@@ -1,6 +1,10 @@
 package com.example.kmatool.work
 
+import android.app.ForegroundServiceStartNotAllowedException
 import android.content.Context
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
@@ -31,10 +35,21 @@ class UpdateScheduleWorker @AssistedInject constructor(
     private val dataLocalManager: IDataLocalManager,
     private val alarmEventsScheduler: AlarmEventsScheduler
 ) : CoroutineWorker(appContext, workerParams) {
+    private val TAG = UpdateScheduleWorker::class.java.simpleName
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override suspend fun doWork(): Result {
+        Log.e(TAG, "doWork: set notification")
+
         // Mark the Worker as important
-        setForeground(createForegroundInfo())
+        try {
+            setForeground(createForegroundInfo())
+        } catch (e: ForegroundServiceStartNotAllowedException) {
+            Log.e(TAG, "doWork: ${e.message}")
+            return Result.failure()
+        }
+
+        Log.e(TAG, "doWork: start update")
 
         // Do the work here--in this case, update the periods.
         updatePeriods()
@@ -45,7 +60,7 @@ class UpdateScheduleWorker @AssistedInject constructor(
 
     private suspend fun updatePeriods() {
         withContext(Dispatchers.IO) {
-            println("start $id")
+            Log.e(TAG, "updatePeriods: start $id")
             val user = userService.getUser()
             // call API
             val callPeriods =
@@ -61,7 +76,7 @@ class UpdateScheduleWorker @AssistedInject constructor(
             }
             // update Data runtime
             Data.getLocalPeriodsRuntime(scheduleService)
-            println("done $id")
+            Log.e(TAG, "updatePeriods: done $id")
         }
     }
 
