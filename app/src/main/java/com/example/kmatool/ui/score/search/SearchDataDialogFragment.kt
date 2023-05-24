@@ -39,8 +39,12 @@ class SearchDataDialogFragment :
         setSearchAsyncEditText()
         setRecyclerViewProperties()
         binding.searchDataVM = viewModel
-        viewModel.showRecentSearchHistory { miniStudents ->
-            showMiniStudentToUI(miniStudents)
+        viewModel.showRecentSearchHistory { data ->
+            if (data != null) {
+                showMiniStudentToUI(data)
+            } else {
+                showToast("Something went wrong")
+            }
         }
     }
 
@@ -51,7 +55,11 @@ class SearchDataDialogFragment :
         viewModel.searchResult.observe(this) { query ->
             logDebug("observe query = $query")
             viewModel.onSearchEditTextObserved(query) { data ->
-                showMiniStudentToUI(data)
+                if (data != null) {
+                    showMiniStudentToUI(data)
+                } else {
+                    showToast("Something went wrong")
+                }
             }
         }
         binding.edtSearchData.doAfterTextChanged {

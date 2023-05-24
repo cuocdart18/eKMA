@@ -9,7 +9,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.common.AlarmEventsScheduler
+import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
 import com.example.kmatool.common.UNIQUE_SCHEDULE_WORK_NAME

@@ -1,5 +1,6 @@
 package com.example.kmatool.data.service
 
+import com.example.kmatool.common.Resource
 import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.repository.IPeriodRepository
 import com.example.kmatool.data.models.service.IScheduleService
@@ -17,7 +18,7 @@ class ScheduleService @Inject constructor(
         periodRepository.insertPeriods(periods)
     }
 
-    override suspend fun getPeriods(): List<Period> {
+    override suspend fun getPeriods(): Resource<List<Period>> {
         return periodRepository.getPeriods()
     }
 
@@ -25,7 +26,7 @@ class ScheduleService @Inject constructor(
         username: String,
         password: String,
         hashed: Boolean
-    ): List<Period> {
+    ): Resource<List<Period>> {
         return periodRepository.getPeriods(username, password, hashed)
     }
 }

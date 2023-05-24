@@ -1,5 +1,6 @@
 package com.example.kmatool.data.service
 
+import com.example.kmatool.common.Resource
 import com.example.kmatool.data.models.MiniStudent
 import com.example.kmatool.data.models.Statistic
 import com.example.kmatool.data.models.StatisticSubject
@@ -15,7 +16,7 @@ class ScoreService @Inject constructor(
     private val miniStudentRepository: IMiniStudentRepository
 ) : IScoreService {
 
-    override suspend fun getStudentById(id: String): Student {
+    override suspend fun getStudentById(id: String): Resource<Student> {
         return studentRepository.getStudentById(id)
     }
 
@@ -28,11 +29,11 @@ class ScoreService @Inject constructor(
     override suspend fun getStatistic(callback: (statistic: Statistic) -> Unit) {
     }
 
-    override suspend fun getMiniStudentsByQuery(query: String): List<MiniStudent> {
+    override suspend fun getMiniStudentsByQuery(query: String): Resource<List<MiniStudent>> {
         return miniStudentRepository.getMiniStudentsByQuery(query)
     }
 
-    override suspend fun getMiniStudents(): List<MiniStudent> {
+    override suspend fun getMiniStudents(): Resource<List<MiniStudent>> {
         return miniStudentRepository.getRecentMiniStudents()
     }
 

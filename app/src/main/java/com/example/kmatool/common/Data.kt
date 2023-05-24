@@ -40,24 +40,28 @@ object Data {
 
     suspend fun getLocalPeriodsRuntime(scheduleService: IScheduleService) {
         val result = scheduleService.getPeriods()
-        withContext(Dispatchers.Default) {
-            periodsDayMap =
-                result.groupBy { it.day } as MutableMap<String, List<Period>>
-            // sort periods on a day by startTime
-            periodsDayMap.forEach { (t, u) ->
-                periodsDayMap[t] = u.sortedBy { it.startTime }
+        if (result is Resource.Success) {
+            withContext(Dispatchers.Default) {
+                periodsDayMap =
+                    result.data?.groupBy { it.day } as MutableMap<String, List<Period>>
+                // sort periods on a day by startTime
+                periodsDayMap.forEach { (t, u) ->
+                    periodsDayMap[t] = u.sortedBy { it.startTime }
+                }
             }
         }
     }
 
     suspend fun getLocalNotesRuntime(noteService: INoteService) {
         val result = noteService.getNotes()
-        withContext(Dispatchers.Default) {
-            notesDayMap =
-                result.groupBy { it.date } as MutableMap<String, List<Note>>
-            // sort notes on a day by day
-            notesDayMap.forEach { (t, u) ->
-                notesDayMap[t] = u.sortedBy { it.time }
+        if (result is Resource.Success) {
+            withContext(Dispatchers.Default) {
+                notesDayMap =
+                    result.data?.groupBy { it.date } as MutableMap<String, List<Note>>
+                // sort notes on a day by day
+                notesDayMap.forEach { (t, u) ->
+                    notesDayMap[t] = u.sortedBy { it.time }
+                }
             }
         }
     }

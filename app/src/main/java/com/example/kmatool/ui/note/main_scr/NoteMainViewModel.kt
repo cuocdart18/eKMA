@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.ADD_NOTE_MODE
-import com.example.kmatool.common.AlarmEventsScheduler
+import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.UPDATE_NOTE_MODE
 import com.example.kmatool.common.formatDoubleChar

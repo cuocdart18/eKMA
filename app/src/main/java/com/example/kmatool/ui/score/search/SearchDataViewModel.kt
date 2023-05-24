@@ -4,6 +4,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
+import com.example.kmatool.common.Resource
 import com.example.kmatool.data.models.MiniStudent
 import com.example.kmatool.data.models.service.IScoreService
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +38,7 @@ class SearchDataViewModel @Inject constructor(
 
     fun onSearchEditTextObserved(
         text: String,
-        callback: (miniStudents: List<MiniStudent>) -> Unit
+        callback: (miniStudents: List<MiniStudent>?) -> Unit
     ) {
         isUserTyped.set(true)
         makeCallApi(text, callback)
@@ -45,23 +46,31 @@ class SearchDataViewModel @Inject constructor(
 
     private fun makeCallApi(
         text: String,
-        callback: (miniStudents: List<MiniStudent>) -> Unit
+        callback: (miniStudents: List<MiniStudent>?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val miniStudents = scoreService.getMiniStudentsByQuery(text)
+            val miniStudentsRes = scoreService.getMiniStudentsByQuery(text)
             withContext(Dispatchers.Main) {
-                callback(miniStudents)
+                if (miniStudentsRes is Resource.Success && miniStudentsRes.data != null) {
+                    callback(miniStudentsRes.data)
+                } else {
+                    callback(null)
+                }
             }
         }
     }
 
     fun showRecentSearchHistory(
-        callback: (miniStudents: List<MiniStudent>) -> Unit
+        callback: (miniStudents: List<MiniStudent>?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val miniStudents = scoreService.getMiniStudents()
+            val miniStudentsRes = scoreService.getMiniStudents()
             withContext(Dispatchers.Main) {
-                callback(miniStudents)
+                if (miniStudentsRes is Resource.Success && miniStudentsRes.data != null) {
+                    callback(miniStudentsRes.data)
+                } else {
+                    callback(null)
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.kmatool.data.models.service
 
+import com.example.kmatool.common.Resource
 import com.example.kmatool.data.models.Note
 
 interface INoteService {
@@ -12,5 +13,5 @@ interface INoteService {
 
     suspend fun deleteNotes()
 
-    suspend fun getNotes(): List<Note>
+    suspend fun getNotes(): Resource<List<Note>>
 }

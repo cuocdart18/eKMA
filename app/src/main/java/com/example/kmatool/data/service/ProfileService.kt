@@ -1,5 +1,6 @@
 package com.example.kmatool.data.service
 
+import com.example.kmatool.common.Resource
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.repository.IProfileRepository
 import com.example.kmatool.data.models.service.IProfileService
@@ -9,7 +10,11 @@ class ProfileService @Inject constructor(
     private val profileRepository: IProfileRepository
 ) : IProfileService {
 
-    override suspend fun getProfile(username: String, password: String, hashed: Boolean): Profile {
+    override suspend fun getProfile(
+        username: String,
+        password: String,
+        hashed: Boolean
+    ): Resource<Profile> {
         return profileRepository.getProfile(username, password, hashed)
     }
 

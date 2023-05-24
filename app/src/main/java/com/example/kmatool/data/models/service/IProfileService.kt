@@ -1,5 +1,6 @@
 package com.example.kmatool.data.models.service
 
+import com.example.kmatool.common.Resource
 import com.example.kmatool.data.models.Profile
 
 interface IProfileService {
@@ -8,7 +9,7 @@ interface IProfileService {
         username: String,
         password: String,
         hashed: Boolean
-    ): Profile
+    ): Resource<Profile>
 
     suspend fun saveProfile(profile: Profile)
 

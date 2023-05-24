@@ -3,8 +3,9 @@ package com.example.kmatool.activities
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.common.AlarmEventsScheduler
+import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.common.Data
+import com.example.kmatool.common.Resource.Success
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Event
 import com.example.kmatool.data.models.User
@@ -67,7 +68,7 @@ class LoginViewModel @Inject constructor(
     fun handleOnClickBtnLogin(
         username: String,
         password: String,
-        callback: () -> Unit
+        callback: (message: String) -> Unit
     ) {
         isShowProgress.set(true)
         isValid.set(true)
@@ -76,21 +77,28 @@ class LoginViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 val callProfile = async { profileService.getProfile(username, password, true) }
                 val callPeriods = async { scheduleService.getPeriods(username, password, true) }
+                val profile = callProfile.await()
+                val periods = callPeriods.await()
 
-                scheduleService.deletePeriods()                     // delete old periods
-                profileService.saveProfile(callProfile.await())     // save profile to local
-                scheduleService.insertPeriods(callPeriods.await())  // save periods to db
-                setAlarmPeriodsInFirstTime(callPeriods.await())     // set periods alarm if possible
+                if (profile is Success && periods is Success) {
+                    scheduleService.deletePeriods()                     // delete old periods
+                    profileService.saveProfile(profile.data!!)          // save profile to local
+                    scheduleService.insertPeriods(periods.data!!)       // save periods to db
+                    setAlarmPeriodsInFirstTime(periods.data)            // set periods alarm if possible
 
-                // for update schedule
-                userService.saveUser(User(username, password, true))
+                    // for update schedule
+                    userService.saveUser(User(username, password, true))
 
-                loginService.saveLoginState(true)
-
-                withContext(Dispatchers.Main) {
-                    isValid.set(true)
+                    loginService.saveLoginState(true)
+                    withContext(Dispatchers.Main) {
+                        isValid.set(true)
+                        isShowProgress.set(false)
+                        callback("Login success")
+                    }
+                } else {
+                    isValid.set(false)
                     isShowProgress.set(false)
-                    callback()
+                    callback("Something went wrong")
                 }
             }
         } else {

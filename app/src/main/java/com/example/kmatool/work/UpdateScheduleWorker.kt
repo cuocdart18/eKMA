@@ -12,8 +12,9 @@ import androidx.work.ForegroundInfo
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.example.kmatool.R
-import com.example.kmatool.common.AlarmEventsScheduler
+import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.common.Data
+import com.example.kmatool.common.Resource
 import com.example.kmatool.common.UPDATE_SCHEDULE_ID
 import com.example.kmatool.common.UPDATE_SCHE_CHANNEL_ID
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
@@ -25,6 +26,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
+import java.io.EOFException
 
 @HiltWorker
 class UpdateScheduleWorker @AssistedInject constructor(
@@ -52,7 +54,12 @@ class UpdateScheduleWorker @AssistedInject constructor(
         Log.e(TAG, "doWork: start update")
 
         // Do the work here--in this case, update the periods.
-        updatePeriods()
+        try {
+            updatePeriods()
+        } catch (e: EOFException) {
+            Log.e(TAG, "doWork: failed with ${e.message}")
+            return Result.failure()
+        }
 
         // Indicate whether the work finished successfully with the Result
         return Result.success()
@@ -65,18 +72,23 @@ class UpdateScheduleWorker @AssistedInject constructor(
             // call API
             val callPeriods =
                 async { scheduleService.getPeriods(user.username, user.password, user.hashed) }
+            val periods = callPeriods.await()
 
-            scheduleService.deletePeriods()
-            setAlarmPeriodsInFirstTime(callPeriods.await())
-            scheduleService.insertPeriods(callPeriods.await())
+            if (periods is Resource.Success) {
+                scheduleService.deletePeriods()
+                setAlarmPeriodsInFirstTime(periods.data!!)
+                scheduleService.insertPeriods(periods.data)
 
-            // cancel alarm periods
-            if (dataLocalManager.getIsNotifyEvents()) {
-                alarmEventsScheduler.cancelPeriods()
+                // cancel alarm periods
+                if (dataLocalManager.getIsNotifyEvents()) {
+                    alarmEventsScheduler.cancelPeriods()
+                }
+                // update Data runtime
+                Data.getLocalPeriodsRuntime(scheduleService)
+                Log.e(TAG, "updatePeriods: done $id")
+            } else {
+                Log.e(TAG, "updatePeriods: failed with ${periods.message}")
             }
-            // update Data runtime
-            Data.getLocalPeriodsRuntime(scheduleService)
-            Log.e(TAG, "updatePeriods: done $id")
         }
     }
 

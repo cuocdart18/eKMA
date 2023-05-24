@@ -1,5 +1,6 @@
 package com.example.kmatool.data.models.repository
 
+import com.example.kmatool.common.Resource
 import com.example.kmatool.data.models.Profile
 
 interface IProfileRepository {
@@ -8,7 +9,7 @@ interface IProfileRepository {
         username: String,
         password: String,
         hashed: Boolean
-    ): Profile
+    ): Resource<Profile>
 
     suspend fun saveProfile(profile: Profile)
 

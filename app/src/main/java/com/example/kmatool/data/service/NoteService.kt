@@ -1,5 +1,6 @@
 package com.example.kmatool.data.service
 
+import com.example.kmatool.common.Resource
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.models.repository.INoteRepository
 import com.example.kmatool.data.models.service.INoteService
@@ -25,7 +26,7 @@ class NoteService @Inject constructor(
         noteRepository.deleteNodes()
     }
 
-    override suspend fun getNotes(): List<Note> {
+    override suspend fun getNotes(): Resource<List<Note>> {
         return noteRepository.getNotes()
     }
 }

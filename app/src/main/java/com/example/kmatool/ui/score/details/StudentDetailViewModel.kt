@@ -2,6 +2,7 @@ package com.example.kmatool.ui.score.details
 
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
+import com.example.kmatool.common.Resource
 import com.example.kmatool.data.models.Student
 import com.example.kmatool.data.models.service.IScoreService
 import com.example.kmatool.ui.score.search.SearchDataViewModel
@@ -21,16 +22,21 @@ class StudentDetailViewModel @Inject constructor(
 
     fun getDetailStudent(
         id: String,
-        callback: (student: Student) -> Unit
+        callback: (student: Student?) -> Unit
     ) {
         if (this::student.isInitialized) {
             callback(student)
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            student = scoreService.getStudentById(id)
+            val studentRes = scoreService.getStudentById(id)
             withContext(Dispatchers.Main) {
-                callback(student)
+                if (studentRes is Resource.Success && studentRes.data != null) {
+                    student = studentRes.data
+                    callback(student)
+                } else {
+                    callback(null)
+                }
             }
         }
     }

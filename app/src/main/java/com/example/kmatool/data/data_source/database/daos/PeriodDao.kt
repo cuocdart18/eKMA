@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.example.kmatool.data.data_source.database.entities.PeriodEntity
 import com.example.kmatool.data.data_source.database.entities.PeriodEntityEntry
+
 @Dao
 interface PeriodDao {
 

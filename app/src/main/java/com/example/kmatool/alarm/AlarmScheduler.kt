@@ -1,4 +1,4 @@
-package com.example.kmatool.common
+package com.example.kmatool.alarm
 
 import com.example.kmatool.data.models.Event
 

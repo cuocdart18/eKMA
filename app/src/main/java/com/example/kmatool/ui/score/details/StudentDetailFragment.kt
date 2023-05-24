@@ -33,7 +33,11 @@ class StudentDetailFragment : BaseFragment() {
         binding.studentDetailVM = viewModel
         receiveData()
         viewModel.getDetailStudent(studentId) { student ->
-            showDetailStudent(student)
+            if (student != null) {
+                showDetailStudent(student)
+            } else {
+                showToast("Something went wrong")
+            }
         }
     }
 
