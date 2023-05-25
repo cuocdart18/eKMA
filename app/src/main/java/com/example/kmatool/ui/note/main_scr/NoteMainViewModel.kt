@@ -4,16 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.ADD_NOTE_MODE
-import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.data.app_data.DataLocalManager
+import com.example.kmatool.alarm.AlarmEventsScheduler
+import com.example.kmatool.common.Data
 import com.example.kmatool.common.UPDATE_NOTE_MODE
 import com.example.kmatool.common.formatDoubleChar
 import com.example.kmatool.common.toDayMonthYear
 import com.example.kmatool.common.toHourMinute
+import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Note
-import com.example.kmatool.data.repositories.NoteRepository
+import com.example.kmatool.data.models.service.INoteService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,9 +23,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NoteMainViewModel @Inject constructor(
-    private val noteRepository: NoteRepository,
-    private val dataLocalManager: DataLocalManager,
-    private val alarmEventsScheduler: AlarmEventsScheduler
+    private val dataLocalManager: IDataLocalManager,
+    private val alarmEventsScheduler: AlarmEventsScheduler,
+    private val noteService: INoteService
 ) : BaseViewModel() {
     override val TAG: String = NoteMainViewModel::class.java.simpleName
     val selectDay = MutableLiveData<String>()
@@ -65,16 +65,14 @@ class NoteMainViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             if (noteMode == ADD_NOTE_MODE) {
-                noteRepository.insertNote(note) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        callback()
-                    }
+                noteService.insertNote(note)
+                withContext(Dispatchers.Main) {
+                    callback()
                 }
             } else if (noteMode == UPDATE_NOTE_MODE) {
-                noteRepository.updateNote(note) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        callback()
-                    }
+                noteService.updateNote(note)
+                withContext(Dispatchers.Main) {
+                    callback()
                 }
             }
         }
@@ -84,7 +82,7 @@ class NoteMainViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            noteRepository.updateLocalDataRuntime()
+            Data.getLocalNotesRuntime(noteService)
             withContext(Dispatchers.Main) {
                 callback()
             }
@@ -96,7 +94,7 @@ class NoteMainViewModel @Inject constructor(
             oldNote?.let { note.id = it.id }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            val isNotify = dataLocalManager.getIsNotifyEventsSPref()
+            val isNotify = dataLocalManager.getIsNotifyEvents()
             if (isNotify) {
                 alarmEventsScheduler.scheduleEvent(note)
             }
@@ -106,7 +104,7 @@ class NoteMainViewModel @Inject constructor(
     fun cancelAlarmForOldNote(note: Note) {
         oldNote?.let { note.id = it.id }
         viewModelScope.launch(Dispatchers.IO) {
-            val isNotify = dataLocalManager.getIsNotifyEventsSPref()
+            val isNotify = dataLocalManager.getIsNotifyEvents()
             if (isNotify) {
                 alarmEventsScheduler.cancelEvent(note)
             }

@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.example.kmatool.common.SCALE_LAYOUT_SEARCH_DATA_DIALOG_X
@@ -121,5 +122,9 @@ open class BaseDialogFragment : DialogFragment() {
             ((size.y * SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y).toInt())
         )
         window?.setGravity(Gravity.CENTER)
+    }
+
+    internal fun showToast(msg: String, type: Int = Toast.LENGTH_SHORT) {
+        Toast.makeText(requireContext(), msg, type).show()
     }
 }

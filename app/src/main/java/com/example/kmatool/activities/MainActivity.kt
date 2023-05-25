@@ -10,9 +10,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.kmatool.R
 import com.example.kmatool.base.activities.BaseActivity
-import com.example.kmatool.data.database.AppDatabase
 import com.example.kmatool.databinding.ActivityMainBinding
 import com.example.kmatool.common.TIRAMISU_PERMISSION_REQUEST_CODE
+import com.example.kmatool.data.data_source.database.AppDatabase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,6 +28,7 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         setUiTemplates()
 //        requestPostNotifyPermission()
+        viewModel.runWorkerIfFailure(this)
     }
 
     private fun setUiTemplates() {

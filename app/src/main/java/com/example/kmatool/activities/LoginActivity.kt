@@ -41,6 +41,7 @@ class LoginActivity : BaseActivity() {
         val username = binding.edtUsername.text.toString().uppercase()
         val password = md5(binding.edtPassword.text.toString())
         viewModel.handleOnClickBtnLogin(username, password) {
+            showToast(it)
             // get local data if already logged in
             viewModel.getLocalData {
                 // if login successfully

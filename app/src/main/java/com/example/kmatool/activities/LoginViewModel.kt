@@ -3,16 +3,30 @@ package com.example.kmatool.activities
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.data.app_data.DataLocalManager
-import com.example.kmatool.data.repositories.ScheduleRepository
+import com.example.kmatool.alarm.AlarmEventsScheduler
+import com.example.kmatool.common.Data
+import com.example.kmatool.common.Resource.Success
+import com.example.kmatool.data.data_source.app_data.IDataLocalManager
+import com.example.kmatool.data.models.Event
+import com.example.kmatool.data.models.User
+import com.example.kmatool.data.models.service.ILoginService
+import com.example.kmatool.data.models.service.INoteService
+import com.example.kmatool.data.models.service.IProfileService
+import com.example.kmatool.data.models.service.IScheduleService
+import com.example.kmatool.data.models.service.IUserService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val dataLocalManager: DataLocalManager,
-    private val scheduleRepository: ScheduleRepository
+    private val alarmEventsScheduler: AlarmEventsScheduler,
+    private val dataLocalManager: IDataLocalManager,
+    private val noteService: INoteService,
+    private val scheduleService: IScheduleService,
+    private val loginService: ILoginService,
+    private val profileService: IProfileService,
+    private val userService: IUserService
 ) : BaseViewModel() {
     override val TAG = LoginViewModel::class.java.simpleName
     private val DELAY_TIME = 1200L
@@ -32,14 +46,13 @@ class LoginViewModel @Inject constructor(
         logDebug("get login state")
         isShowProgress.set(true)
         viewModelScope.launch(Dispatchers.IO) {
-            scheduleRepository.getLoginState { state ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    delay(DELAY_TIME)
-                    if (state) {
-                        callback()
-                    }
-                    isShowProgress.set(false)
+            val state = loginService.getLoginState()
+            delay(DELAY_TIME)
+            withContext(Dispatchers.Main) {
+                if (state) {
+                    callback()
                 }
+                isShowProgress.set(false)
             }
         }
     }
@@ -48,56 +61,55 @@ class LoginViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            scheduleRepository.getLocalData()
-            withContext(Dispatchers.Main) {
-                callback()
-            }
+            Data.getLocalData(noteService, scheduleService, callback)
         }
     }
 
     fun handleOnClickBtnLogin(
         username: String,
         password: String,
-        callback: () -> Unit
+        callback: (message: String) -> Unit
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            dataLocalManager.saveUsername(username)
-            dataLocalManager.savePassword(password)
-        }
-        logInfo("handle input")
         isShowProgress.set(true)
         isValid.set(true)
         // action
         if (username.isNotBlank() && password.isNotBlank()) {
-            logDebug("valid input")
             viewModelScope.launch(Dispatchers.IO) {
-                // call profile
-                val profileCallState =
-                    async { scheduleRepository.callProfileApi(username, password) }
-                // call schedule -> set alarm if possible
-                val scheduleCallState =
-                    async { scheduleRepository.callScheduleApi(username, password) }
+                val callProfile = async { profileService.getProfile(username, password, true) }
+                val callPeriods = async { scheduleService.getPeriods(username, password, true) }
+                val profile = callProfile.await()
+                val periods = callPeriods.await()
 
-                if (profileCallState.await() && scheduleCallState.await()) {
-                    scheduleRepository.saveLoginStateToLocal(true) {
-                        logDebug("save login state successfully")
-                    }.join()
+                if (profile is Success && periods is Success) {
+                    scheduleService.deletePeriods()                     // delete old periods
+                    profileService.saveProfile(profile.data!!)          // save profile to local
+                    scheduleService.insertPeriods(periods.data!!)       // save periods to db
+                    setAlarmPeriodsInFirstTime(periods.data)            // set periods alarm if possible
+
+                    // for update schedule
+                    userService.saveUser(User(username, password, true))
+
+                    loginService.saveLoginState(true)
                     withContext(Dispatchers.Main) {
                         isValid.set(true)
                         isShowProgress.set(false)
-                        logDebug("handle valid response from Api")
-                        callback()
+                        callback("Login success")
                     }
                 } else {
-                    logDebug("login denied")
                     isValid.set(false)
                     isShowProgress.set(false)
+                    callback("Something went wrong")
                 }
             }
         } else {
-            logDebug("invalid input")
             isValid.set(false)
             isShowProgress.set(false)
+        }
+    }
+
+    private suspend fun setAlarmPeriodsInFirstTime(events: List<Event>) {
+        if (dataLocalManager.getIsNotifyEvents()) {
+            alarmEventsScheduler.scheduleEvents(events)
         }
     }
 }

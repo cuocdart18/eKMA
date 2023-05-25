@@ -1,19 +1,15 @@
 package com.example.kmatool.ui.score.main_scr
 
 import androidx.databinding.ObservableField
-import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.data.repositories.ScoreRepository
 import com.example.kmatool.data.models.Statistic
+import com.example.kmatool.data.models.service.IScoreService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ScoreMainViewModel @Inject constructor(
-    private val scoreRepository: ScoreRepository
+    private val scoreService: IScoreService
 ) : BaseViewModel() {
     override val TAG = ScoreMainViewModel::class.java.simpleName
     private var restoreStatistic: Statistic? = null

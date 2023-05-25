@@ -23,12 +23,12 @@
         android:key="@string/key_dark_mode_pref"
         android:title="Chế độ tối" />
 
-    <ListPreference
+    <!--<ListPreference
         android:defaultValue="Tiếng Việt"
         android:icon="@drawable/ic_settings_24_blue"
         android:title="Ngôn ngữ"
         app:key="@string/key_language_pref"
-        app:useSimpleSummaryProvider="true" />
+        app:useSimpleSummaryProvider="true" />-->
 
     <Preference
         android:icon="@drawable/ic_settings_24_blue"

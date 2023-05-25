@@ -1,14 +1,51 @@
 package com.example.kmatool.activities
 
+import android.content.Context
+import androidx.lifecycle.viewModelScope
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.data.app_data.DataLocalManager
+import com.example.kmatool.common.UNIQUE_SCHEDULE_WORK_NAME
+import com.example.kmatool.common.UPDATE_SCHEDULE_WORKER_TAG
+import com.example.kmatool.work.UpdateScheduleWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val dataLocalManager: DataLocalManager
 ) : BaseViewModel() {
     override val TAG: String = MainViewModel::class.java.simpleName
 
+    fun runWorkerIfFailure(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val workManager = WorkManager.getInstance(context)
+            workManager.getWorkInfosByTag(UPDATE_SCHEDULE_WORKER_TAG)
+                .get()
+                .forEach { workInfo ->
+                    logError("tag=${workInfo.tags} with state=${workInfo.state.name}")
+                    if (workInfo.state == WorkInfo.State.FAILED) {
+                        val constraints = Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build()
+                        val updateWorkRequest =
+                            OneTimeWorkRequestBuilder<UpdateScheduleWorker>()
+                                .addTag(UPDATE_SCHEDULE_WORKER_TAG)
+                                .setConstraints(constraints)
+                                .build()
+                        workManager
+                            .enqueueUniqueWork(
+                                UNIQUE_SCHEDULE_WORK_NAME,
+                                ExistingWorkPolicy.REPLACE,
+                                updateWorkRequest
+                            )
+                    }
+                }
+        }
+    }
 }

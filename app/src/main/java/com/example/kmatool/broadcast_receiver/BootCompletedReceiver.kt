@@ -5,10 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import com.example.kmatool.common.AlarmEventsScheduler
+import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.common.Data
-import com.example.kmatool.data.app_data.DataLocalManager
-import com.example.kmatool.data.repositories.ScheduleRepository
+import com.example.kmatool.data.data_source.app_data.IDataLocalManager
+import com.example.kmatool.data.models.service.IScheduleService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,16 +18,17 @@ class BootCompletedReceiver : BroadcastReceiver() {
     private val TAG = BootCompletedReceiver::class.java.simpleName
 
     @Inject
-    lateinit var scheduleRepository: ScheduleRepository
+    lateinit var scheduleService: IScheduleService
 
     @Inject
-    lateinit var dataLocalManager: DataLocalManager
+    lateinit var dataLocalManager: IDataLocalManager
 
     @Inject
     lateinit var alarmEventsScheduler: AlarmEventsScheduler
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Intent.ACTION_BOOT_COMPLETED && context != null) {
+            Log.e(TAG, "boot completed")
             Toast.makeText(context, "boot completed", Toast.LENGTH_SHORT).show()
 //            resetAlarm()
         }
@@ -36,9 +37,9 @@ class BootCompletedReceiver : BroadcastReceiver() {
     private fun resetAlarm() {
         CoroutineScope(Dispatchers.IO).launch {
             // Get local data here
-            scheduleRepository.getLocalData()
+//            scheduleRepository.getLocalData()
             // Set the alarm here
-            val isNotify = dataLocalManager.getIsNotifyEventsSPref()
+            val isNotify = dataLocalManager.getIsNotifyEvents()
             CoroutineScope(Dispatchers.IO).launch {
                 if (isNotify) {
                     Log.d(TAG, "schedule events")
@@ -54,4 +55,6 @@ class BootCompletedReceiver : BroadcastReceiver() {
             }
         }
     }
+
+
 }

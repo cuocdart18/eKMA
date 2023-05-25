@@ -3,31 +3,42 @@ package com.example.kmatool.ui.infor.main
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.common.AlarmEventsScheduler
-import com.example.kmatool.data.app_data.DataLocalManager
+import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
-import com.example.kmatool.common.jsonStringToObject
+import com.example.kmatool.common.UNIQUE_SCHEDULE_WORK_NAME
+import com.example.kmatool.common.UPDATE_SCHEDULE_WORKER_TAG
+import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Profile
-import com.example.kmatool.data.repositories.NoteRepository
-import com.example.kmatool.data.repositories.ScheduleRepository
+import com.example.kmatool.data.models.service.ILoginService
+import com.example.kmatool.data.models.service.INoteService
+import com.example.kmatool.data.models.service.IProfileService
+import com.example.kmatool.data.models.service.IScheduleService
+import com.example.kmatool.data.models.service.IUserService
+import com.example.kmatool.work.UpdateScheduleWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class InformationViewModel @Inject constructor(
-    private val dataLocalManager: DataLocalManager,
-    private val noteRepository: NoteRepository,
-    private val scheduleRepository: ScheduleRepository,
-    private val alarmEventsScheduler: AlarmEventsScheduler
+    private val dataLocalManager: IDataLocalManager,
+    private val alarmEventsScheduler: AlarmEventsScheduler,
+    private val noteService: INoteService,
+    private val scheduleService: IScheduleService,
+    private val loginService: ILoginService,
+    private val profileService: IProfileService,
+    private val userService: IUserService
 ) : BaseViewModel() {
-    override val TAG = InformationViewModel::class.java.simpleName
 
     private lateinit var profile: Profile
     private lateinit var uri: Uri
@@ -40,7 +51,7 @@ class InformationViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            profile = jsonStringToObject(dataLocalManager.getProfileSPref())
+            profile = profileService.getProfile()
             CoroutineScope(Dispatchers.Main).launch {
                 callback(profile)
             }
@@ -55,7 +66,7 @@ class InformationViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            val uriString = dataLocalManager.getImgFilePathSPref()
+            val uriString = dataLocalManager.getImgFilePath()
             uri = Uri.parse(uriString)
             withContext(Dispatchers.Main) {
                 callback(uri)
@@ -71,7 +82,7 @@ class InformationViewModel @Inject constructor(
             TedImagePickerStarter.startImage(context) { uri ->
                 CoroutineScope(Dispatchers.IO).launch {
                     val filePath = FileUtils.saveImageAndGetPath(context, uri)
-                    dataLocalManager.saveImgFilePathSPref(filePath)
+                    dataLocalManager.saveImgFilePath(filePath)
                     withContext(Dispatchers.Main) {
                         this@InformationViewModel.uri = uri
                         callback(uri)
@@ -81,23 +92,29 @@ class InformationViewModel @Inject constructor(
         }
     }
 
-    fun updateSchedule(callback: () -> Unit) {
+    fun updateSchedule(
+        context: Context,
+        callback: () -> Unit
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val username = dataLocalManager.getUsername()
-            val password = dataLocalManager.getPassword()
-            // call API
-            val result = async { scheduleRepository.callScheduleApi(username, password) }
-            if (result.await()) {
-                // cancel alarm periods
-                if (dataLocalManager.getIsNotifyEventsSPref()) {
-                    alarmEventsScheduler.cancelPeriods()
-                }
-                // update Data runtime
-                scheduleRepository.getLocalPeriodsRuntime()
-                // update UI: dismiss dialog
-                withContext(Dispatchers.Main) {
-                    callback()
-                }
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+            val updateWorkRequest =
+                OneTimeWorkRequestBuilder<UpdateScheduleWorker>()
+                    .addTag(UPDATE_SCHEDULE_WORKER_TAG)
+                    .setConstraints(constraints)
+                    .build()
+            WorkManager.getInstance(context)
+                .enqueueUniqueWork(
+                    UNIQUE_SCHEDULE_WORK_NAME,
+                    ExistingWorkPolicy.REPLACE,
+                    updateWorkRequest
+                )
+
+            // update UI: dismiss dialog
+            withContext(Dispatchers.Main) {
+                callback()
             }
         }
     }
@@ -107,7 +124,7 @@ class InformationViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataLocalManager.saveIsNotifyEventsSPref(data)
+            dataLocalManager.saveIsNotifyEvents(data)
             if (data) {
                 alarmEventsScheduler.scheduleAlarmEvents()
             } else {
@@ -123,24 +140,22 @@ class InformationViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val clearPeriods = launch { scheduleRepository.deletePeriods() }
-            val clearNotes = launch { noteRepository.deleteNotes() }
+            val clearPeriods = launch { scheduleService.deletePeriods() }
+            val clearNotes = launch { noteService.deleteNotes() }
             val clearAlarm = launch {
-                if (dataLocalManager.getIsNotifyEventsSPref())
+                if (dataLocalManager.getIsNotifyEvents())
                     alarmEventsScheduler.clearAlarmEvents()
             }
-            val clearProfile = launch { dataLocalManager.saveProfileSPref("") }
-            val clearUsername = launch { dataLocalManager.saveUsername("") }
-            val clearPassword = launch { dataLocalManager.savePassword("") }
-            val clearImage = launch { dataLocalManager.saveImgFilePathSPref("") }
-            val clearLoginState = launch { dataLocalManager.saveLoginStateSPref(false) }
+            val clearProfile = launch { profileService.clearProfile() }
+            val clearUser = launch { userService.clearUser() }
+            val clearImage = launch { dataLocalManager.saveImgFilePath("") }
+            val clearLoginState = launch { loginService.saveLoginState(false) }
 
             clearPeriods.join()
             clearNotes.join()
             clearAlarm.join()
             clearProfile.join()
-            clearUsername.join()
-            clearPassword.join()
+            clearUser.join()
             clearImage.join()
             clearLoginState.join()
 

@@ -1,10 +1,10 @@
 package com.example.kmatool.di
 
 import android.app.Application
-import com.example.kmatool.data.database.AppDatabase
-import com.example.kmatool.data.database.daos.MiniStudentDao
-import com.example.kmatool.data.database.daos.NoteDao
-import com.example.kmatool.data.database.daos.PeriodDao
+import com.example.kmatool.data.data_source.database.AppDatabase
+import com.example.kmatool.data.data_source.database.daos.MiniStudentDao
+import com.example.kmatool.data.data_source.database.daos.NoteDao
+import com.example.kmatool.data.data_source.database.daos.PeriodDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

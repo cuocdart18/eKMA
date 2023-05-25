@@ -1,8 +1,7 @@
 package com.example.kmatool.di
 
-import com.example.kmatool.data.apis.ApiConfig
-import com.example.kmatool.data.apis.ScheduleAPI
-import com.example.kmatool.data.apis.ScoreAPI
+import com.example.kmatool.data.data_source.apis.ScheduleAPI
+import com.example.kmatool.data.data_source.apis.ScoreAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,7 +26,7 @@ object NetworkModule {
     @Named("ScheduleSite")
     fun provideRetrofitScheduleSite(gsonConverterFactory: GsonConverterFactory): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(ApiConfig.BASE_SCHEDULE_URL)
+            .baseUrl(com.example.kmatool.data.data_source.apis.ApiConfig.BASE_SCHEDULE_URL)
             .addConverterFactory(gsonConverterFactory)
             .build()
     }
@@ -42,7 +41,7 @@ object NetworkModule {
     @Named("ScoreSite")
     fun provideRetrofitScoreSite(gsonConverterFactory: GsonConverterFactory): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(ApiConfig.BASE_SCORE_URL)
+            .baseUrl(com.example.kmatool.data.data_source.apis.ApiConfig.BASE_SCORE_URL)
             .addConverterFactory(gsonConverterFactory)
             .build()
     }
