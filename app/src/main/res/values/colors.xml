@@ -20,6 +20,18 @@
     <color name="color_gray_of_dialog">#9E9E9E</color>
     <color name="gray_dam">#424242</color>
 
+    <color name="lab_black">#282828</color>
+    <color name="lab_black_nhat">#333333</color>
+    <color name="lab_white">#F8F0E8</color>
+    <color name="lab_red">#FE6454</color>
+    <color name="lab_pink">#FF8989</color>
+    <color name="lab_orange">#FFFFFF</color>
+    <color name="lab_green">#7CE1B0</color>
+    <color name="lab_yellow">#F3E26B</color>
+    <color name="lab_blue">#2196F3</color>
+    <color name="lab_gray_input">#F3F3F3</color>
+    <color name="lab_white_bgr">#F5F4F5</color>
+
     <array name="google_colors">
         <item>@color/green_nhat</item>
         <item>@color/red_nhat</item>

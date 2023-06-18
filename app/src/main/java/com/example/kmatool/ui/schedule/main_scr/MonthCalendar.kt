@@ -98,14 +98,14 @@ class MonthDayBinderImpl(
                         dotViewNotes.isGone = isDateInNoteList(date)
                     }
                     else -> {
-                        textView.setTextColorRes(R.color.black)
+                        textView.setTextColorRes(R.color.gray)
                         textView.background = null
                         dotViewPeriods.isGone = isDateInPeriodList(date)
                         dotViewNotes.isGone = isDateInNoteList(date)
                     }
                 }
             } else {
-                textView.setTextColorRes(R.color.gray)
+                textView.setTextColorRes(R.color.gray_2)
                 textView.background = null
                 dotViewPeriods.isGone = isDateInPeriodList(date)
                 dotViewNotes.isGone = isDateInNoteList(date)

@@ -9,155 +9,86 @@
             type="com.example.kmatool.ui.score.main_scr.ScoreMainViewModel" />
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="15dp">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-            <TextView
-                android:id="@+id/tv_title_intro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="@string/title_intro_statistics_fragment"
-                android:textColor="@color/white"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@id/tv_slogan"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/lab_black" />
 
-            <TextView
-                android:id="@+id/tv_slogan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="@string/slogan_score"
-                android:textColor="@color/gray"
-                android:textSize="18sp"
-                android:textStyle="normal"
-                app:layout_constraintBottom_toTopOf="@id/btn_search_feature"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title_intro" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/lab_white_bgr" />
+        </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_search_feature"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bgr_rectangle_blue_radius_48dp"
-                android:text="@string/btn_tra_cuu_diem"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="normal"
-                app:layout_constraintBottom_toTopOf="@id/ll_tong_so_sv"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_slogan" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="10">
 
             <LinearLayout
-                android:id="@+id/ll_tong_so_sv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bgr_rectangle_green"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:padding="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/ll_sv_no_mon"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/btn_search_feature">
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:background="@drawable/bgr_box_of_top_score_main"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tong_so_sv"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tv_tong_sv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(scoreMainViewModel.statisticOF.numberOfStudents)}"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/grades_bro_illus" />
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_sv_no_mon"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bgr_rectangle_red"
-                android:gravity="center_vertical"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:background="@drawable/bgr_box_of_bot_score_main"
                 android:orientation="vertical"
-                android:padding="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/ll_so_mon_hoc"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ll_tong_so_sv">
+                android:paddingStart="@dimen/base_xxhigh_padding"
+                android:paddingEnd="@dimen/base_xxhigh_padding">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/so_sv_no_mon"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tv_sv_no_mon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(scoreMainViewModel.statisticOF.numberOfDebtors)}"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
+                    android:layout_marginTop="@dimen/base_xhigh_margin"
+                    android:text="@string/title_intro_kma_score"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/lab_red"
+                    android:textSize="@dimen/base_big_title_text"
                     android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_so_mon_hoc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bgr_rectangle_blue"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:padding="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ll_sv_no_mon">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/so_mon_hoc"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:layout_marginBottom="@dimen/base_xxhigh_margin"
+                    android:text="@string/slogan_score"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/lab_black"
+                    android:textSize="@dimen/base_normal_text"
+                    android:textStyle="normal" />
 
-                <TextView
-                    android:id="@+id/tv_so_mon_hoc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(scoreMainViewModel.statisticOF.numberOfSubjects)}"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/btn_search_feature"
+                    style="@style/BaseButtonSubmit"
+                    android:background="@drawable/bgr_search_btn_score_main"
+                    android:padding="@dimen/base_high_padding"
+                    android:text="@string/btn_tra_cuu_diem" />
             </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
 </layout>

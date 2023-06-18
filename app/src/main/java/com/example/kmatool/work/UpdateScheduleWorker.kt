@@ -113,7 +113,7 @@ class UpdateScheduleWorker @AssistedInject constructor(
             .setContentTitle(title)
             .setTicker(title)
             .setContentText(progress)
-            .setSmallIcon(R.drawable.ic_logo_github)
+            .setSmallIcon(R.drawable.logo_github_black_24dp)
             .setOngoing(true)
             .setProgress(100, 0, true)
             // Add the cancel action to the notification which can

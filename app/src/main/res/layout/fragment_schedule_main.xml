@@ -11,31 +11,31 @@
         android:id="@+id/layout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/lab_black"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/ll_app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/blue_nhat"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/base_normal_margin"
                 android:gravity="center"
+                android:layout_marginBottom="@dimen/base_high_margin"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:padding="@dimen/base_normal_padding">
 
                 <TextView
                     android:id="@+id/tv_year_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/base_high_margin"
                     android:textColor="@color/white"
-                    android:layout_marginEnd="16dp"
-                    android:textSize="30sp"
+                    android:textSize="@dimen/base_title_text"
                     android:textStyle="bold"
                     tools:text="2018" />
 
@@ -48,7 +48,7 @@
                     android:gravity="end"
                     android:singleLine="true"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/base_normal_header_text"
                     tools:text="November" />
             </LinearLayout>
 
@@ -57,28 +57,28 @@
                 layout="@layout/layout_calendar_day_titles_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="@dimen/base_normal_margin" />
         </LinearLayout>
 
         <com.kizitonwose.calendar.view.CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/base_high_margin"
             app:cv_dayViewResource="@layout/layout_calendar_day" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:background="@drawable/bgr_rectangle_blue_corner"
+            android:background="@drawable/bgr_box_of_events_rectangle_white_border"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="@dimen/base_normal_margin"
+                android:layout_marginBottom="@dimen/base_normal_margin"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -86,21 +86,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="@dimen/base_normal_margin"
                     android:text="@string/title_event_detail"
-                    android:textColor="@color/blue"
-                    android:textSize="22sp"
+                    android:textColor="@color/lab_black"
+                    android:textSize="@dimen/base_normal_header_text"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tv_sum_of_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bgr_circular_blue"
+                    android:background="@drawable/bgr_circular_lab_black"
                     android:gravity="center"
                     android:text="3"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/base_normal_text" />
             </LinearLayout>
 
             <FrameLayout
@@ -120,8 +120,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/tv_notify_events_empty"
-                    android:textColor="@color/blue"
-                    android:textSize="16sp"
+                    android:textColor="@color/lab_black"
+                    android:textSize="@dimen/base_helper_text"
                     android:textStyle="normal"
                     android:visibility="gone" />
 
@@ -130,15 +130,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="@dimen/base_high_margin"
+                    android:layout_marginTop="@dimen/base_normal_margin"
+                    android:layout_marginEnd="@dimen/base_high_margin"
                     android:visibility="gone" />
-
             </FrameLayout>
-
         </LinearLayout>
-
     </LinearLayout>
 </layout>

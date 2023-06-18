@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -12,101 +11,93 @@
         <import type="android.view.View" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/login_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/lab_white_bgr"
+        android:orientation="vertical"
+        android:padding="@dimen/base_xhigh_padding">
 
-        <LinearLayout
-            android:id="@+id/login_layout"
+        <ImageView
+            android:layout_width="360dp"
+            android:layout_height="360dp"
+            android:layout_gravity="center"
+            android:src="@drawable/mobile_login_bro" />
+
+        <TextView
+            android:id="@+id/tv_started_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/base_high_margin"
+            android:textColor="@color/lab_red"
+            android:textSize="@dimen/base_title_text"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_username"
+            style="@style/BaseTextInputLayoutForLogin"
+            android:hint="@string/edt_hint_username"
+            app:counterEnabled="true"
+            app:counterMaxLength="8"
+            app:startIconDrawable="@drawable/person_outline_red_24dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_username"
+                style="@style/BaseEditTextForLogin"
+                android:inputType="text"
+                android:maxLength="8" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_password"
+            style="@style/BaseTextInputLayoutForLogin"
+            android:hint="@string/edt_hint_password"
+            app:endIconMode="password_toggle"
+            app:startIconDrawable="@drawable/lock_closed_outline_red_24dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_password"
+                style="@style/BaseEditTextForLogin"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_invalid_username_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/invalid_username_password"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/lab_red"
+            android:textSize="@dimen/base_helper_text"
+            android:visibility="@{viewModel.isValid() ? View.INVISIBLE : View.VISIBLE}" />
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="32dp"
-            android:paddingTop="48dp"
-            android:paddingEnd="32dp"
-            android:paddingBottom="72dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/base_normal_margin">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="48dp"
-                android:text="@string/log_in_title_schedule"
-                android:textColor="@color/blue"
-                android:textSize="48sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edt_username"
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loading_login_progress"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/bgr_rectangle_blue_stroke_corner_8dp"
-                android:drawableStart="@drawable/ic_person_28dp"
-                android:drawablePadding="12dp"
-                android:hint="@string/edt_hint_username"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:maxLines="1"
-                android:padding="16dp"
-                android:textColor="@color/blue"
-                android:textColorHint="@color/gray_2"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/edt_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/bgr_rectangle_blue_stroke_corner_8dp"
-                android:drawableStart="@drawable/ic_lock_28"
-                android:drawablePadding="12dp"
-                android:hint="@string/edt_hint_password"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:padding="16dp"
-                android:textColor="@color/blue"
-                android:textColorHint="@color/gray_2"
-                android:textSize="20sp"
-                tools:ignore="Autofill" />
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center">
-
-                <TextView
-                    android:id="@+id/tv_invalid_username_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/invalid_username_password"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/red_nhat"
-                    android:textSize="18sp"
-                    android:visibility="@{viewModel.isValid() ? View.GONE : View.VISIBLE}" />
-
-                <ProgressBar
-                    android:id="@+id/google_progress"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_gravity="center"
-                    android:visibility="@{viewModel.isShowProgress() ? View.VISIBLE : View.GONE}" />
-            </FrameLayout>
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bgr_rectangle_lab_black"
+                android:visibility="@{viewModel.isShowProgress() ? View.VISIBLE : View.GONE}"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/loading_double_circle" />
 
             <Button
                 android:id="@+id/btn_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/bgr_rectangle_blue_32dp"
-                android:drawableEnd="@drawable/ic_navigate_next_72"
-                android:padding="6dp" />
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                style="@style/BaseButtonSubmit"
+                android:layout_height="52dp"
+                android:text="@string/btn_login_continue"
+                android:visibility="@{viewModel.isShowProgress() ? View.GONE : View.VISIBLE}" />
+        </FrameLayout>
+
+    </LinearLayout>
 </layout>
