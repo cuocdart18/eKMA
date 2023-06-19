@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="TestStyle" parent="@android:style/TextAppearance.Medium">
+    <style name="TestStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -87,6 +87,35 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/lab_red</item>
         <item name="android:textSize">@dimen/base_normal_text</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="BaseLinearLayoutItemEventDay">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingStart">@dimen/base_high_padding</item>
+        <item name="android:paddingTop">@dimen/base_normal_padding</item>
+        <item name="android:paddingEnd">@dimen/base_high_padding</item>
+        <item name="android:paddingBottom">@dimen/base_normal_padding</item>
+    </style>
+
+    <style name="BaseTextViewItemEventDay">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">@dimen/base_small_padding</item>
+        <item name="android:textColor">@color/lab_black</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:scrollbars">none</item>
+    </style>
+
+    <style name="BaseTextViewTitleItemEventDay" parent="BaseTextViewItemEventDay">
+        <item name="android:textSize">@dimen/base_normal_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseTextViewDescItemEventDay" parent="BaseTextViewItemEventDay">
+        <item name="android:textSize">@dimen/base_helper_text</item>
         <item name="android:textStyle">normal</item>
     </style>
 </resources>

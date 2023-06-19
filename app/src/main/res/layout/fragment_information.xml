@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lab_white_bgr"
+        android:background="@color/lab_medium_white"
         android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView

@@ -97,5 +97,6 @@
     <string name="key_rating_pref">rating</string>
     <string name="key_log_out_pref">log_out</string>
     <string name="btn_login_continue">Continue</string>
+    <string name="space_start_end_time">\ -\ </string>
 
 </resources>

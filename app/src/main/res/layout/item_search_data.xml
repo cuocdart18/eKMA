@@ -44,6 +44,5 @@
                 android:text="@{miniStudent.classInSchool}"
                 app:drawableStartCompat="@drawable/ic_flag_outline" />
         </LinearLayout>
-
     </LinearLayout>
 </layout>
