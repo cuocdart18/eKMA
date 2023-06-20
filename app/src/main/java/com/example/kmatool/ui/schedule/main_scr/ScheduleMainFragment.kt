@@ -123,7 +123,7 @@ class ScheduleMainFragment : BaseFragment() {
             KEY_PASS_NOTE_OBJ to note
         )
         // navigate
-        navigateToFragment(R.id.noteDetailDialogFragment, bundle)
+        navigateToFragment(R.id.noteDetailFragment, bundle)
     }
 
     private fun refreshDataAfterUpdatedOrDeleted() {

@@ -98,5 +98,9 @@
     <string name="key_log_out_pref">log_out</string>
     <string name="btn_login_continue">Continue</string>
     <string name="space_start_end_time">\ -\ </string>
+    <string name="desc_of_update_note_fab">Update note</string>
+    <string name="description_header">Description</string>
+    <string name="img_login">img_login</string>
+    <string name="delete_note">delete_note</string>
 
 </resources>
