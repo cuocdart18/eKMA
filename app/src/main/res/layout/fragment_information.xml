@@ -9,7 +9,7 @@
             type="com.example.kmatool.data.models.Profile" />
     </data>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -18,42 +18,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/lab_medium_white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="10">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_profile_image"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                android:layout_gravity="center"
-                android:src="@drawable/default_user"
-                app:civ_border_color="#FF000000"
-                app:civ_border_width="0dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:background="@drawable/bgr_box_of_profile_student_header"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_profile_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@{profile.displayName}"
-                android:textColor="@color/blue"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_profile_image"
+                    android:layout_width="@dimen/base_width_img_profile"
+                    android:layout_height="@dimen/base_height_profile"
+                    android:layout_marginBottom="@dimen/base_high_margin"
+                    android:src="@drawable/default_user"
+                    app:civ_border_color="#FF000000"
+                    app:civ_border_width="0dp" />
 
-            <TextView
-                android:id="@+id/tv_profile_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@{profile.studentCode}"
-                android:textColor="@color/blue"
-                android:textSize="18sp"
-                android:textStyle="normal" />
+                <TextView
+                    android:id="@+id/tv_profile_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/base_small_margin"
+                    android:text="@{profile.displayName}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/base_normal_header_text"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_profile_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{profile.studentCode}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/base_normal_text"
+                    android:textStyle="normal" />
+            </LinearLayout>
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/frm_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:nestedScrollingEnabled="false" />
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>
