@@ -2,37 +2,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Preference
-        android:icon="@drawable/ic_settings_24_blue"
+        android:icon="@drawable/school_outline_black_24dp"
         android:key="@string/key_my_score_pref"
-        android:title="Điểm của tôi" />
+        android:title="My score" />
 
     <Preference
-        android:icon="@drawable/ic_settings_24_blue"
+        android:icon="@drawable/cloud_download_outline_black_24dp"
         android:key="@string/key_update_schedule_pref"
-        android:title="Cập nhật lịch học" />
+        android:title="Update schedule" />
 
     <SwitchPreference
         android:defaultValue="false"
-        android:icon="@drawable/ic_settings_24_blue"
+        android:icon="@drawable/notifications_outline_black_24dp"
         android:key="@string/key_notify_event_pref"
-        android:title="Thông báo" />
+        android:title="Notification" />
 
     <SwitchPreference
         android:defaultValue="false"
-        android:icon="@drawable/ic_settings_24_blue"
+        android:icon="@drawable/moon_outline_black_24dp"
         android:key="@string/key_dark_mode_pref"
-        android:title="Chế độ tối" />
-
-    <!--<ListPreference
-        android:defaultValue="Tiếng Việt"
-        android:icon="@drawable/ic_settings_24_blue"
-        android:title="Ngôn ngữ"
-        app:key="@string/key_language_pref"
-        app:useSimpleSummaryProvider="true" />-->
+        android:title="Dark mode" />
 
     <Preference
-        android:icon="@drawable/ic_settings_24_blue"
-        android:title="Về chúng tôi"
+        android:icon="@drawable/logo_github_black_24dp"
+        android:title="About me"
         app:key="@string/key_about_me_pref">
         <intent
             android:action="android.intent.action.VIEW"
@@ -40,8 +33,8 @@
     </Preference>
 
     <Preference
-        android:icon="@drawable/ic_settings_24_blue"
-        android:title="Đánh giá"
+        android:icon="@drawable/star_outline_black_24dp"
+        android:title="Rate me five star"
         app:key="@string/key_rating_pref">
         <intent
             android:action="android.intent.action.VIEW"
@@ -49,8 +42,8 @@
     </Preference>
 
     <Preference
-        android:icon="@drawable/ic_settings_24_blue"
+        android:icon="@drawable/log_out_outline_black_24dp"
         android:key="@string/key_log_out_pref"
-        android:title="Đăng xuất" />
+        android:title="Log out" />
 
 </PreferenceScreen>

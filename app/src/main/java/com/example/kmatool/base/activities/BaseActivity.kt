@@ -1,5 +1,6 @@
 package com.example.kmatool.base.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ProgressBar
@@ -64,6 +65,17 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     // METHOD
+    internal fun <T> openActivityWithFinish(cls: Class<T>) {
+        val intent = Intent(this, cls)
+        startActivity(intent)
+        finish()
+    }
+
+    internal fun <T> openActivityNoFinish(cls: Class<T>) {
+        val intent = Intent(this, cls)
+        startActivity(intent)
+    }
+
     internal fun showToast(msg: String, type: Int = Toast.LENGTH_SHORT) {
         Toast.makeText(this, msg, type).show()
     }

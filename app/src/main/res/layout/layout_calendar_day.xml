@@ -2,16 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_margin="6dp"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/base_normal_margin">
 
     <TextView
         android:id="@+id/tv_day"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/base_normal_text"
         tools:text="22" />
 
     <LinearLayout
@@ -23,16 +23,16 @@
 
         <View
             android:id="@+id/v_noti_period_dot"
-            android:layout_width="5dp"
-            android:layout_height="5dp"
-            android:background="@drawable/bgr_periods_circular_yellow"
+            android:layout_width="@dimen/base_width_small_cir"
+            android:layout_height="@dimen/base_height_small_cir"
+            android:background="@drawable/bgr_periods_circular_lab_red"
             android:visibility="gone" />
 
         <View
             android:id="@+id/v_noti_note_dot"
-            android:layout_width="5dp"
-            android:layout_height="5dp"
-            android:background="@drawable/bgr_notes_circular_blue"
+            android:layout_width="@dimen/base_width_small_cir"
+            android:layout_height="@dimen/base_height_small_cir"
+            android:background="@drawable/bgr_notes_circular_lab_blue"
             android:visibility="gone" />
     </LinearLayout>
 </FrameLayout>

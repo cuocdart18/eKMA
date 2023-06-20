@@ -1,16 +1,27 @@
 <resources>
     <string name="app_name">KMA Tool</string>
-    <string name="item_menu_score">Điểm</string>
-    <string name="item_menu_schedule">Lịch học</string>
-    <string name="item_menu_note">Ghi chú</string>
-    <string name="item_menu_account">Tài khoản</string>
+    <string name="item_menu_score">Score</string>
+    <string name="item_menu_schedule">Schedule</string>
+    <string name="item_menu_note">Note</string>
+    <string name="item_menu_account">Account</string>
     <string name="open_nav_drawer">open navDrawer</string>
     <string name="close_nav_drawer">close navDrawer</string>
 
     <!--SCORE FEATURE-->
     <string name="title_kma_score">./kma_score</string>
-    <string name="title_intro_statistics_fragment">Công cụ tra cứu điểm dành cho sinh viên KMA</string>
-    <string name="slogan_score">Tổng hợp điểm nhanh chóng và chính xác, sử dụng đơn giản, mã nguồn mở.</string>
+    <string name="title_intro_kma_score">KMA \nScore</string>
+    <string name="title_intro_score_main">
+        <![CDATA[
+        <html>
+            <body>
+                <span><font color="#FFFFFF">Score lookup tool for</font></span>
+                <br>
+                <span><font color="#282828">KMA students</font></span>
+            </body>
+        </html>
+        ]]>
+    </string>
+    <string name="slogan_score">On the way to success, there is no trace of lazy men!</string>
     <string name="slogan_schedule">Cập nhật thời khóa biểu trực tiếp từ hệ thống, thông tin bảo mật, an toàn.</string>
     <string name="tong_so_sv">Tổng số sinh viên</string>
     <string name="so_sv_no_mon">Số sinh viên nợ môn</string>
@@ -25,8 +36,8 @@
     <string name="diem_tong_ket">Điểm TK</string>
     <string name="diem_chu">Điểm chữ</string>
     <string name="src_kma_score_mobile">https://github.com/cuocdart18/Kma-Score</string>
-    <string name="ket_qua_tim_kiem">Kết quả tìm kiếm</string>
-    <string name="lich_su_tim_kiem">Lịch sử tìm kiếm</string>
+    <string name="ket_qua_tim_kiem">Search result</string>
+    <string name="lich_su_tim_kiem">Recently searched</string>
     <string name="hint_search_data">Tìm kiếm theo tên, mã sinh viên, …</string>
     <string name="with_luv">  with ❤</string>
     <string name="kma_score_from">./kma_score from  </string>
@@ -36,33 +47,46 @@
     <string name="designed_by_author">Designed by KIT</string>
     <string name="failed_students">Chưa hoàn thành môn</string>
     <string name="passed_students">Đã hoàn thành môn</string>
-    <string name="btn_tra_cuu_diem">Tra cứu điểm</string>
-    <string name="log_in_title_schedule">Đăng nhập</string>
-    <string name="edt_hint_username">Tài khoản</string>
-    <string name="edt_hint_password">Mật khẩu</string>
+    <string name="btn_tra_cuu_diem">Search</string>
+    <string name="log_in_title_schedule">Let\'s \nGet Started!</string>
+    <string name="log_in_title_app">
+        <![CDATA[
+        <html>
+            <body>
+                <span><font color="#282828">Let\'s</font></span>
+                <br>
+                <span><font color="#282828">Get</font></span>
+                " "
+                <span><font color="#FE6454">Started!</font></span>
+            </body>
+        </html>
+        ]]>
+    </string>
+    <string name="edt_hint_username">Username</string>
+    <string name="edt_hint_password">Password</string>
     <string name="invalid_username_password">Đăng nhập bị từ chối</string>
     <string name="btn_login">Bắt đầu</string>
     <string name="btn_view_schedule">Xem thời khóa biểu</string>
     <string name="title_intro_schedule_fragment">Công cụ xem thời khóa biểu dành cho sinh viên KMA</string>
-    <string name="title_event_detail">Sự kiện</string>
+    <string name="title_event_detail">Events</string>
     <string name="label_name_schedule">Thời khóa biểu</string>
     <string name="label_name_score">Tra cứu điểm</string>
     <string name="tv_notify_events_empty">Không có sự kiện nào</string>
     <string name="so_sinh_vien">Số sinh viên</string>
     <string name="create_note">Tạo ghi chú</string>
-    <string name="note_title">Tiêu đề</string>
-    <string name="note_date">Ngày</string>
-    <string name="note_time">Thời gian</string>
-    <string name="note_content">Nội dung</string>
-    <string name="note_save">Lưu</string>
+    <string name="note_title">Title</string>
+    <string name="note_date">Date</string>
+    <string name="note_time">Time</string>
+    <string name="note_content">Description</string>
+    <string name="note_save">Save</string>
     <string name="empty_title_notify">Thông tin này không được bỏ trống</string>
-    <string name="note_title_dialog">Chi tiết</string>
-    <string name="note_time_dialog">"Thời gian: "</string>
-    <string name="note_content_dialog">Ghi chú:</string>
+    <string name="note_title_dialog">Detail</string>
+    <string name="note_time_dialog">Time:\ </string>
+    <string name="note_content_dialog">Description:</string>
     <string name="btn_note_update_dialog">Update</string>
     <string name="btn_note_delete_dialog">Delete</string>
-    <string name="tv_note_head_add">Tạo ghi chú</string>
-    <string name="tv_note_head_update">Sửa ghi chú</string>
+    <string name="tv_note_head_add">Add new note</string>
+    <string name="tv_note_head_update">Update note</string>
 
     <string name="key_my_score_pref">my_score</string>
     <string name="key_update_schedule_pref">update_schedule</string>
@@ -72,5 +96,12 @@
     <string name="key_about_me_pref">about_me</string>
     <string name="key_rating_pref">rating</string>
     <string name="key_log_out_pref">log_out</string>
+    <string name="btn_login_continue">Continue</string>
+    <string name="space_start_end_time">\ -\ </string>
+    <string name="desc_of_update_note_fab">Update note</string>
+    <string name="description_header">Description</string>
+    <string name="img_login">img_login</string>
+    <string name="delete_note">delete_note</string>
+    <string name="space_of_content">space_of_content</string>
 
 </resources>

@@ -11,18 +11,9 @@
         android:label="@string/label_name_schedule"
         tools:layout="@layout/fragment_schedule_main">
         <action
-            android:id="@+id/action_scheduleMainFragment_to_noteDetailDialogFragment"
-            app:destination="@id/noteDetailDialogFragment" />
+            android:id="@+id/action_scheduleMainFragment_to_noteDetailFragment"
+            app:destination="@id/noteDetailFragment" />
     </fragment>
-    <dialog
-        android:id="@+id/noteDetailDialogFragment"
-        android:name="com.example.kmatool.ui.note.detail.NoteDetailDialogFragment"
-        android:label="NoteDetailDialogFragment"
-        tools:layout="@layout/dialog_note_detail">
-        <action
-            android:id="@+id/action_noteDetailDialogFragment_to_noteMainFragment"
-            app:destination="@id/noteMainFragment" />
-    </dialog>
     <fragment
         android:id="@+id/noteMainFragment"
         android:name="com.example.kmatool.ui.note.main_scr.NoteMainFragment"
@@ -30,6 +21,20 @@
         tools:layout="@layout/fragment_note_main">
         <action
             android:id="@+id/action_noteMainFragment_to_scheduleMainFragment"
+            app:destination="@id/scheduleMainFragment"
+            app:popUpTo="@id/scheduleMainFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/noteDetailFragment"
+        android:name="com.example.kmatool.ui.note.detail.NoteDetailFragment"
+        android:label="NoteDetailFragment"
+        tools:layout="@layout/fragment_note_detail">
+        <action
+            android:id="@+id/action_noteDetailFragment_to_noteMainFragment"
+            app:destination="@id/noteMainFragment" />
+        <action
+            android:id="@+id/action_noteDetailFragment_to_scheduleMainFragment"
             app:destination="@id/scheduleMainFragment"
             app:popUpTo="@id/scheduleMainFragment"
             app:popUpToInclusive="true" />

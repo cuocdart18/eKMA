@@ -1,6 +1,7 @@
 package com.example.kmatool.ui.score.main_scr
 
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +28,10 @@ class ScoreMainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupUI()
+    }
+
+    private fun setupUI() {
         binding.btnSearchFeature.setOnClickListener { onClickShowSearchDialog() }
         binding.scoreMainViewModel = viewModel
     }

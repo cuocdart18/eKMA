@@ -1,11 +1,12 @@
 package com.example.kmatool.activities
 
-import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import androidx.activity.viewModels
+import androidx.core.widget.doOnTextChanged
+import com.example.kmatool.R
 import com.example.kmatool.base.activities.BaseActivity
 import com.example.kmatool.databinding.ActivityLoginBinding
-import com.example.kmatool.common.md5
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,39 +21,58 @@ class LoginActivity : BaseActivity() {
         setContentView(binding.root)
         binding.viewModel = viewModel
 
-        setupGoogleProgress(binding.googleProgress)
-        handleOnClick()
+        setUpUI()
         // check login state
         viewModel.getLoginState {
             // get local data if already logged in
             viewModel.getLocalData {
                 // if login successfully
-                openMainActivity()
+                openActivityWithFinish(MainActivity::class.java)
             }
         }
     }
 
-    private fun handleOnClick() {
+    private fun setUpUI() {
         binding.btnLogin.setOnClickListener { onClickBtnLogin() }
+        binding.tvStartedTitle.text = Html.fromHtml(getString(R.string.log_in_title_app))
+        binding.edtUsername.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty())
+                binding.tilUsername.error = " "
+            else
+                binding.tilUsername.error = ""
+        }
+        binding.edtPassword.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty())
+                binding.tilPassword.error = " "
+            else
+                binding.tilPassword.error = ""
+        }
     }
 
     private fun onClickBtnLogin() {
-        logDebug("on click request log in")
         val username = binding.edtUsername.text.toString().uppercase()
-        val password = md5(binding.edtPassword.text.toString())
-        viewModel.handleOnClickBtnLogin(username, password) {
+        val unHashedPassword = binding.edtPassword.text.toString()
+
+        showErrorIfBlankField(username, unHashedPassword)
+
+        viewModel.handleOnClickBtnLogin(username, unHashedPassword) {
             showToast(it)
             // get local data if already logged in
             viewModel.getLocalData {
                 // if login successfully
-                openMainActivity()
+                openActivityWithFinish(MainActivity::class.java)
             }
         }
     }
 
-    private fun openMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+    private fun showErrorIfBlankField(username: String, unHashedPassword: String) {
+        if (username.isBlank()) {
+            binding.tilUsername.error = " "
+            binding.edtUsername.clearFocus()
+        }
+        if (unHashedPassword.isBlank()) {
+            binding.tilPassword.error = " "
+            binding.edtPassword.clearFocus()
+        }
     }
 }

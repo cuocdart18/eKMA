@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -24,153 +25,77 @@
             type="Integer" />
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginBottom="@dimen/base_normal_margin">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            style="@style/BaseLinearLayoutItemEventDay"
+            android:background="@drawable/bgr_box_of_item_period"
             android:visibility="@{type == ConstantsKt.PERIOD_TYPE ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                style="@style/BaseTextViewTitleItemEventDay"
+                android:text="@{period.className}"
+                app:drawableEndCompat="@drawable/flame_outline_black_16dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{period.startTime}"
-                    android:textColor="@color/blue"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_arrow_drop_down_24" />
+                    style="@style/BaseTextViewDescItemEventDay"
+                    android:layout_marginEnd="@dimen/base_normal_margin"
+                    android:text="@{period.teacher}"
+                    app:drawableStartCompat="@drawable/id_card_outline_black_16dp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{period.endTime}"
-                    android:textColor="@color/blue"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    style="@style/BaseTextViewDescItemEventDay"
+                    android:text="@{period.room}"
+                    app:drawableStartCompat="@drawable/location_outline_black_16dp" />
             </LinearLayout>
 
-            <View
-                android:layout_width="2dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:background="@color/blue" />
-
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@{period.className}"
-                    android:textColor="@color/blue"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    style="@style/BaseTextViewDescItemEventDay"
+                    android:text="@{period.startTime}"
+                    app:drawableStartCompat="@drawable/time_outline_black_16dp" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                <TextView
+                    style="@style/BaseTextViewDescItemEventDay"
+                    android:text="@string/space_start_end_time" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/ic_assignment_ind_24" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@{period.teacher}"
-                        android:textColor="@color/blue"
-                        android:textSize="16sp"
-                        android:textStyle="normal" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/ic_room_24" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@{period.room}"
-                        android:textColor="@color/blue"
-                        android:textSize="16sp"
-                        android:textStyle="normal" />
-                </LinearLayout>
+                <TextView
+                    style="@style/BaseTextViewDescItemEventDay"
+                    android:text="@{period.endTime}" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
+            style="@style/BaseLinearLayoutItemEventDay"
+            android:background="@drawable/bgr_box_of_item_note"
             android:visibility="@{type == ConstantsKt.NOTE_TYPE ? View.VISIBLE : View.GONE}">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:text="@{note.timeCompare}"
-                android:textColor="@color/red_nhat"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="2dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="2dp"
-                android:background="@color/red_nhat" />
+                style="@style/BaseTextViewTitleItemEventDay"
+                android:text="@{note.title}"
+                app:drawableEndCompat="@drawable/pin_outline_black_16dp" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{note.title}"
-                android:textColor="@color/red_nhat"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                style="@style/BaseTextViewDescItemEventDay"
+                android:text="@{note.content}"
+                app:drawableStartCompat="@drawable/pricetags_outline_black_16dp" />
 
+            <TextView
+                style="@style/BaseTextViewDescItemEventDay"
+                android:text="@{note.timeCompare}"
+                app:drawableStartCompat="@drawable/time_outline_black_16dp" />
         </LinearLayout>
-    </LinearLayout>
+    </FrameLayout>
 </layout>

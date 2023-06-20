@@ -6,6 +6,7 @@ import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.Resource.Success
+import com.example.kmatool.common.md5
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Event
 import com.example.kmatool.data.models.User
@@ -67,13 +68,15 @@ class LoginViewModel @Inject constructor(
 
     fun handleOnClickBtnLogin(
         username: String,
-        password: String,
+        unHashedPassword: String,
         callback: (message: String) -> Unit
     ) {
-        isShowProgress.set(true)
         isValid.set(true)
         // action
-        if (username.isNotBlank() && password.isNotBlank()) {
+        if (username.isNotBlank() && unHashedPassword.isNotBlank()) {
+            // show for user: aware of request
+            isShowProgress.set(true)
+            val password = md5(unHashedPassword)
             viewModelScope.launch(Dispatchers.IO) {
                 val callProfile = async { profileService.getProfile(username, password, true) }
                 val callPeriods = async { scheduleService.getPeriods(username, password, true) }
@@ -96,9 +99,11 @@ class LoginViewModel @Inject constructor(
                         callback("Login success")
                     }
                 } else {
-                    isValid.set(false)
-                    isShowProgress.set(false)
-                    callback("Something went wrong")
+                    withContext(Dispatchers.Main) {
+                        isValid.set(false)
+                        isShowProgress.set(false)
+                        callback("Something went wrong")
+                    }
                 }
             }
         } else {

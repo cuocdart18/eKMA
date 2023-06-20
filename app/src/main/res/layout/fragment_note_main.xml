@@ -1,120 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
     </data>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-            android:id="@+id/tv_note_head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="20dp"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="24sp" />
-
-        <EditText
-            android:id="@+id/edt_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/note_title"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:maxLength="50"
-            android:padding="8dp"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/tv_empty_title_notify"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="@string/empty_title_notify"
-            android:textColor="@color/red_nhat"
-            android:visibility="gone" />
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:background="@color/lab_medium_white"
+            android:orientation="vertical"
+            android:padding="@dimen/base_xhigh_padding">
+
+            <TextView
+                android:id="@+id/tv_note_head"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_normal_margin"
+                android:layout_marginBottom="@dimen/base_high_margin"
+                android:textAlignment="center"
+                android:textColor="@color/lab_red"
+                android:textSize="@dimen/base_title_text"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_title"
+                style="@style/BaseTextInputLayoutForNote"
+                android:layout_marginBottom="@dimen/base_high_margin"
+                android:hint="@string/note_title"
+                app:counterEnabled="true"
+                app:counterMaxLength="50">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_title"
+                    style="@style/BaseEditTextForNote"
+                    android:lines="2"
+                    android:maxLength="50"
+                    android:maxLines="2"
+                    android:minLines="2" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_marginBottom="@dimen/base_xhigh_margin"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/note_date"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="24sp" />
+                    android:layout_marginEnd="@dimen/base_high_margin"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btn_select_date"
-                    android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tv_select_date"
+                        style="@style/BaseTextViewDateTimeSelector"
+                        app:drawableEndCompat="@drawable/alarm_outline_red_24dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAllCaps="false"
-                    android:textSize="14sp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_select_time"
+                        style="@style/BaseTextViewDateTimeSelector"
+                        app:drawableEndCompat="@drawable/calendar_outline_red_24dp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_content"
+                style="@style/BaseTextInputLayoutForNote"
+                android:layout_marginBottom="@dimen/base_xhigh_margin"
+                android:hint="@string/note_content"
+                app:counterEnabled="true"
+                app:counterMaxLength="200">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/note_time"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="24sp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_content"
+                    style="@style/BaseEditTextForNote"
+                    android:lines="6"
+                    android:maxLength="200"
+                    android:maxLines="6"
+                    android:minLines="6" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
-                    android:id="@+id/btn_select_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAllCaps="false"
-                    android:textSize="14sp" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/btn_save"
+                style="@style/BaseButtonSubmit"
+                android:text="@string/note_save" />
         </LinearLayout>
-
-        <EditText
-            android:id="@+id/edt_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:hint="@string/note_content"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine"
-            android:maxLines="7"
-            android:padding="8dp"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/note_save"
-            android:textAllCaps="false"
-            android:textSize="24sp" />
-    </LinearLayout>
+    </ScrollView>
 </layout>

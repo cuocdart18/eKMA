@@ -28,5 +28,5 @@ data class Note(
     override fun getSubTextNotify(): String = "Ghi chú"
     override fun getContentTextNotify(): String = content.toString()
     override fun getContentBigTextNotify(): String = content.toString()
-    override fun getSmallIconNotify(): Int = R.drawable.ic_event_note_notify_24
+    override fun getSmallIconNotify(): Int = R.drawable.notifications_outline_black_24dp
 }

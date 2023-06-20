@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="4dp"
+    android:padding="@dimen/base_small_padding"
     android:weightSum="7">
 
     <include layout="@layout/layout_calendar_day_titles_text" />
