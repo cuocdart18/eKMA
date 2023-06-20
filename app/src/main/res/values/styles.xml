@@ -118,4 +118,13 @@
         <item name="android:textSize">@dimen/base_helper_text</item>
         <item name="android:textStyle">normal</item>
     </style>
+
+    <style name="BaseTextViewDateTime">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/lab_black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>

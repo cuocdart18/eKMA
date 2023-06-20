@@ -36,13 +36,13 @@
                 style="@style/BaseTextViewStudentCodeClass"
                 android:layout_marginEnd="@dimen/base_normal_margin"
                 android:text="@{miniStudent.id}"
-                app:drawableStartCompat="@drawable/ic_person_circle_outline" />
+                app:drawableStartCompat="@drawable/person_circle_outline_white_16dp" />
 
             <TextView
                 android:id="@+id/tv_class_in_school"
                 style="@style/BaseTextViewStudentCodeClass"
                 android:text="@{miniStudent.classInSchool}"
-                app:drawableStartCompat="@drawable/ic_flag_outline" />
+                app:drawableStartCompat="@drawable/flag_outline_white_16dp" />
         </LinearLayout>
     </LinearLayout>
 </layout>

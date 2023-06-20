@@ -41,7 +41,7 @@
                         android:padding="@dimen/base_high_padding"
                         android:text="@{note.title}"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/base_big_header_text"
+                        android:textSize="@dimen/base_normal_header_text"
                         android:textStyle="bold" />
 
                     <ImageView
@@ -67,20 +67,14 @@
                         android:weightSum="2">
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            style="@style/BaseTextViewDateTime"
                             android:text="@{note.date}"
-                            android:textColor="@color/lab_black"
                             android:textSize="@dimen/base_normal_text"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            style="@style/BaseTextViewDateTime"
                             android:text="@{note.time}"
-                            android:textColor="@color/lab_black"
                             android:textSize="@dimen/base_normal_text"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -93,22 +87,12 @@
                         android:weightSum="2">
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/note_date"
-                            android:textColor="@color/lab_black"
-                            android:textSize="@dimen/base_helper_text"
-                            android:textStyle="normal" />
+                            style="@style/BaseTextViewDateTime"
+                            android:text="@string/note_date" />
 
                         <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/note_time"
-                            android:textColor="@color/lab_black"
-                            android:textSize="@dimen/base_helper_text"
-                            android:textStyle="normal" />
+                            style="@style/BaseTextViewDateTime"
+                            android:text="@string/note_time" />
                     </LinearLayout>
 
                     <ImageView
@@ -116,10 +100,11 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="@dimen/base_xxhigh_margin"
+                        android:contentDescription="@string/space_of_content"
                         android:src="@drawable/caret_down_outline_red_24dp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/base_normal_margin"
                         android:text="@string/description_header"

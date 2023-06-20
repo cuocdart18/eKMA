@@ -102,5 +102,6 @@
     <string name="description_header">Description</string>
     <string name="img_login">img_login</string>
     <string name="delete_note">delete_note</string>
+    <string name="space_of_content">space_of_content</string>
 
 </resources>
