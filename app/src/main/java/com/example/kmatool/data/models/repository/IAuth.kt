@@ -1,12 +1,8 @@
-package com.example.kmatool.data.models.service
+package com.example.kmatool.data.models.repository
 
 import com.example.kmatool.common.Resource
 
-interface ILoginService {
-
-    suspend fun saveLoginState(data: Boolean)
-
-    suspend fun getLoginState(): Boolean
+interface IAuth {
 
     suspend fun auth(
         username: String,

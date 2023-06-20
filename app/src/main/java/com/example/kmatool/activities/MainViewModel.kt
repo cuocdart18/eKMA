@@ -9,8 +9,11 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.example.kmatool.base.viewmodel.BaseViewModel
+import com.example.kmatool.common.Data
 import com.example.kmatool.common.UNIQUE_SCHEDULE_WORK_NAME
 import com.example.kmatool.common.UPDATE_SCHEDULE_WORKER_TAG
+import com.example.kmatool.data.models.service.INoteService
+import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.work.UpdateScheduleWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val noteService: INoteService,
+    private val scheduleService: IScheduleService
 ) : BaseViewModel() {
     override val TAG: String = MainViewModel::class.java.simpleName
 
@@ -46,6 +51,14 @@ class MainViewModel @Inject constructor(
                             )
                     }
                 }
+        }
+    }
+
+    fun getLocalData(
+        callback: () -> Unit
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            Data.getLocalData(noteService, scheduleService, callback)
         }
     }
 }

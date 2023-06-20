@@ -4,14 +4,13 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.alarm.AlarmEventsScheduler
-import com.example.kmatool.common.Data
+import com.example.kmatool.common.AUTH_MESSAGE_SUCCESS
 import com.example.kmatool.common.Resource.Success
 import com.example.kmatool.common.md5
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Event
 import com.example.kmatool.data.models.User
 import com.example.kmatool.data.models.service.ILoginService
-import com.example.kmatool.data.models.service.INoteService
 import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.data.models.service.IUserService
@@ -23,14 +22,12 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val alarmEventsScheduler: AlarmEventsScheduler,
     private val dataLocalManager: IDataLocalManager,
-    private val noteService: INoteService,
     private val scheduleService: IScheduleService,
     private val loginService: ILoginService,
     private val profileService: IProfileService,
     private val userService: IUserService
 ) : BaseViewModel() {
     override val TAG = LoginViewModel::class.java.simpleName
-    private val DELAY_TIME = 1200L
 
     // observable field
     var isValid = ObservableField<Boolean>()
@@ -41,75 +38,58 @@ class LoginViewModel @Inject constructor(
         isShowProgress.set(false)
     }
 
-    fun getLoginState(
-        callback: () -> Unit
-    ) {
-        logDebug("get login state")
-        isShowProgress.set(true)
-        viewModelScope.launch(Dispatchers.IO) {
-            val state = loginService.getLoginState()
-            delay(DELAY_TIME)
-            withContext(Dispatchers.Main) {
-                if (state) {
-                    callback()
-                }
-                isShowProgress.set(false)
-            }
-        }
-    }
-
-    fun getLocalData(
-        callback: () -> Unit
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            Data.getLocalData(noteService, scheduleService, callback)
-        }
-    }
-
     fun handleOnClickBtnLogin(
         username: String,
         unHashedPassword: String,
-        callback: (message: String) -> Unit
+        callback: () -> Unit
     ) {
         isValid.set(true)
+
         // action
         if (username.isNotBlank() && unHashedPassword.isNotBlank()) {
             // show for user: aware of request
             isShowProgress.set(true)
+
             val password = md5(unHashedPassword)
             viewModelScope.launch(Dispatchers.IO) {
-                val callProfile = async { profileService.getProfile(username, password, true) }
-                val callPeriods = async { scheduleService.getPeriods(username, password, true) }
-                val profile = callProfile.await()
-                val periods = callPeriods.await()
+                val callAuth = loginService.auth(username, password, true)
 
-                if (profile is Success && periods is Success) {
-                    scheduleService.deletePeriods()                     // delete old periods
-                    profileService.saveProfile(profile.data!!)          // save profile to local
-                    scheduleService.insertPeriods(periods.data!!)       // save periods to db
-                    setAlarmPeriodsInFirstTime(periods.data)            // set periods alarm if possible
+                if (callAuth is Success && callAuth.data.equals(AUTH_MESSAGE_SUCCESS)) {
+                    // get schedule and profile
+                    val callProfile = async { profileService.getProfile(username, password, true) }
+                    val callPeriods = async { scheduleService.getPeriods(username, password, true) }
+                    val profile = callProfile.await()
+                    val periods = callPeriods.await()
 
-                    // for update schedule
-                    userService.saveUser(User(username, password, true))
-
-                    loginService.saveLoginState(true)
-                    withContext(Dispatchers.Main) {
-                        isValid.set(true)
-                        isShowProgress.set(false)
-                        callback("Login success")
+                    if (profile is Success) {
+                        scheduleService.deletePeriods()                                  // delete old periods
+                        profile.data?.let { profileService.saveProfile(it) }            // save profile to local
+                        periods.data?.let {
+                            scheduleService.insertPeriods(it)                           // save periods to db
+                            setAlarmPeriodsInFirstTime(it)                             // set periods alarm if possible
+                        }
+                        userService.saveUser(User(username, password, true))
+                        loginService.saveLoginState(true)
+                        withContext(Dispatchers.Main) {
+                            isValid.set(true)
+                            isShowProgress.set(false)
+                            callback()
+                        }
+                    } else {
+                        showLoginRefused()      // if backend unavailable
                     }
                 } else {
-                    withContext(Dispatchers.Main) {
-                        isValid.set(false)
-                        isShowProgress.set(false)
-                        callback("Something went wrong")
-                    }
+                    showLoginRefused()      // if get or auth failed
                 }
             }
         } else {
-            isValid.set(false)
-            isShowProgress.set(false)
+            showLoginRefused()      // if invalid input
         }
+    }
+
+    private fun showLoginRefused() {
+        isValid.set(false)
+        isShowProgress.set(false)
     }
 
     private suspend fun setAlarmPeriodsInFirstTime(events: List<Event>) {

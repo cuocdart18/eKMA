@@ -20,16 +20,7 @@ class LoginActivity : BaseActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.viewModel = viewModel
-
         setUpUI()
-        // check login state
-        viewModel.getLoginState {
-            // get local data if already logged in
-            viewModel.getLocalData {
-                // if login successfully
-                openActivityWithFinish(MainActivity::class.java)
-            }
-        }
     }
 
     private fun setUpUI() {
@@ -56,12 +47,8 @@ class LoginActivity : BaseActivity() {
         showErrorIfBlankField(username, unHashedPassword)
 
         viewModel.handleOnClickBtnLogin(username, unHashedPassword) {
-            showToast(it)
-            // get local data if already logged in
-            viewModel.getLocalData {
-                // if login successfully
-                openActivityWithFinish(MainActivity::class.java)
-            }
+            // if login successfully
+            openActivityWithFinish(MainActivity::class.java)
         }
     }
 
