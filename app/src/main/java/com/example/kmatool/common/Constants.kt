@@ -1,6 +1,8 @@
 package com.example.kmatool.common
 
 // Constants
+const val AUTH_MESSAGE_SUCCESS = "Login successfully"
+const val AUTH_MESSAGE_FAILED = "Sai ten dang nhap hoac mat khau"
 const val KIT_URL = "https://www.facebook.com/kitclubKMA"
 const val PERIOD_TYPE = 0
 const val NOTE_TYPE = 1

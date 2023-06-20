@@ -33,9 +33,8 @@ class PeriodRepositoryImpl @Inject constructor(
         password: String,
         hashed: Boolean
     ): Resource<List<Period>> {
-        val schedule = scheduleAPI.getPeriods(username, password, hashed)
         return safeApiCall {
-            schedule.periods.map { it.toPeriod() }
+            scheduleAPI.getPeriods(username, password, hashed).periods.map { it.toPeriod() }
         }
     }
 }

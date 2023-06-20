@@ -23,11 +23,11 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/base_normal_margin"
+                android:layout_marginStart="@dimen/base_high_margin"
+                android:layout_marginTop="@dimen/base_high_margin"
+                android:layout_marginBottom="@dimen/base_normal_margin"
                 android:gravity="center"
-                android:layout_marginBottom="@dimen/base_high_margin"
-                android:orientation="horizontal"
-                android:padding="@dimen/base_normal_padding">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tv_year_title"
@@ -44,7 +44,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
-                    android:fontFamily="sans-serif-light"
                     android:gravity="end"
                     android:singleLine="true"
                     android:textColor="@color/white"

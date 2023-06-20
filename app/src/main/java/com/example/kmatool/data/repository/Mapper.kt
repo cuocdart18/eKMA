@@ -2,6 +2,7 @@ package com.example.kmatool.data.repository
 
 import com.example.kmatool.common.convertPeriodsToStartEndTime
 import com.example.kmatool.common.jsonObjectToString
+import com.example.kmatool.data.data_source.apis.dto.MessageResult
 import com.example.kmatool.data.data_source.apis.dto.MiniStudentDto
 import com.example.kmatool.data.data_source.apis.dto.PeriodDto
 import com.example.kmatool.data.data_source.apis.dto.ProfileDto
@@ -20,6 +21,10 @@ import com.example.kmatool.data.models.Student
 import com.example.kmatool.data.models.Subject
 import com.example.kmatool.data.models.User
 import java.util.Date
+
+fun MessageResult.toMessage(): String {
+    return this.message
+}
 
 fun MiniStudentEntity.toMiniStudent() = MiniStudent(
     id = id,

@@ -29,6 +29,9 @@ class MainActivity : BaseActivity() {
         setUiTemplates()
 //        requestPostNotifyPermission()
         viewModel.runWorkerIfFailure(this)
+        viewModel.getLocalData {
+            logDebug("get local data successfully")
+        }
     }
 
     private fun setUiTemplates() {
