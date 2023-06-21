@@ -89,7 +89,7 @@
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/loading_login_progress"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="@dimen/base_height_of_button_login"
                     android:layout_gravity="center"
                     android:background="@drawable/bgr_rectangle_lab_black"
                     android:visibility="@{viewModel.isShowProgress() ? View.VISIBLE : View.GONE}"
@@ -100,7 +100,7 @@
                 <Button
                     android:id="@+id/btn_login"
                     style="@style/BaseButtonSubmit"
-                    android:layout_height="52dp"
+                    android:layout_height="@dimen/base_height_of_button_login"
                     android:text="@string/btn_login_continue"
                     android:visibility="@{viewModel.isShowProgress() ? View.GONE : View.VISIBLE}" />
             </FrameLayout>

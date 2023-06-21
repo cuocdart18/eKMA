@@ -54,7 +54,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:importantForAccessibility="no"
-                        android:src="@drawable/grades_bro_illus" />
+                        android:src="@drawable/grades_bro_illus_red_512dp" />
                 </LinearLayout>
 
                 <LinearLayout

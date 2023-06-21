@@ -1,11 +1,11 @@
 package com.example.kmatool.ui.note.main_scr
 
+import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.widget.doOnTextChanged
@@ -96,7 +96,7 @@ class NoteMainFragment : BaseFragment() {
         }
 
         // regis click listeners
-        binding.btnSave.setOnClickListener { saveNoteToLocalDatabase() }
+        binding.btnSave.setOnClickListener { onClickBtnSave() }
         binding.tvSelectDate.setOnClickListener {
             openDatePickerDialog { _, year, month, dayOfMonth ->
                 viewModel.updateSelectDay(year, month, dayOfMonth)
@@ -114,7 +114,7 @@ class NoteMainFragment : BaseFragment() {
         get oldNote -> save -> refresh Data.notes -> set alarm -> notify to user
         if update mode, cancel alarm before saved
     */
-    private fun saveNoteToLocalDatabase() {
+    private fun onClickBtnSave() {
         val title = binding.edtTitle.text.toString().trim()
         val content = binding.edtContent.text.toString().trim()
         val date = binding.tvSelectDate.text.toString().trim()
@@ -122,29 +122,50 @@ class NoteMainFragment : BaseFragment() {
 
         if (title.isNotEmpty()) {
             val note = Note(title, content, date, time)
-            viewModel.saveNoteToLocalDatabase(note) {
-                if (viewModel.noteMode == UPDATE_NOTE_MODE) {
-                    viewModel.oldNote?.let { viewModel.cancelAlarmForOldNote(it) }
-                }
-                viewModel.refreshNotesDayMapInDataObject {
-                    viewModel.setAlarmForNote(note)
-                    onUpdateOrAddSuccessfully()
-                }
+            var dialog: Dialog? = null
+            fun onClickYes() {
+                saveNoteToLocalDatabase(note)
+                dialog?.dismiss()
+            }
+
+            fun onClickNo() {
+                dialog?.dismiss()
+            }
+
+            dialog = showAlertDialog(
+                R.drawable.confirmed_bro_red_500dp,
+                "Thành công!",
+                "Ghi chú đã được lưu, để nhận thông báo, bạn cần xem phần cài đặt",
+                "Đóng",
+                "",
+                { onClickYes() },
+                { onClickNo() },
+                true
+            )
+            dialog.show()
+        }
+    }
+
+    private fun saveNoteToLocalDatabase(note: Note) {
+        viewModel.saveNoteToLocalDatabase(note) {
+            if (viewModel.noteMode == UPDATE_NOTE_MODE) {
+                viewModel.oldNote?.let { viewModel.cancelAlarmForOldNote(it) }
+            }
+            viewModel.refreshNotesDayMapInDataObject {
+                viewModel.setAlarmForNote(note)
+                onUpdateOrAddSuccessfully()
             }
         }
     }
 
     private fun onUpdateOrAddSuccessfully() {
         if (viewModel.noteMode == ADD_NOTE_MODE) {
-            Toast.makeText(requireContext(), "Add note successfully", Toast.LENGTH_SHORT)
-                .show()
             // clear data in fragment
             binding.edtTitle.text?.clear()
             binding.edtContent.text?.clear()
             binding.edtTitle.requestFocus()
+            binding.tilTitle.error = ""
         } else if (viewModel.noteMode == UPDATE_NOTE_MODE) {
-            Toast.makeText(requireContext(), "Update note successfully", Toast.LENGTH_SHORT)
-                .show()
             // reopen ScheduleMainFragment
             navigateToFragment(R.id.action_noteMainFragment_to_scheduleMainFragment)
         }

@@ -4,28 +4,28 @@
     <Preference
         android:icon="@drawable/school_outline_black_24dp"
         android:key="@string/key_my_score_pref"
-        android:title="My score" />
+        android:title="Điểm của tôi" />
 
     <Preference
         android:icon="@drawable/cloud_download_outline_black_24dp"
         android:key="@string/key_update_schedule_pref"
-        android:title="Update schedule" />
+        android:title="Cập nhật thời khoá biểu" />
 
     <SwitchPreference
         android:defaultValue="false"
         android:icon="@drawable/notifications_outline_black_24dp"
         android:key="@string/key_notify_event_pref"
-        android:title="Notification" />
+        android:title="Thông báo" />
 
     <SwitchPreference
         android:defaultValue="false"
         android:icon="@drawable/moon_outline_black_24dp"
         android:key="@string/key_dark_mode_pref"
-        android:title="Dark mode" />
+        android:title="Chế độ tối" />
 
     <Preference
         android:icon="@drawable/logo_github_black_24dp"
-        android:title="About me"
+        android:title="Giới thiệu"
         app:key="@string/key_about_me_pref">
         <intent
             android:action="android.intent.action.VIEW"
@@ -34,7 +34,7 @@
 
     <Preference
         android:icon="@drawable/star_outline_black_24dp"
-        android:title="Rate me five star"
+        android:title="Đánh giá"
         app:key="@string/key_rating_pref">
         <intent
             android:action="android.intent.action.VIEW"
@@ -44,6 +44,6 @@
     <Preference
         android:icon="@drawable/log_out_outline_black_24dp"
         android:key="@string/key_log_out_pref"
-        android:title="Log out" />
+        android:title="Đăng xuất" />
 
 </PreferenceScreen>

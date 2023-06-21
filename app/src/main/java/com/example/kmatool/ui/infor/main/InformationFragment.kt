@@ -80,7 +80,16 @@ class InformationFragment : BaseFragment(),
             dialog?.dismiss()
         }
 
-        dialog = showAlertDialog("Update", "Message", { onClickYes() }, { onClickNo() })
+        dialog = showAlertDialog(
+            R.drawable.in_sync_red_500dp,
+            "Cập nhật thời khoá biểu ?",
+            "Cập nhật thời khóa biểu mới đôi khi không thành công vì lỗi hệ thống",
+            "Đồng ý",
+            "Huỷ bỏ",
+            { onClickYes() },
+            { onClickNo() },
+            false
+        )
         dialog.show()
     }
 
@@ -95,14 +104,38 @@ class InformationFragment : BaseFragment(),
     }
 
     override fun onClickLogOut() {
-        viewModel.signOut() {
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+        var dialog: Dialog? = null
+        fun onClickYes() {
+            viewModel.signOut() {
+                dialog?.dismiss()
+                val intent = Intent(requireContext(), LoginActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
         }
+
+        fun onClickNo() {
+            dialog?.dismiss()
+        }
+
+        dialog = showAlertDialog(
+            R.drawable.secure_data_red_500dp,
+            "Đăng xuất ?",
+            "Điều này sẽ xoá tất cả các ghi chú hiện có của bạn",
+            "Đồng ý",
+            "Huỷ bỏ",
+            { onClickYes() },
+            { onClickNo() },
+            false
+        )
+        dialog.show()
     }
 
     private fun setImageUri(uri: Uri) {
-        binding.civProfileImage.setImageURI(uri)
+        if (uri.toString().isBlank()) {
+            binding.civProfileImage.setBackgroundResource(R.drawable.photo_camera)
+        } else {
+            binding.civProfileImage.setImageURI(uri)
+        }
     }
 }

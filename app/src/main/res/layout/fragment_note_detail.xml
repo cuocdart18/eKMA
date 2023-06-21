@@ -126,7 +126,7 @@
                         android:layout_height="@dimen/base_height_img"
                         android:layout_gravity="center_horizontal"
                         android:importantForAccessibility="no"
-                        android:src="@drawable/checklist_rafiki" />
+                        android:src="@drawable/checklist_rafiki_red_512dp" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

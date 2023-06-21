@@ -1,5 +1,7 @@
 package com.example.kmatool.ui.note.detail
 
+import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.example.kmatool.R
+import com.example.kmatool.activities.LoginActivity
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.common.KEY_PASS_NOTE_MODE
 import com.example.kmatool.common.KEY_PASS_NOTE_OBJ
@@ -68,14 +71,36 @@ class NoteDetailFragment : BaseFragment() {
 
     private fun onClickBtnDelete() {
         note?.let {
-            viewModel.onClickDeleteNote(it) {
-                viewModel.refreshDataInRecyclerView()
-                viewModel.cancelAlarm(it)
-                Toast.makeText(requireContext(), "Delete note successfully", Toast.LENGTH_SHORT)
-                    .show()
-                // reopen ScheduleMainFragment
-                navigateToFragment(R.id.action_noteDetailFragment_to_scheduleMainFragment)
+            var dialog: Dialog? = null
+            fun onClickYes() {
+                deleteNote(it)
+                dialog?.dismiss()
             }
+
+            fun onClickNo() {
+                dialog?.dismiss()
+            }
+
+            dialog = showAlertDialog(
+                R.drawable.inbox_cleanup_red_500dp,
+                "Xoá ghi chú ?",
+                "",
+                "Đồng ý",
+                "Huỷ bỏ",
+                { onClickYes() },
+                { onClickNo() },
+                false
+            )
+            dialog.show()
+        }
+    }
+
+    private fun deleteNote(note: Note) {
+        viewModel.onClickDeleteNote(note) {
+            viewModel.refreshDataInRecyclerView()
+            viewModel.cancelAlarm(note)
+            // reopen ScheduleMainFragment
+            navigateToFragment(R.id.action_noteDetailFragment_to_scheduleMainFragment)
         }
     }
 

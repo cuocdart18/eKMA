@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="base_height_of_button_login">52dp</dimen>
+
     <dimen name="base_width_cir">32dp</dimen>
     <dimen name="base_height_cir">32dp</dimen>
+
+    <dimen name="base_width_dialog_confirm">300dp</dimen>
+    <dimen name="base_height_dialog_confirm">300dp</dimen>
 
     <dimen name="base_width_img">300dp</dimen>
     <dimen name="base_height_img">300dp</dimen>
 
-    <dimen name="base_width_img_profile">108dp</dimen>
-    <dimen name="base_height_profile">108dp</dimen>
+    <dimen name="base_width_img_presentation_in_dialog">156dp</dimen>
+    <dimen name="base_height_img_presentation_in_dialog">156dp</dimen>
+
+    <dimen name="base_width_img_profile">132dp</dimen>
+    <dimen name="base_height_profile">132dp</dimen>
 
     <dimen name="base_width_small_cir">4dp</dimen>
     <dimen name="base_height_small_cir">4dp</dimen>

@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.DatePicker
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.TimePicker
@@ -162,10 +163,14 @@ open class BaseFragment : Fragment() {
     }
 
     internal fun showAlertDialog(
+        bgrId: Int,
         title: String,
         message: String,
-        callbackOnYes: () -> Unit,
-        callbackOnNo: () -> Unit
+        textBtnConfirm: String,
+        textBtnRefuse: String,
+        onClickConfirm: () -> Unit,
+        onClickRefuse: () -> Unit,
+        isAlert: Boolean
     ): Dialog {
         val dialog = Dialog(requireContext())
 
@@ -173,18 +178,25 @@ open class BaseFragment : Fragment() {
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.dialog_custom_alert_yes_or_no)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val imvPresentation = dialog.findViewById<ImageView>(R.id.imv_present_action)
         val tvTitle = dialog.findViewById<TextView>(R.id.tv_dialog_title)
         val tvMessage = dialog.findViewById<TextView>(R.id.tv_dialog_message)
         val btnYes = dialog.findViewById<Button>(R.id.btn_yes)
         val btnNo = dialog.findViewById<Button>(R.id.btn_no)
 
+        imvPresentation.setBackgroundResource(bgrId)
         tvTitle.text = title
         tvMessage.text = message
+        btnYes.text = textBtnConfirm
+        btnNo.text = textBtnRefuse
+        if (isAlert) {
+            btnNo.visibility = View.GONE
+        }
         btnYes.setOnClickListener {
-            callbackOnYes()
+            onClickConfirm()
         }
         btnNo.setOnClickListener {
-            callbackOnNo()
+            onClickRefuse()
         }
         return dialog
     }
