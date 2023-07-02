@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bgr_box_of_list_score_student"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/base_list_of_score_student_top_padding">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/base_xhigh_margin"
+        android:gravity="center"
+        android:text="@string/score_detail_title"
+        android:textColor="@color/lab_black"
+        android:textSize="@dimen/base_big_header_text"
+        android:textStyle="bold" />
+
+    <include
+        layout="@layout/layout_score_type_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/base_normal_margin" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_scores"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

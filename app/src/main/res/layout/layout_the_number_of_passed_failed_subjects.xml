@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="student"
+            type="com.example.kmatool.data.models.Student" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            style="@style/BaseLayoutPassedFailedSubject"
+            android:background="@drawable/bgr_box_of_passed_subject">
+
+            <TextView
+                style="@style/BaseTextViewTitlePassedFailedSubject"
+                android:text="@string/title_passed_subject" />
+
+            <TextView
+                style="@style/BaseTextViewContentPassedFailedSubject"
+                android:text="@{String.valueOf(student.passedSubjects)}" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/BaseLayoutPassedFailedSubject"
+            android:background="@drawable/bgr_box_of_failed_subject">
+
+            <TextView
+                style="@style/BaseTextViewTitlePassedFailedSubject"
+                android:text="@string/title_failed_subject" />
+
+            <TextView
+                style="@style/BaseTextViewContentPassedFailedSubject"
+                android:text="@{String.valueOf(student.failedSubjects)}" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

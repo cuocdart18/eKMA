@@ -150,4 +150,56 @@
         <item name="android:textSize">@dimen/base_normal_text</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="BaseTextViewInGpaInfoStudent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseLayoutPassedFailedSubject">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/base_normal_padding</item>
+    </style>
+
+    <style name="BaseTextViewPassedFailedSubject">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/lab_black</item>
+    </style>
+
+    <style name="BaseTextViewTitlePassedFailedSubject" parent="BaseTextViewPassedFailedSubject">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/base_normal_text</item>
+    </style>
+
+    <style name="BaseTextViewContentPassedFailedSubject" parent="BaseTextViewPassedFailedSubject">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:padding">@dimen/base_normal_padding</item>
+        <item name="android:textSize">@dimen/base_passed_failed_subject_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseTextViewListOfScore">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/lab_black</item>
+        <item name="android:textSize">@dimen/base_normal_text</item>
+    </style>
+
+    <style name="BaseTextViewListOfScoreHeader" parent="BaseTextViewListOfScore">
+        <item name="android:lines">2</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseTextViewListOfScoreItem" parent="BaseTextViewListOfScore">
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>

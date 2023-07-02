@@ -106,5 +106,8 @@
     <string name="imv_present_action">imv_present_action</string>
     <string name="button_confirm_yes">Yes</string>
     <string name="button_confirm_no">No</string>
+    <string name="title_passed_subject">Đã hoàn thành</string>
+    <string name="title_failed_subject">Còn nợ</string>
+    <string name="score_detail_title">Điểm chi tiết</string>
 
 </resources>
