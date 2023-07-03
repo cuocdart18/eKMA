@@ -17,4 +17,5 @@ interface Event : Serializable {
     fun getContentTextNotify(): String
     fun getContentBigTextNotify(): String
     fun getSmallIconNotify(): Int
+    fun getLargeIconNotify(): Int
 }

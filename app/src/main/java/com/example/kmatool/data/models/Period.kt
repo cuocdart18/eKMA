@@ -32,5 +32,6 @@ data class Period(
     override fun getSubTextNotify(): String = "Lịch học"
     override fun getContentTextNotify(): String = "$startTime | $room | $teacher"
     override fun getContentBigTextNotify(): String = "$startTime\nPhòng $room\nGiảng viên $teacher"
-    override fun getSmallIconNotify(): Int = R.drawable.notifications_outline_black_24dp
+    override fun getSmallIconNotify(): Int = R.drawable.school_outline_black_24dp
+    override fun getLargeIconNotify(): Int = R.drawable.school
 }
