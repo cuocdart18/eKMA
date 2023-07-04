@@ -109,5 +109,7 @@
     <string name="title_passed_subject">Đã hoàn thành</string>
     <string name="title_failed_subject">Còn nợ</string>
     <string name="score_detail_title">Điểm chi tiết</string>
+    <string name="desc_loading">Chờ chút nha. . .</string>
+    <string name="desc_error_loading">Có vẻ như đã xảy ra lỗi. . .</string>
 
 </resources>

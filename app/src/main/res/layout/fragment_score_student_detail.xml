@@ -6,46 +6,61 @@
 
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lab_medium_black"
-        android:scrollbars="none">
+        android:background="@color/lab_medium_white">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <include
+            android:id="@+id/layout_dog_loading"
+            layout="@layout/layout_dog_loading"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
 
-            <LinearLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/layout_detail_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/lab_medium_black"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <include
+                        android:id="@+id/layout_gpa_info_student"
+                        layout="@layout/layout_gpa_info_student"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/base_xhigh_margin"
+                        android:layout_marginTop="@dimen/base_xhigh_margin"
+                        android:layout_marginEnd="@dimen/base_xhigh_margin" />
+
+                    <include
+                        android:id="@+id/layout_list_of_score_student"
+                        layout="@layout/layout_list_of_score_student"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
 
                 <include
-                    android:id="@+id/layout_gpa_info_student"
-                    layout="@layout/layout_gpa_info_student"
+                    android:id="@+id/layout_the_number_of_passed_failed_subjects"
+                    layout="@layout/layout_the_number_of_passed_failed_subjects"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/base_xhigh_margin"
-                    android:layout_marginTop="@dimen/base_xhigh_margin"
-                    android:layout_marginEnd="@dimen/base_xhigh_margin" />
+                    android:layout_marginStart="@dimen/base_ultra_margin"
+                    android:layout_marginEnd="@dimen/base_ultra_margin"
+                    app:layout_anchor="@id/layout_gpa_info_student"
+                    app:layout_anchorGravity="center|bottom" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
 
-                <include
-                    android:id="@+id/layout_list_of_score_student"
-                    layout="@layout/layout_list_of_score_student"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-
-            <include
-                android:id="@+id/layout_the_number_of_passed_failed_subjects"
-                layout="@layout/layout_the_number_of_passed_failed_subjects"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/base_ultra_margin"
-                android:layout_marginEnd="@dimen/base_ultra_margin"
-                app:layout_anchor="@id/layout_gpa_info_student"
-                app:layout_anchorGravity="center|bottom" />
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    </androidx.core.widget.NestedScrollView>
 </layout>
