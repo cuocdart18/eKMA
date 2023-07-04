@@ -97,7 +97,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bgr_circular_lab_black"
                     android:gravity="center"
-                    android:text="3"
                     android:textColor="@color/white"
                     android:textSize="@dimen/base_normal_text" />
             </LinearLayout>
@@ -132,6 +131,7 @@
                     android:layout_marginStart="@dimen/base_high_margin"
                     android:layout_marginTop="@dimen/base_normal_margin"
                     android:layout_marginEnd="@dimen/base_high_margin"
+                    android:scrollbars="none"
                     android:visibility="gone" />
             </FrameLayout>
         </LinearLayout>

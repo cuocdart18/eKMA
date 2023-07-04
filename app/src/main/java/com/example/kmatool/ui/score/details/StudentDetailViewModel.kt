@@ -18,10 +18,10 @@ class StudentDetailViewModel @Inject constructor(
 ) : BaseViewModel() {
     override val TAG = SearchDataViewModel::class.java.simpleName
 
+    var studentId: String = ""
     private lateinit var student: Student
 
     fun getDetailStudent(
-        id: String,
         callback: (student: Student?) -> Unit
     ) {
         if (this::student.isInitialized) {
@@ -29,7 +29,7 @@ class StudentDetailViewModel @Inject constructor(
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
-            val studentRes = scoreService.getStudentById(id)
+            val studentRes = scoreService.getStudentById(studentId)
             withContext(Dispatchers.Main) {
                 if (studentRes is Resource.Success && studentRes.data != null) {
                     student = studentRes.data
@@ -40,19 +40,4 @@ class StudentDetailViewModel @Inject constructor(
             }
         }
     }
-
-    /*fun getStatisticSubject(
-        score: Score,
-        callback: (statisticSubject: StatisticSubject) -> Unit
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val id = score.subject.id
-            scoreRepository.getStatisticSubject(id) { result ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    // update data to UI
-                    callback(result)
-                }
-            }
-        }
-    }*/
 }

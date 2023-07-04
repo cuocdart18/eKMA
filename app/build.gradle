@@ -109,6 +109,7 @@ dependencies {
 
     // progress bar
     implementation "com.jpardogo.googleprogressbar:library:1.2.0"
+    implementation 'com.mikhaellopez:circularfillableloaders:1.4.0'
 
     // data store
     implementation "androidx.datastore:datastore-preferences:1.0.0"

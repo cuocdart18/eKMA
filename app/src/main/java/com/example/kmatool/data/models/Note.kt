@@ -1,5 +1,7 @@
 package com.example.kmatool.data.models
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.example.kmatool.R
 import com.example.kmatool.common.toDateTime
 import com.example.kmatool.common.toLocalDate
@@ -28,5 +30,6 @@ data class Note(
     override fun getSubTextNotify(): String = "Ghi chú"
     override fun getContentTextNotify(): String = content.toString()
     override fun getContentBigTextNotify(): String = content.toString()
-    override fun getSmallIconNotify(): Int = R.drawable.notifications_outline_black_24dp
+    override fun getSmallIconNotify(): Int = R.drawable.school_outline_black_24dp
+    override fun getLargeIconNotify(): Int = R.drawable.notes
 }

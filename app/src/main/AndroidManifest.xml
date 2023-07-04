@@ -34,10 +34,12 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.MainActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
 
         <receiver android:name=".broadcast_receiver.AlarmReceiver" />
         <receiver
@@ -55,8 +57,7 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove">
-        </provider>
+            tools:node="remove"></provider>
     </application>
 
 </manifest>

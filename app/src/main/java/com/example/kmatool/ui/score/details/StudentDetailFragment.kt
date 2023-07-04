@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
-import com.example.kmatool.databinding.FragmentScoreStudentDetailBinding
-import com.example.kmatool.data.models.Student
 import com.example.kmatool.common.KEY_PASS_MINISTUDENT_ID
+import com.example.kmatool.data.models.Student
+import com.example.kmatool.databinding.FragmentScoreStudentDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,7 +18,6 @@ class StudentDetailFragment : BaseFragment() {
     override val TAG = StudentDetailFragment::class.java.simpleName
     private lateinit var binding: FragmentScoreStudentDetailBinding
     private val viewModel by viewModels<StudentDetailViewModel>()
-    private var studentId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,13 +30,15 @@ class StudentDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.studentDetailVM = viewModel
+        showLoadingLayout()
         receiveData()
-        viewModel.getDetailStudent(studentId) { student ->
+        viewModel.getDetailStudent() { student ->
             if (student != null) {
                 showDetailStudent(student)
+                hideLoadingLayout()
             } else {
                 showToast("Something went wrong")
+                showError(getString(R.string.desc_error_loading))
             }
         }
     }
@@ -44,48 +46,38 @@ class StudentDetailFragment : BaseFragment() {
     private fun receiveData() {
         val bundle = arguments
         bundle?.let {
-            studentId = it.getString(KEY_PASS_MINISTUDENT_ID).toString()
+            viewModel.studentId = it.getString(KEY_PASS_MINISTUDENT_ID).toString()
         }
-        logInfo("receiveDataFromScoreMainFragment student id = $studentId")
     }
 
     private fun showDetailStudent(student: Student) {
-        logDebug("showDetailStudent id = ${student.id}")
-        binding.student = student
+        binding.layoutGpaInfoStudent.student = student
+        binding.layoutTheNumberOfPassedFailedSubjects.student = student
         // set adapter data for rcv
-        val studentDetailAdapter = StudentDetailAdapter() { score ->
-//            onClickScoreItemInList(score)
-        }
+        val studentDetailAdapter = StudentDetailAdapter() { score -> }
         studentDetailAdapter.setScores(student.scores)
 
         // update list to UI
-        binding.rvScores.layoutManager = LinearLayoutManager(context?.applicationContext)
-        binding.rvScores.isFocusable = false
-        binding.rvScores.isNestedScrollingEnabled = false
-        binding.rvScores.adapter = studentDetailAdapter
+        binding.layoutListOfScoreStudent.rvScores.layoutManager =
+            LinearLayoutManager(context?.applicationContext)
+        binding.layoutListOfScoreStudent.rvScores.isFocusable = false
+        binding.layoutListOfScoreStudent.rvScores.isNestedScrollingEnabled = false
+        binding.layoutListOfScoreStudent.rvScores.adapter = studentDetailAdapter
+        binding.layoutGpaInfoStudent.progressCircularGpa
+            .setProgress(100 - ((student.avgScore.toFloat() / 4.0f) * 100).toInt())
     }
 
-    /*private fun onClickScoreItemInList(score: Score) {
-        logInfo("onClickScoreItemInList score = $score")
-        viewModel.getStatisticSubject(score) { statisticSubject ->
-            showStatisticSubject(statisticSubject)
-        }
-    }*/
+    private fun showLoadingLayout() {
+        binding.layoutDogLoading.layoutDogLoadingContainer.visibility = View.VISIBLE
+        binding.layoutDetailContainer.visibility = View.GONE
+    }
 
-    /*private fun showStatisticSubject(statisticSubject: StatisticSubject) {
-        logDebug("showStatisticSubject")
-        // action (show data to dialog)
-        val bundle = bundleOf(
-            KEY_PASS_STATISTIC_SUBJECT to statisticSubject
-        )
-        navigateToFragment(R.id.statisticSubjectDialogFragment, bundle)
-    }*/
+    private fun hideLoadingLayout() {
+        binding.layoutDogLoading.layoutDogLoadingContainer.visibility = View.GONE
+        binding.layoutDetailContainer.visibility = View.VISIBLE
+    }
 
-    /*private fun onClickTagFooter() {
-        logDebug("onClickTagFooter")
-        // action
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(KIT_URL)
-        startActivity(intent)
-    }*/
+    private fun showError(msg: String) {
+        binding.layoutDogLoading.tvMessageHelper.text = msg
+    }
 }

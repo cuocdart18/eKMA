@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -25,6 +26,12 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun showNotification(context: Context, event: Event) {
         val eventBuilder = NotificationCompat.Builder(context, EVENTS_NOTIFY_CHANNEL_ID)
             .setSmallIcon(event.getSmallIconNotify())
+            /*.setLargeIcon(
+                BitmapFactory.decodeResource(
+                    context.resources,
+                    event.getLargeIconNotify()
+                )
+            )*/
             .setContentTitle(event.getContentTitleNotify())
             .setSubText(event.getSubTextNotify())
             .setContentText(event.getContentTextNotify())
