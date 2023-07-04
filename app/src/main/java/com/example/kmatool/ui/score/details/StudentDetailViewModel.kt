@@ -3,6 +3,7 @@ package com.example.kmatool.ui.score.details
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.Resource
+import com.example.kmatool.common.gpaCalculator
 import com.example.kmatool.data.models.Student
 import com.example.kmatool.data.models.service.IScoreService
 import com.example.kmatool.ui.score.search.SearchDataViewModel
@@ -30,12 +31,13 @@ class StudentDetailViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             val studentRes = scoreService.getStudentById(studentId)
-            withContext(Dispatchers.Main) {
+            withContext(Dispatchers.Default) {
                 if (studentRes is Resource.Success && studentRes.data != null) {
                     student = studentRes.data
-                    callback(student)
+                    student.avgScore = gpaCalculator(student.scores)
+                    withContext(Dispatchers.Main) { callback(student) }
                 } else {
-                    callback(null)
+                    withContext(Dispatchers.Main) { callback(null) }
                 }
             }
         }

@@ -4,7 +4,7 @@ data class Student(
     val id: String,
     val name: String,
     val classInSchool: String,
-    val avgScore: Double,
+    var avgScore: Double,
     val passedSubjects: Int,
     val failedSubjects: Int,
     val scores: List<Score>
