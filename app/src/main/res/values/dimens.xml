@@ -1,8 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="base_normal_text">16sp</dimen>
+    <dimen name="base_height_of_button_login">52dp</dimen>
+
+    <dimen name="base_gpa_info_student_bottom_padding">80dp</dimen>
+    <dimen name="base_list_of_score_student_top_padding">64dp</dimen>
+
+    <dimen name="base_width_cir">32dp</dimen>
+    <dimen name="base_height_cir">32dp</dimen>
+
+    <dimen name="base_width_dialog_confirm">300dp</dimen>
+    <dimen name="base_height_dialog_confirm">300dp</dimen>
+
+    <dimen name="base_width_img">300dp</dimen>
+    <dimen name="base_height_img">300dp</dimen>
+
+    <dimen name="base_width_anim_dog_loading">156dp</dimen>
+    <dimen name="base_height_anim_dog_loading">156dp</dimen>
+
+    <dimen name="base_width_img_presentation_in_dialog">156dp</dimen>
+    <dimen name="base_height_img_presentation_in_dialog">156dp</dimen>
+
+    <dimen name="base_width_img_profile">132dp</dimen>
+    <dimen name="base_height_img_profile">132dp</dimen>
+
+    <dimen name="base_width_gpa_progress">156dp</dimen>
+    <dimen name="base_height_gpa_progress">156dp</dimen>
+
+    <dimen name="base_width_small_cir">4dp</dimen>
+    <dimen name="base_height_small_cir">4dp</dimen>
+
     <dimen name="base_helper_text">14sp</dimen>
+    <dimen name="base_day_title_text">14sp</dimen>
+    <dimen name="base_normal_text">16sp</dimen>
+    <dimen name="base_normal_header_text">18sp</dimen>
+    <dimen name="base_passed_failed_subject_text">20sp</dimen>
+    <dimen name="base_big_header_text">24sp</dimen>
     <dimen name="base_title_text">28sp</dimen>
+    <dimen name="base_medium_title_text">32sp</dimen>
     <dimen name="base_big_title_text">36sp</dimen>
 
     <dimen name="base_small_padding">4dp</dimen>
@@ -10,17 +44,22 @@
     <dimen name="base_high_padding">16dp</dimen>
     <dimen name="base_xhigh_padding">24dp</dimen>
     <dimen name="base_xxhigh_padding">32dp</dimen>
+    <dimen name="base_xxxhigh_padding">40dp</dimen>
+    <dimen name="base_ultra_padding">48dp</dimen>
 
     <dimen name="base_small_margin">4dp</dimen>
     <dimen name="base_normal_margin">8dp</dimen>
     <dimen name="base_high_margin">16dp</dimen>
     <dimen name="base_xhigh_margin">24dp</dimen>
     <dimen name="base_xxhigh_margin">32dp</dimen>
+    <dimen name="base_xxxhigh_margin">40dp</dimen>
+    <dimen name="base_ultra_margin">48dp</dimen>
 
     <dimen name="base_small_border">4dp</dimen>
     <dimen name="base_normal_border">8dp</dimen>
     <dimen name="base_high_border">16dp</dimen>
     <dimen name="base_xhigh_border">24dp</dimen>
     <dimen name="base_xxhigh_border">32dp</dimen>
-    <dimen name="base_xxxhigh_border">48dp</dimen>
+    <dimen name="base_xxxhigh_border">40dp</dimen>
+    <dimen name="base_ultra_border">48dp</dimen>
 </resources>
