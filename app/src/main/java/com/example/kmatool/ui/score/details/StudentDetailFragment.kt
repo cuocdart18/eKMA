@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.common.KEY_PASS_MINISTUDENT_ID
+import com.example.kmatool.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.example.kmatool.data.models.Student
 import com.example.kmatool.databinding.FragmentScoreStudentDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,12 +33,12 @@ class StudentDetailFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         showLoadingLayout()
         receiveData()
+
         viewModel.getDetailStudent() { student ->
             if (student != null) {
                 showDetailStudent(student)
                 hideLoadingLayout()
             } else {
-                showToast("Something went wrong")
                 showError(getString(R.string.desc_error_loading))
             }
         }
@@ -47,6 +48,7 @@ class StudentDetailFragment : BaseFragment() {
         val bundle = arguments
         bundle?.let {
             viewModel.studentId = it.getString(KEY_PASS_MINISTUDENT_ID).toString()
+            viewModel.isMyStudentId = it.getBoolean(KEY_PASS_IS_MY_MINISTUDENT_ID)
         }
     }
 

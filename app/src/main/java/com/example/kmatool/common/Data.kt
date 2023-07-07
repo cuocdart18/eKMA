@@ -3,6 +3,7 @@ package com.example.kmatool.common
 import androidx.lifecycle.MutableLiveData
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.models.Period
+import com.example.kmatool.data.models.Student
 import com.example.kmatool.data.models.service.INoteService
 import com.example.kmatool.data.models.service.IScheduleService
 import com.kizitonwose.calendar.core.CalendarDay
@@ -22,6 +23,10 @@ object Data {
     val isRefreshClickedEvents = MutableLiveData<Boolean>()
     var saveDateClicked = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
 
+    // cache for my score selected
+    var myStudentInfo: Student? = null
+
+    // func
     suspend fun getLocalData(
         noteService: INoteService,
         scheduleService: IScheduleService,

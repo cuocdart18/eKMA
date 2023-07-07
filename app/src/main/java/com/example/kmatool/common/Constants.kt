@@ -25,6 +25,7 @@ const val UNIQUE_SCHEDULE_WORK_NAME = "update_schedule"
 
 // for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
+const val KEY_PASS_IS_MY_MINISTUDENT_ID = "my_ministudent_id"
 const val KEY_PASS_NOTE_OBJ = "note_obj"
 const val KEY_PASS_NOTE_MODE = "note_mode"
 const val DATABASE_NAME = "app_database.db"

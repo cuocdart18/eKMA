@@ -13,6 +13,7 @@ import com.example.kmatool.R
 import com.example.kmatool.activities.LoginActivity
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.common.KEY_PASS_MINISTUDENT_ID
+import com.example.kmatool.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.example.kmatool.databinding.FragmentInformationBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -62,7 +63,8 @@ class InformationFragment : BaseFragment(),
             val id = it.studentCode
             // action
             val bundle = bundleOf(
-                KEY_PASS_MINISTUDENT_ID to id
+                KEY_PASS_MINISTUDENT_ID to id,
+                KEY_PASS_IS_MY_MINISTUDENT_ID to true
             )
             navigateToFragment(R.id.studentDetailFragment, bundle)
         }
