@@ -5,13 +5,19 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.os.bundleOf
+import androidx.navigation.NavDeepLinkBuilder
+import com.example.kmatool.R
+import com.example.kmatool.activities.MainActivity
 import com.example.kmatool.common.EVENTS_NOTIFY_CHANNEL_ID
 import com.example.kmatool.common.KEY_EVENT
+import com.example.kmatool.common.KEY_PASS_NOTE_OBJ
+import com.example.kmatool.common.NOTE_TYPE
 import com.example.kmatool.data.models.Event
+import com.example.kmatool.data.models.Note
 
 class AlarmReceiver : BroadcastReceiver() {
     private val TAG = AlarmReceiver::class.java.simpleName
@@ -26,12 +32,6 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun showNotification(context: Context, event: Event) {
         val eventBuilder = NotificationCompat.Builder(context, EVENTS_NOTIFY_CHANNEL_ID)
             .setSmallIcon(event.getSmallIconNotify())
-            /*.setLargeIcon(
-                BitmapFactory.decodeResource(
-                    context.resources,
-                    event.getLargeIconNotify()
-                )
-            )*/
             .setContentTitle(event.getContentTitleNotify())
             .setSubText(event.getSubTextNotify())
             .setContentText(event.getContentTextNotify())
@@ -41,6 +41,22 @@ class AlarmReceiver : BroadcastReceiver() {
             )
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(false)
+
+        if (event.type == NOTE_TYPE) {
+            val note = event as Note
+            val noteBundle = bundleOf(
+                KEY_PASS_NOTE_OBJ to note
+            )
+            val pendingIntent = NavDeepLinkBuilder(context)
+                .setGraph(R.navigation.nav_app_global_graph)
+                .setDestination(R.id.noteDetailFragment)
+                .setArguments(noteBundle)
+                .setComponentName(MainActivity::class.java)
+                .createPendingIntent()
+            eventBuilder.setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+        }
+
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
             if (ActivityCompat.checkSelfPermission(

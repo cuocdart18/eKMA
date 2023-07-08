@@ -19,6 +19,8 @@ class NoteDetailViewModel @Inject constructor(
     private val alarmEventsScheduler: AlarmEventsScheduler,
     private val noteService: INoteService
 ) : BaseViewModel() {
+    override val TAG = NoteDetailViewModel::class.java.simpleName
+    lateinit var note: Note
 
     fun onClickDeleteNote(
         note: Note,
@@ -26,13 +28,10 @@ class NoteDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             noteService.deleteNote(note)
-            withContext(Dispatchers.IO) {
-                Data.getLocalNotesRuntime(noteService)
-                withContext(Dispatchers.Main) {
-                    callback()
-                }
+            Data.getLocalNotesRuntime(noteService)
+            withContext(Dispatchers.Main) {
+                callback()
             }
-
         }
     }
 

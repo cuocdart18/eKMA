@@ -1,17 +1,14 @@
 package com.example.kmatool.ui.note.detail
 
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.example.kmatool.R
-import com.example.kmatool.activities.LoginActivity
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.common.KEY_PASS_NOTE_MODE
 import com.example.kmatool.common.KEY_PASS_NOTE_OBJ
@@ -25,7 +22,6 @@ class NoteDetailFragment : BaseFragment() {
     override val TAG = NoteDetailFragment::class.java.simpleName
     private lateinit var binding: FragmentNoteDetailBinding
     private val viewModel by viewModels<NoteDetailViewModel>()
-    private var note: Note? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,10 +42,9 @@ class NoteDetailFragment : BaseFragment() {
     private fun receiveNote() {
         val bundle = arguments
         bundle?.let {
-            note = it.get(KEY_PASS_NOTE_OBJ) as Note
+            viewModel.note = it.get(KEY_PASS_NOTE_OBJ) as Note
         }
-        binding.note = note
-        logInfo("receive oldNote=$note")
+        binding.note = viewModel.note
     }
 
     private fun setupView() {
@@ -58,41 +53,37 @@ class NoteDetailFragment : BaseFragment() {
     }
 
     private fun onClickBtnUpdate() {
-        note?.let {
-            // send oldNote to update fragment
-            val bundle = bundleOf(
-                KEY_PASS_NOTE_OBJ to note,
-                KEY_PASS_NOTE_MODE to UPDATE_NOTE_MODE
-            )
-            // navigate
-            navigateToFragment(R.id.noteMainFragment, bundle)
-        }
+        // send oldNote to update fragment
+        val bundle = bundleOf(
+            KEY_PASS_NOTE_OBJ to viewModel.note,
+            KEY_PASS_NOTE_MODE to UPDATE_NOTE_MODE
+        )
+        // navigate
+        navigateToFragment(R.id.noteMainFragment, bundle)
     }
 
     private fun onClickBtnDelete() {
-        note?.let {
-            var dialog: Dialog? = null
-            fun onClickYes() {
-                deleteNote(it)
-                dialog?.dismiss()
-            }
-
-            fun onClickNo() {
-                dialog?.dismiss()
-            }
-
-            dialog = showAlertDialog(
-                R.drawable.inbox_cleanup_red_500dp,
-                "Xoá ghi chú ?",
-                "",
-                "Đồng ý",
-                "Huỷ bỏ",
-                { onClickYes() },
-                { onClickNo() },
-                false
-            )
-            dialog.show()
+        var dialog: Dialog? = null
+        fun onClickYes() {
+            deleteNote(viewModel.note)
+            dialog?.dismiss()
         }
+
+        fun onClickNo() {
+            dialog?.dismiss()
+        }
+
+        dialog = showAlertDialog(
+            R.drawable.inbox_cleanup_red_500dp,
+            "Xoá ghi chú ?",
+            "",
+            "Đồng ý",
+            "Huỷ bỏ",
+            { onClickYes() },
+            { onClickNo() },
+            false
+        )
+        dialog.show()
     }
 
     private fun deleteNote(note: Note) {

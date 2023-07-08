@@ -87,12 +87,10 @@ class ScheduleMainFragment : BaseFragment() {
         Data.saveDateClicked = day
         // action
         val date = day.date
-        logDebug("onDateClicked = $date")
         // if select day in Month
         if (day.position == DayPosition.MonthDate) {
             binding.googleProgress.makeVisible()
             viewModel.showEventsWithDate(date) { events ->
-                logInfo("day = $date - periods/notes = $events")
                 binding.googleProgress.makeGone()
                 if (events.isEmpty()) {
                     binding.tvEventsEmpty.makeVisible()
@@ -117,7 +115,6 @@ class ScheduleMainFragment : BaseFragment() {
     }
 
     private fun onNoteClicked(note: Note) {
-        logDebug("on click note=${note.title}")
         // pass data
         val bundle = bundleOf(
             KEY_PASS_NOTE_OBJ to note
@@ -128,7 +125,6 @@ class ScheduleMainFragment : BaseFragment() {
 
     private fun refreshDataAfterUpdatedOrDeleted() {
         Data.isRefreshClickedEvents.observe(viewLifecycleOwner) { state ->
-            logDebug("refresh events state=$state")
             if (state) {
                 getEventsDay(Data.saveDateClicked)
             }
@@ -138,7 +134,6 @@ class ScheduleMainFragment : BaseFragment() {
     @SuppressLint("SetTextI18n")
     private fun updateTitle() {
         val month = binding.calendarView.findFirstVisibleMonth()?.yearMonth ?: return
-        logDebug("updateTitle month = $month")
         binding.tvYearTitle.text = month.year.toString()
         binding.tvMonthTitle.text = month.month.displayText(short = false)
     }

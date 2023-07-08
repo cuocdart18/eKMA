@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.example.kmatool.broadcast_receiver.AlarmReceiver
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.KEY_EVENT
@@ -20,13 +19,12 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
             return
         }
 
-        Log.d(TAG, "schedule Event: ${event.getContentTitleNotify()}")
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra(KEY_EVENT, event)
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            event.hashCode(),
+            event.getEventId(),
             intent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -43,12 +41,11 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
             return
         }
 
-        Log.d(TAG, "cancel Event: ${event.getContentTitleNotify()}")
         val intent = Intent(context, AlarmReceiver::class.java).apply {
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            event.hashCode(),
+            event.getEventId(),
             intent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )

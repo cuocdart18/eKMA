@@ -81,10 +81,10 @@ class NoteMainFragment : BaseFragment() {
             viewModel.getCurrentDayAndTime()
         } else if (viewModel.noteMode == UPDATE_NOTE_MODE) {
             binding.tvNoteHead.text = getString(R.string.tv_note_head_update)
-            binding.edtTitle.setText(viewModel.oldNote?.title)
-            binding.edtContent.setText(viewModel.oldNote?.content)
-            binding.tvSelectDate.text = viewModel.oldNote?.date
-            binding.tvSelectTime.text = viewModel.oldNote?.time
+            binding.edtTitle.setText(viewModel.oldNote.title)
+            binding.edtContent.setText(viewModel.oldNote.content)
+            binding.tvSelectDate.text = viewModel.oldNote.date
+            binding.tvSelectTime.text = viewModel.oldNote.time
         }
 
         // set input title
@@ -103,7 +103,7 @@ class NoteMainFragment : BaseFragment() {
             }
         }
         binding.tvSelectTime.setOnClickListener {
-            openTimePickerDialog() { _, hourOfDay, minute ->
+            openTimePickerDialog { _, hourOfDay, minute ->
                 viewModel.updateSelectTime(hourOfDay, minute)
             }
         }
@@ -149,7 +149,7 @@ class NoteMainFragment : BaseFragment() {
     private fun saveNoteToLocalDatabase(note: Note) {
         viewModel.saveNoteToLocalDatabase(note) {
             if (viewModel.noteMode == UPDATE_NOTE_MODE) {
-                viewModel.oldNote?.let { viewModel.cancelAlarmForOldNote(it) }
+                viewModel.cancelAlarmForOldNote()
             }
             viewModel.refreshNotesDayMapInDataObject {
                 viewModel.setAlarmForNote(note)

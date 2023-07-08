@@ -5,6 +5,8 @@ import java.io.Serializable
 interface Event : Serializable {
     val type: Int
 
+    fun getEventId(): Int
+
     fun getTimeCompare(): String
 
     fun getTimeMillis(): Long
