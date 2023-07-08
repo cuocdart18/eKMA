@@ -19,7 +19,6 @@ class SplashViewModel @Inject constructor(
     fun getLoginState(
         callback: (state: Boolean) -> Unit
     ) {
-        logDebug("get login state")
         viewModelScope.launch(Dispatchers.IO) {
             delay(1500L)
             val state = loginService.getLoginState()
