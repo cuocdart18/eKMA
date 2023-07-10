@@ -3,17 +3,12 @@ package com.example.kmatool.ui.infor.main
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import androidx.work.Constraints
-import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.alarm.AlarmEventsScheduler
+import com.example.kmatool.common.Data
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
-import com.example.kmatool.common.UNIQUE_SCHEDULE_WORK_NAME
-import com.example.kmatool.common.UPDATE_SCHEDULE_WORKER_TAG
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.service.ILoginService
@@ -21,12 +16,15 @@ import com.example.kmatool.data.models.service.INoteService
 import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.data.models.service.IUserService
-import com.example.kmatool.work.UpdateScheduleWorker
+import com.example.kmatool.work.UpdateScheduleWorkRunner
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -97,21 +95,8 @@ class InformationViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-            val updateWorkRequest =
-                OneTimeWorkRequestBuilder<UpdateScheduleWorker>()
-                    .addTag(UPDATE_SCHEDULE_WORKER_TAG)
-                    .setConstraints(constraints)
-                    .build()
-            WorkManager.getInstance(context)
-                .enqueueUniqueWork(
-                    UNIQUE_SCHEDULE_WORK_NAME,
-                    ExistingWorkPolicy.REPLACE,
-                    updateWorkRequest
-                )
-
+            val workManager = WorkManager.getInstance(context)
+            UpdateScheduleWorkRunner.run(workManager)
             // update UI: dismiss dialog
             withContext(Dispatchers.Main) {
                 callback()
@@ -137,9 +122,14 @@ class InformationViewModel @Inject constructor(
     }
 
     fun signOut(
+        context: Context,
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            // cancel running worker
+            WorkManager.getInstance(context).cancelAllWork()
+
+            // clear disk memory
             val clearPeriods = launch { scheduleService.deletePeriods() }
             val clearNotes = launch { noteService.deleteNotes() }
             val clearAlarm = launch {
@@ -150,7 +140,6 @@ class InformationViewModel @Inject constructor(
             val clearUser = launch { userService.clearUser() }
             val clearImage = launch { dataLocalManager.saveImgFilePath("") }
             val clearLoginState = launch { loginService.saveLoginState(false) }
-
             clearPeriods.join()
             clearNotes.join()
             clearAlarm.join()
@@ -158,6 +147,10 @@ class InformationViewModel @Inject constructor(
             clearUser.join()
             clearImage.join()
             clearLoginState.join()
+
+            // clear cache memory
+            Data.myStudentInfo = null
+            Data.saveDateClicked = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
 
             withContext(Dispatchers.Main) {
                 callback()

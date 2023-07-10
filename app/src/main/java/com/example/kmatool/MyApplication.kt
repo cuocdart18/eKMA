@@ -9,6 +9,8 @@ import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.example.kmatool.common.EVENTS_NOTIFY_CHANNEL
 import com.example.kmatool.common.EVENTS_NOTIFY_CHANNEL_ID
+import com.example.kmatool.common.GET_SCHE_CHANNEL
+import com.example.kmatool.common.GET_SCHE_CHANNEL_ID
 import com.example.kmatool.common.UPDATE_SCHE_CHANNEL
 import com.example.kmatool.common.UPDATE_SCHE_CHANNEL_ID
 import dagger.hilt.android.HiltAndroidApp
@@ -51,6 +53,15 @@ class MyApplication : Application(), Configuration.Provider {
                     updateScheName,
                     updateScheImportance
                 )
+            // Create the NotificationChannel for get schedule
+            val getScheName = GET_SCHE_CHANNEL
+            val getScheImportance = NotificationManager.IMPORTANCE_HIGH
+            val getScheChannel =
+                NotificationChannel(
+                    GET_SCHE_CHANNEL_ID,
+                    getScheName,
+                    getScheImportance
+                )
 
             // Register the channel with the system. You can't change the importance
             // or other notification behaviors after this.
@@ -59,7 +70,8 @@ class MyApplication : Application(), Configuration.Provider {
             notificationManager.createNotificationChannels(
                 listOf(
                     eventNotifyChannel,
-                    updateScheChannel
+                    updateScheChannel,
+                    getScheChannel
                 )
             )
         }

@@ -16,4 +16,13 @@ interface IPeriodRepository {
         password: String,
         hashed: Boolean
     ): Resource<List<Period>>
+
+    suspend fun getPeriods(
+        username: String,
+        password: String,
+        hashed: Boolean,
+        semesterCode: String
+    ): Resource<List<Period>>
+
+    suspend fun getSemesterCodes(): Resource<List<String>>
 }

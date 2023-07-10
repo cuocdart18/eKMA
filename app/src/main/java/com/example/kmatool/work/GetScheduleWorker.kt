@@ -14,23 +14,26 @@ import androidx.work.WorkerParameters
 import com.example.kmatool.R
 import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.common.Data
+import com.example.kmatool.common.GET_SCHEDULE_ID
+import com.example.kmatool.common.GET_SCHE_CHANNEL_ID
 import com.example.kmatool.common.GetPeriodFailingException
 import com.example.kmatool.common.GetSemesterCodesFailingException
 import com.example.kmatool.common.Resource
-import com.example.kmatool.common.UPDATE_SCHEDULE_ID
-import com.example.kmatool.common.UPDATE_SCHE_CHANNEL_ID
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Event
+import com.example.kmatool.data.models.Period
 import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.data.models.service.IUserService
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.EOFException
 
 @HiltWorker
-class UpdateScheduleWorker @AssistedInject constructor(
+class GetScheduleWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val userService: IUserService,
@@ -38,7 +41,7 @@ class UpdateScheduleWorker @AssistedInject constructor(
     private val dataLocalManager: IDataLocalManager,
     private val alarmEventsScheduler: AlarmEventsScheduler
 ) : CoroutineWorker(appContext, workerParams) {
-    private val TAG = UpdateScheduleWorker::class.java.simpleName
+    private val TAG = GetScheduleWorker::class.java.simpleName
 
     @RequiresApi(Build.VERSION_CODES.S)
     override suspend fun doWork(): Result {
@@ -49,9 +52,9 @@ class UpdateScheduleWorker @AssistedInject constructor(
             Log.e(TAG, "doWork: failed with ${e.message}")
             return Result.failure()
         }
-        // Do the work here--in this case, update the periods.
+        // Do the work here--in this case, get periods.
         try {
-            updatePeriods()
+            getPeriods()
         } catch (e: EOFException) {
             Log.e(TAG, "doWork: failed with ${e.message}")
             return Result.failure()
@@ -66,28 +69,39 @@ class UpdateScheduleWorker @AssistedInject constructor(
         return Result.success()
     }
 
-    private suspend fun updatePeriods() {
+    private suspend fun getPeriods() {
         withContext(Dispatchers.IO) {
             val user = userService.getUser()
             // call API
             val semesterCodes = scheduleService.getSemesterCodes()
             if (semesterCodes is Resource.Success && !semesterCodes.data.isNullOrEmpty()) {
-                val code = semesterCodes.data[0]
-                val periods = scheduleService.getPeriods(
-                    user.username,
-                    user.password,
-                    user.hashed,
-                    code
-                )
-                if (periods is Resource.Success && periods.data != null) {
-                    scheduleService.insertPeriods(periods.data)
-                    setAlarmPeriodsInFirstTime(periods.data)
-                    // update Data runtime
-                    Data.getLocalPeriodsRuntime(scheduleService)
-                    Log.i(TAG, "updatePeriods: done $id")
-                } else {
-                    throw GetPeriodFailingException(code)
+                val fullPeriod = mutableListOf<Period>()
+                val getPeriodJobs = mutableListOf<Job>()
+                semesterCodes.data.forEach { code ->
+                    getPeriodJobs.add(launch {
+                        val periods = scheduleService.getPeriods(
+                            user.username,
+                            user.password,
+                            user.hashed,
+                            code
+                        )
+                        if (periods is Resource.Success && periods.data != null) {
+                            fullPeriod.addAll(periods.data)
+                            Log.i(TAG, "getPeriods: get periods done with semester code=$code")
+                        } else {
+                            throw GetPeriodFailingException(code)
+                        }
+                    })
                 }
+                // absolutely request success
+                getPeriodJobs.forEach {
+                    it.join()
+                }
+                scheduleService.insertPeriods(fullPeriod)
+                setAlarmPeriodsInFirstTime(fullPeriod)
+                // update Data runtime
+                Data.getLocalPeriodsRuntime(scheduleService)
+                Log.i(TAG, "getPeriods: done $id")
             } else {
                 throw semesterCodes.message?.let { GetSemesterCodesFailingException(it) }!!
             }
@@ -104,8 +118,8 @@ class UpdateScheduleWorker @AssistedInject constructor(
     // ongoing notification.
     private fun createForegroundInfo(): ForegroundInfo {
         val progress = "Đang xử lí. . ."
-        val id = UPDATE_SCHE_CHANNEL_ID
-        val title = "Cập nhật lịch học mới nhất"
+        val id = GET_SCHE_CHANNEL_ID
+        val title = "Tải xuống toàn bộ lịch học"
         val cancel = "Huỷ"
         // This PendingIntent can be used to cancel the worker
         val intent = WorkManager.getInstance(applicationContext)
@@ -122,6 +136,6 @@ class UpdateScheduleWorker @AssistedInject constructor(
             .addAction(android.R.drawable.ic_delete, cancel, intent)
             .build()
 
-        return ForegroundInfo(UPDATE_SCHEDULE_ID, notification)
+        return ForegroundInfo(GET_SCHEDULE_ID, notification)
     }
 }

@@ -1,28 +1,31 @@
 package com.example.kmatool.activities
 
+import android.content.Context
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
+import androidx.work.Constraints
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.common.AUTH_MESSAGE_SUCCESS
+import com.example.kmatool.common.GET_SCHEDULE_WORKER_TAG
 import com.example.kmatool.common.Resource.Success
+import com.example.kmatool.common.UNIQUE_GET_SCHEDULE_WORK_NAME
 import com.example.kmatool.common.md5
-import com.example.kmatool.data.data_source.app_data.IDataLocalManager
-import com.example.kmatool.data.models.Event
 import com.example.kmatool.data.models.User
 import com.example.kmatool.data.models.service.ILoginService
 import com.example.kmatool.data.models.service.IProfileService
-import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.data.models.service.IUserService
+import com.example.kmatool.work.GetScheduleWorkRunner
+import com.example.kmatool.work.GetScheduleWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val alarmEventsScheduler: AlarmEventsScheduler,
-    private val dataLocalManager: IDataLocalManager,
-    private val scheduleService: IScheduleService,
     private val loginService: ILoginService,
     private val profileService: IProfileService,
     private val userService: IUserService
@@ -39,13 +42,12 @@ class LoginViewModel @Inject constructor(
     }
 
     fun handleOnClickBtnLogin(
+        context: Context,
         username: String,
         unHashedPassword: String,
         callback: () -> Unit
     ) {
         isValid.set(true)
-
-        // action
         if (username.isNotBlank() && unHashedPassword.isNotBlank()) {
             // show for user: aware of request
             isShowProgress.set(true)
@@ -53,26 +55,16 @@ class LoginViewModel @Inject constructor(
             val password = md5(unHashedPassword)
             viewModelScope.launch(Dispatchers.IO) {
                 val callAuth = loginService.auth(username, password, true)
-
                 if (callAuth is Success && callAuth.data.equals(AUTH_MESSAGE_SUCCESS)) {
-                    // get schedule and profile
-                    val callProfile = async { profileService.getProfile(username, password, true) }
-                    val callPeriods = async { scheduleService.getPeriods(username, password, true) }
-                    val profile = callProfile.await()
-                    val periods = callPeriods.await()
-
-                    if (profile is Success) {
-                        scheduleService.deletePeriods()                                  // delete old periods
-                        profile.data?.let { profileService.saveProfile(it) }            // save profile to local
-                        periods.data?.let {
-                            scheduleService.insertPeriods(it)                           // save periods to db
-                            setAlarmPeriodsInFirstTime(it)                             // set periods alarm if possible
-                        }
+                    val profile = profileService.getProfile(username, password, true)
+                    if (profile is Success && profile.data != null) {
+                        profileService.saveProfile(profile.data)
                         userService.saveUser(User(username, password, true))
                         loginService.saveLoginState(true)
+                        // handle schedule
+                        runGetScheduleWorker(context)
                         withContext(Dispatchers.Main) {
-                            isValid.set(true)
-                            isShowProgress.set(false)
+                            showLoginAccept()
                             callback()
                         }
                     } else {
@@ -87,14 +79,18 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun showLoginRefused() {
-        isValid.set(false)
+    private fun runGetScheduleWorker(context: Context) {
+        val workManager = WorkManager.getInstance(context)
+        GetScheduleWorkRunner.run(workManager)
+    }
+
+    private fun showLoginAccept() {
+        isValid.set(true)
         isShowProgress.set(false)
     }
 
-    private suspend fun setAlarmPeriodsInFirstTime(events: List<Event>) {
-        if (dataLocalManager.getIsNotifyEvents()) {
-            alarmEventsScheduler.scheduleEvents(events)
-        }
+    private fun showLoginRefused() {
+        isValid.set(false)
+        isShowProgress.set(false)
     }
 }

@@ -46,7 +46,7 @@ class LoginActivity : BaseActivity() {
 
         showErrorIfBlankField(username, unHashedPassword)
 
-        viewModel.handleOnClickBtnLogin(username, unHashedPassword) {
+        viewModel.handleOnClickBtnLogin(applicationContext, username, unHashedPassword) {
             // if login successfully
             openActivityWithFinish(MainActivity::class.java)
         }

@@ -29,4 +29,17 @@ class ScheduleService @Inject constructor(
     ): Resource<List<Period>> {
         return periodRepository.getPeriods(username, password, hashed)
     }
+
+    override suspend fun getPeriods(
+        username: String,
+        password: String,
+        hashed: Boolean,
+        semesterCode: String
+    ): Resource<List<Period>> {
+        return periodRepository.getPeriods(username, password, hashed, semesterCode)
+    }
+
+    override suspend fun getSemesterCodes(): Resource<List<String>> {
+        return periodRepository.getSemesterCodes()
+    }
 }
