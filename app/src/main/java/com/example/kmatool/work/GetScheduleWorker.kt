@@ -133,7 +133,7 @@ class GetScheduleWorker @AssistedInject constructor(
             .setProgress(100, 0, true)
             // Add the cancel action to the notification which can
             // be used to cancel the worker
-            .addAction(android.R.drawable.ic_delete, cancel, intent)
+//            .addAction(android.R.drawable.ic_delete, cancel, intent)
             .build()
 
         return ForegroundInfo(GET_SCHEDULE_ID, notification)
