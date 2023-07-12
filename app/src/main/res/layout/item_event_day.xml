@@ -31,9 +31,10 @@
         android:layout_marginBottom="@dimen/base_normal_margin">
 
         <LinearLayout
+            android:id="@+id/layout_period"
             style="@style/BaseLinearLayoutItemEventDay"
             android:background="@drawable/bgr_box_of_item_period"
-            android:visibility="@{type == ConstantsKt.PERIOD_TYPE ? View.VISIBLE : View.GONE}">
+            android:visibility="gone">
 
             <TextView
                 style="@style/BaseTextViewTitleItemEventDay"
@@ -78,9 +79,10 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_note"
             style="@style/BaseLinearLayoutItemEventDay"
             android:background="@drawable/bgr_box_of_item_note"
-            android:visibility="@{type == ConstantsKt.NOTE_TYPE ? View.VISIBLE : View.GONE}">
+            android:visibility="gone">
 
             <TextView
                 style="@style/BaseTextViewTitleItemEventDay"

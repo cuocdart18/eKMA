@@ -41,6 +41,6 @@
             style="@style/BaseButtonInConfirmDialog"
             android:layout_marginTop="@dimen/base_normal_margin"
             android:background="@drawable/bgr_box_negative_button"
-            android:textColor="@color/gray" />
+            android:textColor="@color/lab_red" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

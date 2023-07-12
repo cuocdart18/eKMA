@@ -1,11 +1,14 @@
 package com.example.kmatool.ui.infor.main
 
+import android.content.ComponentName
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.alarm.AlarmEventsScheduler
+import com.example.kmatool.broadcast_receiver.BootCompletedReceiver
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
@@ -105,6 +108,7 @@ class InformationViewModel @Inject constructor(
     }
 
     fun changedIsNotifyEvents(
+        context: Context,
         data: Boolean,
         callback: () -> Unit
     ) {
@@ -112,8 +116,20 @@ class InformationViewModel @Inject constructor(
             dataLocalManager.saveIsNotifyEvents(data)
             if (data) {
                 alarmEventsScheduler.scheduleAlarmEvents()
+                val receiver = ComponentName(context, BootCompletedReceiver::class.java)
+                context.packageManager.setComponentEnabledSetting(
+                    receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
             } else {
                 alarmEventsScheduler.clearAlarmEvents()
+                val receiver = ComponentName(context, BootCompletedReceiver::class.java)
+                context.packageManager.setComponentEnabledSetting(
+                    receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP
+                )
             }
             withContext(Dispatchers.Main) {
                 callback()

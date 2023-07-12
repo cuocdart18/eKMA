@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KMA Tool</string>
+    <string name="app_name">eKMA</string>
     <string name="item_menu_score">Điểm</string>
     <string name="item_menu_schedule">Lịch</string>
     <string name="item_menu_note">Ghi chú</string>
@@ -111,5 +111,6 @@
     <string name="score_detail_title">Điểm chi tiết</string>
     <string name="desc_loading">Chờ chút nha. . .</string>
     <string name="desc_error_loading">Có vẻ như đã xảy ra lỗi. . .</string>
+    <string name="splash_image">splash_image</string>
 
 </resources>

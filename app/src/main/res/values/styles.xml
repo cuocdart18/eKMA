@@ -102,7 +102,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:drawablePadding">@dimen/base_small_padding</item>
         <item name="android:textColor">@color/lab_black</item>
-        <item name="android:maxLines">1</item>
+        <item name="android:maxLines">2</item>
         <item name="android:scrollbars">none</item>
     </style>
 
@@ -112,6 +112,7 @@
     </style>
 
     <style name="BaseTextViewDescItemEventDay" parent="BaseTextViewItemEventDay">
+        <item name="android:maxLines">1</item>
         <item name="android:textSize">@dimen/base_helper_text</item>
         <item name="android:textStyle">normal</item>
     </style>

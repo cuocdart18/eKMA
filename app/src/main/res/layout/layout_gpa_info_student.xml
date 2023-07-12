@@ -46,7 +46,7 @@
             style="@style/BaseTextViewInGpaInfoStudent"
             android:layout_marginBottom="@dimen/base_normal_margin"
             android:text="@{student.name}"
-            android:textSize="@dimen/base_title_text" />
+            android:textSize="@dimen/base_big_header_text" />
 
         <TextView
             android:id="@+id/tv_id"

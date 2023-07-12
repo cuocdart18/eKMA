@@ -4,21 +4,26 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.common.Data
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
+import com.example.kmatool.data.models.service.INoteService
 import com.example.kmatool.data.models.service.IScheduleService
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class BootCompletedReceiver : BroadcastReceiver() {
     private val TAG = BootCompletedReceiver::class.java.simpleName
 
     @Inject
     lateinit var scheduleService: IScheduleService
+
+    @Inject
+    lateinit var noteService: INoteService
 
     @Inject
     lateinit var dataLocalManager: IDataLocalManager
@@ -27,27 +32,24 @@ class BootCompletedReceiver : BroadcastReceiver() {
     lateinit var alarmEventsScheduler: AlarmEventsScheduler
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == Intent.ACTION_BOOT_COMPLETED && context != null) {
+        if (intent?.action == "android.intent.action.BOOT_COMPLETED") {
             Log.e(TAG, "boot completed")
-            Toast.makeText(context, "boot completed", Toast.LENGTH_SHORT).show()
-//            resetAlarm()
+            resetAlarm()
         }
     }
 
     private fun resetAlarm() {
         CoroutineScope(Dispatchers.IO).launch {
             // Get local data here
-//            scheduleRepository.getLocalData()
+            Data.getLocalData(noteService, scheduleService) {}
             // Set the alarm here
             val isNotify = dataLocalManager.getIsNotifyEvents()
             CoroutineScope(Dispatchers.IO).launch {
                 if (isNotify) {
-                    Log.d(TAG, "schedule events")
                     // get value of Map, set alarm it
                     launch { Data.periodsDayMap.forEach { alarmEventsScheduler.scheduleEvents(it.value) } }
                     launch { Data.notesDayMap.forEach { alarmEventsScheduler.scheduleEvents(it.value) } }
                 } else {
-                    Log.d(TAG, "cancel events")
                     // get value of Map, cancel alarm it
                     launch { Data.periodsDayMap.forEach { alarmEventsScheduler.cancelEvents(it.value) } }
                     launch { Data.notesDayMap.forEach { alarmEventsScheduler.cancelEvents(it.value) } }
@@ -55,6 +57,4 @@ class BootCompletedReceiver : BroadcastReceiver() {
             }
         }
     }
-
-
 }
