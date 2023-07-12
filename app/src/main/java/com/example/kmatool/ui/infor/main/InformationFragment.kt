@@ -96,7 +96,7 @@ class InformationFragment : BaseFragment(),
     }
 
     override fun onChangedNotifyEvent(data: Boolean) {
-        viewModel.changedIsNotifyEvents(data) { }
+        viewModel.changedIsNotifyEvents(requireContext(), data) { }
     }
 
     override fun onChangedDarkMode(data: Boolean) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bgr_box_of_list_score_student"
@@ -10,11 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/base_xhigh_margin"
+        android:drawablePadding="@dimen/base_normal_padding"
         android:gravity="center"
         android:text="@string/score_detail_title"
         android:textColor="@color/lab_black"
         android:textSize="@dimen/base_big_header_text"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:drawableBottomCompat="@drawable/caret_down_outline_red_24dp" />
 
     <include
         layout="@layout/layout_score_type_header"

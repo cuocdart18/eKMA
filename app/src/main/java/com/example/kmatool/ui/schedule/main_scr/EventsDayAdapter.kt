@@ -39,10 +39,10 @@ class EventsDayAdapter(
         val event = events[position]
         // update UI
         if (event.type == PERIOD_TYPE) {
-            holder.binding.type = PERIOD_TYPE
+            holder.binding.layoutPeriod.visibility = View.VISIBLE
             holder.binding.period = event as Period
         } else if (event.type == NOTE_TYPE) {
-            holder.binding.type = NOTE_TYPE
+            holder.binding.layoutNote.visibility = View.VISIBLE
             holder.binding.note = event as Note
         }
     }
