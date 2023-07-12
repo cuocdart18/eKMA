@@ -16,7 +16,7 @@ import com.example.kmatool.data.models.service.INoteService
 import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.data.models.service.IUserService
-import com.example.kmatool.work.UpdateScheduleWorkRunner
+import com.example.kmatool.work.GetScheduleWorkRunner
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -96,7 +96,7 @@ class InformationViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val workManager = WorkManager.getInstance(context)
-            UpdateScheduleWorkRunner.run(workManager)
+            GetScheduleWorkRunner.run(workManager)
             // update UI: dismiss dialog
             withContext(Dispatchers.Main) {
                 callback()
