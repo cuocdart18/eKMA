@@ -37,4 +37,26 @@ class PeriodRepositoryImpl @Inject constructor(
             scheduleAPI.getPeriods(username, password, hashed).periods.map { it.toPeriod() }
         }
     }
+
+    override suspend fun getPeriods(
+        username: String,
+        password: String,
+        hashed: Boolean,
+        semesterCode: String
+    ): Resource<List<Period>> {
+        return safeApiCall {
+            scheduleAPI.getPeriods(
+                username,
+                password,
+                hashed,
+                semesterCode
+            ).periods.map { it.toPeriod() }
+        }
+    }
+
+    override suspend fun getSemesterCodes(): Resource<List<String>> {
+        return safeApiCall {
+            scheduleAPI.getSemesterCodes()
+        }
+    }
 }

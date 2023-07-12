@@ -3,6 +3,7 @@ package com.example.kmatool.data.data_source.database.daos
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.kmatool.data.data_source.database.entities.PeriodEntity
 import com.example.kmatool.data.data_source.database.entities.PeriodEntityEntry
@@ -10,7 +11,7 @@ import com.example.kmatool.data.data_source.database.entities.PeriodEntityEntry
 @Dao
 interface PeriodDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPeriods(periods: List<PeriodEntity>)
 
     @Delete

@@ -25,6 +25,17 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+        // auth
+        viewModel.authForUserEntryAppFromDeepLink {
+            if (it) {
+                onAuthSuccessfully()
+            } else {
+                openActivityWithFinish(LoginActivity::class.java)
+            }
+        }
+    }
+
+    private fun onAuthSuccessfully() {
         setContentView(binding.root)
         setUiTemplates()
 //        requestPostNotifyPermission()

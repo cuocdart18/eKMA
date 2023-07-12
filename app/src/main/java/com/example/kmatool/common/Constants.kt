@@ -11,20 +11,26 @@ const val UPDATE_NOTE_MODE = 102
 const val EVENTS_NOTIFY_CHANNEL = "Events"
 const val EVENTS_NOTIFY_CHANNEL_ID = "events_id"
 const val UPDATE_SCHE_CHANNEL = "Update schedule"
+const val GET_SCHE_CHANNEL = "Get schedule"
 const val UPDATE_SCHE_CHANNEL_ID = "update_sche_id"
+const val GET_SCHE_CHANNEL_ID = "get_sche_id"
 const val KEY_EVENT = "sent_event_from_AM_to_BR"
 const val EVENTS_NOTIFY_ID = 1001
 const val UPDATE_SCHEDULE_ID = 872002
+const val GET_SCHEDULE_ID = 1812003
 const val TIRAMISU_PERMISSION_REQUEST_CODE = 33
 const val S_PERMISSION_REQUEST_CODE = 31
 const val M_PERMISSION_REQUEST_CODE = 23
 
 // for WorkManager
-const val UPDATE_SCHEDULE_WORKER_TAG = "schedule_tag"
-const val UNIQUE_SCHEDULE_WORK_NAME = "update_schedule"
+const val UPDATE_SCHEDULE_WORKER_TAG = "update_schedule_tag"
+const val GET_SCHEDULE_WORKER_TAG = "get_schedule_tag"
+const val UNIQUE_UPDATE_SCHEDULE_WORK_NAME = "update_schedule"
+const val UNIQUE_GET_SCHEDULE_WORK_NAME = "get_schedule"
 
 // for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
+const val KEY_PASS_IS_MY_MINISTUDENT_ID = "my_ministudent_id"
 const val KEY_PASS_NOTE_OBJ = "note_obj"
 const val KEY_PASS_NOTE_MODE = "note_mode"
 const val DATABASE_NAME = "app_database.db"

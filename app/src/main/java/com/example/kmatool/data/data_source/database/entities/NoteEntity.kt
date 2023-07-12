@@ -15,7 +15,7 @@ data class NoteEntity(
     @ColumnInfo(name = NoteEntityEntry.TIME)
     var time: String
 ) {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = NoteEntityEntry.ID)
     var id: Int = 0
 }

@@ -31,9 +31,11 @@ class NoteMainViewModel @Inject constructor(
     val selectDay = MutableLiveData<String>()
     val selectTime = MutableLiveData<String>()
 
-    // default
+    // default mode
     var noteMode = ADD_NOTE_MODE
-    var oldNote: Note? = null
+
+    // update note mode
+    lateinit var oldNote: Note
 
     fun getCurrentDayAndTime() {
         viewModelScope.launch(Dispatchers.Main) {
@@ -60,9 +62,8 @@ class NoteMainViewModel @Inject constructor(
         note: Note,
         callback: () -> Unit
     ) {
-        if (noteMode == UPDATE_NOTE_MODE) {
-            oldNote?.let { note.id = it.id }
-        }
+        // define primary key for note
+        note.id = note.hashCode()
         viewModelScope.launch(Dispatchers.IO) {
             if (noteMode == ADD_NOTE_MODE) {
                 noteService.insertNote(note)
@@ -70,7 +71,8 @@ class NoteMainViewModel @Inject constructor(
                     callback()
                 }
             } else if (noteMode == UPDATE_NOTE_MODE) {
-                noteService.updateNote(note)
+                noteService.insertNote(note)
+                noteService.deleteNote(oldNote)
                 withContext(Dispatchers.Main) {
                     callback()
                 }
@@ -90,9 +92,6 @@ class NoteMainViewModel @Inject constructor(
     }
 
     fun setAlarmForNote(note: Note) {
-        if (noteMode == UPDATE_NOTE_MODE) {
-            oldNote?.let { note.id = it.id }
-        }
         viewModelScope.launch(Dispatchers.IO) {
             val isNotify = dataLocalManager.getIsNotifyEvents()
             if (isNotify) {
@@ -101,12 +100,11 @@ class NoteMainViewModel @Inject constructor(
         }
     }
 
-    fun cancelAlarmForOldNote(note: Note) {
-        oldNote?.let { note.id = it.id }
+    fun cancelAlarmForOldNote() {
         viewModelScope.launch(Dispatchers.IO) {
             val isNotify = dataLocalManager.getIsNotifyEvents()
             if (isNotify) {
-                alarmEventsScheduler.cancelEvent(note)
+                alarmEventsScheduler.cancelEvent(oldNote)
             }
         }
     }

@@ -13,6 +13,7 @@ import com.example.kmatool.R
 import com.example.kmatool.activities.LoginActivity
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.common.KEY_PASS_MINISTUDENT_ID
+import com.example.kmatool.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.example.kmatool.databinding.FragmentInformationBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -62,7 +63,8 @@ class InformationFragment : BaseFragment(),
             val id = it.studentCode
             // action
             val bundle = bundleOf(
-                KEY_PASS_MINISTUDENT_ID to id
+                KEY_PASS_MINISTUDENT_ID to id,
+                KEY_PASS_IS_MY_MINISTUDENT_ID to true
             )
             navigateToFragment(R.id.studentDetailFragment, bundle)
         }
@@ -83,7 +85,7 @@ class InformationFragment : BaseFragment(),
         dialog = showAlertDialog(
             R.drawable.in_sync_red_500dp,
             "Cập nhật thời khoá biểu ?",
-            "Cập nhật thời khóa biểu mới đôi khi không thành công vì lỗi hệ thống",
+            "Nếu bạn đã thay đổi lịch trên hệ thống, hãy cập nhật lịch mới nhất",
             "Đồng ý",
             "Huỷ bỏ",
             { onClickYes() },
@@ -106,7 +108,7 @@ class InformationFragment : BaseFragment(),
     override fun onClickLogOut() {
         var dialog: Dialog? = null
         fun onClickYes() {
-            viewModel.signOut() {
+            viewModel.signOut(requireContext()) {
                 dialog?.dismiss()
                 val intent = Intent(requireContext(), LoginActivity::class.java)
                 startActivity(intent)
@@ -121,7 +123,7 @@ class InformationFragment : BaseFragment(),
         dialog = showAlertDialog(
             R.drawable.secure_data_red_500dp,
             "Đăng xuất ?",
-            "Điều này sẽ xoá tất cả các ghi chú hiện có của bạn",
+            "Điều này sẽ xoá tất cả thông tin (ghi chú, lịch sử tìm kiếm) hiện có",
             "Đồng ý",
             "Huỷ bỏ",
             { onClickYes() },
