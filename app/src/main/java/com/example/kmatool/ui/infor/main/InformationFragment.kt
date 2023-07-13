@@ -1,12 +1,18 @@
 package com.example.kmatool.ui.infor.main
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.example.kmatool.R
@@ -24,6 +30,15 @@ class InformationFragment : BaseFragment(),
     private lateinit var binding: FragmentInformationBinding
     private val viewModel by viewModels<InformationViewModel>()
 
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+            } else {
+            }
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +52,10 @@ class InformationFragment : BaseFragment(),
         super.onViewCreated(view, savedInstanceState)
         setUpPreferencesSetting()
         setUpProfile()
+        // ask permission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermission()
+        }
     }
 
     private fun setUpPreferencesSetting() {
@@ -50,6 +69,55 @@ class InformationFragment : BaseFragment(),
         viewModel.getProfile { binding.profile = it }
         viewModel.getImageProfile { setImageUri(it) }
         binding.civProfileImage.setOnClickListener { onClickChangeProfile() }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun requestPermission() {
+        when {
+            checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED -> {
+            }
+
+            shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                showDialogNotifyPermissionRationale()
+            }
+
+            else -> {
+                requestPermissionLauncher.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            }
+        }
+    }
+
+    private fun showDialogNotifyPermissionRationale() {
+        var dialog: Dialog? = null
+
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        fun onClickYes() {
+            requestPermissionLauncher.launch(
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+            dialog?.dismiss()
+        }
+
+        fun onClickNo() {
+            dialog?.dismiss()
+        }
+
+        dialog = showAlertDialog(
+            R.drawable.notify_amico,
+            "Nhận thông báo sự kiện ?",
+            "Với những thiết bị chạy Android 13 trở lên, ứng dụng cần được cấp quyền hiện thông báo để sử dụng tính năng nhắc nhở",
+            "Đóng",
+            "Huỷ bỏ",
+            { onClickYes() },
+            { onClickNo() },
+            true
+        )
+        dialog.show()
     }
 
     private fun onClickChangeProfile() {
