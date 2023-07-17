@@ -54,6 +54,7 @@ class GetScheduleWorker @AssistedInject constructor(
         }
         // Do the work here--in this case, get periods.
         try {
+            scheduleService.deletePeriods()
             getPeriods()
         } catch (e: EOFException) {
             Log.e(TAG, "doWork: failed with ${e.message}")
