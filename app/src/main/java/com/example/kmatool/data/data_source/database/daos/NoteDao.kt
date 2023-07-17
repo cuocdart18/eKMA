@@ -3,6 +3,7 @@ package com.example.kmatool.data.data_source.database.daos
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.kmatool.data.data_source.database.entities.NoteEntity
@@ -11,7 +12,7 @@ import com.example.kmatool.data.data_source.database.entities.NoteEntityEntry
 @Dao
 interface NoteDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNote(note: NoteEntity)
 
     @Query("SELECT * FROM ${NoteEntityEntry.TBL_NAME}")

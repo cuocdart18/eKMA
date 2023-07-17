@@ -1,6 +1,5 @@
 package com.example.kmatool.ui.schedule.main_scr
 
-import android.util.Log
 import android.view.View
 import androidx.core.view.isGone
 import com.example.kmatool.R
@@ -54,7 +53,6 @@ class MonthDayBinderImpl(
     fun selectedDate(day: CalendarDay) {
         val date = day.date
         if (selectedDate != date) {
-            Log.d(TAG, "clicked day = $date")
             val oldDate = selectedDate
             selectedDate = date
             oldDate?.let { notifyDateChanged(it) }
@@ -84,14 +82,12 @@ class MonthDayBinderImpl(
             if (data.position == DayPosition.MonthDate) {
                 when (date) {
                     selectedDate -> {
-                        Log.d(TAG, "set background day clicked = $date")
                         textView.setTextColorRes(R.color.white)
                         textView.setBackgroundResource(R.drawable.bgr_day_selected)
                         dotViewPeriods.makeInVisible()
                         dotViewNotes.makeInVisible()
                     }
                     today -> {
-                        Log.d(TAG, "set background current day = $date")
                         textView.setTextColorRes(R.color.white)
                         textView.setBackgroundResource(R.drawable.bgr_today)
                         dotViewPeriods.isGone = isDateInPeriodList(date)

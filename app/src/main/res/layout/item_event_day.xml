@@ -82,22 +82,36 @@
             android:id="@+id/layout_note"
             style="@style/BaseLinearLayoutItemEventDay"
             android:background="@drawable/bgr_box_of_item_note"
+            android:orientation="horizontal"
             android:visibility="gone">
 
-            <TextView
-                style="@style/BaseTextViewTitleItemEventDay"
-                android:text="@{note.title}"
-                app:drawableEndCompat="@drawable/pin_outline_black_16dp" />
+            <ImageView
+                android:id="@+id/cb_is_note_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/base_normal_margin"
+                android:contentDescription="@string/checkbox_outline" />
 
-            <TextView
-                style="@style/BaseTextViewDescItemEventDay"
-                android:text="@{note.content}"
-                app:drawableStartCompat="@drawable/pricetags_outline_black_16dp" />
+            <LinearLayout
+                android:id="@+id/layout_note_content"
+                style="@style/BaseLinearLayoutItemEventDay"
+                android:padding="0dp">
 
-            <TextView
-                style="@style/BaseTextViewDescItemEventDay"
-                android:text="@{note.timeCompare}"
-                app:drawableStartCompat="@drawable/time_outline_black_16dp" />
+                <TextView
+                    style="@style/BaseTextViewTitleItemEventDay"
+                    android:text="@{note.title}"
+                    app:drawableEndCompat="@drawable/pin_outline_black_16dp" />
+
+                <TextView
+                    style="@style/BaseTextViewDescItemEventDay"
+                    android:text="@{note.content}"
+                    app:drawableStartCompat="@drawable/pricetags_outline_black_16dp" />
+
+                <TextView
+                    style="@style/BaseTextViewDescItemEventDay"
+                    android:text="@{note.timeCompare}"
+                    app:drawableStartCompat="@drawable/time_outline_black_16dp" />
+            </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 </layout>

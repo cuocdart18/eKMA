@@ -148,9 +148,6 @@ class NoteMainFragment : BaseFragment() {
 
     private fun saveNoteToLocalDatabase(note: Note) {
         viewModel.saveNoteToLocalDatabase(note) {
-            if (viewModel.noteMode == UPDATE_NOTE_MODE) {
-                viewModel.cancelAlarmForOldNote()
-            }
             viewModel.refreshNotesDayMapInDataObject {
                 viewModel.setAlarmForNote(note)
                 onUpdateOrAddSuccessfully()

@@ -54,6 +54,7 @@ fun Note.toNoteEntity(): NoteEntity {
         date = date,
         time = time
     )
+    noteEntity.isDone = isDone
     noteEntity.id = id
     return noteEntity
 }
@@ -65,6 +66,7 @@ fun NoteEntity.toNote(): Note {
         date = date,
         time = time
     )
+    note.isDone = isDone
     note.id = id
     return note
 }

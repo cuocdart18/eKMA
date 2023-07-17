@@ -18,6 +18,9 @@ data class NoteEntity(
     @PrimaryKey
     @ColumnInfo(name = NoteEntityEntry.ID)
     var id: Int = 0
+
+    @ColumnInfo(name = NoteEntityEntry.IS_DONE)
+    var isDone: Boolean = false
 }
 
 object NoteEntityEntry {
@@ -27,4 +30,5 @@ object NoteEntityEntry {
     const val CONTENT = "content"
     const val DATE = "date"
     const val TIME = "time"
+    const val IS_DONE = "is_done"
 }

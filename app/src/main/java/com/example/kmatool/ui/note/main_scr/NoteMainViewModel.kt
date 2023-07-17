@@ -67,15 +67,14 @@ class NoteMainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             if (noteMode == ADD_NOTE_MODE) {
                 noteService.insertNote(note)
-                withContext(Dispatchers.Main) {
-                    callback()
-                }
             } else if (noteMode == UPDATE_NOTE_MODE) {
-                noteService.insertNote(note)
+                note.isDone = oldNote.isDone
                 noteService.deleteNote(oldNote)
-                withContext(Dispatchers.Main) {
-                    callback()
-                }
+                noteService.insertNote(note)
+                cancelAlarmForOldNote()
+            }
+            withContext(Dispatchers.Main) {
+                callback()
             }
         }
     }
@@ -94,13 +93,13 @@ class NoteMainViewModel @Inject constructor(
     fun setAlarmForNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
             val isNotify = dataLocalManager.getIsNotifyEvents()
-            if (isNotify) {
+            if (isNotify && !note.isDone) {
                 alarmEventsScheduler.scheduleEvent(note)
             }
         }
     }
 
-    fun cancelAlarmForOldNote() {
+    private fun cancelAlarmForOldNote() {
         viewModelScope.launch(Dispatchers.IO) {
             val isNotify = dataLocalManager.getIsNotifyEvents()
             if (isNotify) {

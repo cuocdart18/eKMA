@@ -112,5 +112,6 @@
     <string name="desc_loading">Chờ chút nha. . .</string>
     <string name="desc_error_loading">Có vẻ như đã xảy ra lỗi. . .</string>
     <string name="splash_image">splash_image</string>
+    <string name="checkbox_outline">checkbox_outline</string>
 
 </resources>

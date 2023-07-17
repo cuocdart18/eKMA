@@ -34,10 +34,11 @@
     <color name="lab_dark_yellow">#EDA744</color>
     <color name="lab_blue">#2196F3</color>
     <color name="lab_medium_blue">#39A7FF</color>
-    <color name="lab_light_blue">#6FC0FF</color>
+    <color name="lab_light_blue">#81C8FF</color>
     <color name="lab_gray_input">#EFEFEF</color>
     <color name="lab_medium_white">#F5F4F5</color>
     <color name="lab_gray">#D3D3D3</color>
+    <color name="lab_gray_expired_note">#A6A6A6</color>
 
     <array name="google_colors">
         <item>@color/green_nhat</item>

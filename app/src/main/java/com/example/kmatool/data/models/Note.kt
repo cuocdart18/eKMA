@@ -14,7 +14,7 @@ data class Note(
     var time: String
 ) : Event {
     var id: Int = 0
-
+    var isDone: Boolean = false
     override val type: Int = NOTE_TYPE
 
     override fun getTimeCompare(): String = time

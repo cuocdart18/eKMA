@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.example.kmatool.broadcast_receiver.AlarmReceiver
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.KEY_EVENT
@@ -70,7 +71,7 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
     }
 
     private fun scheduleNotes() {
-        Data.notesDayMap.forEach { scheduleEvents(it.value) }
+        Data.notesDayMap.forEach { entry -> scheduleEvents(entry.value.filter { !it.isDone }) }
     }
 
     fun clearAlarmEvents() {

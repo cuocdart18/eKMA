@@ -36,7 +36,9 @@ class ScheduleMainFragment : BaseFragment() {
     override val TAG = ScheduleMainFragment::class.java.simpleName
     private lateinit var binding: FragmentScheduleMainBinding
     private val viewModel by viewModels<ScheduleMainViewModel>()
-    private val eventsDayAdapter: EventsDayAdapter by lazy { EventsDayAdapter { onNoteClicked(it) } }
+    private val eventsDayAdapter: EventsDayAdapter by lazy {
+        EventsDayAdapter({ onNoteClicked(it) }, { onNoteCheckboxClicked(it) })
+    }
     private val dayBinder: MonthDayBinderImpl by lazy {
         MonthDayBinderImpl(
             { binding.calendarView.notifyDateChanged(it) }, { getEventsDay(it) })
@@ -121,6 +123,10 @@ class ScheduleMainFragment : BaseFragment() {
         )
         // navigate
         navigateToFragment(R.id.noteDetailFragment, bundle)
+    }
+
+    private fun onNoteCheckboxClicked(note: Note) {
+        viewModel.onClickNoteCheckbox(note)
     }
 
     private fun refreshDataAfterUpdatedOrDeleted() {

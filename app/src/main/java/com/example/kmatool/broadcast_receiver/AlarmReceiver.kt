@@ -22,11 +22,9 @@ import com.example.kmatool.data.models.Note
 class AlarmReceiver : BroadcastReceiver() {
     private val TAG = AlarmReceiver::class.java.simpleName
 
-    override fun onReceive(context: Context?, intent: Intent?) {
-        val event = intent?.getSerializableExtra(KEY_EVENT) as Event
-        if (context != null) {
-            showNotification(context, event)
-        }
+    override fun onReceive(context: Context, intent: Intent) {
+        val event = intent.getSerializableExtra(KEY_EVENT) as Event
+        showNotification(context, event)
     }
 
     private fun showNotification(context: Context, event: Event) {
