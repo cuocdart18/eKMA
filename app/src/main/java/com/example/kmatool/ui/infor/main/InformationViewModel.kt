@@ -27,6 +27,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -40,7 +41,7 @@ class InformationViewModel @Inject constructor(
     private val profileService: IProfileService,
     private val userService: IUserService
 ) : BaseViewModel() {
-
+    override val TAG = InformationViewModel::class.java.simpleName
     private lateinit var profile: Profile
     private lateinit var uri: Uri
 
@@ -147,7 +148,21 @@ class InformationViewModel @Inject constructor(
 
             // clear disk memory
             val clearPeriods = launch { scheduleService.deletePeriods() }
-            val clearNotes = launch { noteService.deleteNotes() }
+            val clearNotes = launch {
+                launch {
+                    Data.notesDayMap.forEach {
+                        launch {
+                            it.value.forEach {
+                                launch {
+                                    File(it.audioPath.toString()).delete()
+                                    logError("delete ${it.audioPath.toString()} done")
+                                }
+                            }
+                        }
+                    }
+                }
+                noteService.deleteNotes()
+            }
             val clearAlarm = launch {
                 if (dataLocalManager.getIsNotifyEvents())
                     alarmEventsScheduler.clearAlarmEvents()

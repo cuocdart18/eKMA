@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +29,10 @@ class NoteDetailViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             noteService.deleteNote(note)
+            // delete local file
+            if (!note.audioPath.isNullOrEmpty()) {
+                note.audioPath?.let { File(it).delete() }
+            }
             Data.getLocalNotesRuntime(noteService)
             withContext(Dispatchers.Main) {
                 callback()

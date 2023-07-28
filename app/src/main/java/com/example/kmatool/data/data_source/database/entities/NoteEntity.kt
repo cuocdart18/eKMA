@@ -10,6 +10,8 @@ data class NoteEntity(
     var title: String,
     @ColumnInfo(name = NoteEntityEntry.CONTENT)
     var content: String? = null,
+    @ColumnInfo(name = NoteEntityEntry.AUDIO_PATH)
+    var audioPath: String? = null,
     @ColumnInfo(name = NoteEntityEntry.DATE)
     var date: String,
     @ColumnInfo(name = NoteEntityEntry.TIME)
@@ -28,6 +30,7 @@ object NoteEntityEntry {
     const val ID = "id"
     const val TITLE = "title"
     const val CONTENT = "content"
+    const val AUDIO_PATH = "audio_path"
     const val DATE = "date"
     const val TIME = "time"
     const val IS_DONE = "is_done"

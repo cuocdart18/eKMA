@@ -12,6 +12,7 @@ import com.example.kmatool.data.models.Period
 import com.example.kmatool.databinding.ItemEventDayBinding
 import com.example.kmatool.common.NOTE_TYPE
 import com.example.kmatool.common.PERIOD_TYPE
+import com.example.kmatool.common.makeVisible
 
 class EventsDayAdapter(
     private val callback: (note: Note) -> Unit,
@@ -42,23 +43,29 @@ class EventsDayAdapter(
         // update UI
         if (event.type == PERIOD_TYPE) {
             holder.binding.period = event as Period
-            holder.binding.layoutPeriod.visibility = View.VISIBLE
+            holder.binding.layoutPeriod.makeVisible()
         } else if (event.type == NOTE_TYPE) {
             val note = event as Note
             holder.binding.note = note
+            // set background for expired note
             if (note.getTimeMillis() < System.currentTimeMillis()) {
                 holder.binding.layoutNote.setBackgroundResource(R.drawable.bgr_box_of_item_expired_note)
             } else {
                 holder.binding.layoutNote.setBackgroundResource(R.drawable.bgr_box_of_item_note)
             }
+            // set checkmark state
             holder.binding.cbIsNoteDone.setImageResource(
                 if (note.isDone) {
-                    R.drawable.checkmark_circle_outline_28dp_blue
+                    R.drawable.checkbox_circle_line
                 } else {
-                    R.drawable.ellipse_outline_28dp_white
+                    R.drawable.checkbox_blank_circle_fill
                 }
             )
-            holder.binding.layoutNote.visibility = View.VISIBLE
+            // set audio enable
+            if (!note.audioPath.isNullOrEmpty()) {
+                holder.binding.imvAudio.setImageResource(R.drawable.mic_outline_white_24dp)
+            }
+            holder.binding.layoutNote.makeVisible()
         }
     }
 
@@ -87,9 +94,9 @@ class EventsDayAdapter(
                         checkboxCallback(note)
                         binding.cbIsNoteDone.setImageResource(
                             if (note.isDone) {
-                                R.drawable.checkmark_circle_outline_28dp_blue
+                                R.drawable.checkbox_circle_line
                             } else {
-                                R.drawable.ellipse_outline_28dp_white
+                                R.drawable.checkbox_blank_circle_fill
                             }
                         )
                     }

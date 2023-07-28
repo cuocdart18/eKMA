@@ -48,10 +48,10 @@
                     <ImageView
                         android:id="@+id/btn_delete_note"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="24dp"
                         android:layout_weight="2"
                         android:contentDescription="@string/delete_note"
-                        android:src="@drawable/trash_outline_red_24dp" />
+                        android:src="@drawable/trash_outline_red" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -100,13 +100,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="@dimen/base_xxhigh_margin"
+                        android:layout_marginBottom="@dimen/base_high_margin"
                         android:contentDescription="@string/space_of_content"
                         android:src="@drawable/caret_down_outline_red_24dp" />
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/frm_container_player"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/base_high_margin"
                         android:layout_marginBottom="@dimen/base_normal_margin"
                         android:text="@string/description_header"
                         android:textColor="@color/lab_black"
@@ -123,8 +130,8 @@
                         android:textStyle="bold" />
 
                     <ImageView
-                        android:layout_width="@dimen/base_width_img"
-                        android:layout_height="@dimen/base_height_img"
+                        android:layout_width="@dimen/base_width_img_present"
+                        android:layout_height="@dimen/base_height_img_present"
                         android:layout_gravity="center_horizontal"
                         android:importantForAccessibility="no"
                         android:src="@drawable/checklist_rafiki_red_512dp" />

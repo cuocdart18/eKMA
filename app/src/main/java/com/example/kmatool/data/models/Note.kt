@@ -10,6 +10,7 @@ import com.example.kmatool.common.NOTE_TYPE
 data class Note(
     var title: String,
     var content: String? = null,
+    var audioPath: String? = null,
     var date: String,
     var time: String
 ) : Event {

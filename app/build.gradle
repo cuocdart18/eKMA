@@ -135,4 +135,5 @@ dependencies {
 
     // animation gif
     implementation "com.airbnb.android:lottie:6.0.0"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
 }

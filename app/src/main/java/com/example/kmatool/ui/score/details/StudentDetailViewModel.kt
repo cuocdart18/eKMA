@@ -7,7 +7,6 @@ import com.example.kmatool.common.Resource
 import com.example.kmatool.common.gpaCalculator
 import com.example.kmatool.data.models.Student
 import com.example.kmatool.data.models.service.IScoreService
-import com.example.kmatool.ui.score.search.SearchDataViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +17,7 @@ import javax.inject.Inject
 class StudentDetailViewModel @Inject constructor(
     private val scoreService: IScoreService
 ) : BaseViewModel() {
-    override val TAG = SearchDataViewModel::class.java.simpleName
+    override val TAG = StudentDetailViewModel::class.java.simpleName
 
     var studentId: String = ""
     var isMyStudentId = false

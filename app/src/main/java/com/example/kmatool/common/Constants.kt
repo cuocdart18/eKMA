@@ -21,6 +21,14 @@ const val GET_SCHEDULE_ID = 1812003
 const val TIRAMISU_PERMISSION_REQUEST_CODE = 33
 const val S_PERMISSION_REQUEST_CODE = 31
 const val M_PERMISSION_REQUEST_CODE = 23
+const val START_RECORDING = 1001
+const val PAUSE_RECORDING = 1002
+const val RESUME_RECORDING = 1003
+const val STOP_RECORDING = 1004
+const val START_PLAYING = 1005
+const val PAUSE_PLAYING = 1006
+const val RESUME_PLAYING = 1007
+const val STOP_PLAYING = 1008
 
 // for WorkManager
 const val UPDATE_SCHEDULE_WORKER_TAG = "update_schedule_tag"
@@ -28,11 +36,11 @@ const val GET_SCHEDULE_WORKER_TAG = "get_schedule_tag"
 const val UNIQUE_UPDATE_SCHEDULE_WORK_NAME = "update_schedule"
 const val UNIQUE_GET_SCHEDULE_WORK_NAME = "get_schedule"
 
-// for database
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
 const val KEY_PASS_IS_MY_MINISTUDENT_ID = "my_ministudent_id"
 const val KEY_PASS_NOTE_OBJ = "note_obj"
 const val KEY_PASS_NOTE_MODE = "note_mode"
+const val KEY_PASS_VOICE_AUDIO_PATH = "voice_audio_path"
 const val DATABASE_NAME = "app_database.db"
 const val KEY_PASS_STATISTIC_SUBJECT = "statistic_subject"
 const val SCALE_LAYOUT_STATISTIC_SUBJECT_DIALOG_X = 0.80

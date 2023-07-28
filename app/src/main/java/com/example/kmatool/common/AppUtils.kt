@@ -1,5 +1,6 @@
 package com.example.kmatool.common
 
+import android.content.Context
 import com.example.kmatool.data.models.Score
 import com.google.gson.Gson
 import java.math.BigInteger
@@ -7,9 +8,19 @@ import java.security.MessageDigest
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.concurrent.TimeUnit
 import kotlin.math.round
 
 // Global method
+
+fun getCachedRecordDirPath(context: Context): String {
+    return "${context.cacheDir.absolutePath}/records"
+}
+
+fun getPersistentRecordDirPath(context: Context): String {
+    return "${context.filesDir.absolutePath}/records"
+}
+
 fun convertPeriodToTime(data: String): String =
     when (data) {
         "1" -> "07:00"
@@ -103,4 +114,32 @@ private fun isExcludedSubjects(id: String): Boolean {
         "ATQGTC5"   // GDTC 5
     )
     return excludedSubject.contains(id)
+}
+
+fun formatRecordingTimer(duration: Int): String {
+    val millis = (duration % 1000) / 10
+    val seconds = (duration / 1000) % 60
+    val minutes = (duration / (1000 * 60)) % 60
+    val hours = (duration / (1000 * 60 * 60))
+    val formatted = if (hours > 0) {
+        "%02d:%02d:%02d.%02d".format(hours, minutes, seconds, millis)
+    } else {
+        "%02d:%02d.%02d".format(minutes, seconds, millis)
+    }
+    return formatted
+}
+
+fun formatAudioDuration(duration: Int): String {
+//    val durationL = duration.toLong()
+    val minutes = (duration / (1000 * 60)) % 60
+//    val minutes = TimeUnit.MILLISECONDS.toMinutes(durationL)
+    val seconds = (duration / 1000) % 60
+//    val seconds = TimeUnit.MILLISECONDS.toSeconds(durationL) - TimeUnit.MINUTES.toSeconds(minutes)
+    val hours = (duration / (1000 * 60 * 60))
+    val formatted = if (hours > 0) {
+        "%02d:%02d:%02d".format(hours, minutes, seconds)
+    } else {
+        "%02d:%02d".format(minutes, seconds)
+    }
+    return formatted
 }

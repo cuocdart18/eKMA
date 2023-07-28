@@ -7,14 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.common.KEY_PASS_NOTE_MODE
 import com.example.kmatool.common.KEY_PASS_NOTE_OBJ
+import com.example.kmatool.common.KEY_PASS_VOICE_AUDIO_PATH
 import com.example.kmatool.common.UPDATE_NOTE_MODE
+import com.example.kmatool.common.makeVisible
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.databinding.FragmentNoteDetailBinding
+import com.example.kmatool.ui.note.audio_player.AudioPlayerFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,8 +40,8 @@ class NoteDetailFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         regisOnBackPressed()
-        setupView()
         receiveNote()
+        setupView()
     }
 
     private fun receiveNote() {
@@ -48,6 +53,19 @@ class NoteDetailFragment : BaseFragment() {
     }
 
     private fun setupView() {
+        if (!viewModel.note.audioPath.isNullOrEmpty()) {
+            if (childFragmentManager.fragments.size == 0) {
+                val bundle = bundleOf(
+                    KEY_PASS_VOICE_AUDIO_PATH to viewModel.note.audioPath
+                )
+                // add audio player fragment
+                childFragmentManager.commit {
+                    setReorderingAllowed(true)
+                    add<AudioPlayerFragment>(binding.frmContainerPlayer.id, args = bundle)
+                }
+            }
+            binding.frmContainerPlayer.makeVisible()
+        }
         binding.btnDeleteNote.setOnClickListener { onClickBtnDelete() }
         binding.fabUpdateNote.setOnClickListener { onClickBtnUpdate() }
     }

@@ -84,7 +84,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_content"
                 style="@style/BaseTextInputLayoutForNote"
-                android:layout_marginBottom="@dimen/base_xhigh_margin"
+                android:layout_marginBottom="@dimen/base_high_margin"
                 android:hint="@string/note_content"
                 app:counterEnabled="true"
                 app:counterMaxLength="200">
@@ -98,9 +98,61 @@
                     android:minLines="6" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/layout_audio_player"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/base_xhigh_margin"
+                android:visibility="gone">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/frm_container_player"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/btn_delete_audio_old_note"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/btn_delete_audio_old_note"
+                    android:src="@drawable/trash_outline_red"
+                    app:layout_anchor="@id/frm_container_player"
+                    app:layout_anchorGravity="bottom|right" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:text="@string/tv_recording_text_helper"
+                    android:textColor="@color/lab_black"
+                    android:textSize="@dimen/base_normal_text" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/sw_voice_recorder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:checked="false"
+                    app:thumbTint="@color/lab_red"
+                    app:trackTint="@color/lab_light_red" />
+            </FrameLayout>
+
+            <include
+                android:id="@+id/layout_voice_recorder"
+                layout="@layout/layout_voice_recorder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/base_normal_margin" />
+
             <Button
                 android:id="@+id/btn_save"
                 style="@style/BaseButtonSubmit"
+                android:layout_marginTop="@dimen/base_xhigh_margin"
                 android:text="@string/note_save" />
         </LinearLayout>
     </ScrollView>

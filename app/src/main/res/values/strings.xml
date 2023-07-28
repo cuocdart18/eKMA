@@ -113,5 +113,13 @@
     <string name="desc_error_loading">Có vẻ như đã xảy ra lỗi. . .</string>
     <string name="splash_image">splash_image</string>
     <string name="checkbox_outline">checkbox_outline</string>
+    <string name="tv_recording_text_helper">Ghi âm</string>
+    <string name="audio_recording">audio_recording</string>
+    <string name="btn_jump_plus">btn_jump_plus</string>
+    <string name="btn_jump_minus">btn_jump_minus</string>
+    <string name="btn_play_pause">btn_play_pause</string>
+    <string name="btn_delete_audio_old_note">btn_delete_audio_old_note</string>
+    <string name="btn_record">btn_record</string>
+    <string name="btn_fit_record_ui">btn_fit_record_ui</string>
 
 </resources>

@@ -51,6 +51,7 @@ fun Note.toNoteEntity(): NoteEntity {
     val noteEntity = NoteEntity(
         title = title,
         content = content,
+        audioPath = audioPath,
         date = date,
         time = time
     )
@@ -63,6 +64,7 @@ fun NoteEntity.toNote(): Note {
     val note = Note(
         title = title,
         content = content,
+        audioPath = audioPath,
         date = date,
         time = time
     )
