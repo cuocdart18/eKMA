@@ -20,6 +20,7 @@ class ProfileService @Inject constructor(
 
     override suspend fun saveProfile(profile: Profile) {
         profileRepository.saveProfile(profile)
+        profileRepository.saveProfileToFirestore(profile)
     }
 
     override suspend fun clearProfile() {

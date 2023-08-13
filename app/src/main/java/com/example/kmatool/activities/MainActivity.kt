@@ -1,12 +1,14 @@
 package com.example.kmatool.activities
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.kmatool.R
 import com.example.kmatool.base.activities.BaseActivity
+import com.example.kmatool.common.Data
 import com.example.kmatool.databinding.ActivityMainBinding
 import com.example.kmatool.data.data_source.database.AppDatabase
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +46,12 @@ class MainActivity : BaseActivity() {
             supportFragmentManager.findFragmentById(R.id.frm_host) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNav.setupWithNavController(navController)
+        Data.hideBottomNavView.observe(this) {
+            if (it)
+                binding.bottomNav.visibility = View.GONE
+            else
+                binding.bottomNav.visibility = View.VISIBLE
+        }
     }
 
     override fun onDestroy() {

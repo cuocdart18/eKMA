@@ -90,6 +90,7 @@
 
     <string name="key_my_score_pref">my_score</string>
     <string name="key_update_schedule_pref">update_schedule</string>
+    <string name="key_chat">chat</string>
     <string name="key_notify_event_pref">notify_event</string>
     <string name="key_dark_mode_pref">dark_mode</string>
     <string name="key_language_pref">language</string>

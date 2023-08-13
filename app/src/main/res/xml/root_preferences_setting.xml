@@ -7,6 +7,11 @@
         android:title="Điểm của tôi" />
 
     <Preference
+        android:icon="@drawable/chatbubbles_outline_24dp"
+        android:key="@string/key_chat"
+        android:title="Trò chuyện (beta)" />
+
+    <Preference
         android:icon="@drawable/cloud_download_outline_black_24dp"
         android:key="@string/key_update_schedule_pref"
         android:title="Cập nhật thời khoá biểu" />
@@ -16,12 +21,6 @@
         android:icon="@drawable/notifications_outline_black_24dp"
         android:key="@string/key_notify_event_pref"
         android:title="Thông báo" />
-
-    <SwitchPreference
-        android:defaultValue="false"
-        android:icon="@drawable/moon_outline_black_24dp"
-        android:key="@string/key_dark_mode_pref"
-        android:title="Chế độ tối" />
 
     <Preference
         android:icon="@drawable/logo_github_black_24dp"

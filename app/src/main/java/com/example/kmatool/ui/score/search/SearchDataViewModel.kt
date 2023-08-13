@@ -29,12 +29,12 @@ class SearchDataViewModel @Inject constructor(
     internal val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
 
     @OptIn(ObsoleteCoroutinesApi::class, FlowPreview::class)
-    private val internalSearchResult = queryChannel
+    val searchResult = queryChannel
         .asFlow()
         .debounce(600L)
         .filterNot { it.isBlank() }
         .distinctUntilChanged()
-    val searchResult = internalSearchResult.asLiveData()
+        .asLiveData()
 
     fun onSearchEditTextObserved(
         text: String,

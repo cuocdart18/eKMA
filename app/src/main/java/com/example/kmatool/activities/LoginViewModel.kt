@@ -59,6 +59,7 @@ class LoginViewModel @Inject constructor(
                     val profile = profileService.getProfile(username, password, true)
                     if (profile is Success && profile.data != null) {
                         profileService.saveProfile(profile.data)
+                        // save hashed data to local
                         userService.saveUser(User(username, password, true))
                         loginService.saveLoginState(true)
                         // handle schedule

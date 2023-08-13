@@ -13,6 +13,8 @@ interface IProfileRepository {
 
     suspend fun saveProfile(profile: Profile)
 
+    suspend fun saveProfileToFirestore(profile: Profile)
+
     suspend fun clearProfile()
 
     suspend fun getProfile(): Profile

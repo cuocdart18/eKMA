@@ -1,17 +1,35 @@
 package com.example.kmatool.common
 
 import android.content.Context
+import androidx.lifecycle.viewModelScope
 import com.example.kmatool.data.models.Score
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.util.concurrent.TimeUnit
 import kotlin.math.round
 
 // Global method
+
+fun genChatRoomId(studentId: String, myStudentId: String): String {
+    val compareStatus = myStudentId.compareTo(studentId)
+    return if (compareStatus == 0) {
+        "$studentId$myStudentId"
+    } else if (compareStatus > 0) {
+        "$studentId$myStudentId"
+    } else {
+        "$myStudentId$studentId"
+    }
+}
+
+fun formatMembersToRoomName(members: List<String>): String {
+    return members.toString()
+}
 
 fun getCachedRecordDirPath(context: Context): String {
     return "${context.cacheDir.absolutePath}/records"
@@ -24,20 +42,14 @@ fun getPersistentRecordDirPath(context: Context): String {
 fun convertPeriodToTime(data: String): String =
     when (data) {
         "1" -> "07:00"
-//        "2" -> "7:00"
         "3" -> "09:25"
         "4" -> "09:35"
-//        "5" -> "7:00"
         "6" -> "12:00"
         "7" -> "12:30"
-//        "8" -> "7:00"
         "9" -> "14:55"
         "10" -> "15:05"
-//        "11" -> "7:00"
         "12" -> "17:30"
         "13" -> "18:00"
-//        "14" -> "7:00"
-//        "15" -> "7:00"
         "16" -> "21:15"
         else -> "invalid data"
     }

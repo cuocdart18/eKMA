@@ -17,6 +17,7 @@ import com.example.kmatool.common.UNIQUE_UPDATE_SCHEDULE_WORK_NAME
 import com.example.kmatool.common.UPDATE_SCHEDULE_WORKER_TAG
 import com.example.kmatool.data.models.service.ILoginService
 import com.example.kmatool.data.models.service.INoteService
+import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.work.GetScheduleWorkRunner
 import com.example.kmatool.work.UpdateScheduleWorkRunner
@@ -31,7 +32,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val loginService: ILoginService,
     private val noteService: INoteService,
-    private val scheduleService: IScheduleService
+    private val scheduleService: IScheduleService,
+    private val profileService: IProfileService
 ) : BaseViewModel() {
     override val TAG: String = MainViewModel::class.java.simpleName
 
@@ -74,6 +76,7 @@ class MainViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            Data.getProfile(profileService)
             Data.getLocalData(noteService, scheduleService, callback)
         }
     }

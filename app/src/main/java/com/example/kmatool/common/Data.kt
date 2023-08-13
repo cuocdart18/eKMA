@@ -3,9 +3,13 @@ package com.example.kmatool.common
 import androidx.lifecycle.MutableLiveData
 import com.example.kmatool.data.models.Note
 import com.example.kmatool.data.models.Period
+import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.Student
 import com.example.kmatool.data.models.service.INoteService
+import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScheduleService
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import kotlinx.coroutines.Dispatchers
@@ -15,18 +19,29 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 object Data {
+    val firestore by lazy { Firebase.firestore }
+
     // K = day
     // V = Periods/Notes on a day
     var periodsDayMap = mutableMapOf<String, List<Period>>()
     var notesDayMap = mutableMapOf<String, List<Note>>()
 
     val isRefreshClickedEvents = MutableLiveData<Boolean>()
+    val hideBottomNavView = MutableLiveData<Boolean>()
     var saveDateClicked = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
 
     // cache for my score selected
     var myStudentInfo: Student? = null
 
+    lateinit var profile: Profile
+
     // func
+    suspend fun getProfile(
+        profileService: IProfileService
+    ) {
+        profile = profileService.getProfile()
+    }
+
     suspend fun getLocalData(
         noteService: INoteService,
         scheduleService: IScheduleService,

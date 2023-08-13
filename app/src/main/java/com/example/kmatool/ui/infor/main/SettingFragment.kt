@@ -37,6 +37,13 @@ class SettingFragment(
             }
         }
 
+        findPreference<Preference>(getString(R.string.key_chat))?.let {
+            it.setOnPreferenceClickListener {
+                listener.onClickChat()
+                true
+            }
+        }
+
         findPreference<Preference>(getString(R.string.key_log_out_pref))?.let {
             it.setOnPreferenceClickListener {
                 listener.onClickLogOut()
@@ -52,10 +59,6 @@ class SettingFragment(
         when (key) {
             getString(R.string.key_notify_event_pref) -> {
                 listener.onChangedNotifyEvent(sPref.getBoolean(key, false))
-            }
-
-            getString(R.string.key_dark_mode_pref) -> {
-                listener.onChangedDarkMode(sPref.getBoolean(key, false))
             }
 
             getString(R.string.key_language_pref) -> {
@@ -75,7 +78,7 @@ class SettingFragment(
         fun onClickUpdateSchedule()
         fun onClickLogOut()
         fun onChangedNotifyEvent(data: Boolean)
-        fun onChangedDarkMode(data: Boolean)
+        fun onClickChat()
         fun onChangedLanguage()
     }
 }

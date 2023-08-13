@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import com.example.kmatool.R
 import com.example.kmatool.activities.LoginActivity
 import com.example.kmatool.base.fragment.BaseFragment
+import com.example.kmatool.common.Data
 import com.example.kmatool.common.KEY_PASS_MINISTUDENT_ID
 import com.example.kmatool.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.example.kmatool.databinding.FragmentInformationBinding
@@ -50,6 +51,7 @@ class InformationFragment : BaseFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Data.hideBottomNavView.value = false
         setUpPreferencesSetting()
         setUpProfile()
         // ask permission
@@ -167,7 +169,9 @@ class InformationFragment : BaseFragment(),
         viewModel.changedIsNotifyEvents(requireContext(), data) { }
     }
 
-    override fun onChangedDarkMode(data: Boolean) {
+    override fun onClickChat() {
+        Data.hideBottomNavView.value = true
+        navigateToFragment(R.id.listChatFragment)
     }
 
     override fun onChangedLanguage() {

@@ -50,10 +50,8 @@ class SearchDataDialogFragment :
 
     @OptIn(ObsoleteCoroutinesApi::class)
     private fun setSearchAsyncEditText() {
-        logDebug("setSearchAsyncEditText")
         // get data
         viewModel.searchResult.observe(this) { query ->
-            logDebug("observe query = $query")
             viewModel.onSearchEditTextObserved(query) { data ->
                 if (data != null) {
                     showMiniStudentToUI(data)
@@ -70,7 +68,6 @@ class SearchDataDialogFragment :
     }
 
     private fun setRecyclerViewProperties() {
-        logDebug("setting rcv properties")
         val linearLayoutManager = LinearLayoutManager(requireContext())
         binding.rvSearchQuery.layoutManager = linearLayoutManager
         binding.rvSearchQuery.isFocusable = false
@@ -78,19 +75,12 @@ class SearchDataDialogFragment :
     }
 
     private fun showMiniStudentToUI(miniStudents: List<MiniStudent>) {
-        logDebug("show data UI student")
         searchDataAdapter.setMiniStudents(miniStudents)
         binding.rvSearchQuery.adapter = searchDataAdapter
     }
 
     private fun onClickListItem(miniStudent: MiniStudent) {
-        logDebug("on click student = $miniStudent")
         viewModel.insertMiniStudentToDb(miniStudent)
-        navigateStudentDetailFragment(miniStudent.id)
-    }
-
-    private fun navigateStudentDetailFragment(id: String) {
-        logDebug("navigate detail fragment with student = $id")
         // action
         val bundle = bundleOf(
             KEY_PASS_MINISTUDENT_ID to id

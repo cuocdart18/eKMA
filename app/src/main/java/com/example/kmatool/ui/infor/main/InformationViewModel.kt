@@ -54,7 +54,7 @@ class InformationViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             profile = profileService.getProfile()
-            CoroutineScope(Dispatchers.Main).launch {
+            withContext(Dispatchers.Main) {
                 callback(profile)
             }
         }
@@ -181,6 +181,7 @@ class InformationViewModel @Inject constructor(
 
             // clear cache memory
             Data.myStudentInfo = null
+            Data.profile = Profile("", "", "", "")
             Data.saveDateClicked = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
 
             withContext(Dispatchers.Main) {

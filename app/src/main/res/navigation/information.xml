@@ -9,14 +9,43 @@
         android:id="@+id/informationFragment"
         android:name="com.example.kmatool.ui.infor.main.InformationFragment"
         android:label="thong tin"
-        tools:layout="@layout/fragment_information" >
+        tools:layout="@layout/fragment_information">
         <action
             android:id="@+id/action_informationFragment_to_studentDetailFragment2"
             app:destination="@id/studentDetailFragment" />
+        <action
+            android:id="@+id/action_informationFragment_to_listChatFragment"
+            app:destination="@id/listChatFragment" />
     </fragment>
     <fragment
         android:id="@+id/studentDetailFragment"
         android:name="com.example.kmatool.ui.score.details.StudentDetailFragment"
         android:label="StudentDetailFragment"
-        tools:layout="@layout/fragment_score_student_detail"/>
+        tools:layout="@layout/fragment_score_student_detail" />
+    <fragment
+        android:id="@+id/listChatFragment"
+        android:name="com.example.kmatool.ui.chat.list.ListChatFragment"
+        android:label="ListChatFragment"
+        tools:layout="@layout/fragment_list_chat">
+        <action
+            android:id="@+id/action_listChatFragment_to_searchUserFragment"
+            app:destination="@id/searchUserFragment" />
+        <action
+            android:id="@+id/action_listChatFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchUserFragment"
+        android:name="com.example.kmatool.ui.chat.search.SearchUserFragment"
+        android:label="SearchUserFragment"
+        tools:layout="@layout/fragment_search_user">
+        <action
+            android:id="@+id/action_searchUserFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.kmatool.ui.chat.main.ChatFragment"
+        android:label="ChatFragment"
+        tools:layout="@layout/fragment_chat" />
 </navigation>
