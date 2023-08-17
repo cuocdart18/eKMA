@@ -10,8 +10,6 @@ import com.example.kmatool.common.KEY_ROOM_MESSAGE_COLL
 import com.example.kmatool.common.formatMembersToRoomName
 import com.example.kmatool.data.models.ChatRoom
 import com.example.kmatool.data.models.service.IProfileService
-import com.example.kmatool.data.service.ProfileService
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
@@ -107,6 +105,8 @@ class ListChatViewModel @Inject constructor(
                 // when a user sends the first message, room is displayed
                 if (querySnapshot.size() == 1) {
                     val chatRoom = ChatRoom(id, name, members, timestamp)
+                    // if room has been exist, return
+                    rooms.forEach { if (it.id == id) return@addOnSuccessListener }
                     rooms.add(chatRoom)
                     rooms.sortByDescending { it.timestamp }
                     callback()
