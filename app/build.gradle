@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.7.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -137,4 +138,7 @@ dependencies {
     // animation gif
     implementation "com.airbnb.android:lottie:6.0.0"
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
+
+    // Image operation
+    implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1'
 }

@@ -35,6 +35,7 @@ class VoiceNoteRecorder {
     fun getCurrentDuration() = currentDuration
 
     fun startRecorder(context: Context) {
+
         File(context.cacheDir, "records").mkdir()
         File(context.filesDir, "records").mkdir()
         outputCacheFile =

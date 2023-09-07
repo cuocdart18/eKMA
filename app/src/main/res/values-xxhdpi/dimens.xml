@@ -8,6 +8,9 @@
     <dimen name="base_width_cir">32dp</dimen>
     <dimen name="base_height_cir">32dp</dimen>
 
+    <dimen name="base_width_image_msg">256dp</dimen>
+    <dimen name="base_height_image_msg">256dp</dimen>
+
     <dimen name="base_width_dialog_confirm">300dp</dimen>
     <dimen name="base_height_dialog_confirm">300dp</dimen>
 

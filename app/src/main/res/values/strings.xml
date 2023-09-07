@@ -122,5 +122,6 @@
     <string name="btn_delete_audio_old_note">btn_delete_audio_old_note</string>
     <string name="btn_record">btn_record</string>
     <string name="btn_fit_record_ui">btn_fit_record_ui</string>
+    <string name="image_message">image_message</string>
 
 </resources>

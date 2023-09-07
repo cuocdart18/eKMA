@@ -9,9 +9,11 @@ import androidx.work.WorkManager
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.alarm.AlarmEventsScheduler
 import com.example.kmatool.broadcast_receiver.BootCompletedReceiver
+import com.example.kmatool.common.AVATAR_FILE
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
+import com.example.kmatool.common.USERS_DIR
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.service.ILoginService
@@ -19,6 +21,7 @@ import com.example.kmatool.data.models.service.INoteService
 import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.data.models.service.IUserService
+import com.example.kmatool.firebase.storage
 import com.example.kmatool.work.GetScheduleWorkRunner
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
@@ -81,10 +84,20 @@ class InformationViewModel @Inject constructor(
         callback: (uri: Uri) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.Main) {
+            val myStudentCode = profileService.getProfile().studentCode
             TedImagePickerStarter.startImage(context) { uri ->
                 CoroutineScope(Dispatchers.IO).launch {
                     val filePath = FileUtils.saveImageAndGetPath(context, uri)
+                    // save to local
                     dataLocalManager.saveImgFilePath(filePath)
+                    // save to storage
+                    val avtRef = storage.child("$USERS_DIR/$myStudentCode/$AVATAR_FILE")
+                    avtRef.putFile(uri).addOnSuccessListener {
+                        avtRef.downloadUrl.addOnCompleteListener { uri ->
+                            val url = uri.result.toString()
+                            logError("link=$url")
+                        }
+                    }.addOnFailureListener { logError("$it") }
                     withContext(Dispatchers.Main) {
                         this@InformationViewModel.uri = uri
                         callback(uri)

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_margin="@dimen/base_high_margin"
+            android:textColor="@color/lab_black"
+            android:textSize="@dimen/base_normal_text"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/imv_message"
+            android:layout_width="@dimen/base_width_image_msg"
+            android:layout_height="@dimen/base_height_image_msg"
+            android:layout_gravity="start"
+            android:layout_margin="@dimen/base_high_margin"
+            android:contentDescription="@string/image_message"
+            android:visibility="gone" />
+    </LinearLayout>
+</layout>

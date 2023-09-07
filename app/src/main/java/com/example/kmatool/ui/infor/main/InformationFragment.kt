@@ -207,7 +207,7 @@ class InformationFragment : BaseFragment(),
 
     private fun setImageUri(uri: Uri) {
         if (uri.toString().isBlank()) {
-            binding.civProfileImage.setBackgroundResource(R.drawable.photo_camera)
+            binding.civProfileImage.setBackgroundResource(R.drawable.user)
         } else {
             binding.civProfileImage.setImageURI(uri)
         }

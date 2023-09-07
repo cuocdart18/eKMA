@@ -83,7 +83,7 @@ class SearchDataDialogFragment :
         viewModel.insertMiniStudentToDb(miniStudent)
         // action
         val bundle = bundleOf(
-            KEY_PASS_MINISTUDENT_ID to id
+            KEY_PASS_MINISTUDENT_ID to miniStudent.id
         )
         navigateToFragment(R.id.studentDetailFragment, bundle)
     }

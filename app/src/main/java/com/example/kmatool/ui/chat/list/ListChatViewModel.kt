@@ -2,7 +2,6 @@ package com.example.kmatool.ui.chat.list
 
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.common.Data
 import com.example.kmatool.common.KEY_MESSAGE_TIMESTAMP_DOC
 import com.example.kmatool.common.KEY_ROOMS_COLL
 import com.example.kmatool.common.KEY_ROOM_MEMBERS
@@ -10,6 +9,7 @@ import com.example.kmatool.common.KEY_ROOM_MESSAGE_COLL
 import com.example.kmatool.common.formatMembersToRoomName
 import com.example.kmatool.data.models.ChatRoom
 import com.example.kmatool.data.models.service.IProfileService
+import com.example.kmatool.firebase.firestore
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
@@ -32,7 +32,7 @@ class ListChatViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val myStudentCode = profileService.getProfile().studentCode
-            roomChangeListener = Data.firestore.collection(KEY_ROOMS_COLL)
+            roomChangeListener = firestore.collection(KEY_ROOMS_COLL)
                 .whereArrayContains(KEY_ROOM_MEMBERS, myStudentCode)
                 .addSnapshotListener { value, _ ->
                     if (value != null) {

@@ -1,8 +1,6 @@
 package com.example.kmatool.data.repository
 
 import com.example.kmatool.base.repositories.BaseRepositories
-import com.example.kmatool.common.Data
-import com.example.kmatool.common.KEY_STUDENT_PROFILE
 import com.example.kmatool.common.KEY_USERS_COLL
 import com.example.kmatool.common.KEY_USER_DOB
 import com.example.kmatool.common.KEY_USER_GENDER
@@ -14,6 +12,7 @@ import com.example.kmatool.data.data_source.apis.ScheduleAPI
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.repository.IProfileRepository
+import com.example.kmatool.firebase.firestore
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
@@ -42,7 +41,7 @@ class ProfileRepositoryImpl @Inject constructor(
             KEY_USER_DOB to profile.birthday,
             KEY_USER_GENDER to profile.gender
         )
-        Data.firestore.collection(KEY_USERS_COLL)
+        firestore.collection(KEY_USERS_COLL)
             .document(profile.studentCode)
             .set(profileMap)
     }

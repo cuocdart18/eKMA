@@ -47,5 +47,14 @@
         android:id="@+id/chatFragment"
         android:name="com.example.kmatool.ui.chat.main.ChatFragment"
         android:label="ChatFragment"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat">
+        <action
+            android:id="@+id/action_chatFragment_to_imageViewerFragment"
+            app:destination="@id/imageViewerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageViewerFragment"
+        android:name="com.example.kmatool.ui.chat.image_viewer.ImageViewerFragment"
+        android:label="ImageViewerFragment"
+        tools:layout="@layout/fragment_image_viewer" />
 </navigation>

@@ -22,6 +22,12 @@ const val EVENTS_NOTIFY_ID = 1001
 const val UPDATE_SCHEDULE_ID = 872002
 const val GET_SCHEDULE_ID = 1812003
 
+// Message type
+const val TEXT_MSG = 1
+const val IMAGE_MSG = 2
+const val GIF_MSG = 3
+const val VIDEO_MSG = 4
+
 // for Recording
 const val START_RECORDING = 1001
 const val PAUSE_RECORDING = 1002
@@ -44,10 +50,16 @@ const val KEY_ROOM_MESSAGE_COLL = "messages"
 const val KEY_MESSAGE_TIMESTAMP_DOC = "timestamp"
 const val KEY_MESSAGE_CONTENT_DOC = "content"
 const val KEY_MESSAGE_FROM_DOC = "from"
+const val KEY_MESSAGE_TYPE_DOC = "type"
 const val KEY_USER_ID = "studentCode"
 const val KEY_USER_DOB = "birthday"
 const val KEY_USER_NAME = "displayName"
 const val KEY_USER_GENDER = "gender"
+
+// for Storage
+const val USERS_DIR = "users"
+const val AVATAR_FILE = "avatar"
+const val ROOMS_DIR = "rooms"
 
 // for DocsChange type
 const val DOCUMENT_CHANGE_ADDED = 900
@@ -61,6 +73,7 @@ const val UNIQUE_UPDATE_SCHEDULE_WORK_NAME = "update_schedule"
 const val UNIQUE_GET_SCHEDULE_WORK_NAME = "get_schedule"
 
 // for data Passing
+const val KEY_PASS_IMAGE_URL = "image_url"
 const val KEY_PASS_CHAT_ROOM_ID = "chat_room_id"
 const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
 const val KEY_PASS_IS_MY_MINISTUDENT_ID = "my_ministudent_id"

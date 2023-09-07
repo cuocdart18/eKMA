@@ -8,8 +8,6 @@ import com.example.kmatool.data.models.Student
 import com.example.kmatool.data.models.service.INoteService
 import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScheduleService
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import kotlinx.coroutines.Dispatchers
@@ -19,8 +17,6 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
 object Data {
-    val firestore by lazy { Firebase.firestore }
-
     // K = day
     // V = Periods/Notes on a day
     var periodsDayMap = mutableMapOf<String, List<Period>>()

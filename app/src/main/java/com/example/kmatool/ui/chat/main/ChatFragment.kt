@@ -5,11 +5,15 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kmatool.R
 import com.example.kmatool.base.fragment.BaseFragment
 import com.example.kmatool.base.listeners.PaginationScrollListener
 import com.example.kmatool.common.KEY_PASS_CHAT_ROOM_ID
+import com.example.kmatool.common.KEY_PASS_IMAGE_URL
+import com.example.kmatool.common.TEXT_MSG
 import com.example.kmatool.databinding.FragmentChatBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,7 +22,7 @@ class ChatFragment : BaseFragment() {
     override val TAG = ChatFragment::class.java.simpleName
     private lateinit var binding: FragmentChatBinding
     private val viewModel by viewModels<ChatViewModel>()
-    private val chatAdapter by lazy { ChatAdapter() }
+    private val chatAdapter by lazy { ChatAdapter(requireContext(), imageCallback) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +37,9 @@ class ChatFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         getBundleData()
         initViews()
-        initMessaging()
+        if (viewModel.messages.isEmpty()) {
+            initMessaging()
+        }
     }
 
     private fun getBundleData() {
@@ -51,8 +57,12 @@ class ChatFragment : BaseFragment() {
         chatAdapter.setMessages(viewModel.messages)
         binding.rcvMessages.adapter = chatAdapter
 
+        binding.btnImagePicker.setOnClickListener {
+            viewModel.sendImageFromPicker(requireContext())
+        }
+
         binding.btnSend.setOnClickListener {
-            viewModel.sendMessage(binding.edtMessageInput.text.toString().trim())
+            viewModel.sendMessage(binding.edtMessageInput.text.toString().trim(), TEXT_MSG)
             binding.edtMessageInput.text.clear()
         }
 
@@ -68,6 +78,13 @@ class ChatFragment : BaseFragment() {
 
             override fun isLastPage() = viewModel.isLastPage
         })
+    }
+
+    private val imageCallback: (imgUrl: String) -> Unit = { imgUrl ->
+        val bundle = bundleOf(
+            KEY_PASS_IMAGE_URL to imgUrl
+        )
+        navigateToFragment(R.id.imageViewerFragment, bundle)
     }
 
     private fun initMessaging() {

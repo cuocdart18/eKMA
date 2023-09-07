@@ -3,7 +3,6 @@ package com.example.kmatool.ui.chat.search
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
-import com.example.kmatool.common.Data
 import com.example.kmatool.common.KEY_MESSAGE_TIMESTAMP_DOC
 import com.example.kmatool.common.KEY_ROOMS_COLL
 import com.example.kmatool.common.KEY_ROOM_ID
@@ -15,8 +14,7 @@ import com.example.kmatool.common.genChatRoomId
 import com.example.kmatool.data.models.MiniStudent
 import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.data.models.service.IScoreService
-import com.example.kmatool.data.service.ProfileService
-import com.google.firebase.Timestamp
+import com.example.kmatool.firebase.firestore
 import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -71,7 +69,7 @@ class SearchUserViewModel @Inject constructor(
         miniStudents: List<MiniStudent>,
         callback: (miniStudents: List<MiniStudent>) -> Unit
     ) {
-        Data.firestore.collection(KEY_USERS_COLL)
+        firestore.collection(KEY_USERS_COLL)
             .get()
             .addOnSuccessListener { documents ->
                 viewModelScope.launch(Dispatchers.IO) {
@@ -94,7 +92,7 @@ class SearchUserViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val myStudentId = profileService.getProfile().studentCode
             val roomId = genChatRoomId(studentId, myStudentId)
-            val chatRoomDocRef = Data.firestore.collection(KEY_ROOMS_COLL).document(roomId)
+            val chatRoomDocRef = firestore.collection(KEY_ROOMS_COLL).document(roomId)
 
             chatRoomDocRef.get()
                 .addOnSuccessListener {

@@ -10,9 +10,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_margin="@dimen/base_high_margin"
+        android:text="Day la text"
         android:textColor="@color/lab_black"
         android:textSize="@dimen/base_normal_text"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_my_message"
@@ -20,7 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_margin="@dimen/base_high_margin"
+        android:text="Day la text"
         android:textColor="@color/lab_black"
         android:textSize="@dimen/base_normal_text"
-        android:visibility="gone" />
+        android:visibility="visible" />
 </LinearLayout>

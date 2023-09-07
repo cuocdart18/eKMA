@@ -1,6 +1,7 @@
 package com.example.kmatool.common
 
 import android.content.Context
+import android.os.Build
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.data.models.Score
 import com.google.gson.Gson
@@ -15,6 +16,19 @@ import java.time.LocalTime
 import kotlin.math.round
 
 // Global method
+fun getExtensionFile(type: String) = type.split("/").last()
+
+inline fun sdk28AndUp(onSdk28: () -> Unit) {
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+        onSdk28()
+    }
+}
+
+inline fun <T> sdk29AndUp(onSdk29: () -> T): T? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        onSdk29()
+    } else null
+}
 
 fun genChatRoomId(studentId: String, myStudentId: String): String {
     val compareStatus = myStudentId.compareTo(studentId)

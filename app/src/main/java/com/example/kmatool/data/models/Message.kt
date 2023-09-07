@@ -6,4 +6,5 @@ data class Message(
     val timestamp: Date,
     var content: String,
     var from: String,
+    val type: Int
 )

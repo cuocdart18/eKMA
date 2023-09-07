@@ -1,15 +1,23 @@
 package com.example.kmatool.ui.chat.main
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.Data
+import com.example.kmatool.common.IMAGE_MSG
 import com.example.kmatool.common.KEY_MESSAGE_CONTENT_DOC
 import com.example.kmatool.common.KEY_MESSAGE_FROM_DOC
 import com.example.kmatool.common.KEY_MESSAGE_TIMESTAMP_DOC
+import com.example.kmatool.common.KEY_MESSAGE_TYPE_DOC
 import com.example.kmatool.common.KEY_ROOMS_COLL
 import com.example.kmatool.common.KEY_ROOM_MESSAGE_COLL
+import com.example.kmatool.common.ROOMS_DIR
+import com.example.kmatool.common.TEXT_MSG
+import com.example.kmatool.common.TedImagePickerStarter
 import com.example.kmatool.data.models.Message
 import com.example.kmatool.data.models.service.IProfileService
+import com.example.kmatool.firebase.firestore
+import com.example.kmatool.firebase.storage
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
@@ -20,6 +28,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
@@ -27,9 +36,7 @@ import javax.inject.Inject
 import kotlin.math.ceil
 
 @HiltViewModel
-class ChatViewModel @Inject constructor(
-    private val profileService: IProfileService
-) : BaseViewModel() {
+class ChatViewModel @Inject constructor() : BaseViewModel() {
     override val TAG = ChatViewModel::class.java.simpleName
     private lateinit var msgCollRef: CollectionReference
     private lateinit var msgChangeRegis: ListenerRegistration
@@ -44,31 +51,50 @@ class ChatViewModel @Inject constructor(
     var totalPage = 0
     var currentPage = 1
 
-    fun sendMessage(content: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val myStudentCode = profileService.getProfile().studentCode
-            val messageMap = mapOf(
-                KEY_MESSAGE_TIMESTAMP_DOC to FieldValue.serverTimestamp(),
-                KEY_MESSAGE_CONTENT_DOC to content,
-                KEY_MESSAGE_FROM_DOC to myStudentCode
-            )
-            val docRoomRef = Data.firestore
-                .collection(KEY_ROOMS_COLL)
-                .document(roomId)
-            docRoomRef
-                .collection(KEY_ROOM_MESSAGE_COLL)
-                .add(messageMap)
-                .addOnSuccessListener {
-                    docRoomRef.update(messageMap)
+    fun sendImageFromPicker(context: Context) {
+        TedImagePickerStarter.pickMultiImageForChatting(context) { uris ->
+            GlobalScope.launch(Dispatchers.IO) {
+                val imgName = Date().time
+                val imageRef = storage.child("$ROOMS_DIR/$roomId/$imgName")
+                imageRef.putFile(uris.first()).addOnSuccessListener {
+                    imageRef.downloadUrl.addOnCompleteListener { task ->
+                        if (!task.isSuccessful) return@addOnCompleteListener
+                        val url = task.result.toString()
+                        sendMessage(url, IMAGE_MSG)
+                    }.addOnFailureListener {
+                        logError("$it")
+                    }
+                }.addOnFailureListener {
+                    logError("$it")
                 }
+            }
         }
+    }
+
+    fun sendMessage(content: String, type: Int) {
+        val myStudentCode = Data.profile.studentCode
+        val messageMap = mapOf(
+            KEY_MESSAGE_TIMESTAMP_DOC to FieldValue.serverTimestamp(),
+            KEY_MESSAGE_CONTENT_DOC to content,
+            KEY_MESSAGE_FROM_DOC to myStudentCode,
+            KEY_MESSAGE_TYPE_DOC to type
+        )
+        val docRoomRef = firestore
+            .collection(KEY_ROOMS_COLL)
+            .document(roomId)
+        docRoomRef
+            .collection(KEY_ROOM_MESSAGE_COLL)
+            .add(messageMap)
+            .addOnSuccessListener {
+                docRoomRef.update(messageMap)
+            }
     }
 
     fun getTotalMessageCount(
         callback: () -> Unit
     ) {
         // init collection reference
-        msgCollRef = Data.firestore
+        msgCollRef = firestore
             .collection(KEY_ROOMS_COLL)
             .document(roomId)
             .collection(KEY_ROOM_MESSAGE_COLL)
@@ -111,13 +137,14 @@ class ChatViewModel @Inject constructor(
                     val timestamp = serverTimestamp?.toDate() ?: Date()
                     val content = it.document.get(KEY_MESSAGE_CONTENT_DOC).toString()
                     val from = it.document.get(KEY_MESSAGE_FROM_DOC).toString()
-                    val message = Message(timestamp, content, from)
+                    val type = it.document.getLong(KEY_MESSAGE_TYPE_DOC)?.toInt() ?: TEXT_MSG
+                    val message = Message(timestamp, content, from, type)
                     logInfo("add $message")
                     messages.add(message)
                     itemCount++
                 }
             }
-        logInfo("listenMessagesAdded")
+        logError("size=${messages.size}")
         withContext(Dispatchers.Main) {
             addEleCallback(itemCount)
         }
@@ -153,8 +180,8 @@ class ChatViewModel @Inject constructor(
             val timestamp = serverTimestamp?.toDate() ?: Date()
             val content = doc.get(KEY_MESSAGE_CONTENT_DOC).toString()
             val from = doc.get(KEY_MESSAGE_FROM_DOC).toString()
-            val message = Message(timestamp, content, from)
-            logInfo("$message")
+            val type = doc.getLong(KEY_MESSAGE_TYPE_DOC)?.toInt() ?: TEXT_MSG
+            val message = Message(timestamp, content, from, type)
             messagesTemp.add(message)
         }
         if (query.documents.isNotEmpty()) {
@@ -162,6 +189,7 @@ class ChatViewModel @Inject constructor(
         }
         messagesTemp.reverse()
         messages.addAll(0, messagesTemp)
+        logError("size=${messages.size}")
     }
 
     override fun onCleared() {
