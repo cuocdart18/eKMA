@@ -51,6 +51,9 @@ class InformationFragment : BaseFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.msgToast.observe(viewLifecycleOwner) {
+            showToast(it)
+        }
         Data.hideBottomNavView.value = false
         setUpPreferencesSetting()
         setUpProfile()

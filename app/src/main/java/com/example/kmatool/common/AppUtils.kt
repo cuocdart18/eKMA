@@ -102,16 +102,18 @@ inline fun <reified T> jsonStringToObject(data: String): T {
 fun toDateTime(date: LocalDate, time: LocalTime): LocalDateTime =
     LocalDateTime.of(date, time)
 
-fun gpaCalculator(scores: List<Score>): Double {
-    var avgScoreWithCreditTotal = 0.00
-    var creditTotal = 0
-    scores.forEach {
-        if (!isExcludedSubjects(it.subject.id)) {
-            avgScoreWithCreditTotal += alphabetScoreToFourCoefficientConverter(it.alphabetScore) * it.subject.numberOfCredits
-            creditTotal += it.subject.numberOfCredits
+suspend fun gpaCalculator(scores: List<Score>): Double {
+    return withContext(Dispatchers.Default) {
+        var avgScoreWithCreditTotal = 0.00
+        var creditTotal = 0
+        scores.forEach {
+            if (!isExcludedSubjects(it.subject.id)) {
+                avgScoreWithCreditTotal += alphabetScoreToFourCoefficientConverter(it.alphabetScore) * it.subject.numberOfCredits
+                creditTotal += it.subject.numberOfCredits
+            }
         }
+        round((avgScoreWithCreditTotal / creditTotal) * 100) / 100
     }
-    return round((avgScoreWithCreditTotal / creditTotal) * 100) / 100
 }
 
 private fun alphabetScoreToFourCoefficientConverter(alphabetScore: String) =

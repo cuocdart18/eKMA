@@ -58,7 +58,7 @@ class NoteMainViewModel @Inject constructor(
     }
 
     fun getCurrentDayAndTime() {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             val day = LocalDate.now().toDayMonthYear()
             selectDay.value = day
             val time = LocalTime.now().toHourMinute()
@@ -67,13 +67,13 @@ class NoteMainViewModel @Inject constructor(
     }
 
     fun updateSelectDay(year: Int, month: Int, dayOfMonth: Int) {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             selectDay.value = "${dayOfMonth.formatDoubleChar()}/${month.formatDoubleChar()}/$year"
         }
     }
 
     fun updateSelectTime(hourOfDay: Int, minute: Int) {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             selectTime.value = "${hourOfDay.formatDoubleChar()}:${minute.formatDoubleChar()}"
         }
     }
@@ -140,7 +140,7 @@ class NoteMainViewModel @Inject constructor(
     ) {
         // define primary key for note
         note.id = note.hashCode()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             if (noteMode == ADD_NOTE_MODE) {
                 noteService.insertNote(note)
             } else if (noteMode == UPDATE_NOTE_MODE) {
@@ -149,20 +149,16 @@ class NoteMainViewModel @Inject constructor(
                 noteService.insertNote(note)
                 cancelAlarmForOldNote()
             }
-            withContext(Dispatchers.Main) {
-                callback()
-            }
+            callback()
         }
     }
 
     fun refreshNotesDayMapInDataObject(
         callback: () -> Unit
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             Data.getLocalNotesRuntime(noteService)
-            withContext(Dispatchers.Main) {
-                callback()
-            }
+            callback()
         }
     }
 

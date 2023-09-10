@@ -37,8 +37,7 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         setUiTemplates()
         viewModel.runWorkerIfFailure(this)
-        viewModel.getLocalData {
-        }
+        viewModel.getLocalData(this)
     }
 
     private fun setUiTemplates() {

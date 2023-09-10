@@ -57,6 +57,7 @@ const val KEY_USER_NAME = "displayName"
 const val KEY_USER_GENDER = "gender"
 
 // for Storage
+const val NOT_EXIST_OBJECT_CODE = -13010
 const val USERS_DIR = "users"
 const val AVATAR_FILE = "avatar"
 const val ROOMS_DIR = "rooms"

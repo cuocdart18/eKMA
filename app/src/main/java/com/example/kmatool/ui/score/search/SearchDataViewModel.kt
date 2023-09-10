@@ -48,14 +48,12 @@ class SearchDataViewModel @Inject constructor(
         text: String,
         callback: (miniStudents: List<MiniStudent>?) -> Unit
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val miniStudentsRes = scoreService.getMiniStudentsByQuery(text)
-            withContext(Dispatchers.Main) {
-                if (miniStudentsRes is Resource.Success && miniStudentsRes.data != null) {
-                    callback(miniStudentsRes.data)
-                } else {
-                    callback(null)
-                }
+            if (miniStudentsRes is Resource.Success && miniStudentsRes.data != null) {
+                callback(miniStudentsRes.data)
+            } else {
+                callback(null)
             }
         }
     }
@@ -63,20 +61,18 @@ class SearchDataViewModel @Inject constructor(
     fun showRecentSearchHistory(
         callback: (miniStudents: List<MiniStudent>?) -> Unit
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val miniStudentsRes = scoreService.getMiniStudents()
-            withContext(Dispatchers.Main) {
-                if (miniStudentsRes is Resource.Success && miniStudentsRes.data != null) {
-                    callback(miniStudentsRes.data)
-                } else {
-                    callback(null)
-                }
+            if (miniStudentsRes is Resource.Success && miniStudentsRes.data != null) {
+                callback(miniStudentsRes.data)
+            } else {
+                callback(null)
             }
         }
     }
 
     fun insertMiniStudentToDb(miniStudent: MiniStudent) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             scoreService.insertMiniStudent(miniStudent)
         }
     }

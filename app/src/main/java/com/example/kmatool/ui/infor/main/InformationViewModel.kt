@@ -4,6 +4,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
 import com.example.kmatool.base.viewmodel.BaseViewModel
@@ -14,6 +16,7 @@ import com.example.kmatool.common.Data
 import com.example.kmatool.common.FileUtils
 import com.example.kmatool.common.TedImagePickerStarter
 import com.example.kmatool.common.USERS_DIR
+import com.example.kmatool.common.saveImageAndGetPath
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.service.ILoginService
@@ -23,6 +26,7 @@ import com.example.kmatool.data.models.service.IScheduleService
 import com.example.kmatool.data.models.service.IUserService
 import com.example.kmatool.firebase.storage
 import com.example.kmatool.work.GetScheduleWorkRunner
+import com.google.firebase.storage.StorageException
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,6 +52,10 @@ class InformationViewModel @Inject constructor(
     private lateinit var profile: Profile
     private lateinit var uri: Uri
 
+    private val _msgToast = MutableLiveData<String>()
+    val msgToast: LiveData<String>
+        get() = _msgToast
+
     fun getProfile(
         callback: (profile: Profile) -> Unit
     ) {
@@ -55,11 +63,9 @@ class InformationViewModel @Inject constructor(
             callback(profile)
             return
         }
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             profile = profileService.getProfile()
-            withContext(Dispatchers.Main) {
-                callback(profile)
-            }
+            callback(profile)
         }
     }
 
@@ -70,12 +76,10 @@ class InformationViewModel @Inject constructor(
             callback(uri)
             return
         }
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val uriString = dataLocalManager.getImgFilePath()
             uri = Uri.parse(uriString)
-            withContext(Dispatchers.Main) {
-                callback(uri)
-            }
+            callback(uri)
         }
     }
 
@@ -83,25 +87,23 @@ class InformationViewModel @Inject constructor(
         context: Context,
         callback: (uri: Uri) -> Unit
     ) {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             val myStudentCode = profileService.getProfile().studentCode
             TedImagePickerStarter.startImage(context) { uri ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    val filePath = FileUtils.saveImageAndGetPath(context, uri)
-                    // save to local
-                    dataLocalManager.saveImgFilePath(filePath)
-                    // save to storage
-                    val avtRef = storage.child("$USERS_DIR/$myStudentCode/$AVATAR_FILE")
-                    avtRef.putFile(uri).addOnSuccessListener {
-                        avtRef.downloadUrl.addOnCompleteListener { uri ->
-                            val url = uri.result.toString()
-                            logError("link=$url")
-                        }
-                    }.addOnFailureListener { logError("$it") }
-                    withContext(Dispatchers.Main) {
+                // save to storage
+                val avtRef = storage.child("$USERS_DIR/$myStudentCode/$AVATAR_FILE")
+                avtRef.putFile(uri).addOnSuccessListener {
+                    viewModelScope.launch {
+                        // save to local
+                        val filePath = FileUtils.saveImageAndGetPath(context, uri)
+                        dataLocalManager.saveImgFilePath(filePath)
                         this@InformationViewModel.uri = uri
                         callback(uri)
                     }
+                }.addOnFailureListener {
+                    it as StorageException
+                    logError(it.message.toString())
+                    _msgToast.value = "Yeu cau co ket noi mang"
                 }
             }
         }

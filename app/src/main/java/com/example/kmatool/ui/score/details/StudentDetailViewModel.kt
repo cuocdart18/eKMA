@@ -34,21 +34,17 @@ class StudentDetailViewModel @Inject constructor(
             callback(student)
             return
         }
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val studentRes = scoreService.getStudentById(studentId)
-            withContext(Dispatchers.Default) {
-                if (studentRes is Resource.Success && studentRes.data != null) {
-                    student = studentRes.data
-                    student.avgScore = gpaCalculator(student.scores)
-
-                    if (isMyStudentId) {
-                        Data.myStudentInfo = student
-                    }
-
-                    withContext(Dispatchers.Main) { callback(student) }
-                } else {
-                    withContext(Dispatchers.Main) { callback(null) }
+            if (studentRes is Resource.Success && studentRes.data != null) {
+                student = studentRes.data
+                student.avgScore = gpaCalculator(student.scores)
+                if (isMyStudentId) {
+                    Data.myStudentInfo = student
                 }
+                callback(student)
+            } else {
+                callback(null)
             }
         }
     }

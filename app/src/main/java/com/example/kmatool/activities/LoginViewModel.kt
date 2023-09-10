@@ -53,21 +53,19 @@ class LoginViewModel @Inject constructor(
             isShowProgress.set(true)
 
             val password = md5(unHashedPassword)
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 val callAuth = loginService.auth(username, password, true)
                 if (callAuth is Success && callAuth.data.equals(AUTH_MESSAGE_SUCCESS)) {
                     val profile = profileService.getProfile(username, password, true)
                     if (profile is Success && profile.data != null) {
+                        // save data to local
                         profileService.saveProfile(profile.data)
-                        // save hashed data to local
                         userService.saveUser(User(username, password, true))
                         loginService.saveLoginState(true)
                         // handle schedule
                         runGetScheduleWorker(context)
-                        withContext(Dispatchers.Main) {
-                            showLoginAccept()
-                            callback()
-                        }
+                        showLoginAccept()
+                        callback()
                     } else {
                         showLoginRefused()      // if backend unavailable
                     }

@@ -13,6 +13,8 @@ import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.Profile
 import com.example.kmatool.data.models.repository.IProfileRepository
 import com.example.kmatool.firebase.firestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
@@ -30,20 +32,22 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveProfile(profile: Profile) {
+    override suspend fun saveProfile(profile: Profile) = withContext(Dispatchers.Default) {
         dataLocalManager.saveProfile(profile.toProfileShPref())
     }
 
     override suspend fun saveProfileToFirestore(profile: Profile) {
-        val profileMap = mapOf(
-            KEY_USER_ID to profile.studentCode,
-            KEY_USER_NAME to profile.displayName,
-            KEY_USER_DOB to profile.birthday,
-            KEY_USER_GENDER to profile.gender
-        )
-        firestore.collection(KEY_USERS_COLL)
-            .document(profile.studentCode)
-            .set(profileMap)
+        withContext(Dispatchers.IO) {
+            val profileMap = mapOf(
+                KEY_USER_ID to profile.studentCode,
+                KEY_USER_NAME to profile.displayName,
+                KEY_USER_DOB to profile.birthday,
+                KEY_USER_GENDER to profile.gender
+            )
+            firestore.collection(KEY_USERS_COLL)
+                .document(profile.studentCode)
+                .set(profileMap)
+        }
     }
 
     override suspend fun clearProfile() {
@@ -51,6 +55,8 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getProfile(): Profile {
-        return jsonStringToObject(dataLocalManager.getProfile())
+        return withContext(Dispatchers.Default) {
+            jsonStringToObject(dataLocalManager.getProfile())
+        }
     }
 }

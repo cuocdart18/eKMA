@@ -24,7 +24,7 @@ public class FileUtils {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
             FileOutputStream outputStream = new FileOutputStream(file);
             int read = 0;
-            int maxBufferSize = 1048576;    // 1 * 1024 * 1024
+            int maxBufferSize = 50000000;    // 1 * 1024 * 1024
             int bytesAvailable = inputStream.available();
 
             int bufferSize = Math.min(bytesAvailable, maxBufferSize);

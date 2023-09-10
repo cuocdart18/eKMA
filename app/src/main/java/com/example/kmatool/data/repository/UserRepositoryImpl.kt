@@ -5,6 +5,8 @@ import com.example.kmatool.common.jsonStringToObject
 import com.example.kmatool.data.data_source.app_data.IDataLocalManager
 import com.example.kmatool.data.models.User
 import com.example.kmatool.data.models.repository.IUserRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -20,6 +22,8 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUser(): User {
-        return jsonStringToObject(dataLocalManager.getUser())
+        return withContext(Dispatchers.Default) {
+            jsonStringToObject(dataLocalManager.getUser())
+        }
     }
 }
