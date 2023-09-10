@@ -15,7 +15,6 @@ import com.example.kmatool.common.ROOMS_DIR
 import com.example.kmatool.common.TEXT_MSG
 import com.example.kmatool.common.TedImagePickerStarter
 import com.example.kmatool.data.models.Message
-import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.firebase.firestore
 import com.example.kmatool.firebase.storage
 import com.google.firebase.firestore.AggregateSource
@@ -26,6 +25,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.StorageException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -62,10 +62,12 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
                         val url = task.result.toString()
                         sendMessage(url, IMAGE_MSG)
                     }.addOnFailureListener {
-                        logError("$it")
+                        it as StorageException
+                        logError(it.toString())
                     }
                 }.addOnFailureListener {
-                    logError("$it")
+                    it as StorageException
+                    logError(it.toString())
                 }
             }
         }

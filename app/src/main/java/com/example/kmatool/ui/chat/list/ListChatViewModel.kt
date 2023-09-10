@@ -2,11 +2,15 @@ package com.example.kmatool.ui.chat.list
 
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.base.viewmodel.BaseViewModel
+import com.example.kmatool.common.KEY_MESSAGE_CONTENT_DOC
+import com.example.kmatool.common.KEY_MESSAGE_FROM_DOC
 import com.example.kmatool.common.KEY_MESSAGE_TIMESTAMP_DOC
+import com.example.kmatool.common.KEY_MESSAGE_TYPE_DOC
 import com.example.kmatool.common.KEY_ROOMS_COLL
 import com.example.kmatool.common.KEY_ROOM_MEMBERS
 import com.example.kmatool.common.KEY_ROOM_MESSAGE_COLL
 import com.example.kmatool.common.formatMembersToRoomName
+import com.example.kmatool.common.removeMyStudentCode
 import com.example.kmatool.data.models.ChatRoom
 import com.example.kmatool.data.models.service.IProfileService
 import com.example.kmatool.firebase.firestore
@@ -30,13 +34,13 @@ class ListChatViewModel @Inject constructor(
     fun listenChatRoomsChanges(
         callback: () -> Unit
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val myStudentCode = profileService.getProfile().studentCode
             roomChangeListener = firestore.collection(KEY_ROOMS_COLL)
                 .whereArrayContains(KEY_ROOM_MEMBERS, myStudentCode)
                 .addSnapshotListener { value, _ ->
                     if (value != null) {
-                        onChatRoomsChanged(value, myStudentCode, callback)
+                        onChatRoomsChanged(value, callback)
                     }
                 }
         }
@@ -44,32 +48,37 @@ class ListChatViewModel @Inject constructor(
 
     private fun onChatRoomsChanged(
         value: QuerySnapshot,
-        myStudentCode: String,
         callback: () -> Unit
     ) {
-        value.documentChanges.forEach { docChange ->
-            if (docChange.type == DocumentChange.Type.ADDED) {
-                onDocumentAdded(docChange, myStudentCode, callback)
-            }
-            if (docChange.type == DocumentChange.Type.MODIFIED) {
-                onDocumentModified(docChange, myStudentCode, callback)
-            }
-            if (docChange.type == DocumentChange.Type.REMOVED) {
-                onDocumentRemoved(docChange, myStudentCode, callback)
+        viewModelScope.launch(Dispatchers.IO) {
+            val myStudentCode = profileService.getProfile().studentCode
+            value.documentChanges.forEach { docChange ->
+                if (docChange.type == DocumentChange.Type.ADDED) {
+                    onDocumentAdded(docChange, myStudentCode, callback)
+                }
+                if (docChange.type == DocumentChange.Type.MODIFIED) {
+                    onDocumentModified(docChange, myStudentCode, callback)
+                }
+                if (docChange.type == DocumentChange.Type.REMOVED) {
+                    onDocumentRemoved(docChange, myStudentCode, callback)
+                }
             }
         }
     }
 
-    private fun onDocumentAdded(
+    private suspend fun onDocumentAdded(
         docChange: DocumentChange,
         myStudentCode: String,
         callback: () -> Unit
     ) {
         val id = docChange.document.id
         val members = docChange.document.get(KEY_ROOM_MEMBERS) as List<String>
-        val name = formatMembersToRoomName(members.filter { it != myStudentCode })
+        val name = formatMembersToRoomName(removeMyStudentCode(members, myStudentCode))
         val serverTimestamp = docChange.document.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
         val timestamp = serverTimestamp?.toDate() ?: Date()
+        val content = docChange.document.get(KEY_MESSAGE_CONTENT_DOC).toString()
+        val from = docChange.document.get(KEY_MESSAGE_FROM_DOC).toString()
+        val type = (docChange.document.getLong(KEY_MESSAGE_TYPE_DOC) ?: 1).toInt()
         logInfo("ADDED $id")
 
         docChange.document.reference
@@ -79,23 +88,26 @@ class ListChatViewModel @Inject constructor(
                 if (querySnapshot.isEmpty) {
                     return@addOnSuccessListener
                 }
-                val chatRoom = ChatRoom(id, name, members, timestamp)
+                val chatRoom = ChatRoom(id, name, members, timestamp, content, from, type)
                 rooms.add(chatRoom)
                 rooms.sortByDescending { it.timestamp }
                 callback()
             }
     }
 
-    private fun onDocumentModified(
+    private suspend fun onDocumentModified(
         docChange: DocumentChange,
         myStudentCode: String,
         callback: () -> Unit
     ) {
         val id = docChange.document.id
         val members = docChange.document.get(KEY_ROOM_MEMBERS) as List<String>
-        val name = formatMembersToRoomName(members.filter { it != myStudentCode })
+        val name = formatMembersToRoomName(removeMyStudentCode(members, myStudentCode))
         val serverTimestamp = docChange.document.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
         val timestamp = serverTimestamp?.toDate() ?: Date()
+        val content = docChange.document.get(KEY_MESSAGE_CONTENT_DOC).toString()
+        val from = docChange.document.get(KEY_MESSAGE_FROM_DOC).toString()
+        val type = (docChange.document.getLong(KEY_MESSAGE_TYPE_DOC) ?: 1).toInt()
         logInfo("MODIFIED $id")
 
         docChange.document.reference
@@ -104,7 +116,7 @@ class ListChatViewModel @Inject constructor(
             .addOnSuccessListener { querySnapshot ->
                 // when a user sends the first message, room is displayed
                 if (querySnapshot.size() == 1) {
-                    val chatRoom = ChatRoom(id, name, members, timestamp)
+                    val chatRoom = ChatRoom(id, name, members, timestamp, content, from, type)
                     // if room has been exist, return
                     rooms.forEach { if (it.id == id) return@addOnSuccessListener }
                     rooms.add(chatRoom)
@@ -116,6 +128,9 @@ class ListChatViewModel @Inject constructor(
                     rooms.forEach {
                         if (it.id == id) {
                             it.timestamp = timestamp
+                            it.content = content
+                            it.from = from
+                            it.type = type
                             return@forEach
                         }
                     }

@@ -1,7 +1,6 @@
 package com.example.kmatool.activities
 
 import android.content.Context
-import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
@@ -10,7 +9,6 @@ import com.example.kmatool.base.viewmodel.BaseViewModel
 import com.example.kmatool.common.AVATAR_FILE
 import com.example.kmatool.common.Data
 import com.example.kmatool.common.GET_SCHEDULE_WORKER_TAG
-import com.example.kmatool.common.NOT_EXIST_OBJECT_CODE
 import com.example.kmatool.common.UNIQUE_GET_SCHEDULE_WORK_NAME
 import com.example.kmatool.common.UNIQUE_UPDATE_SCHEDULE_WORK_NAME
 import com.example.kmatool.common.UPDATE_SCHEDULE_WORKER_TAG

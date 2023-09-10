@@ -19,7 +19,7 @@ class ListChatFragment : BaseFragment() {
     override val TAG = ListChatFragment::class.java.simpleName
     private lateinit var binding: FragmentListChatBinding
     private val viewModel by viewModels<ListChatViewModel>()
-    private val listChatAdapter by lazy { ListChatAdapter(onClickChatRoomItem) }
+    private val listChatAdapter by lazy { ListChatAdapter(requireContext(), onClickChatRoomItem) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

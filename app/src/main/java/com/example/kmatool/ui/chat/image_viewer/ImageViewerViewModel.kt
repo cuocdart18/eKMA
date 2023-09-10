@@ -10,13 +10,12 @@ import com.example.kmatool.common.getExtensionFile
 import com.example.kmatool.common.sdk29AndUp
 import com.example.kmatool.data.models.Image
 import com.example.kmatool.firebase.httpsStorageRef
-import com.google.type.DateTime
+import com.google.firebase.storage.StorageException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.IOException
-import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 
@@ -43,7 +42,10 @@ class ImageViewerViewModel @Inject constructor() : BaseViewModel() {
                     val image = Image(fileName, type, dateAdded, extensionFile, bytes)
                     saveImageToExternalStorage(context, image)
                     callback()
-                }.addOnFailureListener { logError("$it") }
+                }.addOnFailureListener {
+                    it as StorageException
+                    logError(it.toString())
+                }
             }
         }
     }
@@ -62,15 +64,13 @@ class ImageViewerViewModel @Inject constructor() : BaseViewModel() {
             put(MediaStore.Images.Media.SIZE, image.bytes.size)
         }
         try {
-            context.contentResolver.insert(imageCollection, contentValues)
-                ?.also { uri ->
-                    context.contentResolver.openOutputStream(uri).use { outputStream ->
-                        if (!imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-                        ) {
-                            logError("Couldn't save image bitmap")
-                        }
+            context.contentResolver.insert(imageCollection, contentValues)?.also { uri ->
+                context.contentResolver.openOutputStream(uri).use { outputStream ->
+                    if (!imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
+                        logError("Couldn't save image bitmap")
                     }
                 }
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         }

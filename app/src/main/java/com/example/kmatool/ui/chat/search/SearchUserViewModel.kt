@@ -53,14 +53,12 @@ class SearchUserViewModel @Inject constructor(
         text: String,
         callback: (miniStudents: List<MiniStudent>?) -> Unit
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val miniStudentsRes = scoreService.getMiniStudentsByQuery(text)
-            withContext(Dispatchers.Main) {
-                if (miniStudentsRes is Resource.Success && miniStudentsRes.data != null) {
-                    filterAvailableUsers(miniStudentsRes.data, callback)
-                } else {
-                    callback(null)
-                }
+            if (miniStudentsRes is Resource.Success && miniStudentsRes.data != null) {
+                filterAvailableUsers(miniStudentsRes.data, callback)
+            } else {
+                callback(null)
             }
         }
     }
@@ -93,21 +91,20 @@ class SearchUserViewModel @Inject constructor(
             val myStudentId = profileService.getProfile().studentCode
             val roomId = genChatRoomId(studentId, myStudentId)
             val chatRoomDocRef = firestore.collection(KEY_ROOMS_COLL).document(roomId)
-
-            chatRoomDocRef.get()
-                .addOnSuccessListener {
-                    if (it.exists()) {
+            chatRoomDocRef.get().addOnSuccessListener {
+                if (it.exists()) {
+                    callback(roomId)
+                } else {
+                    val room = mapOf(
+                        KEY_ROOM_ID to roomId,
+                        KEY_ROOM_MEMBERS to listOf(studentId, myStudentId),
+                        KEY_MESSAGE_TIMESTAMP_DOC to FieldValue.serverTimestamp()
+                    )
+                    chatRoomDocRef.set(room).addOnSuccessListener {
                         callback(roomId)
-                    } else {
-                        val room = mapOf(
-                            KEY_ROOM_ID to roomId,
-                            KEY_ROOM_MEMBERS to listOf(studentId, myStudentId),
-                            KEY_MESSAGE_TIMESTAMP_DOC to FieldValue.serverTimestamp()
-                        )
-                        chatRoomDocRef.set(room)
-                            .addOnSuccessListener { callback(roomId) }
                     }
                 }
+            }
         }
     }
 }

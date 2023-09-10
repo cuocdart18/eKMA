@@ -4,9 +4,11 @@ import android.content.Context
 import android.os.Build
 import androidx.lifecycle.viewModelScope
 import com.example.kmatool.data.models.Score
+import com.example.kmatool.firebase.firestore
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.asDeferred
 import kotlinx.coroutines.withContext
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -41,9 +43,17 @@ fun genChatRoomId(studentId: String, myStudentId: String): String {
     }
 }
 
-fun formatMembersToRoomName(members: List<String>): String {
-    return members.toString()
+suspend fun formatMembersToRoomName(members: List<String>): String {
+    return firestore.collection(KEY_USERS_COLL)
+        .document(members.first())
+        .get()
+        .asDeferred()
+        .await()
+        .get(KEY_USER_NAME).toString()
 }
+
+fun removeMyStudentCode(members: List<String>, myStudentCode: String) =
+    members.filter { it != myStudentCode }
 
 fun getCachedRecordDirPath(context: Context): String {
     return "${context.cacheDir.absolutePath}/records"
