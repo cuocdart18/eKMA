@@ -5,7 +5,7 @@
 
         <variable
             name="student"
-            type="com.example.kmatool.data.models.Student" />
+            type="com.app.ekma.data.models.Student" />
     </data>
 
     <LinearLayout

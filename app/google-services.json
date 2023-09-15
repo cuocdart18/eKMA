@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "366258783314",
-    "project_id": "kma-tool",
-    "storage_bucket": "kma-tool.appspot.com"
+    "project_number": "527716698680",
+    "project_id": "ekma-c517e",
+    "storage_bucket": "ekma-c517e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:366258783314:android:c4bbc94e8423356f7dcb8b",
+        "mobilesdk_app_id": "1:527716698680:android:904a679e72ff9af39234cd",
         "android_client_info": {
-          "package_name": "com.example.kmatool"
+          "package_name": "com.app.ekma"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "366258783314-pn21okm17kgv1i5b1drfdt1vvgnah1sa.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBDQM3QNryWB4qFThgzh98LpFOsew7wqKk"
+          "current_key": "AIzaSyCuxBhEBAflNuHhY4JWLa0RAjVehh3WoKY"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "366258783314-pn21okm17kgv1i5b1drfdt1vvgnah1sa.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

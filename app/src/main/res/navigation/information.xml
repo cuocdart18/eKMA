@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/informationFragment"
-        android:name="com.example.kmatool.ui.infor.main.InformationFragment"
+        android:name="com.app.ekma.ui.infor.main.InformationFragment"
         android:label="thong tin"
         tools:layout="@layout/fragment_information">
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/studentDetailFragment"
-        android:name="com.example.kmatool.ui.score.details.StudentDetailFragment"
+        android:name="com.app.ekma.ui.score.details.StudentDetailFragment"
         android:label="StudentDetailFragment"
         tools:layout="@layout/fragment_score_student_detail" />
     <fragment
         android:id="@+id/listChatFragment"
-        android:name="com.example.kmatool.ui.chat.list.ListChatFragment"
+        android:name="com.app.ekma.ui.chat.list.ListChatFragment"
         android:label="ListChatFragment"
         tools:layout="@layout/fragment_list_chat">
         <action
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchUserFragment"
-        android:name="com.example.kmatool.ui.chat.search.SearchUserFragment"
+        android:name="com.app.ekma.ui.chat.search.SearchUserFragment"
         android:label="SearchUserFragment"
         tools:layout="@layout/fragment_search_user">
         <action
@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.example.kmatool.ui.chat.main.ChatFragment"
+        android:name="com.app.ekma.ui.chat.main.ChatFragment"
         android:label="ChatFragment"
         tools:layout="@layout/fragment_chat">
         <action
@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/imageViewerFragment"
-        android:name="com.example.kmatool.ui.chat.image_viewer.ImageViewerFragment"
+        android:name="com.app.ekma.ui.chat.image_viewer.ImageViewerFragment"
         android:label="ImageViewerFragment"
         tools:layout="@layout/fragment_image_viewer" />
 </navigation>

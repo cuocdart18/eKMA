@@ -6,7 +6,7 @@
 
         <variable
             name="profile"
-            type="com.example.kmatool.data.models.Profile" />
+            type="com.app.ekma.data.models.Profile" />
     </data>
 
     <androidx.core.widget.NestedScrollView

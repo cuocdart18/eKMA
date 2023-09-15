@@ -6,19 +6,19 @@
 
         <import type="android.view.View" />
 
-        <import type="com.example.kmatool.common.ConstantsKt" />
+        <import type="com.app.ekma.common.ConstantsKt" />
 
         <variable
             name="event"
-            type="com.example.kmatool.data.models.Event" />
+            type="com.app.ekma.data.models.Event" />
 
         <variable
             name="period"
-            type="com.example.kmatool.data.models.Period" />
+            type="com.app.ekma.data.models.Period" />
 
         <variable
             name="note"
-            type="com.example.kmatool.data.models.Note" />
+            type="com.app.ekma.data.models.Note" />
 
         <variable
             name="type"

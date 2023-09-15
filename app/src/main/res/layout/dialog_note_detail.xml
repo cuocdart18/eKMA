@@ -6,7 +6,7 @@
 
         <variable
             name="note"
-            type="com.example.kmatool.data.models.Note" />
+            type="com.app.ekma.data.models.Note" />
     </data>
 
     <LinearLayout

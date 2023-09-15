@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/scheduleMainFragment"
-        android:name="com.example.kmatool.ui.schedule.main_scr.ScheduleMainFragment"
+        android:name="com.app.ekma.ui.schedule.main_scr.ScheduleMainFragment"
         android:label="@string/label_name_schedule"
         tools:layout="@layout/fragment_schedule_main">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/noteMainFragment"
-        android:name="com.example.kmatool.ui.note.main_scr.NoteMainFragment"
+        android:name="com.app.ekma.ui.note.main_scr.NoteMainFragment"
         android:label="NoteMainFragment"
         tools:layout="@layout/fragment_note_main">
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/noteDetailFragment"
-        android:name="com.example.kmatool.ui.note.detail.NoteDetailFragment"
+        android:name="com.app.ekma.ui.note.detail.NoteDetailFragment"
         android:label="NoteDetailFragment"
         tools:layout="@layout/fragment_note_detail">
         <action

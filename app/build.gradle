@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.kmatool'
+    namespace 'com.app.ekma'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.kmatool"
+        applicationId "com.app.ekma"
         minSdk 23
         targetSdk 33
         versionCode 1

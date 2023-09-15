@@ -5,7 +5,7 @@
 
         <variable
             name="scoreMainViewModel"
-            type="com.example.kmatool.ui.score.main_scr.ScoreMainViewModel" />
+            type="com.app.ekma.ui.score.main_scr.ScoreMainViewModel" />
     </data>
 
     <ScrollView

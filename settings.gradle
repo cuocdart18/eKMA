@@ -15,5 +15,5 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "KMA Tool"
+rootProject.name = "eKMA"
 include ':app'
