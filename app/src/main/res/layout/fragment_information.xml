@@ -6,7 +6,7 @@
 
         <variable
             name="profile"
-            type="com.example.kmatool.data.models.Profile" />
+            type="com.app.ekma.data.models.Profile" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -35,9 +35,9 @@
                     android:layout_width="@dimen/base_width_img_profile"
                     android:layout_height="@dimen/base_height_img_profile"
                     android:layout_marginBottom="@dimen/base_high_margin"
-                    android:src="@drawable/photo_camera"
+                    android:src="@drawable/user"
                     app:civ_border_color="@color/lab_red"
-                    app:civ_border_width="0dp" />
+                    app:civ_border_width="1dp" />
 
                 <TextView
                     android:id="@+id/tv_profile_name"

@@ -5,7 +5,7 @@
 
         <variable
             name="statisticSubject"
-            type="com.example.kmatool.data.models.StatisticSubject" />
+            type="com.app.ekma.data.models.StatisticSubject" />
     </data>
 
     <LinearLayout

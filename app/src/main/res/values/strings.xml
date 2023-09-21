@@ -90,6 +90,7 @@
 
     <string name="key_my_score_pref">my_score</string>
     <string name="key_update_schedule_pref">update_schedule</string>
+    <string name="key_chat">chat</string>
     <string name="key_notify_event_pref">notify_event</string>
     <string name="key_dark_mode_pref">dark_mode</string>
     <string name="key_language_pref">language</string>
@@ -121,5 +122,6 @@
     <string name="btn_delete_audio_old_note">btn_delete_audio_old_note</string>
     <string name="btn_record">btn_record</string>
     <string name="btn_fit_record_ui">btn_fit_record_ui</string>
+    <string name="image_message">image_message</string>
 
 </resources>

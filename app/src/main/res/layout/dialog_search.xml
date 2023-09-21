@@ -5,7 +5,7 @@
 
         <variable
             name="searchDataVM"
-            type="com.example.kmatool.ui.score.search.SearchDataViewModel" />
+            type="com.app.ekma.ui.score.search.SearchDataViewModel" />
     </data>
 
     <LinearLayout
