@@ -2,13 +2,12 @@ package com.app.ekma.common
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
+import com.app.ekma.firebase.AVATAR_FILE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.io.IOException
 import kotlin.math.min
 
 suspend fun saveImageAndGetPath(context: Context, uri: Uri): String {
@@ -35,20 +34,6 @@ suspend fun saveImageAndGetPath(context: Context, uri: Uri): String {
         }
 
         file.absolutePath
-    }
-}
-
-@Throws(IOException::class)
-fun copy(src: File?, dst: File?) {
-    FileInputStream(src).use { `in` ->
-        FileOutputStream(dst).use { out ->
-            // Transfer bytes from in to out
-            val buf = ByteArray(1024)
-            var len: Int
-            while (`in`.read(buf).also { len = it } > 0) {
-                out.write(buf, 0, len)
-            }
-        }
     }
 }
 

@@ -21,17 +21,32 @@
             android:id="@+id/tv_name_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/btn_info"
+            android:layout_toStartOf="@id/btn_audio_call"
             android:layout_toEndOf="@id/btn_back"
+            android:lines="1"
             android:textColor="@color/lab_black"
             android:textSize="@dimen/base_big_header_text" />
+
+        <Button
+            android:id="@+id/btn_audio_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/btn_video_call"
+            android:text="Audio" />
+
+        <Button
+            android:id="@+id/btn_video_call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/btn_info"
+            android:text="Video" />
 
         <Button
             android:id="@+id/btn_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="Information" />
+            android:text="Infor" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

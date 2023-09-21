@@ -6,13 +6,13 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import com.app.ekma.base.viewmodel.BaseViewModel
-import com.app.ekma.common.AVATAR_FILE
+import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.common.Data
 import com.app.ekma.common.GET_SCHEDULE_WORKER_TAG
 import com.app.ekma.common.UNIQUE_GET_SCHEDULE_WORK_NAME
 import com.app.ekma.common.UNIQUE_UPDATE_SCHEDULE_WORK_NAME
 import com.app.ekma.common.UPDATE_SCHEDULE_WORKER_TAG
-import com.app.ekma.common.USERS_DIR
+import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.service.ILoginService
 import com.app.ekma.data.models.service.INoteService

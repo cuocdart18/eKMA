@@ -11,10 +11,10 @@ import androidx.work.WorkManager
 import com.app.ekma.alarm.AlarmEventsScheduler
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.broadcast_receiver.BootCompletedReceiver
-import com.app.ekma.common.AVATAR_FILE
+import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.common.Data
 import com.app.ekma.common.TedImagePickerStarter
-import com.app.ekma.common.USERS_DIR
+import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.common.saveImageAndGetPath
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Profile

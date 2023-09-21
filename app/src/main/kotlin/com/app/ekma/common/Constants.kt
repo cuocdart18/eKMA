@@ -3,7 +3,6 @@ package com.app.ekma.common
 // Constants
 const val AUTH_MESSAGE_SUCCESS = "Login successfully"
 const val AUTH_MESSAGE_FAILED = "Sai ten dang nhap hoac mat khau"
-const val KIT_URL = "https://www.facebook.com/kitclubKMA"
 
 const val PERIOD_TYPE = 0
 const val NOTE_TYPE = 1
@@ -40,33 +39,6 @@ const val PAUSE_PLAYING = 1006
 const val RESUME_PLAYING = 1007
 const val STOP_PLAYING = 1008
 
-// for Firestore
-const val KEY_USERS_COLL = "users"
-const val KEY_ROOMS_COLL = "rooms"
-const val KEY_ROOM_ID = "id"
-const val KEY_ROOM_MEMBERS = "members"
-const val KEY_ROOM_IS_HIDDEN = "isHidden"
-const val KEY_ROOM_MESSAGE_COLL = "messages"
-const val KEY_MESSAGE_TIMESTAMP_DOC = "timestamp"
-const val KEY_MESSAGE_CONTENT_DOC = "content"
-const val KEY_MESSAGE_FROM_DOC = "from"
-const val KEY_MESSAGE_TYPE_DOC = "type"
-const val KEY_USER_ID = "studentCode"
-const val KEY_USER_DOB = "birthday"
-const val KEY_USER_NAME = "displayName"
-const val KEY_USER_GENDER = "gender"
-
-// for Storage
-const val NOT_EXIST_OBJECT_CODE = -13010
-const val USERS_DIR = "users"
-const val AVATAR_FILE = "avatar"
-const val ROOMS_DIR = "rooms"
-
-// for DocsChange type
-const val DOCUMENT_CHANGE_ADDED = 900
-const val DOCUMENT_CHANGE_MODIFIED = 901
-const val DOCUMENT_CHANGE_REMOVED = 902
-
 // for WorkManager
 const val UPDATE_SCHEDULE_WORKER_TAG = "update_schedule_tag"
 const val GET_SCHEDULE_WORKER_TAG = "get_schedule_tag"
@@ -94,3 +66,14 @@ const val KEY_STUDENT_PROFILE = "student_profile"
 const val KEY_IS_LOGIN = "is_login"
 const val KEY_IS_NOTIFY_EVENTS = "is_notify_events"
 const val KEY_IMG_FILE_PATH = "img_file_path"
+
+// for Agora
+const val AGORA_APP_ID = "8d92b5ef9ae8488393dc2021dbfc94b5"
+const val RTC_TOKEN_TYPE = "rtc"
+const val RTM_TOKEN_TYPE = "rtm"
+const val PUBLISHER_ROLE = "publisher"
+const val SUBSCRIBER_ROLE = "subscriber"
+const val DEFAULT_UID = "0"
+const val TOKEN_EXPIRED_TIME = 120
+const val CHANNEL_TOKEN = "channelToken"
+const val PENDING_INVITE_TIME = 30000L

@@ -1,24 +1,29 @@
 package com.app.ekma.data.repository
 
 import com.app.ekma.base.repositories.BaseRepositories
-import com.app.ekma.common.KEY_USERS_COLL
-import com.app.ekma.common.KEY_USER_DOB
-import com.app.ekma.common.KEY_USER_GENDER
-import com.app.ekma.common.KEY_USER_ID
-import com.app.ekma.common.KEY_USER_NAME
+import com.app.ekma.common.Data
+import com.app.ekma.firebase.KEY_USER_DOB
+import com.app.ekma.firebase.KEY_USER_GENDER
+import com.app.ekma.firebase.KEY_USER_ID
+import com.app.ekma.firebase.KEY_USER_NAME
 import com.app.ekma.common.Resource
 import com.app.ekma.common.jsonStringToObject
-import com.app.ekma.data.data_source.apis.ScheduleAPI
+import com.app.ekma.data.data_source.apis.EKmaAPI
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Profile
 import com.app.ekma.data.models.repository.IProfileRepository
+import com.app.ekma.firebase.KEY_USERS_COLL
+import com.app.ekma.firebase.KEY_USER_TOKEN
 import com.app.ekma.firebase.firestore
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ProfileRepositoryImpl @Inject constructor(
-    private val scheduleAPI: ScheduleAPI,
+    private val eKmaApi: EKmaAPI,
     private val dataLocalManager: IDataLocalManager
 ) : BaseRepositories(), IProfileRepository {
 
@@ -28,7 +33,7 @@ class ProfileRepositoryImpl @Inject constructor(
         hashed: Boolean
     ): Resource<Profile> {
         return safeApiCall {
-            scheduleAPI.getProfile(username, password, hashed).toProfile()
+            eKmaApi.getProfile(username, password, hashed).toProfile()
         }
     }
 
@@ -38,11 +43,13 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun saveProfileToFirestore(profile: Profile) {
         withContext(Dispatchers.IO) {
+            val token = FirebaseMessaging.getInstance().token.await()
             val profileMap = mapOf(
                 KEY_USER_ID to profile.studentCode,
                 KEY_USER_NAME to profile.displayName,
                 KEY_USER_DOB to profile.birthday,
-                KEY_USER_GENDER to profile.gender
+                KEY_USER_GENDER to profile.gender,
+                KEY_USER_TOKEN to token
             )
             firestore.collection(KEY_USERS_COLL)
                 .document(profile.studentCode)
@@ -52,6 +59,27 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun clearProfile() {
         dataLocalManager.saveProfile("")
+    }
+
+    override suspend fun clearFcmToken() {
+        withContext(Dispatchers.IO) {
+            val deleteUserToken = mapOf(
+                KEY_USER_TOKEN to FieldValue.delete()
+            )
+            firestore.collection(KEY_USERS_COLL)
+                .document(Data.profile.studentCode)
+                .update(deleteUserToken)
+        }
+    }
+
+    override suspend fun getFcmToken(code: String): String {
+        return withContext(Dispatchers.IO) {
+            firestore.collection(KEY_USERS_COLL)
+                .document(code)
+                .get()
+                .await()
+                .get(KEY_USER_TOKEN).toString()
+        }
     }
 
     override suspend fun getProfile(): Profile {

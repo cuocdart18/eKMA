@@ -53,7 +53,6 @@ class NoteMainFragment : BaseFragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         receiveNote()
@@ -71,7 +70,6 @@ class NoteMainFragment : BaseFragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun setUpViews() {
         regisDayTimeTextObserver()
         setTextTitleHeader()
@@ -110,14 +108,12 @@ class NoteMainFragment : BaseFragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun regisOnClickListeners() {
         setupForBaseLayout()
         addVoicePLayerLayout()
         setupForRecorderLayout()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun setupForBaseLayout() {
         binding.btnSave.setOnClickListener { onClickBtnSave() }
         binding.tvSelectDate.setOnClickListener {

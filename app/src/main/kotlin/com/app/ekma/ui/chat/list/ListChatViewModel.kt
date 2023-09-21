@@ -2,13 +2,13 @@ package com.app.ekma.ui.chat.list
 
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
-import com.app.ekma.common.KEY_MESSAGE_CONTENT_DOC
-import com.app.ekma.common.KEY_MESSAGE_FROM_DOC
-import com.app.ekma.common.KEY_MESSAGE_TIMESTAMP_DOC
-import com.app.ekma.common.KEY_MESSAGE_TYPE_DOC
-import com.app.ekma.common.KEY_ROOMS_COLL
-import com.app.ekma.common.KEY_ROOM_MEMBERS
-import com.app.ekma.common.KEY_ROOM_MESSAGE_COLL
+import com.app.ekma.firebase.KEY_MESSAGE_CONTENT_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_FROM_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_TIMESTAMP_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_TYPE_DOC
+import com.app.ekma.firebase.KEY_ROOMS_COLL
+import com.app.ekma.firebase.KEY_ROOM_MEMBERS
+import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL
 import com.app.ekma.common.formatMembersToRoomName
 import com.app.ekma.common.removeMyStudentCode
 import com.app.ekma.data.models.ChatRoom

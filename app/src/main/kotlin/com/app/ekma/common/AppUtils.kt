@@ -1,12 +1,19 @@
 package com.app.ekma.common
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.content.ContextCompat
 import com.app.ekma.data.models.Score
+import com.app.ekma.firebase.KEY_USERS_COLL
+import com.app.ekma.firebase.KEY_USER_NAME
+import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
+import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
 import com.app.ekma.firebase.firestore
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.asDeferred
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -16,6 +23,31 @@ import java.time.LocalTime
 import kotlin.math.round
 
 // Global method
+fun checkCallPermission(context: Context, type: String): Boolean {
+    return when (type) {
+        MSG_AUDIO_CALL_TYPE -> {
+            PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.RECORD_AUDIO
+            )
+        }
+
+        MSG_VIDEO_CALL_TYPE -> {
+            PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.RECORD_AUDIO
+            ) && PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA
+            )
+        }
+
+        else -> {
+            false
+        }
+    }
+}
+
 fun getExtensionFile(type: String) = type.split("/").last()
 
 inline fun sdk28AndUp(onSdk28: () -> Unit) {
@@ -45,7 +77,6 @@ suspend fun formatMembersToRoomName(members: List<String>): String {
     return firestore.collection(KEY_USERS_COLL)
         .document(members.first())
         .get()
-        .asDeferred()
         .await()
         .get(KEY_USER_NAME).toString()
 }

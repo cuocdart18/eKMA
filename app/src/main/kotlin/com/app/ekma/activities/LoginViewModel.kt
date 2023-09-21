@@ -51,7 +51,7 @@ class LoginViewModel @Inject constructor(
                 if (callAuth is Resource.Success && callAuth.data.equals(AUTH_MESSAGE_SUCCESS)) {
                     val profile = profileService.getProfile(username, password, true)
                     if (profile is Resource.Success && profile.data != null) {
-                        // save data to local
+                        // save data
                         profileService.saveProfile(profile.data)
                         userService.saveUser(User(username, password, true))
                         loginService.saveLoginState(true)

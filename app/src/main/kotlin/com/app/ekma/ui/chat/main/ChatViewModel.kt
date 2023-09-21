@@ -5,13 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.Data
 import com.app.ekma.common.IMAGE_MSG
-import com.app.ekma.common.KEY_MESSAGE_CONTENT_DOC
-import com.app.ekma.common.KEY_MESSAGE_FROM_DOC
-import com.app.ekma.common.KEY_MESSAGE_TIMESTAMP_DOC
-import com.app.ekma.common.KEY_MESSAGE_TYPE_DOC
-import com.app.ekma.common.KEY_ROOMS_COLL
-import com.app.ekma.common.KEY_ROOM_MESSAGE_COLL
-import com.app.ekma.common.ROOMS_DIR
+import com.app.ekma.firebase.KEY_MESSAGE_CONTENT_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_FROM_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_TIMESTAMP_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_TYPE_DOC
+import com.app.ekma.firebase.KEY_ROOMS_COLL
+import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL
+import com.app.ekma.firebase.ROOMS_DIR
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.common.TedImagePickerStarter
 import com.app.ekma.data.models.Message
@@ -74,10 +74,13 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun sendMessage(content: String, type: Int) {
+        val message = content.trim()
+        if (message.isEmpty()) return
+
         val myStudentCode = Data.profile.studentCode
         val messageMap = mapOf(
             KEY_MESSAGE_TIMESTAMP_DOC to FieldValue.serverTimestamp(),
-            KEY_MESSAGE_CONTENT_DOC to content,
+            KEY_MESSAGE_CONTENT_DOC to message,
             KEY_MESSAGE_FROM_DOC to myStudentCode,
             KEY_MESSAGE_TYPE_DOC to type
         )

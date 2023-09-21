@@ -25,6 +25,7 @@ class ProfileService @Inject constructor(
 
     override suspend fun clearProfile() {
         profileRepository.clearProfile()
+        profileRepository.clearFcmToken()
     }
 
     override suspend fun getProfile(): Profile {

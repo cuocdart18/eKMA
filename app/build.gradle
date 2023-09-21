@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "com.app.ekma"
-        minSdk 23
+        minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -34,6 +34,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -48,13 +51,19 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.8.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // firebase
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
     implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:24.7.0'
     implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
+
+    // google OAuth2
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.19.0'
 
     // splash
     implementation "androidx.core:core-splashscreen:1.0.1"
@@ -141,4 +150,7 @@ dependencies {
 
     // Image operation
     implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1'
+
+    // Agora for call audio/video
+    implementation 'io.agora.rtc:full-sdk:4.0.1'
 }

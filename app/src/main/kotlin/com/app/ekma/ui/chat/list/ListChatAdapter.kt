@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ekma.R
-import com.app.ekma.common.AVATAR_FILE
+import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.common.Data
 import com.app.ekma.common.IMAGE_MSG
 import com.app.ekma.common.TEXT_MSG
-import com.app.ekma.common.USERS_DIR
+import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.common.removeMyStudentCode
 import com.app.ekma.data.models.ChatRoom
 import com.app.ekma.databinding.ItemChatRoomBinding

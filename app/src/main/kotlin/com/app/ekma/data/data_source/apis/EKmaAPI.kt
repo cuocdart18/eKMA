@@ -1,12 +1,15 @@
 package com.app.ekma.data.data_source.apis
 
+import com.app.ekma.data.data_source.apis.dto.FcmDataMessageDto
 import com.app.ekma.data.data_source.apis.dto.MessageResult
 import com.app.ekma.data.data_source.apis.dto.ProfileDto
 import com.app.ekma.data.data_source.apis.dto.ScheduleDto
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
-interface ScheduleAPI {
+interface EKmaAPI {
 
     @GET("/auth")
     suspend fun auth(
@@ -39,4 +42,9 @@ interface ScheduleAPI {
 
     @GET("/semester-codes")
     suspend fun getSemesterCodes(): List<String>
+
+    @POST("/call-invitation")
+    suspend fun sendCallInvitationMessage(
+        @Body fcmDataMessageDto: FcmDataMessageDto
+    )
 }

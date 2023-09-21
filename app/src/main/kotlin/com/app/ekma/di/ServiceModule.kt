@@ -1,11 +1,15 @@
 package com.app.ekma.di
 
+import com.app.ekma.data.models.service.IAgoraService
+import com.app.ekma.data.models.service.IFcmService
 import com.app.ekma.data.models.service.ILoginService
 import com.app.ekma.data.models.service.INoteService
 import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.data.models.service.IScheduleService
 import com.app.ekma.data.models.service.IScoreService
 import com.app.ekma.data.models.service.IUserService
+import com.app.ekma.data.service.AgoraService
+import com.app.ekma.data.service.FcmService
 import com.app.ekma.data.service.LoginService
 import com.app.ekma.data.service.NoteService
 import com.app.ekma.data.service.ProfileService
@@ -68,5 +72,21 @@ object ServiceModule {
         userService: UserService
     ): IUserService {
         return userService
+    }
+
+    @Provides
+    @Singleton
+    fun provideIFcmService(
+        fcmService: FcmService
+    ): IFcmService {
+        return fcmService
+    }
+
+    @Provides
+    @Singleton
+    fun provideIAgoraService(
+        agoraService: AgoraService
+    ): IAgoraService {
+        return agoraService
     }
 }

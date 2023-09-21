@@ -1,20 +1,28 @@
 package com.app.ekma.ui.chat.main
 
+import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
+import com.app.ekma.activities.OutgoingInvitationActivity
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.base.listeners.PaginationScrollListener
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.KEY_PASS_IMAGE_URL
 import com.app.ekma.common.TEXT_MSG
+import com.app.ekma.common.checkCallPermission
 import com.app.ekma.databinding.FragmentChatBinding
+import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
+import com.app.ekma.firebase.MSG_TYPE
+import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,6 +31,23 @@ class ChatFragment : BaseFragment() {
     private lateinit var binding: FragmentChatBinding
     private val viewModel by viewModels<ChatViewModel>()
     private val chatAdapter by lazy { ChatAdapter(requireContext(), imageCallback) }
+    private val requestAudioPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            logError("request audio permission = $it")
+            if (it) {
+                navigateToOutgoingActivity(MSG_AUDIO_CALL_TYPE)
+            }
+        }
+    private val requestVideoPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            logError("request video permission = $it")
+            if (it.getOrDefault(Manifest.permission.RECORD_AUDIO, false)
+                and
+                it.getOrDefault(Manifest.permission.CAMERA, false)
+            ) {
+                navigateToOutgoingActivity(MSG_VIDEO_CALL_TYPE)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,15 +82,11 @@ class ChatFragment : BaseFragment() {
         chatAdapter.setMessages(viewModel.messages)
         binding.rcvMessages.adapter = chatAdapter
 
-        binding.btnImagePicker.setOnClickListener {
-            viewModel.sendImageFromPicker(requireContext())
-        }
-
-        binding.btnSend.setOnClickListener {
-            viewModel.sendMessage(binding.edtMessageInput.text.toString().trim(), TEXT_MSG)
-            binding.edtMessageInput.text.clear()
-        }
-
+        binding.btnImagePicker.setOnClickListener(onClickBtnImagePicker)
+        binding.btnSend.setOnClickListener(onClickBtnSend)
+        binding.btnInfo.setOnClickListener(onClickBtnInfo)
+        binding.btnAudioCall.setOnClickListener(onClickBtnAudioCall)
+        binding.btnVideoCall.setOnClickListener(onClickBtnVideoCall)
         binding.rcvMessages.addOnScrollListener(object :
             PaginationScrollListener(linearLayoutManager) {
             override fun loadMore() {
@@ -78,6 +99,52 @@ class ChatFragment : BaseFragment() {
 
             override fun isLastPage() = viewModel.isLastPage
         })
+    }
+
+    private val onClickBtnSend: (View) -> Unit = {
+        viewModel.sendMessage(binding.edtMessageInput.text.toString(), TEXT_MSG)
+        binding.edtMessageInput.text.clear()
+    }
+
+    private val onClickBtnImagePicker: (View) -> Unit = {
+        viewModel.sendImageFromPicker(requireContext())
+    }
+
+    private val onClickBtnInfo: (View) -> Unit = {
+
+    }
+
+    private val onClickBtnAudioCall: (View) -> Unit = {
+        if (checkCallPermission(requireContext(), MSG_AUDIO_CALL_TYPE)) {
+            navigateToOutgoingActivity(MSG_AUDIO_CALL_TYPE)
+        } else {
+            requestAudioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+        }
+    }
+
+    private val onClickBtnVideoCall: (View) -> Unit = {
+        if (checkCallPermission(requireContext(), MSG_VIDEO_CALL_TYPE)) {
+            navigateToOutgoingActivity(MSG_VIDEO_CALL_TYPE)
+        } else {
+            requestVideoPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.CAMERA
+                )
+            )
+        }
+    }
+
+    private fun navigateToOutgoingActivity(type: String) {
+        if (viewModel.roomId.isNotEmpty()) {
+            val intent = Intent(requireContext(), OutgoingInvitationActivity::class.java)
+            val bundle = bundleOf(
+                KEY_PASS_CHAT_ROOM_ID to viewModel.roomId,
+                MSG_TYPE to type
+            )
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
     }
 
     private val imageCallback: (imgUrl: String) -> Unit = { imgUrl ->

@@ -1,8 +1,10 @@
 package com.app.ekma.di
 
-import com.app.ekma.data.data_source.apis.ApiConfig.BASE_SCHEDULE_URL
+import com.app.ekma.data.data_source.apis.AgoraAPI
+import com.app.ekma.data.data_source.apis.ApiConfig.BASE_AGORA_APP_URL
+import com.app.ekma.data.data_source.apis.ApiConfig.BASE_APP_URL
 import com.app.ekma.data.data_source.apis.ApiConfig.BASE_SCORE_URL
-import com.app.ekma.data.data_source.apis.ScheduleAPI
+import com.app.ekma.data.data_source.apis.EKmaAPI
 import com.app.ekma.data.data_source.apis.ScoreAPI
 import dagger.Module
 import dagger.Provides
@@ -25,17 +27,17 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    @Named("ScheduleSite")
-    fun provideRetrofitScheduleSite(gsonConverterFactory: GsonConverterFactory): Retrofit {
+    @Named("AppSite")
+    fun provideRetrofitAppSite(gsonConverterFactory: GsonConverterFactory): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_SCHEDULE_URL)
+            .baseUrl(BASE_APP_URL)
             .addConverterFactory(gsonConverterFactory)
             .build()
     }
 
     @Provides
-    fun provideApiScheduleService(@Named("ScheduleSite") retrofit: Retrofit): ScheduleAPI {
-        return retrofit.create(ScheduleAPI::class.java)
+    fun provideApiAppService(@Named("AppSite") retrofit: Retrofit): EKmaAPI {
+        return retrofit.create(EKmaAPI::class.java)
     }
 
     @Provides
@@ -51,5 +53,20 @@ object NetworkModule {
     @Provides
     fun provideApiScoreService(@Named("ScoreSite") retrofit: Retrofit): ScoreAPI {
         return retrofit.create(ScoreAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    @Named("AgoraSite")
+    fun provideRetrofitAgoraSite(gsonConverterFactory: GsonConverterFactory): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_AGORA_APP_URL)
+            .addConverterFactory(gsonConverterFactory)
+            .build()
+    }
+
+    @Provides
+    fun provideApiAgoraService(@Named("AgoraSite") retrofit: Retrofit): AgoraAPI {
+        return retrofit.create(AgoraAPI::class.java)
     }
 }

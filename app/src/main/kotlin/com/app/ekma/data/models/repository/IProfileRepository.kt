@@ -17,5 +17,9 @@ interface IProfileRepository {
 
     suspend fun clearProfile()
 
+    suspend fun clearFcmToken()
+
+    suspend fun getFcmToken(code: String): String
+
     suspend fun getProfile(): Profile
 }

@@ -1,13 +1,17 @@
 package com.app.ekma.di
 
+import com.app.ekma.data.models.repository.IAgoraTokenRepository
 import com.app.ekma.data.models.repository.IAuth
+import com.app.ekma.data.models.repository.IFcmRepository
 import com.app.ekma.data.models.repository.IMiniStudentRepository
 import com.app.ekma.data.models.repository.INoteRepository
 import com.app.ekma.data.models.repository.IPeriodRepository
 import com.app.ekma.data.models.repository.IProfileRepository
 import com.app.ekma.data.models.repository.IStudentRepository
 import com.app.ekma.data.models.repository.IUserRepository
+import com.app.ekma.data.repository.AgoraTokenRepositoryImpl
 import com.app.ekma.data.repository.AuthImpl
+import com.app.ekma.data.repository.FcmRepositoryImpl
 import com.app.ekma.data.repository.MiniStudentRepositoryImpl
 import com.app.ekma.data.repository.NoteRepositoryImpl
 import com.app.ekma.data.repository.PeriodRepositoryImpl
@@ -78,5 +82,21 @@ object RepositoryModule {
         userRepositoryImpl: UserRepositoryImpl
     ): IUserRepository {
         return userRepositoryImpl
+    }
+
+    @Provides
+    @Singleton
+    fun provideIFcmRepository(
+        fcmRepositoryImpl: FcmRepositoryImpl
+    ): IFcmRepository {
+        return fcmRepositoryImpl
+    }
+
+    @Provides
+    @Singleton
+    fun provideIAgoraTokenRepository(
+        agoraTokenRepositoryImpl: AgoraTokenRepositoryImpl
+    ): IAgoraTokenRepository {
+        return agoraTokenRepositoryImpl
     }
 }

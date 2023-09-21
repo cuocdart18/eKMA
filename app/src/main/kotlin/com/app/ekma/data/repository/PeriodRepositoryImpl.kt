@@ -2,7 +2,7 @@ package com.app.ekma.data.repository
 
 import com.app.ekma.base.repositories.BaseRepositories
 import com.app.ekma.common.Resource
-import com.app.ekma.data.data_source.apis.ScheduleAPI
+import com.app.ekma.data.data_source.apis.EKmaAPI
 import com.app.ekma.data.data_source.database.daos.PeriodDao
 import com.app.ekma.data.models.Period
 import com.app.ekma.data.models.repository.IPeriodRepository
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class PeriodRepositoryImpl @Inject constructor(
     private val periodDao: PeriodDao,
-    private val scheduleAPI: ScheduleAPI
+    private val eKmaApi: EKmaAPI
 ) : BaseRepositories(), IPeriodRepository {
 
     override suspend fun insertPeriods(periods: List<Period>) {
@@ -34,7 +34,7 @@ class PeriodRepositoryImpl @Inject constructor(
         hashed: Boolean
     ): Resource<List<Period>> {
         return safeApiCall {
-            scheduleAPI.getPeriods(username, password, hashed).periods.map { it.toPeriod() }
+            eKmaApi.getPeriods(username, password, hashed).periods.map { it.toPeriod() }
         }
     }
 
@@ -45,7 +45,7 @@ class PeriodRepositoryImpl @Inject constructor(
         semesterCode: String
     ): Resource<List<Period>> {
         return safeApiCall {
-            scheduleAPI.getPeriods(
+            eKmaApi.getPeriods(
                 username,
                 password,
                 hashed,
@@ -56,7 +56,7 @@ class PeriodRepositoryImpl @Inject constructor(
 
     override suspend fun getSemesterCodes(): Resource<List<String>> {
         return safeApiCall {
-            scheduleAPI.getSemesterCodes()
+            eKmaApi.getSemesterCodes()
         }
     }
 }
