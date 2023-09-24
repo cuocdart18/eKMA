@@ -56,7 +56,10 @@
             android:name=".activities.IncomingInvitationActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.CallingActivity"
+            android:name=".activities.VideoCallingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AudioCallingActivity"
             android:exported="false" />
 
         <receiver android:name=".broadcast_receiver.AlarmReceiver" />

@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.AGORA_APP_ID
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.Data
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
-import com.app.ekma.databinding.ActivityCallingBinding
+import com.app.ekma.databinding.ActivityVideoCallingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
@@ -17,12 +18,13 @@ import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
 import io.agora.rtc2.video.VideoCanvas
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CallingActivity : BaseActivity() {
-    override val TAG = CallingActivity::class.java.simpleName
-    private lateinit var binding: ActivityCallingBinding
-    private val viewModel by viewModels<CallingViewModel>()
+class VideoCallingActivity : BaseActivity() {
+    override val TAG = VideoCallingActivity::class.java.simpleName
+    private lateinit var binding: ActivityVideoCallingBinding
+    private val viewModel by viewModels<VideoCallingViewModel>()
 
     private lateinit var agoraEngine: RtcEngine
     private lateinit var localSurfaceView: SurfaceView
@@ -30,7 +32,7 @@ class CallingActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCallingBinding.inflate(layoutInflater)
+        binding = ActivityVideoCallingBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getData()
         setupUI()
@@ -51,6 +53,7 @@ class CallingActivity : BaseActivity() {
         binding.btnLeave.setOnClickListener(onClickBtnLeave)
         binding.btnMuteMic.setOnClickListener(onClickBtnMuteMic)
         binding.btnSwitchCamera.setOnClickListener(onClickBtnSwitchCamera)
+        binding.btnDisableCamera.setOnClickListener(onClickBtnDisableCamera)
     }
 
     private val onClickBtnLeave: (View) -> Unit = {
@@ -58,12 +61,21 @@ class CallingActivity : BaseActivity() {
     }
 
     private val onClickBtnMuteMic: (View) -> Unit = {
-        agoraEngine.muteLocalAudioStream(viewModel.isMute)
-        viewModel.isMute = !viewModel.isMute
+        agoraEngine.muteLocalAudioStream(viewModel.isMuteMic)
+        viewModel.isMuteMic = !viewModel.isMuteMic
     }
 
     private val onClickBtnSwitchCamera: (View) -> Unit = {
         agoraEngine.switchCamera()
+    }
+
+    private val onClickBtnDisableCamera: (View) -> Unit = {
+        agoraEngine.muteLocalVideoStream(viewModel.isMuteCamera)
+        if (viewModel.isMuteCamera)
+            localSurfaceView.visibility = View.GONE
+        else
+            localSurfaceView.visibility = View.VISIBLE
+        viewModel.isMuteCamera = !viewModel.isMuteCamera
     }
 
     private val rtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
@@ -84,6 +96,11 @@ class CallingActivity : BaseActivity() {
                 remoteSurfaceView.visibility = View.GONE
                 finish()
             }
+        }
+
+        override fun onRemoteVideoStateChanged(uid: Int, state: Int, reason: Int, elapsed: Int) {
+            super.onRemoteVideoStateChanged(uid, state, reason, elapsed)
+            logError("$uid - $state - $reason - $elapsed")
         }
 
         override fun onTokenPrivilegeWillExpire(token: String?) {

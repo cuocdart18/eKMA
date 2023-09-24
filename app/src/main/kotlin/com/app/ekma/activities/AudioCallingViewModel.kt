@@ -5,14 +5,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class CallingViewModel @Inject constructor(
+class AudioCallingViewModel @Inject constructor(
 
 ) : BaseViewModel() {
-    override val TAG = CallingViewModel::class.java.simpleName
+    override val TAG = AudioCallingViewModel::class.java.simpleName
 
     var token = ""
     var roomId = ""
-    var isMute = true
+    var isMuteMic = true
+    var isMuteVolume = true
 
     override fun onCleared() {
         super.onCleared()

@@ -107,6 +107,7 @@ class IncomingInvitationActivity : BaseActivity() {
     }
 
     private val invitationResponseReceiver = object : BroadcastReceiver() {
+
         override fun onReceive(context: Context, intent: Intent) {
             val bundle = intent.extras
             bundle?.let {
@@ -120,11 +121,20 @@ class IncomingInvitationActivity : BaseActivity() {
                     MSG_SEND_CHANNEL_TOKEN -> {
                         val token = it.getString(CHANNEL_TOKEN, "")
                         val roomId = it.getString(KEY_PASS_CHAT_ROOM_ID, "")
-                        val intentAcceptCall =
-                            Intent(this@IncomingInvitationActivity, CallingActivity::class.java)
+
+                        val intentAcceptCall = if (viewModel.callType == MSG_VIDEO_CALL_TYPE) {
+                            Intent(
+                                this@IncomingInvitationActivity,
+                                VideoCallingActivity::class.java
+                            )
+                        } else {
+                            Intent(
+                                this@IncomingInvitationActivity,
+                                AudioCallingActivity::class.java
+                            )
+                        }
                         // put data
                         val bundleAcceptCall = bundleOf(
-                            MSG_TYPE to viewModel.callType,
                             CHANNEL_TOKEN to token,
                             KEY_PASS_CHAT_ROOM_ID to roomId,
                         )
