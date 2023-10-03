@@ -1,20 +1,37 @@
 package com.app.ekma.ui.note.audio_player
 
+import android.content.Context
+import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
+import com.app.ekma.common.APP_EXTERNAL_MEDIA_FOLDER
+import com.app.ekma.common.EXTERNAL_AUDIO_FOLDER
+import com.app.ekma.data.models.service.IProfileService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class AudioPlayerViewModel @Inject constructor() : BaseViewModel() {
+class AudioPlayerViewModel @Inject constructor(
+    private val profileService: IProfileService
+) : BaseViewModel() {
     override val TAG = AudioPlayerViewModel::class.java.simpleName
-    var audioPath = ""
+    var audioName = ""
     private lateinit var voiceNotePlayer: VoiceNotePlayer
 
-    fun initMediaPlayer(
+    suspend fun initMediaPlayer(
+        context: Context,
         callback: (state: Int) -> Unit,
         callbackUpdateDuration: (duration: Int) -> Unit
-    ) {
-        if (!this::voiceNotePlayer.isInitialized) {
+    ) = withContext(Dispatchers.IO) {
+        if (!this@AudioPlayerViewModel::voiceNotePlayer.isInitialized) {
+            val myStudentCode = profileService.getProfile().studentCode
+            val audioPath = File(
+                context.getExternalFilesDir("$APP_EXTERNAL_MEDIA_FOLDER/$myStudentCode/$EXTERNAL_AUDIO_FOLDER"),
+                audioName
+            ).absolutePath
             voiceNotePlayer = VoiceNotePlayer(audioPath)
         }
         voiceNotePlayer.setCallback(callback, callbackUpdateDuration)

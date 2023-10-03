@@ -6,15 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
-import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_PATH
+import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_NAME
 import com.app.ekma.common.PAUSE_PLAYING
 import com.app.ekma.common.RESUME_PLAYING
 import com.app.ekma.common.START_PLAYING
 import com.app.ekma.common.formatAudioDuration
 import com.app.ekma.databinding.LayoutVoicePlayerBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AudioPlayerFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
@@ -34,16 +36,22 @@ class AudioPlayerFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         receiveNote()
-        initMediaPlayer()
-        setupView()
+        initMediaPlayer {
+            setupView()
+        }
     }
 
     private fun receiveNote() {
-        viewModel.audioPath = requireArguments().getString(KEY_PASS_VOICE_AUDIO_PATH, "")
+        viewModel.audioName = requireArguments().getString(KEY_PASS_VOICE_AUDIO_NAME, "")
     }
 
-    private fun initMediaPlayer() {
-        viewModel.initMediaPlayer(uiCallBack, updateDuration)
+    private fun initMediaPlayer(
+        callback: () -> Unit
+    ) {
+        lifecycleScope.launch {
+            viewModel.initMediaPlayer(requireContext(), uiCallBack, updateDuration)
+            callback()
+        }
     }
 
     private fun setupView() {

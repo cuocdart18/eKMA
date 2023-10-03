@@ -69,7 +69,7 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
         Data.periodsDayMap.forEach { scheduleEvents(it.value) }
     }
 
-    private fun scheduleNotes() {
+    fun scheduleNotes() {
         Data.notesDayMap.forEach { entry -> scheduleEvents(entry.value.filter { !it.isDone }) }
     }
 
@@ -78,7 +78,7 @@ class AlarmEventsScheduler(private val context: Context) : AlarmScheduler {
         cancelNotes()
     }
 
-    fun cancelPeriods() {
+    private fun cancelPeriods() {
         Data.periodsDayMap.forEach { cancelEvents(it.value) }
     }
 

@@ -1,27 +1,39 @@
 package com.app.ekma.firebase
 
 // for Firestore
-const val KEY_USERS_COLL = "users"
 const val KEY_ROOMS_COLL = "rooms"
 const val KEY_ROOM_ID = "id"
 const val KEY_ROOM_MEMBERS = "members"
-const val KEY_ROOM_IS_HIDDEN = "isHidden"
+
 const val KEY_ROOM_MESSAGE_COLL = "messages"
 const val KEY_MESSAGE_TIMESTAMP_DOC = "timestamp"
 const val KEY_MESSAGE_CONTENT_DOC = "content"
 const val KEY_MESSAGE_FROM_DOC = "from"
 const val KEY_MESSAGE_TYPE_DOC = "type"
+
+const val KEY_USERS_COLL = "users"
 const val KEY_USER_ID = "studentCode"
 const val KEY_USER_DOB = "birthday"
 const val KEY_USER_NAME = "displayName"
 const val KEY_USER_GENDER = "gender"
 const val KEY_USER_TOKEN = "token"
 
+const val KEY_NOTES_COLL = "notes"
+const val KEY_NOTE_TITLE = "title"
+const val KEY_NOTE_CONTENT = "content"
+const val KEY_NOTE_AUDIO_NAME = "audioName"
+const val KEY_NOTE_DATE = "date"
+const val KEY_NOTE_TIME = "time"
+const val KEY_NOTE_ID = "id"
+const val KEY_NOTE_IS_DONE = "isDone"
+const val KEY_NOTE_TYPE = "type"
+
 // for Storage
 const val NOT_EXIST_OBJECT_CODE = -13010
-const val USERS_DIR = "users"
-const val AVATAR_FILE = "avatar"
 const val ROOMS_DIR = "rooms"
+const val USERS_DIR = "users"
+const val AUDIO_NOTES_DIR = "audioNotes"
+const val AVATAR_FILE = "avatar"
 
 const val DOCUMENT_CHANGE_ADDED = 900
 const val DOCUMENT_CHANGE_MODIFIED = 901

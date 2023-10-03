@@ -11,10 +11,8 @@ import androidx.work.WorkManager
 import com.app.ekma.alarm.AlarmEventsScheduler
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.broadcast_receiver.BootCompletedReceiver
-import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.common.Data
 import com.app.ekma.common.TedImagePickerStarter
-import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.common.saveImageAndGetPath
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Profile
@@ -23,9 +21,7 @@ import com.app.ekma.data.models.service.INoteService
 import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.data.models.service.IScheduleService
 import com.app.ekma.data.models.service.IUserService
-import com.app.ekma.firebase.storage
-import com.app.ekma.work.GetScheduleWorkRunner
-import com.google.firebase.storage.StorageException
+import com.app.ekma.work.WorkRunner
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -85,24 +81,18 @@ class InformationViewModel @Inject constructor(
         context: Context,
         callback: (uri: Uri) -> Unit
     ) {
-        viewModelScope.launch {
-            val myStudentCode = profileService.getProfile().studentCode
-            TedImagePickerStarter.startImage(context) { uri ->
-                // save to storage
-                val avtRef = storage.child("$USERS_DIR/$myStudentCode/$AVATAR_FILE")
-                avtRef.putFile(uri).addOnSuccessListener {
-                    viewModelScope.launch {
-                        // save to local
-                        val filePath = saveImageAndGetPath(context, uri)
-                        dataLocalManager.saveImgFilePath(filePath)
-                        this@InformationViewModel.uri = uri
-                        callback(uri)
-                    }
-                }.addOnFailureListener {
-                    it as StorageException
-                    logError(it.message.toString())
-                    _msgToast.value = "Yeu cau co ket noi mang"
-                }
+        TedImagePickerStarter.startImage(context) { uri ->
+            viewModelScope.launch {
+                val myStudentCode = profileService.getProfile().studentCode
+                // save to local
+                this@InformationViewModel.uri = uri
+                val filePath = saveImageAndGetPath(context, uri, myStudentCode)
+                dataLocalManager.saveImgFilePath(filePath)
+                // save to remote by run a worker
+                val workerManager = WorkManager.getInstance(context)
+                WorkRunner.runUploadAvatarWorker(workerManager, myStudentCode, filePath)
+                // UI response
+                callback(uri)
             }
         }
     }
@@ -113,7 +103,7 @@ class InformationViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val workManager = WorkManager.getInstance(context)
-            GetScheduleWorkRunner.run(workManager)
+            WorkRunner.runGetScheduleWorker(workManager)
             // update UI: dismiss dialog
             withContext(Dispatchers.Main) {
                 callback()
@@ -161,21 +151,20 @@ class InformationViewModel @Inject constructor(
 
             // clear disk memory
             val clearPeriods = launch { scheduleService.deletePeriods() }
-            val clearNotes = launch {
+            /*val clearNotes = launch {
                 launch {
                     Data.notesDayMap.forEach {
                         launch {
                             it.value.forEach {
                                 launch {
-                                    File(it.audioPath.toString()).delete()
-                                    logError("delete ${it.audioPath.toString()} done")
+                                    File(it.audioName).delete()
+                                    logError("delete ${it.audioName} done")
                                 }
                             }
                         }
                     }
                 }
-                noteService.deleteNotes()
-            }
+            }*/
             val clearAlarm = launch {
                 if (dataLocalManager.getIsNotifyEvents())
                     alarmEventsScheduler.clearAlarmEvents()
@@ -185,7 +174,7 @@ class InformationViewModel @Inject constructor(
             val clearImage = launch { dataLocalManager.saveImgFilePath("") }
             val clearLoginState = launch { loginService.saveLoginState(false) }
             clearPeriods.join()
-            clearNotes.join()
+//            clearNotes.join()
             clearAlarm.join()
             clearProfile.join()
             clearUser.join()

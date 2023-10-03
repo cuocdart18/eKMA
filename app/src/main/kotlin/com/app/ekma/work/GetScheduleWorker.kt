@@ -88,7 +88,6 @@ class GetScheduleWorker @AssistedInject constructor(
                         )
                         if (periods is Resource.Success && periods.data != null) {
                             fullPeriod.addAll(periods.data)
-                            Log.i(TAG, "getPeriods: get periods done with semester code=$code")
                         } else {
                             throw GetPeriodFailingException(code)
                         }
@@ -102,7 +101,6 @@ class GetScheduleWorker @AssistedInject constructor(
                 setAlarmPeriodsInFirstTime(fullPeriod)
                 // update Data runtime
                 Data.getLocalPeriodsRuntime(scheduleService)
-                Log.i(TAG, "getPeriods: done $id")
             } else {
                 throw semesterCodes.message?.let { GetSemesterCodesFailingException(it) }!!
             }
@@ -115,16 +113,9 @@ class GetScheduleWorker @AssistedInject constructor(
         }
     }
 
-    // Creates an instance of ForegroundInfo which can be used to update the
-    // ongoing notification.
     private fun createForegroundInfo(): ForegroundInfo {
-        val progress = "Đang xử lí. . ."
         val id = GET_SCHE_CHANNEL_ID
         val title = "Tải xuống toàn bộ lịch học"
-        val cancel = "Huỷ"
-        // This PendingIntent can be used to cancel the worker
-        val intent = WorkManager.getInstance(applicationContext)
-            .createCancelPendingIntent(getId())
 
         val notification = NotificationCompat.Builder(applicationContext, id)
             .setContentTitle(title)
@@ -132,9 +123,6 @@ class GetScheduleWorker @AssistedInject constructor(
             .setSmallIcon(R.drawable.cloud_download_outline_black_24dp)
             .setOngoing(true)
             .setProgress(100, 0, true)
-            // Add the cancel action to the notification which can
-            // be used to cancel the worker
-//            .addAction(android.R.drawable.ic_delete, cancel, intent)
             .build()
 
         return ForegroundInfo(GET_SCHEDULE_ID, notification)

@@ -1,6 +1,9 @@
 package com.app.ekma.common
 
 // Constants
+const val APP_EXTERNAL_MEDIA_FOLDER = "media"
+const val EXTERNAL_AUDIO_FOLDER = "audio"
+
 const val AUTH_MESSAGE_SUCCESS = "Login successfully"
 const val AUTH_MESSAGE_FAILED = "Sai ten dang nhap hoac mat khau"
 
@@ -40,10 +43,25 @@ const val RESUME_PLAYING = 1007
 const val STOP_PLAYING = 1008
 
 // for WorkManager
+const val INPUT_DATA_STUDENT_CODE = "student_code"
+const val INPUT_DATA_IMAGE_URI = "image_uri"
+const val INPUT_DATA_AUDIO_NOTE_NAME = "audio_note_name"
+
 const val UPDATE_SCHEDULE_WORKER_TAG = "update_schedule_tag"
 const val GET_SCHEDULE_WORKER_TAG = "get_schedule_tag"
+const val UPLOAD_AVATAR_WORKER_TAG = "upload_avatar_tag"
+const val UPLOAD_AUDIO_NOTE_WORKER_TAG = "upload_audio_note_tag"
+const val DELETE_AUDIO_NOTE_WORKER_TAG = "delete_audio_note_tag"
+const val DOWNLOAD_AVATAR_WORKER_TAG = "download_avatar_tag"
+const val DOWNLOAD_AUDIO_NOTES_WORKER_TAG = "download_audio_notes_tag"
+
 const val UNIQUE_UPDATE_SCHEDULE_WORK_NAME = "update_schedule"
 const val UNIQUE_GET_SCHEDULE_WORK_NAME = "get_schedule"
+const val UNIQUE_UPLOAD_AVATAR_WORK_NAME = "upload_avatar"
+const val UNIQUE_UPLOAD_AUDIO_NOTE_WORK_NAME = "upload_audio_note"
+const val UNIQUE_DELETE_AUDIO_NOTE_WORK_NAME = "delete_audio_note"
+const val UNIQUE_DOWNLOAD_AVATAR_WORK_NAME = "download_avatar"
+const val UNIQUE_DOWNLOAD_AUDIO_NOTES_WORK_NAME = "download_audio_notes"
 
 // for data Passing
 const val KEY_PASS_IMAGE_URL = "image_url"
@@ -52,7 +70,8 @@ const val KEY_PASS_MINISTUDENT_ID = "ministudent_id"
 const val KEY_PASS_IS_MY_MINISTUDENT_ID = "my_ministudent_id"
 const val KEY_PASS_NOTE_OBJ = "note_obj"
 const val KEY_PASS_NOTE_MODE = "note_mode"
-const val KEY_PASS_VOICE_AUDIO_PATH = "voice_audio_path"
+const val KEY_PASS_VOICE_AUDIO_NAME = "voice_audio_name"
+const val KEY_PASS_MY_STUDENT_CODE = "my_student_code"
 const val KEY_PASS_STATISTIC_SUBJECT = "statistic_subject"
 
 const val DATABASE_NAME = "app_database.db"

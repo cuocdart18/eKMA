@@ -63,11 +63,12 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun clearFcmToken() {
         withContext(Dispatchers.IO) {
+            val myStudentCode = getProfile().studentCode
             val deleteUserToken = mapOf(
                 KEY_USER_TOKEN to FieldValue.delete()
             )
             firestore.collection(KEY_USERS_COLL)
-                .document(Data.profile.studentCode)
+                .document(myStudentCode)
                 .update(deleteUserToken)
         }
     }

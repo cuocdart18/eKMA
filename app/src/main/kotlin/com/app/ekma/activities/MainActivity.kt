@@ -23,7 +23,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // auth
-        viewModel.authForUserEntryAppFromDeepLink {
+        viewModel.authForUserEntryApp {
             if (it) {
                 onAuthSuccessfully()
             } else {
@@ -37,7 +37,7 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         setUiTemplates()
         viewModel.runWorkerIfFailure(this)
-        viewModel.getLocalData(this)
+        viewModel.getLocalData()
     }
 
     private fun setUiTemplates() {
