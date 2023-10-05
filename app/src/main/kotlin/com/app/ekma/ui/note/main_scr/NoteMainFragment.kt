@@ -3,14 +3,12 @@ package com.app.ekma.ui.note.main_scr
 import android.Manifest
 import android.app.Dialog
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
@@ -22,7 +20,7 @@ import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.ADD_NOTE_MODE
 import com.app.ekma.common.KEY_PASS_NOTE_MODE
 import com.app.ekma.common.KEY_PASS_NOTE_OBJ
-import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_PATH
+import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_NAME
 import com.app.ekma.common.PAUSE_RECORDING
 import com.app.ekma.common.RESUME_RECORDING
 import com.app.ekma.common.START_RECORDING
@@ -110,7 +108,7 @@ class NoteMainFragment : BaseFragment() {
 
     private fun regisOnClickListeners() {
         setupForBaseLayout()
-        addVoicePLayerLayout()
+        addVoicePlayerLayout()
         setupForRecorderLayout()
     }
 
@@ -128,12 +126,12 @@ class NoteMainFragment : BaseFragment() {
         }
     }
 
-    private fun addVoicePLayerLayout() {
+    private fun addVoicePlayerLayout() {
         if (viewModel.noteMode == UPDATE_NOTE_MODE) {
-            if (!viewModel.oldNote.audioPath.isNullOrEmpty()) {
+            if (viewModel.oldNote.audioName.isNotEmpty()) {
                 if (childFragmentManager.fragments.size == 0) {
                     val bundle = bundleOf(
-                        KEY_PASS_VOICE_AUDIO_PATH to viewModel.oldNote.audioPath
+                        KEY_PASS_VOICE_AUDIO_NAME to viewModel.oldNote.audioName
                     )
                     // add audio player fragment
                     childFragmentManager.commit {
@@ -142,7 +140,7 @@ class NoteMainFragment : BaseFragment() {
                     }
                 }
                 binding.btnDeleteAudioOldNote.setOnClickListener {
-                    viewModel.deleteAudioOldNote()
+                    viewModel.deleteAudioOldNote(requireContext())
                     binding.layoutAudioPlayer.makeGone()
                 }
                 binding.layoutAudioPlayer.makeVisible()
@@ -241,20 +239,15 @@ class NoteMainFragment : BaseFragment() {
         binding.layoutVoiceRecorder.tvDuration.text = "00:00.00"
     }
 
-    /*
-        action flow
-        get oldNote -> save -> refresh Data.notes -> set alarm -> notify to user
-        if update mode, cancel alarm before saved
-    */
     private fun onClickBtnSave() {
         val title = binding.edtTitle.text.toString().trim()
         val content = binding.edtContent.text.toString().trim()
         val date = binding.tvSelectDate.text.toString().trim()
         val time = binding.tvSelectTime.text.toString().trim()
-        var audioPath = ""
+        var audioName = ""
         if (viewModel.noteMode == UPDATE_NOTE_MODE) {
-            audioPath = viewModel.oldNote.audioPath ?: ""
-            if (!viewModel.oldNote.audioPath.isNullOrEmpty()
+            audioName = viewModel.oldNote.audioName
+            if (viewModel.oldNote.audioName.isNotEmpty()
                 and
                 viewModel.isRecording()
             ) {
@@ -264,11 +257,13 @@ class NoteMainFragment : BaseFragment() {
         }
 
         if (title.isNotEmpty()) {
-            viewModel.saveRecord(requireContext()) { path ->
-                audioPath = path
+            viewModel.saveRecord(requireContext()) { fileName ->
+                if (fileName.isNotEmpty()) {
+                    audioName = fileName
+                }
                 resetLayoutVoiceRecorder()
-                val note = Note(title, content, audioPath, date, time)
-                saveNoteToLocalDatabase(note)
+                val note = Note(title, content, audioName, date, time)
+                saveNote(note)
             }
 
             var dialog: Dialog? = null
@@ -294,8 +289,8 @@ class NoteMainFragment : BaseFragment() {
         }
     }
 
-    private fun saveNoteToLocalDatabase(note: Note) {
-        viewModel.saveNoteToLocalDatabase(note) {
+    private fun saveNote(note: Note) {
+        viewModel.saveNote(note) {
             viewModel.refreshNotesDayMapInDataObject {
                 viewModel.setAlarmForNote(note)
                 onUpdateOrAddSuccessfully()

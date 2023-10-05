@@ -13,9 +13,11 @@ import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.databinding.ActivityOugoingInvitationBinding
 import com.app.ekma.firebase.MSG_ACCEPT
+import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
 import com.app.ekma.firebase.MSG_OPERATION
 import com.app.ekma.firebase.MSG_REJECT
 import com.app.ekma.firebase.MSG_TYPE
+import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -90,12 +92,15 @@ class OutgoingInvitationActivity : BaseActivity() {
             }
         } else {
             viewModel.sendChannelTokenToReceiver(token) {
-                val intentAcceptCall =
-                    Intent(this@OutgoingInvitationActivity, CallingActivity::class.java)
+                // move to calling activity
+                val intentAcceptCall = if (viewModel.callType == MSG_VIDEO_CALL_TYPE) {
+                    Intent(this@OutgoingInvitationActivity, VideoCallingActivity::class.java)
+                } else {
+                    Intent(this@OutgoingInvitationActivity, AudioCallingActivity::class.java)
+                }
                 // put data
                 val bundleAcceptCall = bundleOf(
                     KEY_PASS_CHAT_ROOM_ID to viewModel.roomId,
-                    MSG_TYPE to viewModel.callType,
                     CHANNEL_TOKEN to token
                 )
                 intentAcceptCall.putExtras(bundleAcceptCall)

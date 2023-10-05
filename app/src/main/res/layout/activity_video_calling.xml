@@ -21,7 +21,7 @@
         android:id="@+id/btn_mute_mic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mute" />
+        android:text="Mute mic" />
 
     <Button
         android:id="@+id/btn_leave"
@@ -34,4 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Switch camera" />
+
+    <Button
+        android:id="@+id/btn_disable_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disable camera" />
 </LinearLayout>

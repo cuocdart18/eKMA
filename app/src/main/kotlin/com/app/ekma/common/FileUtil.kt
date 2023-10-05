@@ -10,9 +10,12 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import kotlin.math.min
 
-suspend fun saveImageAndGetPath(context: Context, uri: Uri): String {
+suspend fun saveImageAndGetPath(context: Context, uri: Uri, myStudentCode: String): String {
     return withContext(Dispatchers.IO) {
-        val file = File(context.filesDir, AVATAR_FILE)
+        val file = File(
+            context.getExternalFilesDir("$APP_EXTERNAL_MEDIA_FOLDER/$myStudentCode"),
+            AVATAR_FILE
+        )
 
         try {
             val inputStream = context.contentResolver.openInputStream(uri)!!

@@ -62,7 +62,7 @@ class EventsDayAdapter(
                 }
             )
             // set audio enable
-            if (!note.audioPath.isNullOrEmpty()) {
+            if (note.audioName.isNotEmpty()) {
                 holder.binding.imvAudio.setImageResource(R.drawable.mic_outline_white_24dp)
             }
             holder.binding.layoutNote.makeVisible()

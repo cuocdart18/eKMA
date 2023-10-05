@@ -200,7 +200,7 @@ class InformationFragment : BaseFragment(),
         dialog = showAlertDialog(
             R.drawable.secure_data_red_500dp,
             "Đăng xuất ?",
-            "Điều này sẽ xoá tất cả thông tin (ghi chú, lịch sử tìm kiếm) hiện có",
+            "",
             "Đồng ý",
             "Huỷ bỏ",
             { onClickYes() },

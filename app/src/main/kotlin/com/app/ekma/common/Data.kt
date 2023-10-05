@@ -18,7 +18,7 @@ import java.time.LocalDate
 
 object Data {
     // K = day
-    // V = Periods/Notes on a day
+    // V = Periods/Notes / day
     var periodsDayMap = mutableMapOf<String, List<Period>>()
     var notesDayMap = mutableMapOf<String, List<Note>>()
 

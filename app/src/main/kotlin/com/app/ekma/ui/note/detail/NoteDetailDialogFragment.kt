@@ -70,7 +70,7 @@ class NoteDetailDialogFragment : BaseDialogFragment() {
 
     private fun onClickBtnDelete() {
         note?.let {
-            viewModel.onClickDeleteNote(it) {
+            viewModel.onClickDeleteNote(requireContext(), it) {
                 viewModel.refreshDataInRecyclerView()
                 viewModel.cancelAlarm(it)
                 Toast.makeText(requireContext(), "Delete note successfully", Toast.LENGTH_SHORT)

@@ -123,5 +123,6 @@
     <string name="btn_record">btn_record</string>
     <string name="btn_fit_record_ui">btn_fit_record_ui</string>
     <string name="image_message">image_message</string>
+    <string name="audio_file_is_not_exists">Bản ghi audio chưa được tải xuống</string>
 
 </resources>

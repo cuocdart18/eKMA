@@ -1,23 +1,54 @@
 package com.app.ekma.ui.note.audio_player
 
+import android.content.Context
+import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
+import com.app.ekma.common.APP_EXTERNAL_MEDIA_FOLDER
+import com.app.ekma.common.EXTERNAL_AUDIO_FOLDER
+import com.app.ekma.data.models.service.IProfileService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class AudioPlayerViewModel @Inject constructor() : BaseViewModel() {
+class AudioPlayerViewModel @Inject constructor(
+    private val profileService: IProfileService
+) : BaseViewModel() {
     override val TAG = AudioPlayerViewModel::class.java.simpleName
-    var audioPath = ""
+    private lateinit var myStudentCode: String
+    var audioName = ""
+    private lateinit var audioFile: File
     private lateinit var voiceNotePlayer: VoiceNotePlayer
 
+    fun checkAudioFileExists(
+        context: Context,
+        callback: (Boolean) -> Unit
+    ) {
+        if (this::audioFile.isInitialized) {
+            callback(audioFile.exists())
+        } else {
+            viewModelScope.launch {
+                myStudentCode = profileService.getProfile().studentCode
+                audioFile = File(
+                    context.getExternalFilesDir("$APP_EXTERNAL_MEDIA_FOLDER/$myStudentCode/$EXTERNAL_AUDIO_FOLDER"),
+                    audioName
+                )
+                callback(audioFile.exists())
+            }
+        }
+    }
+
     fun initMediaPlayer(
-        callback: (state: Int) -> Unit,
+        callbackState: (state: Int) -> Unit,
         callbackUpdateDuration: (duration: Int) -> Unit
     ) {
         if (!this::voiceNotePlayer.isInitialized) {
-            voiceNotePlayer = VoiceNotePlayer(audioPath)
+            voiceNotePlayer = VoiceNotePlayer(audioFile.absolutePath)
         }
-        voiceNotePlayer.setCallback(callback, callbackUpdateDuration)
+        voiceNotePlayer.setCallback(callbackState, callbackUpdateDuration)
     }
 
     fun getAudioDuration(): Int {
@@ -41,13 +72,17 @@ class AudioPlayerViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun onPausePlayer() {
-        if (voiceNotePlayer.isPlaying) {
-            voiceNotePlayer.pausePlayer()
+        if (this::voiceNotePlayer.isInitialized) {
+            if (voiceNotePlayer.isPlaying) {
+                voiceNotePlayer.pausePlayer()
+            }
         }
     }
 
     private fun onReleaseMediaPlayer() {
-        voiceNotePlayer.stopPlayer()
+        if (this::voiceNotePlayer.isInitialized) {
+            voiceNotePlayer.stopPlayer()
+        }
     }
 
     override fun onCleared() {
