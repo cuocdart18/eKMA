@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_NAME
@@ -16,7 +15,6 @@ import com.app.ekma.common.START_PLAYING
 import com.app.ekma.common.formatAudioDuration
 import com.app.ekma.databinding.LayoutVoicePlayerBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AudioPlayerFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
@@ -36,22 +34,21 @@ class AudioPlayerFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         receiveNote()
-        initMediaPlayer {
-            setupView()
+        viewModel.checkAudioFileExists(requireContext()) { isExists ->
+            if (isExists) {
+                viewModel.initMediaPlayer(state, updateDuration)
+                setupView()
+                binding.tvAudioFileIsNotExists.visibility = View.GONE
+                binding.layoutAudioController.visibility = View.VISIBLE
+            } else {
+                binding.tvAudioFileIsNotExists.visibility = View.VISIBLE
+                binding.layoutAudioController.visibility = View.GONE
+            }
         }
     }
 
     private fun receiveNote() {
         viewModel.audioName = requireArguments().getString(KEY_PASS_VOICE_AUDIO_NAME, "")
-    }
-
-    private fun initMediaPlayer(
-        callback: () -> Unit
-    ) {
-        lifecycleScope.launch {
-            viewModel.initMediaPlayer(requireContext(), uiCallBack, updateDuration)
-            callback()
-        }
     }
 
     private fun setupView() {
@@ -67,7 +64,7 @@ class AudioPlayerFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
         binding.sbAudioPlayer.setOnSeekBarChangeListener(this)
     }
 
-    private val uiCallBack: (state: Int) -> Unit = {
+    private val state: (state: Int) -> Unit = {
         when (it) {
             RESUME_PLAYING -> {
                 binding.btnPlayPause.setImageResource(R.drawable.pause_circle_outline_red)

@@ -28,7 +28,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -36,7 +35,6 @@ import javax.inject.Inject
 class InformationViewModel @Inject constructor(
     private val dataLocalManager: IDataLocalManager,
     private val alarmEventsScheduler: AlarmEventsScheduler,
-    private val noteService: INoteService,
     private val scheduleService: IScheduleService,
     private val loginService: ILoginService,
     private val profileService: IProfileService,
@@ -151,20 +149,6 @@ class InformationViewModel @Inject constructor(
 
             // clear disk memory
             val clearPeriods = launch { scheduleService.deletePeriods() }
-            /*val clearNotes = launch {
-                launch {
-                    Data.notesDayMap.forEach {
-                        launch {
-                            it.value.forEach {
-                                launch {
-                                    File(it.audioName).delete()
-                                    logError("delete ${it.audioName} done")
-                                }
-                            }
-                        }
-                    }
-                }
-            }*/
             val clearAlarm = launch {
                 if (dataLocalManager.getIsNotifyEvents())
                     alarmEventsScheduler.clearAlarmEvents()
@@ -174,7 +158,6 @@ class InformationViewModel @Inject constructor(
             val clearImage = launch { dataLocalManager.saveImgFilePath("") }
             val clearLoginState = launch { loginService.saveLoginState(false) }
             clearPeriods.join()
-//            clearNotes.join()
             clearAlarm.join()
             clearProfile.join()
             clearUser.join()

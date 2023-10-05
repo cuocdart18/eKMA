@@ -18,23 +18,37 @@ class AudioPlayerViewModel @Inject constructor(
     private val profileService: IProfileService
 ) : BaseViewModel() {
     override val TAG = AudioPlayerViewModel::class.java.simpleName
+    private lateinit var myStudentCode: String
     var audioName = ""
+    private lateinit var audioFile: File
     private lateinit var voiceNotePlayer: VoiceNotePlayer
 
-    suspend fun initMediaPlayer(
+    fun checkAudioFileExists(
         context: Context,
-        callback: (state: Int) -> Unit,
-        callbackUpdateDuration: (duration: Int) -> Unit
-    ) = withContext(Dispatchers.IO) {
-        if (!this@AudioPlayerViewModel::voiceNotePlayer.isInitialized) {
-            val myStudentCode = profileService.getProfile().studentCode
-            val audioPath = File(
-                context.getExternalFilesDir("$APP_EXTERNAL_MEDIA_FOLDER/$myStudentCode/$EXTERNAL_AUDIO_FOLDER"),
-                audioName
-            ).absolutePath
-            voiceNotePlayer = VoiceNotePlayer(audioPath)
+        callback: (Boolean) -> Unit
+    ) {
+        if (this::audioFile.isInitialized) {
+            callback(audioFile.exists())
+        } else {
+            viewModelScope.launch {
+                myStudentCode = profileService.getProfile().studentCode
+                audioFile = File(
+                    context.getExternalFilesDir("$APP_EXTERNAL_MEDIA_FOLDER/$myStudentCode/$EXTERNAL_AUDIO_FOLDER"),
+                    audioName
+                )
+                callback(audioFile.exists())
+            }
         }
-        voiceNotePlayer.setCallback(callback, callbackUpdateDuration)
+    }
+
+    fun initMediaPlayer(
+        callbackState: (state: Int) -> Unit,
+        callbackUpdateDuration: (duration: Int) -> Unit
+    ) {
+        if (!this::voiceNotePlayer.isInitialized) {
+            voiceNotePlayer = VoiceNotePlayer(audioFile.absolutePath)
+        }
+        voiceNotePlayer.setCallback(callbackState, callbackUpdateDuration)
     }
 
     fun getAudioDuration(): Int {
@@ -58,13 +72,17 @@ class AudioPlayerViewModel @Inject constructor(
     }
 
     fun onPausePlayer() {
-        if (voiceNotePlayer.isPlaying) {
-            voiceNotePlayer.pausePlayer()
+        if (this::voiceNotePlayer.isInitialized) {
+            if (voiceNotePlayer.isPlaying) {
+                voiceNotePlayer.pausePlayer()
+            }
         }
     }
 
     private fun onReleaseMediaPlayer() {
-        voiceNotePlayer.stopPlayer()
+        if (this::voiceNotePlayer.isInitialized) {
+            voiceNotePlayer.stopPlayer()
+        }
     }
 
     override fun onCleared() {
