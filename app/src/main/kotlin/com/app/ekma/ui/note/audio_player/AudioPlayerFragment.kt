@@ -8,7 +8,7 @@ import android.widget.SeekBar
 import androidx.fragment.app.viewModels
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
-import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_PATH
+import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_NAME
 import com.app.ekma.common.PAUSE_PLAYING
 import com.app.ekma.common.RESUME_PLAYING
 import com.app.ekma.common.START_PLAYING
@@ -34,16 +34,21 @@ class AudioPlayerFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         receiveNote()
-        initMediaPlayer()
-        setupView()
+        viewModel.checkAudioFileExists(requireContext()) { isExists ->
+            if (isExists) {
+                viewModel.initMediaPlayer(state, updateDuration)
+                setupView()
+                binding.tvAudioFileIsNotExists.visibility = View.GONE
+                binding.layoutAudioController.visibility = View.VISIBLE
+            } else {
+                binding.tvAudioFileIsNotExists.visibility = View.VISIBLE
+                binding.layoutAudioController.visibility = View.GONE
+            }
+        }
     }
 
     private fun receiveNote() {
-        viewModel.audioPath = requireArguments().getString(KEY_PASS_VOICE_AUDIO_PATH, "")
-    }
-
-    private fun initMediaPlayer() {
-        viewModel.initMediaPlayer(uiCallBack, updateDuration)
+        viewModel.audioName = requireArguments().getString(KEY_PASS_VOICE_AUDIO_NAME, "")
     }
 
     private fun setupView() {
@@ -59,7 +64,7 @@ class AudioPlayerFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
         binding.sbAudioPlayer.setOnSeekBarChangeListener(this)
     }
 
-    private val uiCallBack: (state: Int) -> Unit = {
+    private val state: (state: Int) -> Unit = {
         when (it) {
             RESUME_PLAYING -> {
                 binding.btnPlayPause.setImageResource(R.drawable.pause_circle_outline_red)

@@ -9,8 +9,8 @@ import com.app.ekma.common.toMilli
 
 data class Note(
     var title: String,
-    var content: String? = null,
-    var audioPath: String? = null,
+    var content: String = "",
+    var audioName: String = "",
     var date: String,
     var time: String
 ) : Event {
@@ -27,8 +27,8 @@ data class Note(
 
     override fun getContentTitleNotify(): String = title
     override fun getSubTextNotify(): String = "Ghi chú"
-    override fun getContentTextNotify(): String = content.toString()
-    override fun getContentBigTextNotify(): String = content.toString()
+    override fun getContentTextNotify(): String = content
+    override fun getContentBigTextNotify(): String = content
     override fun getSmallIconNotify(): Int = R.drawable.school_outline_black_24dp
     override fun getLargeIconNotify(): Int = R.drawable.notes
     override fun getEventId() = id

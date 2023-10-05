@@ -1,5 +1,6 @@
 package com.app.ekma.ui.note.detail
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.alarm.AlarmEventsScheduler
 import com.app.ekma.base.viewmodel.BaseViewModel
@@ -10,8 +11,6 @@ import com.app.ekma.data.models.service.INoteService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,19 +23,15 @@ class NoteDetailViewModel @Inject constructor(
     lateinit var note: Note
 
     fun onClickDeleteNote(
+        context: Context,
         note: Note,
         callback: () -> Unit
     ) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             noteService.deleteNote(note)
-            // delete local file
-            if (!note.audioPath.isNullOrEmpty()) {
-                note.audioPath?.let { File(it).delete() }
-            }
+            noteService.deleteAudioNote(context, note.audioName)
             Data.getLocalNotesRuntime(noteService)
-            withContext(Dispatchers.Main) {
-                callback()
-            }
+            callback()
         }
     }
 

@@ -14,7 +14,7 @@ import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.KEY_PASS_NOTE_MODE
 import com.app.ekma.common.KEY_PASS_NOTE_OBJ
-import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_PATH
+import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_NAME
 import com.app.ekma.common.UPDATE_NOTE_MODE
 import com.app.ekma.common.makeVisible
 import com.app.ekma.data.models.Note
@@ -53,10 +53,10 @@ class NoteDetailFragment : BaseFragment() {
     }
 
     private fun setupView() {
-        if (!viewModel.note.audioPath.isNullOrEmpty()) {
+        if (viewModel.note.audioName.isNotEmpty()) {
             if (childFragmentManager.fragments.size == 0) {
                 val bundle = bundleOf(
-                    KEY_PASS_VOICE_AUDIO_PATH to viewModel.note.audioPath
+                    KEY_PASS_VOICE_AUDIO_NAME to viewModel.note.audioName
                 )
                 // add audio player fragment
                 childFragmentManager.commit {
@@ -105,7 +105,7 @@ class NoteDetailFragment : BaseFragment() {
     }
 
     private fun deleteNote(note: Note) {
-        viewModel.onClickDeleteNote(note) {
+        viewModel.onClickDeleteNote(requireContext(), note) {
             viewModel.refreshDataInRecyclerView()
             viewModel.cancelAlarm(note)
             // reopen ScheduleMainFragment
