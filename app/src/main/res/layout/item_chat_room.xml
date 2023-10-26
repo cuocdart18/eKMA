@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/base_small_margin"
-                android:text="Ngo Cuoc Dat"
+                android:text="Vai lon luon"
                 android:textColor="@color/lab_black"
                 android:textSize="@dimen/base_helper_text" />
 
@@ -49,9 +49,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/base_small_margin"
-                android:text="Ngo Cuoc Dat"
+                android:text="3h"
                 android:textColor="@color/lab_black"
                 android:textSize="@dimen/base_helper_text" />
+
+            <TextView
+                android:id="@+id/tv_active_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/base_small_margin"
+                android:text="Dang hoat dong"
+                android:textColor="@color/lab_black"
+                android:textSize="@dimen/base_helper_text"
+                android:visibility="gone" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

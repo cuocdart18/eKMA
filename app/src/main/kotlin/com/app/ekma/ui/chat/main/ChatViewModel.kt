@@ -3,7 +3,6 @@ package com.app.ekma.ui.chat.main
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
-import com.app.ekma.common.Data
 import com.app.ekma.common.IMAGE_MSG
 import com.app.ekma.firebase.KEY_MESSAGE_CONTENT_DOC
 import com.app.ekma.firebase.KEY_MESSAGE_FROM_DOC
@@ -15,6 +14,8 @@ import com.app.ekma.firebase.ROOMS_DIR
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.common.TedImagePickerStarter
 import com.app.ekma.data.models.Message
+import com.app.ekma.data.models.service.IProfileService
+import com.app.ekma.firebase.KEY_MESSAGE_SEEN_DOC
 import com.app.ekma.firebase.firestore
 import com.app.ekma.firebase.storage
 import com.google.firebase.firestore.AggregateSource
@@ -29,6 +30,7 @@ import com.google.firebase.storage.StorageException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
@@ -36,12 +38,16 @@ import javax.inject.Inject
 import kotlin.math.ceil
 
 @HiltViewModel
-class ChatViewModel @Inject constructor() : BaseViewModel() {
+class ChatViewModel @Inject constructor(
+    private val profileService: IProfileService
+) : BaseViewModel() {
     override val TAG = ChatViewModel::class.java.simpleName
+
     private lateinit var msgCollRef: CollectionReference
     private lateinit var msgChangeRegis: ListenerRegistration
     private lateinit var lastVisibleDoc: DocumentSnapshot
 
+    private lateinit var myStudentCode: String
     var roomId = ""
     var isLoading = false
     var isLastPage = false
@@ -50,6 +56,41 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
     private val messagePerPage = 30L
     var totalPage = 0
     var currentPage = 1
+
+    fun getMyStudentCode(
+        callback: () -> Unit
+    ) {
+        if (this::myStudentCode.isInitialized) {
+            callback()
+        } else {
+            viewModelScope.launch {
+                myStudentCode = profileService.getProfile().studentCode
+                callback()
+            }
+        }
+    }
+
+    fun sendMessage(content: String, type: Int) {
+        val message = content.trim()
+        if (message.isEmpty()) return
+
+        val messageMap = mapOf(
+            KEY_MESSAGE_TIMESTAMP_DOC to FieldValue.serverTimestamp(),
+            KEY_MESSAGE_CONTENT_DOC to message,
+            KEY_MESSAGE_FROM_DOC to myStudentCode,
+            KEY_MESSAGE_TYPE_DOC to type,
+            KEY_MESSAGE_SEEN_DOC to listOf(myStudentCode)
+        )
+        val docRoomRef = firestore
+            .collection(KEY_ROOMS_COLL)
+            .document(roomId)
+        docRoomRef
+            .collection(KEY_ROOM_MESSAGE_COLL)
+            .add(messageMap)
+            .addOnSuccessListener {
+                docRoomRef.update(messageMap)
+            }
+    }
 
     fun sendImageFromPicker(context: Context) {
         TedImagePickerStarter.pickMultiImageForChatting(context) { uris ->
@@ -73,28 +114,6 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    fun sendMessage(content: String, type: Int) {
-        val message = content.trim()
-        if (message.isEmpty()) return
-
-        val myStudentCode = Data.profile.studentCode
-        val messageMap = mapOf(
-            KEY_MESSAGE_TIMESTAMP_DOC to FieldValue.serverTimestamp(),
-            KEY_MESSAGE_CONTENT_DOC to message,
-            KEY_MESSAGE_FROM_DOC to myStudentCode,
-            KEY_MESSAGE_TYPE_DOC to type
-        )
-        val docRoomRef = firestore
-            .collection(KEY_ROOMS_COLL)
-            .document(roomId)
-        docRoomRef
-            .collection(KEY_ROOM_MESSAGE_COLL)
-            .add(messageMap)
-            .addOnSuccessListener {
-                docRoomRef.update(messageMap)
-            }
-    }
-
     fun getTotalMessageCount(
         callback: () -> Unit
     ) {
@@ -109,7 +128,6 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
             .addOnSuccessListener { task ->
                 val totalMessage = task.count
                 totalPage = ceil(totalMessage.toDouble() / messagePerPage).toInt()
-                logInfo("totalPage=$totalPage")
                 callback()
             }
     }
@@ -125,12 +143,12 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
                 }
                 viewModelScope.launch(Dispatchers.IO) {
                     if (value == null) return@launch
-                    listenMessagesAdded(value, addEleCallback)
+                    listenAddedMessages(value, addEleCallback)
                 }
             }
     }
 
-    private suspend fun listenMessagesAdded(
+    private suspend fun listenAddedMessages(
         value: QuerySnapshot,
         addEleCallback: (itemCount: Int) -> Unit
     ) {
@@ -138,18 +156,32 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
         value.documentChanges
             .forEach {
                 if (it.type == DocumentChange.Type.ADDED) {
+                    viewModelScope.launch {
+                        val seen = it.document.get(KEY_MESSAGE_SEEN_DOC) as MutableList<String>
+                        if (!seen.contains(myStudentCode)) {
+                            seen.add(myStudentCode)
+                            // update seen members of message
+                            it.document.reference.update(mapOf(KEY_MESSAGE_SEEN_DOC to seen))
+                            // update seen members of room
+                            delay(1500) // avoid conflict transaction in 1s
+                            firestore
+                                .collection(KEY_ROOMS_COLL)
+                                .document(roomId)
+                                .update(mapOf(KEY_MESSAGE_SEEN_DOC to seen))
+                        }
+                    }
+                    // add to list message item
                     val serverTimestamp = it.document.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
                     val timestamp = serverTimestamp?.toDate() ?: Date()
                     val content = it.document.get(KEY_MESSAGE_CONTENT_DOC).toString()
                     val from = it.document.get(KEY_MESSAGE_FROM_DOC).toString()
                     val type = it.document.getLong(KEY_MESSAGE_TYPE_DOC)?.toInt() ?: TEXT_MSG
                     val message = Message(timestamp, content, from, type)
-                    logInfo("add $message")
+                    logInfo("ADD $message")
                     messages.add(message)
                     itemCount++
                 }
             }
-        logError("size=${messages.size}")
         withContext(Dispatchers.Main) {
             addEleCallback(itemCount)
         }
@@ -181,6 +213,15 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
 
     private fun getMsgPerPage(query: QuerySnapshot, messagesTemp: MutableList<Message>) {
         query.documents.forEach { doc ->
+            // update seen members
+            viewModelScope.launch {
+                val seen = doc.get(KEY_MESSAGE_SEEN_DOC) as MutableList<String>
+                if (!seen.contains(myStudentCode)) {
+                    seen.add(myStudentCode)
+                    doc.reference.update(mapOf(KEY_MESSAGE_SEEN_DOC to seen))
+                }
+            }
+            // add to list message item
             val serverTimestamp = doc.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
             val timestamp = serverTimestamp?.toDate() ?: Date()
             val content = doc.get(KEY_MESSAGE_CONTENT_DOC).toString()
@@ -194,7 +235,6 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
         }
         messagesTemp.reverse()
         messages.addAll(0, messagesTemp)
-        logError("size=${messages.size}")
     }
 
     override fun onCleared() {

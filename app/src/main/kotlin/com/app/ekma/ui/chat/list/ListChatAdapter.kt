@@ -57,7 +57,9 @@ class ListChatAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(room: ChatRoom) {
             val myStudentCode = Data.profile.studentCode
+
             binding.tvRoomName.text = room.name
+
             if (room.type == TEXT_MSG) {
                 if (room.from == myStudentCode) {
                     binding.tvContent.text = "Bạn: ${room.content}"
@@ -71,13 +73,22 @@ class ListChatAdapter(
                     binding.tvContent.text = "Đã gửi một ảnh"
                 }
             }
+
             binding.tvTime.text = "${room.timestamp.hours}h"
+
+            if (room.seenMembers.contains(myStudentCode)) {
+                binding.tvContent.setTextAppearance(R.style.NormalText)
+                binding.tvTime.setTextAppearance(R.style.NormalText)
+            } else {
+                binding.tvContent.setTextAppearance(R.style.BoldText)
+                binding.tvTime.setTextAppearance(R.style.BoldText)
+            }
+
             // show avatar
             val friendCode = removeMyStudentCode(room.members, myStudentCode).first()
             storage.child("$USERS_DIR/$friendCode/$AVATAR_FILE")
                 .downloadUrl
                 .addOnSuccessListener { uri ->
-                    println(uri.toString())
                     Glide.with(context)
                         .load(uri)
                         .placeholder(R.drawable.user)

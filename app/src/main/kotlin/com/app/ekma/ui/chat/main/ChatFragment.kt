@@ -33,14 +33,12 @@ class ChatFragment : BaseFragment() {
     private val chatAdapter by lazy { ChatAdapter(requireContext(), imageCallback) }
     private val requestAudioPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            logError("request audio permission = $it")
             if (it) {
                 navigateToOutgoingActivity(MSG_AUDIO_CALL_TYPE)
             }
         }
     private val requestVideoPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            logError("request video permission = $it")
             if (it.getOrDefault(Manifest.permission.RECORD_AUDIO, false)
                 and
                 it.getOrDefault(Manifest.permission.CAMERA, false)
@@ -62,8 +60,10 @@ class ChatFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         getBundleData()
         initViews()
-        if (viewModel.messages.isEmpty()) {
-            initMessaging()
+        viewModel.getMyStudentCode {
+            if (viewModel.messages.isEmpty()) {
+                initMessaging()
+            }
         }
     }
 
@@ -172,7 +172,6 @@ class ChatFragment : BaseFragment() {
     }
 
     private fun loadNextPage() {
-        logError("page=${viewModel.currentPage}")
         Handler().postDelayed({
             chatAdapter.removeHeaderLoading()
             viewModel.getOlderMessage { itemCount ->

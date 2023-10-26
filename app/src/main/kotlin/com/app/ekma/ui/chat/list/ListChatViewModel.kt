@@ -13,6 +13,7 @@ import com.app.ekma.common.formatMembersToRoomName
 import com.app.ekma.common.removeMyStudentCode
 import com.app.ekma.data.models.ChatRoom
 import com.app.ekma.data.models.service.IProfileService
+import com.app.ekma.firebase.KEY_MESSAGE_SEEN_DOC
 import com.app.ekma.firebase.firestore
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ListenerRegistration
@@ -79,6 +80,7 @@ class ListChatViewModel @Inject constructor(
         val content = docChange.document.get(KEY_MESSAGE_CONTENT_DOC).toString()
         val from = docChange.document.get(KEY_MESSAGE_FROM_DOC).toString()
         val type = (docChange.document.getLong(KEY_MESSAGE_TYPE_DOC) ?: 1).toInt()
+        val seen = docChange.document.get(KEY_MESSAGE_SEEN_DOC) as MutableList<String>
         logInfo("ADDED $id")
 
         docChange.document.reference
@@ -88,7 +90,7 @@ class ListChatViewModel @Inject constructor(
                 if (querySnapshot.isEmpty) {
                     return@addOnSuccessListener
                 }
-                val chatRoom = ChatRoom(id, name, members, timestamp, content, from, type)
+                val chatRoom = ChatRoom(id, name, members, timestamp, content, from, type, seen)
                 rooms.add(chatRoom)
                 rooms.sortByDescending { it.timestamp }
                 callback()
@@ -108,6 +110,7 @@ class ListChatViewModel @Inject constructor(
         val content = docChange.document.get(KEY_MESSAGE_CONTENT_DOC).toString()
         val from = docChange.document.get(KEY_MESSAGE_FROM_DOC).toString()
         val type = (docChange.document.getLong(KEY_MESSAGE_TYPE_DOC) ?: 1).toInt()
+        val seen = docChange.document.get(KEY_MESSAGE_SEEN_DOC) as MutableList<String>
         logInfo("MODIFIED $id")
 
         docChange.document.reference
@@ -116,7 +119,7 @@ class ListChatViewModel @Inject constructor(
             .addOnSuccessListener { querySnapshot ->
                 // when a user sends the first message, room is displayed
                 if (querySnapshot.size() == 1) {
-                    val chatRoom = ChatRoom(id, name, members, timestamp, content, from, type)
+                    val chatRoom = ChatRoom(id, name, members, timestamp, content, from, type, seen)
                     // if room has been exist, return
                     rooms.forEach { if (it.id == id) return@addOnSuccessListener }
                     rooms.add(chatRoom)
@@ -125,12 +128,13 @@ class ListChatViewModel @Inject constructor(
                 }
                 // when a user sends the next message, room is moved to top
                 else if (querySnapshot.size() > 1) {
-                    rooms.forEach {
-                        if (it.id == id) {
-                            it.timestamp = timestamp
-                            it.content = content
-                            it.from = from
-                            it.type = type
+                    rooms.forEach { room ->
+                        if (room.id == id) {
+                            room.timestamp = timestamp
+                            room.content = content
+                            room.from = from
+                            room.type = type
+                            room.seenMembers = seen
                             return@forEach
                         }
                     }
@@ -147,6 +151,25 @@ class ListChatViewModel @Inject constructor(
     ) {
         val id = docChange.document.id
         logError("REMOVED $id")
+    }
+
+    fun modifySeenMembersInRoom(roomId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val myStudentCode = profileService.getProfile().studentCode
+            rooms.forEach { room ->
+                if (room.id == roomId && !room.seenMembers.contains(myStudentCode)) {
+                    // modify seen members in room list
+                    room.seenMembers.add(myStudentCode)
+                    // modify seen members of room in firebase
+                    firestore.collection(KEY_ROOMS_COLL)
+                        .document(roomId)
+                        .update(
+                            mapOf(KEY_MESSAGE_SEEN_DOC to room.seenMembers)
+                        )
+                    return@forEach
+                }
+            }
+        }
     }
 
     override fun onCleared() {

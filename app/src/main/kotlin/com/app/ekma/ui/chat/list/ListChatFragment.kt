@@ -55,6 +55,7 @@ class ListChatFragment : BaseFragment() {
     }
 
     private val onClickChatRoomItem: (roomId: String) -> Unit = {
+        viewModel.modifySeenMembersInRoom(it)
         val bundle = bundleOf(
             KEY_PASS_CHAT_ROOM_ID to it
         )
