@@ -1,6 +1,8 @@
 package com.app.ekma.ui.chat.main
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.IMAGE_MSG
@@ -11,11 +13,12 @@ import com.app.ekma.firebase.KEY_MESSAGE_TYPE_DOC
 import com.app.ekma.firebase.KEY_ROOMS_COLL
 import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL
 import com.app.ekma.firebase.ROOMS_DIR
-import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.common.TedImagePickerStarter
+import com.app.ekma.common.parseDataToMessage
 import com.app.ekma.data.models.Message
 import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.firebase.KEY_MESSAGE_SEEN_DOC
+import com.app.ekma.firebase.KEY_ROOM_MEMBERS
 import com.app.ekma.firebase.firestore
 import com.app.ekma.firebase.storage
 import com.google.firebase.firestore.AggregateSource
@@ -32,6 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
@@ -45,27 +49,42 @@ class ChatViewModel @Inject constructor(
 
     private lateinit var msgCollRef: CollectionReference
     private lateinit var msgChangeRegis: ListenerRegistration
-    private lateinit var lastVisibleDoc: DocumentSnapshot
+    private lateinit var lastVisibleMsgPerPage: DocumentSnapshot
 
     private lateinit var myStudentCode: String
+    private val membersCode = mutableListOf<String>()
     var roomId = ""
-    var isLoading = false
-    var isLastPage = false
 
     val messages = mutableListOf<Message>()
     private val messagePerPage = 30L
     var totalPage = 0
     var currentPage = 1
+    var isLoading = false
+    var isLastPage = false
 
-    fun getMyStudentCode(
+    private val _modifiedMsgPosition = MutableLiveData(-1)
+    val modifiedMsgPosition: LiveData<Int>
+        get() = _modifiedMsgPosition
+    private var lastMsgPosition = -1
+
+    fun getStudentCode(
         callback: () -> Unit
     ) {
         if (this::myStudentCode.isInitialized) {
             callback()
         } else {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 myStudentCode = profileService.getProfile().studentCode
-                callback()
+                membersCode.addAll(
+                    firestore.collection(KEY_ROOMS_COLL)
+                        .document(roomId)
+                        .get()
+                        .await()
+                        .get(KEY_ROOM_MEMBERS) as List<String>
+                )
+                withContext(Dispatchers.Main) {
+                    callback()
+                }
             }
         }
     }
@@ -132,7 +151,9 @@ class ChatViewModel @Inject constructor(
             }
     }
 
-    fun observeMessageDocChanges(addEleCallback: (itemCount: Int) -> Unit) {
+    fun observeMessageChanges(
+        callback: (Int) -> Unit
+    ) {
         var isFirstGetMessage = true
         msgChangeRegis = msgCollRef
             .orderBy(KEY_MESSAGE_TIMESTAMP_DOC, Query.Direction.ASCENDING)
@@ -142,62 +163,82 @@ class ChatViewModel @Inject constructor(
                     return@addSnapshotListener
                 }
                 viewModelScope.launch(Dispatchers.IO) {
-                    if (value == null) return@launch
-                    listenAddedMessages(value, addEleCallback)
+                    value?.documentChanges?.forEach { docChange ->
+                        if (docChange.type == DocumentChange.Type.ADDED) {
+                            onMessageAdded(docChange, callback)
+                        }
+                        if (docChange.type == DocumentChange.Type.MODIFIED) {
+                            onMessageModified(docChange, callback)
+                        }
+                        if (docChange.type == DocumentChange.Type.REMOVED) {
+                            onMessageRemoved(docChange, callback)
+                        }
+                    }
                 }
             }
     }
 
-    private suspend fun listenAddedMessages(
-        value: QuerySnapshot,
-        addEleCallback: (itemCount: Int) -> Unit
+    private suspend fun onMessageAdded(
+        docChange: DocumentChange,
+        callback: (Int) -> Unit
     ) {
-        var itemCount = 0
-        value.documentChanges
-            .forEach {
-                if (it.type == DocumentChange.Type.ADDED) {
-                    viewModelScope.launch {
-                        val seen = it.document.get(KEY_MESSAGE_SEEN_DOC) as MutableList<String>
-                        if (!seen.contains(myStudentCode)) {
-                            seen.add(myStudentCode)
-                            // update seen members of message
-                            it.document.reference.update(mapOf(KEY_MESSAGE_SEEN_DOC to seen))
-                            // update seen members of room
-                            delay(1500) // avoid conflict transaction in 1s
-                            firestore
-                                .collection(KEY_ROOMS_COLL)
-                                .document(roomId)
-                                .update(mapOf(KEY_MESSAGE_SEEN_DOC to seen))
-                        }
-                    }
-                    // add to list message item
-                    val serverTimestamp = it.document.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
-                    val timestamp = serverTimestamp?.toDate() ?: Date()
-                    val content = it.document.get(KEY_MESSAGE_CONTENT_DOC).toString()
-                    val from = it.document.get(KEY_MESSAGE_FROM_DOC).toString()
-                    val type = it.document.getLong(KEY_MESSAGE_TYPE_DOC)?.toInt() ?: TEXT_MSG
-                    val message = Message(timestamp, content, from, type)
-                    logInfo("ADD $message")
-                    messages.add(message)
-                    itemCount++
-                }
+        val message = parseDataToMessage(docChange.document)
+        viewModelScope.launch {
+            val seen = message.seen
+            if (!seen.contains(myStudentCode)) {
+                seen.add(myStudentCode)
+                // update seen members of message
+                docChange.document.reference.update(mapOf(KEY_MESSAGE_SEEN_DOC to seen))
+                // update seen members of room
+                delay(1500) // avoid conflict transaction in 1s
+                firestore
+                    .collection(KEY_ROOMS_COLL)
+                    .document(roomId)
+                    .update(mapOf(KEY_MESSAGE_SEEN_DOC to seen))
             }
-        withContext(Dispatchers.Main) {
-            addEleCallback(itemCount)
         }
+        // add to list message item
+        messages.add(message)
+        logInfo("ADDED $message")
+
+        withContext(Dispatchers.Main) {
+            callback(1)
+        }
+    }
+
+    private suspend fun onMessageModified(
+        docChange: DocumentChange,
+        callback: (Int) -> Unit
+    ) {
+        val message = parseDataToMessage(docChange.document)
+        messages.forEach {
+            if (it.id == message.id) {
+                it.seen = message.seen
+                return@forEach
+            }
+        }
+        findTheLastSeenMessage()
+    }
+
+    private suspend fun onMessageRemoved(
+        docChange: DocumentChange,
+        callback: (Int) -> Unit
+    ) {
+
     }
 
     fun getOlderMessage(addEleCallback: (itemCount: Int) -> Unit) {
         val messagesTemp = mutableListOf<Message>()
-        if (this::lastVisibleDoc.isInitialized) {
+        if (this::lastVisibleMsgPerPage.isInitialized) {
             msgCollRef
                 .orderBy(KEY_MESSAGE_TIMESTAMP_DOC, Query.Direction.DESCENDING)
-                .startAfter(lastVisibleDoc)
+                .startAfter(lastVisibleMsgPerPage)
                 .limit(messagePerPage)
                 .get()
                 .addOnSuccessListener { query ->
                     getMsgPerPage(query, messagesTemp)
                     addEleCallback(messagesTemp.size)
+                    findTheLastSeenMessage()
                 }
         } else {
             msgCollRef
@@ -207,6 +248,7 @@ class ChatViewModel @Inject constructor(
                 .addOnSuccessListener { query ->
                     getMsgPerPage(query, messagesTemp)
                     addEleCallback(messagesTemp.size)
+                    findTheLastSeenMessage()
                 }
         }
     }
@@ -222,19 +264,32 @@ class ChatViewModel @Inject constructor(
                 }
             }
             // add to list message item
-            val serverTimestamp = doc.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
-            val timestamp = serverTimestamp?.toDate() ?: Date()
-            val content = doc.get(KEY_MESSAGE_CONTENT_DOC).toString()
-            val from = doc.get(KEY_MESSAGE_FROM_DOC).toString()
-            val type = doc.getLong(KEY_MESSAGE_TYPE_DOC)?.toInt() ?: TEXT_MSG
-            val message = Message(timestamp, content, from, type)
+            val message = parseDataToMessage(doc)
             messagesTemp.add(message)
         }
         if (query.documents.isNotEmpty()) {
-            lastVisibleDoc = query.documents.last()
+            lastVisibleMsgPerPage = query.documents.last()
         }
         messagesTemp.reverse()
         messages.addAll(0, messagesTemp)
+    }
+
+    private fun findTheLastSeenMessage() {
+        viewModelScope.launch(Dispatchers.Default) {
+            if (lastMsgPosition != -1) {
+                messages[lastMsgPosition].isLastSeenMessage = false
+            }
+            for (i in messages.size - 1 downTo 0) {
+                if (messages[i].seen.containsAll(membersCode) and (messages[i].from == myStudentCode)) {
+                    messages[i].isLastSeenMessage = true
+                    withContext(Dispatchers.Main) {
+                        _modifiedMsgPosition.value = lastMsgPosition
+                        lastMsgPosition = i
+                    }
+                    break
+                }
+            }
+        }
     }
 
     override fun onCleared() {

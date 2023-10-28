@@ -74,7 +74,6 @@ class ChatAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val message = messages[position]
-
         if (holder.itemViewType == ITEM_MY_MSG_TYPE) {
             holder as MyMessageViewHolder
             holder.bind(message)
@@ -89,7 +88,7 @@ class ChatAdapter(
     fun addHeaderLoading() {
         isAddLoading = true
         // fake item
-        messages.add(0, Message(Date(), "", "", 0))
+        messages.add(0, Message("", Date(), "", "", 0, mutableListOf()))
     }
 
     fun removeHeaderLoading() {
@@ -101,8 +100,7 @@ class ChatAdapter(
     inner class MyMessageViewHolder(
         val binding: ItemMyMessageBinding,
         private val imageCallback: (imgUrl: String) -> Unit
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(message: Message) {
             if (message.type == TEXT_MSG) {
@@ -117,6 +115,11 @@ class ChatAdapter(
                     .into(binding.imvMessage)
                 binding.imvMessage.makeVisible()
                 binding.tvMessage.makeGone()
+            }
+            if (message.isLastSeenMessage) {
+                binding.tvSeen.makeVisible()
+            } else {
+                binding.tvSeen.makeGone()
             }
         }
     }
@@ -124,8 +127,7 @@ class ChatAdapter(
     inner class FriendMessageViewHolder(
         val binding: ItemFriendMessageBinding,
         private val imageCallback: (imgUrl: String) -> Unit
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(message: Message) {
             if (message.type == TEXT_MSG) {
@@ -144,6 +146,7 @@ class ChatAdapter(
         }
     }
 
-    inner class LoadingViewHolder(val binding: ItemLoadingBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    inner class LoadingViewHolder(
+        val binding: ItemLoadingBinding
+    ) : RecyclerView.ViewHolder(binding.root)
 }

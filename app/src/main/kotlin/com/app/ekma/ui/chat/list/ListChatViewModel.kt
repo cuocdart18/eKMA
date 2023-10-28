@@ -2,15 +2,10 @@ package com.app.ekma.ui.chat.list
 
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
-import com.app.ekma.firebase.KEY_MESSAGE_CONTENT_DOC
-import com.app.ekma.firebase.KEY_MESSAGE_FROM_DOC
-import com.app.ekma.firebase.KEY_MESSAGE_TIMESTAMP_DOC
-import com.app.ekma.firebase.KEY_MESSAGE_TYPE_DOC
 import com.app.ekma.firebase.KEY_ROOMS_COLL
 import com.app.ekma.firebase.KEY_ROOM_MEMBERS
 import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL
-import com.app.ekma.common.formatMembersToRoomName
-import com.app.ekma.common.removeMyStudentCode
+import com.app.ekma.common.parseDataToChatRoom
 import com.app.ekma.data.models.ChatRoom
 import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.firebase.KEY_MESSAGE_SEEN_DOC
@@ -21,7 +16,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Date
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,96 +51,81 @@ class ListChatViewModel @Inject constructor(
             val myStudentCode = profileService.getProfile().studentCode
             value.documentChanges.forEach { docChange ->
                 if (docChange.type == DocumentChange.Type.ADDED) {
-                    onDocumentAdded(docChange, myStudentCode, callback)
+                    onRoomAdded(docChange, myStudentCode, callback)
                 }
                 if (docChange.type == DocumentChange.Type.MODIFIED) {
-                    onDocumentModified(docChange, myStudentCode, callback)
+                    onRoomModified(docChange, myStudentCode, callback)
                 }
                 if (docChange.type == DocumentChange.Type.REMOVED) {
-                    onDocumentRemoved(docChange, myStudentCode, callback)
+                    onRoomRemoved(docChange, myStudentCode, callback)
                 }
             }
         }
     }
 
-    private suspend fun onDocumentAdded(
+    private suspend fun onRoomAdded(
         docChange: DocumentChange,
         myStudentCode: String,
         callback: () -> Unit
     ) {
-        val id = docChange.document.id
-        val members = docChange.document.get(KEY_ROOM_MEMBERS) as List<String>
-        val name = formatMembersToRoomName(removeMyStudentCode(members, myStudentCode))
-        val serverTimestamp = docChange.document.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
-        val timestamp = serverTimestamp?.toDate() ?: Date()
-        val content = docChange.document.get(KEY_MESSAGE_CONTENT_DOC).toString()
-        val from = docChange.document.get(KEY_MESSAGE_FROM_DOC).toString()
-        val type = (docChange.document.getLong(KEY_MESSAGE_TYPE_DOC) ?: 1).toInt()
-        val seen = docChange.document.get(KEY_MESSAGE_SEEN_DOC) as MutableList<String>
-        logInfo("ADDED $id")
-
-        docChange.document.reference
+        val chatRoom = parseDataToChatRoom(docChange.document, myStudentCode).await()
+        val querySnapshot = docChange.document.reference
             .collection(KEY_ROOM_MESSAGE_COLL)
             .get()
-            .addOnSuccessListener { querySnapshot ->
-                if (querySnapshot.isEmpty) {
-                    return@addOnSuccessListener
-                }
-                val chatRoom = ChatRoom(id, name, members, timestamp, content, from, type, seen)
-                rooms.add(chatRoom)
-                rooms.sortByDescending { it.timestamp }
+            .await()
+        if (querySnapshot.isEmpty) {
+            return
+        }
+        rooms.add(chatRoom)
+        rooms.sortByDescending { it.timestamp }
+        withContext(Dispatchers.Main) {
+            callback()
+        }
+    }
+
+    private suspend fun onRoomModified(
+        docChange: DocumentChange,
+        myStudentCode: String,
+        callback: () -> Unit
+    ) {
+        val chatRoom = parseDataToChatRoom(docChange.document, myStudentCode).await()
+        val querySnapshot = docChange.document.reference
+            .collection(KEY_ROOM_MESSAGE_COLL)
+            .get()
+            .await()
+        // when a user sends the first message, room is displayed
+        if (querySnapshot.size() == 1) {
+            // if room has been exist, don't add
+            rooms.forEach {
+                if (it.id == chatRoom.id)
+                    return
+            }
+            rooms.add(chatRoom)
+            rooms.sortByDescending { it.timestamp }
+            withContext(Dispatchers.Main) {
                 callback()
             }
-    }
-
-    private suspend fun onDocumentModified(
-        docChange: DocumentChange,
-        myStudentCode: String,
-        callback: () -> Unit
-    ) {
-        val id = docChange.document.id
-        val members = docChange.document.get(KEY_ROOM_MEMBERS) as List<String>
-        val name = formatMembersToRoomName(removeMyStudentCode(members, myStudentCode))
-        val serverTimestamp = docChange.document.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
-        val timestamp = serverTimestamp?.toDate() ?: Date()
-        val content = docChange.document.get(KEY_MESSAGE_CONTENT_DOC).toString()
-        val from = docChange.document.get(KEY_MESSAGE_FROM_DOC).toString()
-        val type = (docChange.document.getLong(KEY_MESSAGE_TYPE_DOC) ?: 1).toInt()
-        val seen = docChange.document.get(KEY_MESSAGE_SEEN_DOC) as MutableList<String>
-        logInfo("MODIFIED $id")
-
-        docChange.document.reference
-            .collection(KEY_ROOM_MESSAGE_COLL)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                // when a user sends the first message, room is displayed
-                if (querySnapshot.size() == 1) {
-                    val chatRoom = ChatRoom(id, name, members, timestamp, content, from, type, seen)
-                    // if room has been exist, return
-                    rooms.forEach { if (it.id == id) return@addOnSuccessListener }
-                    rooms.add(chatRoom)
-                    rooms.sortByDescending { it.timestamp }
-                    callback()
-                }
-                // when a user sends the next message, room is moved to top
-                else if (querySnapshot.size() > 1) {
-                    rooms.forEach { room ->
-                        if (room.id == id) {
-                            room.timestamp = timestamp
-                            room.content = content
-                            room.from = from
-                            room.type = type
-                            room.seenMembers = seen
-                            return@forEach
-                        }
-                    }
-                    rooms.sortByDescending { it.timestamp }
-                    callback()
+        }
+        // when a user sends the next message, room is moved to top
+        else if (querySnapshot.size() > 1) {
+            rooms.forEach { room ->
+                if (room.id == chatRoom.id) {
+                    room.timestamp = chatRoom.timestamp
+                    room.content = chatRoom.content
+                    room.from = chatRoom.from
+                    room.type = chatRoom.type
+                    room.seenMembers = chatRoom.seenMembers
+                    return@forEach
                 }
             }
+            rooms.sortByDescending { it.timestamp }
+            withContext(Dispatchers.Main) {
+                callback()
+            }
+        }
     }
 
-    private fun onDocumentRemoved(
+    private fun onRoomRemoved(
         docChange: DocumentChange,
         myStudentCode: String,
         callback: () -> Unit

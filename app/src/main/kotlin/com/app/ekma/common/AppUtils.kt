@@ -5,14 +5,26 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
+import com.app.ekma.data.models.ChatRoom
+import com.app.ekma.data.models.Message
 import com.app.ekma.data.models.Score
+import com.app.ekma.firebase.KEY_MESSAGE_CONTENT_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_FROM_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_SEEN_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_TIMESTAMP_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_TYPE_DOC
+import com.app.ekma.firebase.KEY_ROOM_MEMBERS
 import com.app.ekma.firebase.KEY_USERS_COLL
 import com.app.ekma.firebase.KEY_USER_NAME
 import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
 import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
 import com.app.ekma.firebase.firestore
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.gson.Gson
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.math.BigInteger
@@ -20,9 +32,43 @@ import java.security.MessageDigest
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.Date
 import kotlin.math.round
 
 // Global method
+suspend fun parseDataToChatRoom(
+    document: DocumentSnapshot,
+    myStudentCode: String
+): Deferred<ChatRoom> {
+    return coroutineScope {
+        async {
+            val id = document.id
+            val members = document.get(KEY_ROOM_MEMBERS) as List<String>
+            val name = formatMembersToRoomName(removeMyStudentCode(members, myStudentCode))
+            val serverTimestamp = document.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
+            val timestamp = serverTimestamp?.toDate() ?: Date()
+            val content = document.get(KEY_MESSAGE_CONTENT_DOC).toString()
+            val from = document.get(KEY_MESSAGE_FROM_DOC).toString()
+            val type = (document.getLong(KEY_MESSAGE_TYPE_DOC) ?: 1).toInt()
+            val seen = document.get(KEY_MESSAGE_SEEN_DOC)?.let {
+                it as MutableList<String>
+            } ?: mutableListOf()
+            ChatRoom(id, name, members, timestamp, content, from, type, seen)
+        }
+    }
+}
+
+fun parseDataToMessage(document: DocumentSnapshot): Message {
+    val id = document.id
+    val serverTimestamp = document.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
+    val timestamp = serverTimestamp?.toDate() ?: Date()
+    val content = document.get(KEY_MESSAGE_CONTENT_DOC).toString()
+    val from = document.get(KEY_MESSAGE_FROM_DOC).toString()
+    val type = document.getLong(KEY_MESSAGE_TYPE_DOC)?.toInt() ?: TEXT_MSG
+    val seen = document.get(KEY_MESSAGE_SEEN_DOC) as MutableList<String>
+    return Message(id, timestamp, content, from, type, seen)
+}
+
 fun checkCallPermission(context: Context, type: String): Boolean {
     return when (type) {
         MSG_AUDIO_CALL_TYPE -> {

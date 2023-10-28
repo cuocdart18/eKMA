@@ -60,7 +60,7 @@ class ChatFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         getBundleData()
         initViews()
-        viewModel.getMyStudentCode {
+        viewModel.getStudentCode {
             if (viewModel.messages.isEmpty()) {
                 initMessaging()
             }
@@ -168,7 +168,13 @@ class ChatFragment : BaseFragment() {
             }
         }
 
-        viewModel.observeMessageDocChanges(addEleCallback)
+        viewModel.observeMessageChanges(addEleCallback)
+
+        viewModel.modifiedMsgPosition.observe(viewLifecycleOwner) { pos ->
+            if (pos != -1) {
+                chatAdapter.notifyItemRangeChanged(pos, viewModel.messages.size - pos)
+            }
+        }
     }
 
     private fun loadNextPage() {
