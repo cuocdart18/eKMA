@@ -1,7 +1,6 @@
 package com.app.ekma.data.repository
 
 import com.app.ekma.base.repositories.BaseRepositories
-import com.app.ekma.common.Data
 import com.app.ekma.firebase.KEY_USER_DOB
 import com.app.ekma.firebase.KEY_USER_GENDER
 import com.app.ekma.firebase.KEY_USER_ID
@@ -13,6 +12,7 @@ import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Profile
 import com.app.ekma.data.models.repository.IProfileRepository
 import com.app.ekma.firebase.KEY_USERS_COLL
+import com.app.ekma.firebase.KEY_USER_STATUS
 import com.app.ekma.firebase.KEY_USER_TOKEN
 import com.app.ekma.firebase.firestore
 import com.google.firebase.firestore.FieldValue
@@ -54,6 +54,20 @@ class ProfileRepositoryImpl @Inject constructor(
             firestore.collection(KEY_USERS_COLL)
                 .document(profile.studentCode)
                 .set(profileMap)
+                .await()
+        }
+    }
+
+    override suspend fun setActiveStatus(status: String) {
+        withContext(Dispatchers.IO) {
+            val myStudentCode = getProfile().studentCode
+            val statusMap = mapOf(
+                KEY_USER_STATUS to status
+            )
+            firestore.collection(KEY_USERS_COLL)
+                .document(myStudentCode)
+                .update(statusMap)
+                .await()
         }
     }
 

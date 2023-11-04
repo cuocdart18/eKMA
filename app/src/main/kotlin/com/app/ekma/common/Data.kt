@@ -31,6 +31,8 @@ object Data {
 
     lateinit var profile: Profile
 
+    var myConnectionsRefKey = ""
+
     // func
     suspend fun getProfile(
         profileService: IProfileService

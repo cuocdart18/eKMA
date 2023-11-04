@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_margin="@dimen/base_high_margin"
+            android:text="day la mot doan tin nhan"
             android:textColor="@color/lab_black"
             android:textSize="@dimen/base_normal_text"
             android:visibility="gone" />
@@ -27,6 +28,19 @@
             android:layout_gravity="end"
             android:layout_margin="@dimen/base_high_margin"
             android:contentDescription="@string/image_message"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_seen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="@dimen/base_high_margin"
+            android:layout_marginEnd="@dimen/base_high_margin"
+            android:layout_marginBottom="@dimen/base_high_margin"
+            android:text="Da xem"
+            android:textColor="@color/lab_black"
+            android:textSize="@dimen/base_helper_text"
             android:visibility="gone" />
     </LinearLayout>
 </layout>

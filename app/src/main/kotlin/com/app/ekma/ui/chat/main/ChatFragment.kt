@@ -33,14 +33,12 @@ class ChatFragment : BaseFragment() {
     private val chatAdapter by lazy { ChatAdapter(requireContext(), imageCallback) }
     private val requestAudioPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            logError("request audio permission = $it")
             if (it) {
                 navigateToOutgoingActivity(MSG_AUDIO_CALL_TYPE)
             }
         }
     private val requestVideoPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            logError("request video permission = $it")
             if (it.getOrDefault(Manifest.permission.RECORD_AUDIO, false)
                 and
                 it.getOrDefault(Manifest.permission.CAMERA, false)
@@ -62,8 +60,10 @@ class ChatFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         getBundleData()
         initViews()
-        if (viewModel.messages.isEmpty()) {
-            initMessaging()
+        viewModel.getStudentCode {
+            if (viewModel.messages.isEmpty()) {
+                initMessaging()
+            }
         }
     }
 
@@ -99,6 +99,14 @@ class ChatFragment : BaseFragment() {
 
             override fun isLastPage() = viewModel.isLastPage
         })
+
+        viewModel.activeStatus.observe(viewLifecycleOwner) { state ->
+            if (state) {
+                logError("online")
+            } else {
+                logError("offline")
+            }
+        }
     }
 
     private val onClickBtnSend: (View) -> Unit = {
@@ -155,6 +163,8 @@ class ChatFragment : BaseFragment() {
     }
 
     private fun initMessaging() {
+        viewModel.regisActiveStatusChange()
+
         viewModel.getTotalMessageCount {
             viewModel.getOlderMessage { itemCount ->
                 chatAdapter.notifyItemRangeInserted(0, itemCount)
@@ -168,11 +178,16 @@ class ChatFragment : BaseFragment() {
             }
         }
 
-        viewModel.observeMessageDocChanges(addEleCallback)
+        viewModel.observeMessageChanges(addEleCallback)
+
+        viewModel.modifiedMsgPosition.observe(viewLifecycleOwner) { pos ->
+            if (pos != -1) {
+                chatAdapter.notifyItemRangeChanged(pos, viewModel.messages.size - pos)
+            }
+        }
     }
 
     private fun loadNextPage() {
-        logError("page=${viewModel.currentPage}")
         Handler().postDelayed({
             chatAdapter.removeHeaderLoading()
             viewModel.getOlderMessage { itemCount ->

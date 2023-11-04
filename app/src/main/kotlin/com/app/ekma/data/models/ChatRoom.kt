@@ -9,5 +9,8 @@ data class ChatRoom(
     var timestamp: Date,
     var content: String,
     var from: String,
-    var type: Int = 1
-)
+    var type: Int = 1,
+    var seenMembers: MutableList<String>
+) {
+    var isOnline = false
+}
