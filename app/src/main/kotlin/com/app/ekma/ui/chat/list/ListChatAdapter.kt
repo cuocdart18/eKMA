@@ -84,6 +84,12 @@ class ListChatAdapter(
                 binding.tvTime.setTextAppearance(R.style.BoldText)
             }
 
+            if (room.isOnline) {
+                binding.tvActiveStatus.text = "Online"
+            } else {
+                binding.tvActiveStatus.text = "Offline"
+            }
+
             // show avatar
             val friendCode = removeMyStudentCode(room.members, myStudentCode).first()
             storage.child("$USERS_DIR/$friendCode/$AVATAR_FILE")

@@ -11,4 +11,6 @@ data class ChatRoom(
     var from: String,
     var type: Int = 1,
     var seenMembers: MutableList<String>
-)
+) {
+    var isOnline = false
+}

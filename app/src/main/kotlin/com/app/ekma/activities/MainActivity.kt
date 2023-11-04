@@ -38,6 +38,7 @@ class MainActivity : BaseActivity() {
         setUiTemplates()
         viewModel.runWorkerIfFailure(this)
         viewModel.getLocalData()
+        viewModel.regisActiveValueEventListener()
     }
 
     private fun setUiTemplates() {

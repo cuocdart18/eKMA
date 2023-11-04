@@ -21,7 +21,12 @@ import com.app.ekma.data.models.service.INoteService
 import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.data.models.service.IScheduleService
 import com.app.ekma.data.models.service.IUserService
+import com.app.ekma.firebase.ACTIVE_STATUS
+import com.app.ekma.firebase.CONNECTIONS
+import com.app.ekma.firebase.LAST_ONLINE
+import com.app.ekma.firebase.database
 import com.app.ekma.work.WorkRunner
+import com.google.firebase.database.ServerValue
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -144,6 +149,15 @@ class InformationViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            // change active status
+            if (Data.myConnectionsRefKey.isNotEmpty()) {
+                val myStudentCode = profile.studentCode
+                database.child(ACTIVE_STATUS).child(myStudentCode).child(LAST_ONLINE)
+                    .setValue(ServerValue.TIMESTAMP)
+                database.child(ACTIVE_STATUS).child(myStudentCode).child(CONNECTIONS)
+                    .child(Data.myConnectionsRefKey).removeValue()
+            }
+
             // cancel running worker
             WorkManager.getInstance(context).cancelAllWork()
 

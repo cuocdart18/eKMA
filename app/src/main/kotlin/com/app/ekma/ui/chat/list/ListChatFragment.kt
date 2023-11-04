@@ -1,6 +1,5 @@
 package com.app.ekma.ui.chat.list
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,14 +42,18 @@ class ListChatFragment : BaseFragment() {
         binding.rcvListChat.adapter = listChatAdapter
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun showListChatRoom() {
         if (viewModel.rooms.isEmpty()) {
             viewModel.listenChatRoomsChanges {
-                listChatAdapter.notifyDataSetChanged()
+                listChatAdapter.notifyItemRangeChanged(0, viewModel.rooms.size)
             }
         } else {
-            listChatAdapter.notifyDataSetChanged()
+            listChatAdapter.notifyItemRangeChanged(0, viewModel.rooms.size)
+        }
+        viewModel.modifiedRoomPos.observe(viewLifecycleOwner) { pos ->
+            if (pos != -1) {
+                listChatAdapter.notifyItemChanged(pos)
+            }
         }
     }
 

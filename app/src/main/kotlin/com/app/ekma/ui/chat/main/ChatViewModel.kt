@@ -15,12 +15,19 @@ import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL
 import com.app.ekma.firebase.ROOMS_DIR
 import com.app.ekma.common.TedImagePickerStarter
 import com.app.ekma.common.parseDataToMessage
+import com.app.ekma.common.removeMyStudentCode
 import com.app.ekma.data.models.Message
 import com.app.ekma.data.models.service.IProfileService
+import com.app.ekma.firebase.ACTIVE_STATUS
+import com.app.ekma.firebase.CONNECTIONS
 import com.app.ekma.firebase.KEY_MESSAGE_SEEN_DOC
 import com.app.ekma.firebase.KEY_ROOM_MEMBERS
+import com.app.ekma.firebase.database
 import com.app.ekma.firebase.firestore
 import com.app.ekma.firebase.storage
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
@@ -54,6 +61,9 @@ class ChatViewModel @Inject constructor(
     private lateinit var myStudentCode: String
     private val membersCode = mutableListOf<String>()
     var roomId = ""
+    private val _activeStatus = MutableLiveData(false)
+    val activeStatus: LiveData<Boolean>
+        get() = _activeStatus
 
     val messages = mutableListOf<Message>()
     private val messagePerPage = 30L
@@ -84,6 +94,37 @@ class ChatViewModel @Inject constructor(
                 )
                 withContext(Dispatchers.Main) {
                     callback()
+                }
+            }
+        }
+    }
+
+    fun regisActiveStatusChange() {
+        viewModelScope.launch(Dispatchers.IO) {
+            removeMyStudentCode(membersCode, myStudentCode).forEach { studentCode ->
+                launch {
+                    database.child(ACTIVE_STATUS)
+                        .child(studentCode)
+                        .child(CONNECTIONS)
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                viewModelScope.launch(Dispatchers.Default) {
+                                    val data = snapshot.value
+                                    var isOnline = false
+                                    if (data != null) {
+                                        data as Map<String, Boolean>
+                                        isOnline = data.values.contains(true)
+                                    }
+                                    withContext(Dispatchers.Main) {
+                                        _activeStatus.value = isOnline
+                                    }
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                logWarning("onCancelled: ${error.toException()}")
+                            }
+                        })
                 }
             }
         }

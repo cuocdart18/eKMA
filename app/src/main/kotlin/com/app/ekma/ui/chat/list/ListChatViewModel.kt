@@ -1,20 +1,30 @@
 package com.app.ekma.ui.chat.list
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.firebase.KEY_ROOMS_COLL
 import com.app.ekma.firebase.KEY_ROOM_MEMBERS
 import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL
 import com.app.ekma.common.parseDataToChatRoom
+import com.app.ekma.common.removeMyStudentCode
 import com.app.ekma.data.models.ChatRoom
 import com.app.ekma.data.models.service.IProfileService
+import com.app.ekma.firebase.ACTIVE_STATUS
+import com.app.ekma.firebase.CONNECTIONS
 import com.app.ekma.firebase.KEY_MESSAGE_SEEN_DOC
+import com.app.ekma.firebase.database
 import com.app.ekma.firebase.firestore
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -27,6 +37,10 @@ class ListChatViewModel @Inject constructor(
     override val TAG = ListChatViewModel::class.java.simpleName
     val rooms = mutableListOf<ChatRoom>()
     private lateinit var roomChangeListener: ListenerRegistration
+
+    private val _modifiedRoomPos = MutableLiveData(-1)
+    val modifiedRoomPos: LiveData<Int>
+        get() = _modifiedRoomPos
 
     fun listenChatRoomsChanges(
         callback: () -> Unit
@@ -78,8 +92,46 @@ class ListChatViewModel @Inject constructor(
         }
         rooms.add(chatRoom)
         rooms.sortByDescending { it.timestamp }
+        setActiveStatus(chatRoom, myStudentCode)
         withContext(Dispatchers.Main) {
             callback()
+        }
+    }
+
+    private fun setActiveStatus(chatRoom: ChatRoom, myStudentCode: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            removeMyStudentCode(chatRoom.members, myStudentCode).forEach { studentCode ->
+                launch {
+                    database.child(ACTIVE_STATUS)
+                        .child(studentCode)
+                        .child(CONNECTIONS)
+                        .addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                viewModelScope.launch(Dispatchers.Default) {
+                                    val data = snapshot.value
+                                    var isOnline = false
+                                    if (data != null) {
+                                        data as Map<String, Boolean>
+                                        isOnline = data.values.contains(true)
+                                    }
+                                    for (i in rooms.indices) {
+                                        if (rooms[i].id == chatRoom.id) {
+                                            rooms[i].isOnline = isOnline
+                                            withContext(Dispatchers.Main) {
+                                                _modifiedRoomPos.value = i
+                                            }
+                                            break
+                                        }
+                                    }
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                logWarning("onCancelled: ${error.toException()}")
+                            }
+                        })
+                }
+            }
         }
     }
 

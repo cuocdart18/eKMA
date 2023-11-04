@@ -32,6 +32,12 @@ const val KEY_NOTE_ID = "id"
 const val KEY_NOTE_IS_DONE = "isDone"
 const val KEY_NOTE_TYPE = "type"
 
+// for Realtime database
+const val ACTIVE_STATUS = "activeStatus"
+const val CONNECTIONS = "connections"
+const val LAST_ONLINE = "lastOnline"
+const val CONNECTED_REFERENCE = ".info/connected"
+
 // for Storage
 const val NOT_EXIST_OBJECT_CODE = -13010
 const val ROOMS_DIR = "rooms"

@@ -99,6 +99,14 @@ class ChatFragment : BaseFragment() {
 
             override fun isLastPage() = viewModel.isLastPage
         })
+
+        viewModel.activeStatus.observe(viewLifecycleOwner) { state ->
+            if (state) {
+                logError("online")
+            } else {
+                logError("offline")
+            }
+        }
     }
 
     private val onClickBtnSend: (View) -> Unit = {
@@ -155,6 +163,8 @@ class ChatFragment : BaseFragment() {
     }
 
     private fun initMessaging() {
+        viewModel.regisActiveStatusChange()
+
         viewModel.getTotalMessageCount {
             viewModel.getOlderMessage { itemCount ->
                 chatAdapter.notifyItemRangeInserted(0, itemCount)
