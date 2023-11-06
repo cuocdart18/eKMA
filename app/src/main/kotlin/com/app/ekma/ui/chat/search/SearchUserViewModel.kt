@@ -3,6 +3,7 @@ package com.app.ekma.ui.chat.search
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.firebase.KEY_MESSAGE_TIMESTAMP_DOC
 import com.app.ekma.firebase.KEY_ROOMS_COLL
 import com.app.ekma.firebase.KEY_ROOM_ID
@@ -11,7 +12,6 @@ import com.app.ekma.firebase.KEY_USER_ID
 import com.app.ekma.common.Resource
 import com.app.ekma.common.genChatRoomId
 import com.app.ekma.data.models.MiniStudent
-import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.data.models.service.IScoreService
 import com.app.ekma.firebase.KEY_USERS_COLL
 import com.app.ekma.firebase.firestore
@@ -32,8 +32,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchUserViewModel @Inject constructor(
-    private val scoreService: IScoreService,
-    private val profileService: IProfileService
+    private val scoreService: IScoreService
 ) : BaseViewModel() {
     override val TAG = SearchUserViewModel::class.java.simpleName
 
@@ -84,12 +83,12 @@ class SearchUserViewModel @Inject constructor(
     }
 
     fun referenceToChatRoom(
-        studentId: String,
+        studentCode: String,
         callback: (roomId: String) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val myStudentId = profileService.getProfile().studentCode
-            val roomId = genChatRoomId(studentId, myStudentId)
+            val myStudentCode = ProfileSingleton().studentCode
+            val roomId = genChatRoomId(studentCode, myStudentCode)
             val chatRoomDocRef = firestore.collection(KEY_ROOMS_COLL).document(roomId)
             chatRoomDocRef.get().addOnSuccessListener {
                 if (it.exists()) {
@@ -97,7 +96,7 @@ class SearchUserViewModel @Inject constructor(
                 } else {
                     val room = mapOf(
                         KEY_ROOM_ID to roomId,
-                        KEY_ROOM_MEMBERS to listOf(studentId, myStudentId),
+                        KEY_ROOM_MEMBERS to listOf(studentCode, myStudentCode),
                         KEY_MESSAGE_TIMESTAMP_DOC to FieldValue.serverTimestamp()
                     )
                     chatRoomDocRef.set(room).addOnSuccessListener {

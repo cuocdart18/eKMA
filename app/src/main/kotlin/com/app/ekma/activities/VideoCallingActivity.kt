@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.SurfaceView
 import android.view.View
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.AGORA_APP_ID
 import com.app.ekma.common.CHANNEL_TOKEN
-import com.app.ekma.common.Data
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.databinding.ActivityVideoCallingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
@@ -18,7 +17,6 @@ import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
 import io.agora.rtc2.video.VideoCanvas
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class VideoCallingActivity : BaseActivity() {
@@ -134,7 +132,7 @@ class VideoCallingActivity : BaseActivity() {
         agoraEngine.joinChannelWithUserAccount(
             viewModel.token,
             viewModel.roomId,
-            Data.profile.studentCode,
+            ProfileSingleton().studentCode,
             option
         )
     }

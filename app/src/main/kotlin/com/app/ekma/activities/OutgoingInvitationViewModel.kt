@@ -10,10 +10,11 @@ import com.app.ekma.common.PUBLISHER_ROLE
 import com.app.ekma.common.CountDownTimer
 import com.app.ekma.common.DEFAULT_UID
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.common.RTC_TOKEN_TYPE
 import com.app.ekma.common.Resource
 import com.app.ekma.common.TOKEN_EXPIRED_TIME
-import com.app.ekma.common.removeMyStudentCode
+import com.app.ekma.common.removeStudentCode
 import com.app.ekma.data.models.AgoraTokenRequest
 import com.app.ekma.data.models.FcmDataMessage
 import com.app.ekma.data.models.service.IAgoraService
@@ -61,13 +62,13 @@ class OutgoingInvitationViewModel @Inject constructor(
         callback: (String) -> Unit
     ) {
         viewModelScope.launch {
-            myStudentCode = profileService.getProfile().studentCode
+            myStudentCode = ProfileSingleton().studentCode
             val roomMembers = firestore.collection(KEY_ROOMS_COLL)
                 .document(roomId)
                 .get()
                 .await()
                 .get(KEY_ROOM_MEMBERS) as List<String>
-            receiverCodes = removeMyStudentCode(roomMembers, myStudentCode)
+            receiverCodes = removeStudentCode(roomMembers, myStudentCode)
             callback(receiverCodes.toString())
         }
     }

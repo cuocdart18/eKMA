@@ -60,7 +60,7 @@ class ChatFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         getBundleData()
         initViews()
-        viewModel.getStudentCode {
+        viewModel.getMembersCode {
             if (viewModel.messages.isEmpty()) {
                 initMessaging()
             }

@@ -6,8 +6,8 @@ import androidx.activity.viewModels
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.AGORA_APP_ID
 import com.app.ekma.common.CHANNEL_TOKEN
-import com.app.ekma.common.Data
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.databinding.ActivityAudioCallingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
@@ -112,7 +112,7 @@ class AudioCallingActivity : BaseActivity() {
         agoraEngine.joinChannelWithUserAccount(
             viewModel.token,
             viewModel.roomId,
-            Data.profile.studentCode,
+            ProfileSingleton().studentCode,
             option
         )
     }

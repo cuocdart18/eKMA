@@ -1,14 +1,15 @@
 package com.app.ekma.activities
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.app.ekma.R
 import com.app.ekma.base.activities.BaseActivity
-import com.app.ekma.common.Data
+import com.app.ekma.common.MainBottomNavigation
+import com.app.ekma.common.makeGone
+import com.app.ekma.common.makeVisible
 import com.app.ekma.data.data_source.database.AppDatabase
 import com.app.ekma.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,9 +37,7 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUiTemplates()
-        viewModel.runWorkerIfFailure(this)
-        viewModel.getLocalData()
-        viewModel.regisActiveValueEventListener()
+        viewModel.firstInitialize(this)
     }
 
     private fun setUiTemplates() {
@@ -46,11 +45,11 @@ class MainActivity : BaseActivity() {
             supportFragmentManager.findFragmentById(R.id.frm_host) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNav.setupWithNavController(navController)
-        Data.hideBottomNavView.observe(this) {
+        MainBottomNavigation().observe(this) {
             if (it)
-                binding.bottomNav.visibility = View.GONE
+                binding.bottomNav.makeGone()
             else
-                binding.bottomNav.visibility = View.VISIBLE
+                binding.bottomNav.makeVisible()
         }
     }
 

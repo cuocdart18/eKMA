@@ -23,12 +23,8 @@ class ProfileService @Inject constructor(
         profileRepository.saveProfileToFirestore(profile)
     }
 
-    override suspend fun setActiveStatus(status: String) {
-        profileRepository.setActiveStatus(status)
-    }
-
-    override suspend fun clearProfile() {
-        profileRepository.clearFcmToken()
+    override suspend fun clearProfile(myStudentCode: String) {
+        profileRepository.clearFcmToken(myStudentCode)
         profileRepository.clearProfile()
     }
 

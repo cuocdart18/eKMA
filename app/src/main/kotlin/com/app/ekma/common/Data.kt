@@ -1,20 +1,13 @@
 package com.app.ekma.common
 
-import androidx.lifecycle.MutableLiveData
 import com.app.ekma.data.models.Note
 import com.app.ekma.data.models.Period
-import com.app.ekma.data.models.Profile
-import com.app.ekma.data.models.Student
 import com.app.ekma.data.models.service.INoteService
-import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.data.models.service.IScheduleService
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.DayPosition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
 
 object Data {
     // K = day
@@ -22,24 +15,7 @@ object Data {
     var periodsDayMap = mutableMapOf<String, List<Period>>()
     var notesDayMap = mutableMapOf<String, List<Note>>()
 
-    val isRefreshClickedEvents = MutableLiveData<Boolean>()
-    val hideBottomNavView = MutableLiveData<Boolean>()
-    var saveDateClicked = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
-
-    // cache for my score selected
-    var myStudentInfo: Student? = null
-
-    lateinit var profile: Profile
-
-    var myConnectionsRefKey = ""
-
     // func
-    suspend fun getProfile(
-        profileService: IProfileService
-    ) {
-        profile = profileService.getProfile()
-    }
-
     suspend fun getLocalData(
         noteService: INoteService,
         scheduleService: IScheduleService,
@@ -73,7 +49,7 @@ object Data {
 
     suspend fun getLocalNotesRuntime(noteService: INoteService) =
         withContext(Dispatchers.IO) {
-            val result = noteService.getNotes()
+            val result = noteService.getNotes(ProfileSingleton().studentCode)
             if (result is Resource.Success) {
                 withContext(Dispatchers.Default) {
                     notesDayMap =

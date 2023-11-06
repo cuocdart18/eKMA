@@ -13,9 +13,7 @@ interface IProfileService {
 
     suspend fun saveProfile(profile: Profile)
 
-    suspend fun setActiveStatus(status: String)
-
-    suspend fun clearProfile()
+    suspend fun clearProfile(myStudentCode: String)
 
     suspend fun getProfile(): Profile
 }

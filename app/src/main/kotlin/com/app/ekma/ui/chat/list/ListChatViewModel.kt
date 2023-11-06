@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.firebase.KEY_ROOMS_COLL
 import com.app.ekma.firebase.KEY_ROOM_MEMBERS
 import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL
 import com.app.ekma.common.parseDataToChatRoom
-import com.app.ekma.common.removeMyStudentCode
+import com.app.ekma.common.removeStudentCode
 import com.app.ekma.data.models.ChatRoom
-import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.firebase.ACTIVE_STATUS
 import com.app.ekma.firebase.CONNECTIONS
 import com.app.ekma.firebase.KEY_MESSAGE_SEEN_DOC
@@ -24,16 +24,13 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class ListChatViewModel @Inject constructor(
-    private val profileService: IProfileService
-) : BaseViewModel() {
+class ListChatViewModel @Inject constructor() : BaseViewModel() {
     override val TAG = ListChatViewModel::class.java.simpleName
     val rooms = mutableListOf<ChatRoom>()
     private lateinit var roomChangeListener: ListenerRegistration
@@ -46,9 +43,8 @@ class ListChatViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch {
-            val myStudentCode = profileService.getProfile().studentCode
             roomChangeListener = firestore.collection(KEY_ROOMS_COLL)
-                .whereArrayContains(KEY_ROOM_MEMBERS, myStudentCode)
+                .whereArrayContains(KEY_ROOM_MEMBERS, ProfileSingleton().studentCode)
                 .addSnapshotListener { value, _ ->
                     if (value != null) {
                         onChatRoomsChanged(value, callback)
@@ -62,16 +58,15 @@ class ListChatViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val myStudentCode = profileService.getProfile().studentCode
             value.documentChanges.forEach { docChange ->
                 if (docChange.type == DocumentChange.Type.ADDED) {
-                    onRoomAdded(docChange, myStudentCode, callback)
+                    onRoomAdded(docChange, callback)
                 }
                 if (docChange.type == DocumentChange.Type.MODIFIED) {
-                    onRoomModified(docChange, myStudentCode, callback)
+                    onRoomModified(docChange, callback)
                 }
                 if (docChange.type == DocumentChange.Type.REMOVED) {
-                    onRoomRemoved(docChange, myStudentCode, callback)
+                    onRoomRemoved(docChange, callback)
                 }
             }
         }
@@ -79,10 +74,10 @@ class ListChatViewModel @Inject constructor(
 
     private suspend fun onRoomAdded(
         docChange: DocumentChange,
-        myStudentCode: String,
         callback: () -> Unit
     ) {
-        val chatRoom = parseDataToChatRoom(docChange.document, myStudentCode).await()
+        val chatRoom =
+            parseDataToChatRoom(docChange.document, ProfileSingleton().studentCode).await()
         val querySnapshot = docChange.document.reference
             .collection(KEY_ROOM_MESSAGE_COLL)
             .get()
@@ -92,15 +87,18 @@ class ListChatViewModel @Inject constructor(
         }
         rooms.add(chatRoom)
         rooms.sortByDescending { it.timestamp }
-        setActiveStatus(chatRoom, myStudentCode)
+        setActiveStatus(chatRoom)
         withContext(Dispatchers.Main) {
             callback()
         }
     }
 
-    private fun setActiveStatus(chatRoom: ChatRoom, myStudentCode: String) {
+    private fun setActiveStatus(chatRoom: ChatRoom) {
         viewModelScope.launch(Dispatchers.IO) {
-            removeMyStudentCode(chatRoom.members, myStudentCode).forEach { studentCode ->
+            removeStudentCode(
+                chatRoom.members,
+                ProfileSingleton().studentCode
+            ).forEach { studentCode ->
                 launch {
                     database.child(ACTIVE_STATUS)
                         .child(studentCode)
@@ -137,10 +135,10 @@ class ListChatViewModel @Inject constructor(
 
     private suspend fun onRoomModified(
         docChange: DocumentChange,
-        myStudentCode: String,
         callback: () -> Unit
     ) {
-        val chatRoom = parseDataToChatRoom(docChange.document, myStudentCode).await()
+        val chatRoom =
+            parseDataToChatRoom(docChange.document, ProfileSingleton().studentCode).await()
         val querySnapshot = docChange.document.reference
             .collection(KEY_ROOM_MESSAGE_COLL)
             .get()
@@ -179,7 +177,6 @@ class ListChatViewModel @Inject constructor(
 
     private fun onRoomRemoved(
         docChange: DocumentChange,
-        myStudentCode: String,
         callback: () -> Unit
     ) {
         val id = docChange.document.id
@@ -188,7 +185,7 @@ class ListChatViewModel @Inject constructor(
 
     fun modifySeenMembersInRoom(roomId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val myStudentCode = profileService.getProfile().studentCode
+            val myStudentCode = ProfileSingleton().studentCode
             rooms.forEach { room ->
                 if (room.id == roomId && !room.seenMembers.contains(myStudentCode)) {
                     // modify seen members in room list

@@ -6,8 +6,10 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import com.app.ekma.base.viewmodel.BaseViewModel
+import com.app.ekma.common.ConnReferenceKey
 import com.app.ekma.common.Data
 import com.app.ekma.common.GET_SCHEDULE_WORKER_TAG
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.common.UNIQUE_GET_SCHEDULE_WORK_NAME
 import com.app.ekma.data.models.service.ILoginService
 import com.app.ekma.data.models.service.INoteService
@@ -50,7 +52,13 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun runWorkerIfFailure(context: Context) {
+    fun firstInitialize(context: Context) {
+        runWorkerIfFailure(context)
+        getLocalData()
+        regisActiveValueEventListener()
+    }
+
+    private fun runWorkerIfFailure(context: Context) {
         viewModelScope.launch(Dispatchers.IO) {
             val workManager = WorkManager.getInstance(context)
             val workQuery = WorkQuery.Builder
@@ -71,14 +79,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun getLocalData() {
+    private fun getLocalData() {
         viewModelScope.launch(Dispatchers.IO) {
-            Data.getProfile(profileService)
+            ProfileSingleton.setData(profileService.getProfile())
             Data.getLocalData(noteService, scheduleService) {}
         }
     }
 
-    fun regisActiveValueEventListener() {
+    private fun regisActiveValueEventListener() {
         viewModelScope.launch {
             val myStudentCode = profileService.getProfile().studentCode
             val myConnectionsRef =
@@ -91,7 +99,7 @@ class MainViewModel @Inject constructor(
                     val connected = snapshot.value as Boolean
                     if (connected) {
                         val conn = myConnectionsRef.push()
-                        Data.myConnectionsRefKey = conn.key ?: ""
+                        ConnReferenceKey.setData(conn.key ?: "")
                         // When this device disconnects, remove it
                         conn.onDisconnect().removeValue()
                         // When I disconnect, update the last time I was seen online

@@ -15,11 +15,9 @@ interface IProfileRepository {
 
     suspend fun saveProfileToFirestore(profile: Profile)
 
-    suspend fun setActiveStatus(status: String)
-
     suspend fun clearProfile()
 
-    suspend fun clearFcmToken()
+    suspend fun clearFcmToken(myStudentCode: String)
 
     suspend fun getFcmToken(code: String): String
 

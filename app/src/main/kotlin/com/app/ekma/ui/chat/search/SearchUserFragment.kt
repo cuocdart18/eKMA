@@ -68,8 +68,8 @@ class SearchUserFragment : BaseFragment() {
         binding.rcvUsersResult.adapter = searchUserAdapter
     }
 
-    private val onItemClicked: (studentId: String) -> Unit = { studentId ->
-        viewModel.referenceToChatRoom(studentId) { roomId ->
+    private val onItemClicked: (String) -> Unit = { studentCode ->
+        viewModel.referenceToChatRoom(studentCode) { roomId ->
             val bundle = bundleOf(
                 KEY_PASS_CHAT_ROOM_ID to roomId
             )

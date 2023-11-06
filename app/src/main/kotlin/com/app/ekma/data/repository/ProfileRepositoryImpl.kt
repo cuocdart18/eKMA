@@ -58,26 +58,12 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun setActiveStatus(status: String) {
-        withContext(Dispatchers.IO) {
-            val myStudentCode = getProfile().studentCode
-            val statusMap = mapOf(
-                KEY_USER_STATUS to status
-            )
-            firestore.collection(KEY_USERS_COLL)
-                .document(myStudentCode)
-                .update(statusMap)
-                .await()
-        }
-    }
-
     override suspend fun clearProfile() {
         dataLocalManager.saveProfile("")
     }
 
-    override suspend fun clearFcmToken() {
+    override suspend fun clearFcmToken(myStudentCode: String) {
         withContext(Dispatchers.IO) {
-            val myStudentCode = getProfile().studentCode
             val deleteUserToken = mapOf(
                 KEY_USER_TOKEN to FieldValue.delete()
             )

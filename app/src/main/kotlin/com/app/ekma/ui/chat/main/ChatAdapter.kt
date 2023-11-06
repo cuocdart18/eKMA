@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ekma.R
-import com.app.ekma.common.Data
 import com.app.ekma.common.IMAGE_MSG
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible
@@ -39,7 +39,7 @@ class ChatAdapter(
             return LOADING_TYPE
         }
         val message = messages[position]
-        return if (message.from == Data.profile.studentCode) {
+        return if (message.from == ProfileSingleton().studentCode) {
             ITEM_MY_MSG_TYPE
         } else {
             ITEM_FRIEND_MSG_TYPE

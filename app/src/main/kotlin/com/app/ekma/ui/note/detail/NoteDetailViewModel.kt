@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.alarm.AlarmEventsScheduler
 import com.app.ekma.base.viewmodel.BaseViewModel
+import com.app.ekma.common.CurrentEventsRefresher
 import com.app.ekma.common.Data
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Note
 import com.app.ekma.data.models.service.INoteService
@@ -28,15 +30,15 @@ class NoteDetailViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch {
-            noteService.deleteNote(note)
-            noteService.deleteAudioNote(context, note.audioName)
+            noteService.deleteNote(note, ProfileSingleton().studentCode)
+            noteService.deleteAudioNote(context, note.audioName, ProfileSingleton().studentCode)
             Data.getLocalNotesRuntime(noteService)
             callback()
         }
     }
 
     fun refreshDataInRecyclerView() {
-        Data.isRefreshClickedEvents.value = true
+        CurrentEventsRefresher.setData(true)
     }
 
     fun cancelAlarm(note: Note) {

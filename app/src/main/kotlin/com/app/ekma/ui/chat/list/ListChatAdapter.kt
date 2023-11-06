@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ekma.R
 import com.app.ekma.firebase.AVATAR_FILE
-import com.app.ekma.common.Data
 import com.app.ekma.common.IMAGE_MSG
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.firebase.USERS_DIR
-import com.app.ekma.common.removeMyStudentCode
+import com.app.ekma.common.removeStudentCode
 import com.app.ekma.data.models.ChatRoom
 import com.app.ekma.databinding.ItemChatRoomBinding
 import com.app.ekma.firebase.storage
@@ -56,7 +56,7 @@ class ListChatAdapter(
 
         @SuppressLint("SetTextI18n")
         fun bind(room: ChatRoom) {
-            val myStudentCode = Data.profile.studentCode
+            val myStudentCode = ProfileSingleton().studentCode
 
             binding.tvRoomName.text = room.name
 
@@ -91,7 +91,7 @@ class ListChatAdapter(
             }
 
             // show avatar
-            val friendCode = removeMyStudentCode(room.members, myStudentCode).first()
+            val friendCode = removeStudentCode(room.members, myStudentCode).first()
             storage.child("$USERS_DIR/$friendCode/$AVATAR_FILE")
                 .downloadUrl
                 .addOnSuccessListener { uri ->

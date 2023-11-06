@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ekma.data.models.MiniStudent
 import com.app.ekma.databinding.ItemSearchUserBinding
 
-class SearchUserAdapter(private val onItemClicked: (studentId: String) -> Unit) :
+class SearchUserAdapter(private val onItemClicked: (String) -> Unit) :
     RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHolder>() {
     private lateinit var miniStudents: List<MiniStudent>
     private lateinit var binding: ItemSearchUserBinding
@@ -36,7 +36,7 @@ class SearchUserAdapter(private val onItemClicked: (studentId: String) -> Unit) 
 
     inner class SearchUserViewHolder(
         val binding: ItemSearchUserBinding,
-        private val onItemClicked: (studentId: String) -> Unit
+        private val onItemClicked: (String) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
         init {

@@ -34,7 +34,7 @@ class StudentDetailFragment : BaseFragment() {
         showLoadingLayout()
         receiveData()
 
-        viewModel.getDetailStudent() { student ->
+        viewModel.getDetailStudent { student ->
             if (student != null) {
                 showDetailStudent(student)
                 hideLoadingLayout()

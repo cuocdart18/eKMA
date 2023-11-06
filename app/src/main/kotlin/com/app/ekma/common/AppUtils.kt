@@ -44,7 +44,7 @@ suspend fun parseDataToChatRoom(
         async {
             val id = document.id
             val members = document.get(KEY_ROOM_MEMBERS) as List<String>
-            val name = formatMembersToRoomName(removeMyStudentCode(members, myStudentCode))
+            val name = formatMembersToRoomName(removeStudentCode(members, myStudentCode))
             val serverTimestamp = document.getTimestamp(KEY_MESSAGE_TIMESTAMP_DOC)
             val timestamp = serverTimestamp?.toDate() ?: Date()
             val content = document.get(KEY_MESSAGE_CONTENT_DOC).toString()
@@ -127,8 +127,8 @@ suspend fun formatMembersToRoomName(members: List<String>): String {
         .get(KEY_USER_NAME).toString()
 }
 
-fun removeMyStudentCode(members: List<String>, myStudentCode: String) =
-    members.filter { it != myStudentCode }
+fun removeStudentCode(members: List<String>, studentCode: String) =
+    members.filter { it != studentCode }
 
 fun getCachedRecordDirPath(context: Context): String {
     return "${context.cacheDir.absolutePath}/records"

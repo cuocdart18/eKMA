@@ -11,6 +11,7 @@ import com.app.ekma.common.APP_EXTERNAL_MEDIA_FOLDER
 import com.app.ekma.common.Data
 import com.app.ekma.common.EXTERNAL_AUDIO_FOLDER
 import com.app.ekma.common.PAUSE_RECORDING
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.common.UPDATE_NOTE_MODE
 import com.app.ekma.common.copy
 import com.app.ekma.common.formatDoubleChar
@@ -20,7 +21,6 @@ import com.app.ekma.common.toMilli
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Note
 import com.app.ekma.data.models.service.INoteService
-import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.work.WorkRunner
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -35,8 +35,7 @@ import javax.inject.Inject
 class NoteMainViewModel @Inject constructor(
     private val dataLocalManager: IDataLocalManager,
     private val alarmEventsScheduler: AlarmEventsScheduler,
-    private val noteService: INoteService,
-    private val profileService: IProfileService
+    private val noteService: INoteService
 ) : BaseViewModel() {
     override val TAG: String = NoteMainViewModel::class.java.simpleName
     val selectDay = MutableLiveData<String>()
@@ -85,9 +84,13 @@ class NoteMainViewModel @Inject constructor(
     fun deleteAudioOldNote(context: Context) {
         if (oldNote.audioName.isNotEmpty()) {
             viewModelScope.launch {
-                noteService.deleteAudioNote(context, oldNote.audioName)
+                noteService.deleteAudioNote(
+                    context,
+                    oldNote.audioName,
+                    ProfileSingleton().studentCode
+                )
                 oldNote.audioName = ""
-                noteService.updateNote(oldNote)
+                noteService.updateNote(oldNote, ProfileSingleton().studentCode)
             }
         }
     }
@@ -133,7 +136,7 @@ class NoteMainViewModel @Inject constructor(
         if (voiceNoteRecorder.outputCacheFile.isNotBlank()) {
             viewModelScope.launch {
                 voiceNoteRecorder.stopRecorder()
-                val myStudentCode = profileService.getProfile().studentCode
+                val myStudentCode = ProfileSingleton().studentCode
                 // save to local
                 val srcFile = File(voiceNoteRecorder.outputCacheFile)
                 val fileName = "${LocalDateTime.now().toMilli()}"
@@ -165,13 +168,13 @@ class NoteMainViewModel @Inject constructor(
         viewModelScope.launch {
             when (noteMode) {
                 ADD_NOTE_MODE -> {
-                    noteService.insertNote(note)
+                    noteService.insertNote(note, ProfileSingleton().studentCode)
                 }
 
                 UPDATE_NOTE_MODE -> {
                     note.isDone = oldNote.isDone
-                    noteService.deleteNote(oldNote)
-                    noteService.insertNote(note)
+                    noteService.deleteNote(oldNote, ProfileSingleton().studentCode)
+                    noteService.insertNote(note, ProfileSingleton().studentCode)
                     cancelAlarmForOldNote()
                 }
             }

@@ -5,18 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.APP_EXTERNAL_MEDIA_FOLDER
 import com.app.ekma.common.EXTERNAL_AUDIO_FOLDER
-import com.app.ekma.data.models.service.IProfileService
+import com.app.ekma.common.ProfileSingleton
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class AudioPlayerViewModel @Inject constructor(
-    private val profileService: IProfileService
-) : BaseViewModel() {
+class AudioPlayerViewModel @Inject constructor() : BaseViewModel() {
     override val TAG = AudioPlayerViewModel::class.java.simpleName
     private lateinit var myStudentCode: String
     var audioName = ""
@@ -31,7 +27,7 @@ class AudioPlayerViewModel @Inject constructor(
             callback(audioFile.exists())
         } else {
             viewModelScope.launch {
-                myStudentCode = profileService.getProfile().studentCode
+                myStudentCode = ProfileSingleton().studentCode
                 audioFile = File(
                     context.getExternalFilesDir("$APP_EXTERNAL_MEDIA_FOLDER/$myStudentCode/$EXTERNAL_AUDIO_FOLDER"),
                     audioName

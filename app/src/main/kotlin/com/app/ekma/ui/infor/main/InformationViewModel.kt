@@ -11,13 +11,16 @@ import androidx.work.WorkManager
 import com.app.ekma.alarm.AlarmEventsScheduler
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.broadcast_receiver.BootCompletedReceiver
-import com.app.ekma.common.Data
+import com.app.ekma.common.ClickedDay
+import com.app.ekma.common.ConnReferenceKey
+import com.app.ekma.common.CurrentEventsRefresher
+import com.app.ekma.common.MainBottomNavigation
+import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.StudentScoreSingleton
 import com.app.ekma.common.TedImagePickerStarter
 import com.app.ekma.common.saveImageAndGetPath
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
-import com.app.ekma.data.models.Profile
 import com.app.ekma.data.models.service.ILoginService
-import com.app.ekma.data.models.service.INoteService
 import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.data.models.service.IScheduleService
 import com.app.ekma.data.models.service.IUserService
@@ -27,13 +30,10 @@ import com.app.ekma.firebase.LAST_ONLINE
 import com.app.ekma.firebase.database
 import com.app.ekma.work.WorkRunner
 import com.google.firebase.database.ServerValue
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.DayPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,25 +46,11 @@ class InformationViewModel @Inject constructor(
     private val userService: IUserService
 ) : BaseViewModel() {
     override val TAG = InformationViewModel::class.java.simpleName
-    private lateinit var profile: Profile
     private lateinit var uri: Uri
 
     private val _msgToast = MutableLiveData<String>()
     val msgToast: LiveData<String>
         get() = _msgToast
-
-    fun getProfile(
-        callback: (profile: Profile) -> Unit
-    ) {
-        if (this::profile.isInitialized) {
-            callback(profile)
-            return
-        }
-        viewModelScope.launch {
-            profile = profileService.getProfile()
-            callback(profile)
-        }
-    }
 
     fun getImageProfile(
         callback: (uri: Uri) -> Unit
@@ -86,7 +72,7 @@ class InformationViewModel @Inject constructor(
     ) {
         TedImagePickerStarter.startImage(context) { uri ->
             viewModelScope.launch {
-                val myStudentCode = profileService.getProfile().studentCode
+                val myStudentCode = ProfileSingleton().studentCode
                 // save to local
                 this@InformationViewModel.uri = uri
                 val filePath = saveImageAndGetPath(context, uri, myStudentCode)
@@ -149,13 +135,13 @@ class InformationViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            val myStudentCode = ProfileSingleton().studentCode
             // change active status
-            if (Data.myConnectionsRefKey.isNotEmpty()) {
-                val myStudentCode = profile.studentCode
+            if (ConnReferenceKey().isNotEmpty()) {
                 database.child(ACTIVE_STATUS).child(myStudentCode).child(LAST_ONLINE)
                     .setValue(ServerValue.TIMESTAMP)
                 database.child(ACTIVE_STATUS).child(myStudentCode).child(CONNECTIONS)
-                    .child(Data.myConnectionsRefKey).removeValue()
+                    .child(ConnReferenceKey()).removeValue()
             }
 
             // cancel running worker
@@ -167,7 +153,7 @@ class InformationViewModel @Inject constructor(
                 if (dataLocalManager.getIsNotifyEvents())
                     alarmEventsScheduler.clearAlarmEvents()
             }
-            val clearProfile = launch { profileService.clearProfile() }
+            val clearProfile = launch { profileService.clearProfile(myStudentCode) }
             val clearUser = launch { userService.clearUser() }
             val clearImage = launch { dataLocalManager.saveImgFilePath("") }
             val clearLoginState = launch { loginService.saveLoginState(false) }
@@ -178,10 +164,13 @@ class InformationViewModel @Inject constructor(
             clearImage.join()
             clearLoginState.join()
 
-            // clear cache memory
-            Data.myStudentInfo = null
-            Data.profile = Profile("", "", "", "")
-            Data.saveDateClicked = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
+            // clear cached memory
+            StudentScoreSingleton.release()
+            ProfileSingleton.release()
+            ConnReferenceKey.release()
+            ClickedDay.release()
+            CurrentEventsRefresher.release()
+            MainBottomNavigation.release()
 
             withContext(Dispatchers.Main) {
                 callback()

@@ -12,7 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
-import com.app.ekma.common.Data
+import com.app.ekma.common.ClickedDay
+import com.app.ekma.common.CurrentEventsRefresher
 import com.app.ekma.common.KEY_PASS_NOTE_OBJ
 import com.app.ekma.common.displayText
 import com.app.ekma.common.makeGone
@@ -75,18 +76,18 @@ class ScheduleMainFragment : BaseFragment() {
                 val title = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault())
                 textView.text = title
             }
-        val currentMonth = YearMonth.from(Data.saveDateClicked.date)
+        val currentMonth = YearMonth.from(ClickedDay().date)
         val startMonth = currentMonth.minusMonths(100)
         val endMonth = currentMonth.plusMonths(100)
         binding.calendarView.dayBinder = dayBinder
         binding.calendarView.monthScrollListener = { updateTitle() }
         binding.calendarView.setup(startMonth, endMonth, daysOfWeek.first())
         binding.calendarView.scrollToMonth(currentMonth)
-        dayBinder.selectedDate(Data.saveDateClicked)
+        dayBinder.selectedDate(ClickedDay())
     }
 
     private fun getEventsDay(day: CalendarDay) {
-        Data.saveDateClicked = day
+        ClickedDay.setData(day)
         // action
         val date = day.date
         // if select day in Month
@@ -130,9 +131,9 @@ class ScheduleMainFragment : BaseFragment() {
     }
 
     private fun refreshDataAfterUpdatedOrDeleted() {
-        Data.isRefreshClickedEvents.observe(viewLifecycleOwner) { state ->
+        CurrentEventsRefresher().observe(viewLifecycleOwner) { state ->
             if (state) {
-                getEventsDay(Data.saveDateClicked)
+                getEventsDay(ClickedDay())
             }
         }
     }

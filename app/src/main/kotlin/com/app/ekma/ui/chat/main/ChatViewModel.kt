@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.IMAGE_MSG
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.firebase.KEY_MESSAGE_CONTENT_DOC
 import com.app.ekma.firebase.KEY_MESSAGE_FROM_DOC
 import com.app.ekma.firebase.KEY_MESSAGE_TIMESTAMP_DOC
@@ -15,9 +16,8 @@ import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL
 import com.app.ekma.firebase.ROOMS_DIR
 import com.app.ekma.common.TedImagePickerStarter
 import com.app.ekma.common.parseDataToMessage
-import com.app.ekma.common.removeMyStudentCode
+import com.app.ekma.common.removeStudentCode
 import com.app.ekma.data.models.Message
-import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.firebase.ACTIVE_STATUS
 import com.app.ekma.firebase.CONNECTIONS
 import com.app.ekma.firebase.KEY_MESSAGE_SEEN_DOC
@@ -49,17 +49,14 @@ import javax.inject.Inject
 import kotlin.math.ceil
 
 @HiltViewModel
-class ChatViewModel @Inject constructor(
-    private val profileService: IProfileService
-) : BaseViewModel() {
+class ChatViewModel @Inject constructor() : BaseViewModel() {
     override val TAG = ChatViewModel::class.java.simpleName
 
     private lateinit var msgCollRef: CollectionReference
     private lateinit var msgChangeRegis: ListenerRegistration
     private lateinit var lastVisibleMsgPerPage: DocumentSnapshot
 
-    private lateinit var myStudentCode: String
-    private val membersCode = mutableListOf<String>()
+    private lateinit var membersCode: MutableList<String>
     var roomId = ""
     private val _activeStatus = MutableLiveData(false)
     val activeStatus: LiveData<Boolean>
@@ -77,14 +74,14 @@ class ChatViewModel @Inject constructor(
         get() = _modifiedMsgPosition
     private var lastMsgPosition = -1
 
-    fun getStudentCode(
+    fun getMembersCode(
         callback: () -> Unit
     ) {
-        if (this::myStudentCode.isInitialized) {
+        if (this::membersCode.isInitialized) {
             callback()
         } else {
             viewModelScope.launch(Dispatchers.IO) {
-                myStudentCode = profileService.getProfile().studentCode
+                membersCode = mutableListOf()
                 membersCode.addAll(
                     firestore.collection(KEY_ROOMS_COLL)
                         .document(roomId)
@@ -101,7 +98,7 @@ class ChatViewModel @Inject constructor(
 
     fun regisActiveStatusChange() {
         viewModelScope.launch(Dispatchers.IO) {
-            removeMyStudentCode(membersCode, myStudentCode).forEach { studentCode ->
+            removeStudentCode(membersCode, ProfileSingleton().studentCode).forEach { studentCode ->
                 launch {
                     database.child(ACTIVE_STATUS)
                         .child(studentCode)
@@ -137,9 +134,9 @@ class ChatViewModel @Inject constructor(
         val messageMap = mapOf(
             KEY_MESSAGE_TIMESTAMP_DOC to FieldValue.serverTimestamp(),
             KEY_MESSAGE_CONTENT_DOC to message,
-            KEY_MESSAGE_FROM_DOC to myStudentCode,
+            KEY_MESSAGE_FROM_DOC to ProfileSingleton().studentCode,
             KEY_MESSAGE_TYPE_DOC to type,
-            KEY_MESSAGE_SEEN_DOC to listOf(myStudentCode)
+            KEY_MESSAGE_SEEN_DOC to listOf(ProfileSingleton().studentCode)
         )
         val docRoomRef = firestore
             .collection(KEY_ROOMS_COLL)
@@ -226,8 +223,8 @@ class ChatViewModel @Inject constructor(
         val message = parseDataToMessage(docChange.document)
         viewModelScope.launch {
             val seen = message.seen
-            if (!seen.contains(myStudentCode)) {
-                seen.add(myStudentCode)
+            if (!seen.contains(ProfileSingleton().studentCode)) {
+                seen.add(ProfileSingleton().studentCode)
                 // update seen members of message
                 docChange.document.reference.update(mapOf(KEY_MESSAGE_SEEN_DOC to seen))
                 // update seen members of room
@@ -299,8 +296,8 @@ class ChatViewModel @Inject constructor(
             // update seen members
             viewModelScope.launch {
                 val seen = doc.get(KEY_MESSAGE_SEEN_DOC) as MutableList<String>
-                if (!seen.contains(myStudentCode)) {
-                    seen.add(myStudentCode)
+                if (!seen.contains(ProfileSingleton().studentCode)) {
+                    seen.add(ProfileSingleton().studentCode)
                     doc.reference.update(mapOf(KEY_MESSAGE_SEEN_DOC to seen))
                 }
             }
@@ -321,7 +318,7 @@ class ChatViewModel @Inject constructor(
                 messages[lastMsgPosition].isLastSeenMessage = false
             }
             for (i in messages.size - 1 downTo 0) {
-                if (messages[i].seen.containsAll(membersCode) and (messages[i].from == myStudentCode)) {
+                if (messages[i].seen.containsAll(membersCode) and (messages[i].from == ProfileSingleton().studentCode)) {
                     messages[i].isLastSeenMessage = true
                     withContext(Dispatchers.Main) {
                         _modifiedMsgPosition.value = lastMsgPosition

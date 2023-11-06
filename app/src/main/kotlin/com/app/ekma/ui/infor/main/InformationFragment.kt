@@ -21,6 +21,8 @@ import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.Data
 import com.app.ekma.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.app.ekma.common.KEY_PASS_MINISTUDENT_ID
+import com.app.ekma.common.MainBottomNavigation
+import com.app.ekma.common.ProfileSingleton
 import com.app.ekma.databinding.FragmentInformationBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,7 +56,7 @@ class InformationFragment : BaseFragment(),
         viewModel.msgToast.observe(viewLifecycleOwner) {
             showToast(it)
         }
-        Data.hideBottomNavView.value = false
+        MainBottomNavigation.setData(false)
         setUpPreferencesSetting()
         setUpProfile()
         // ask permission
@@ -71,7 +73,7 @@ class InformationFragment : BaseFragment(),
     }
 
     private fun setUpProfile() {
-        viewModel.getProfile { binding.profile = it }
+        binding.profile = ProfileSingleton()
         viewModel.getImageProfile { setImageUri(it) }
         binding.civProfileImage.setOnClickListener { onClickChangeProfile() }
     }
@@ -134,15 +136,11 @@ class InformationFragment : BaseFragment(),
     }
 
     override fun onClickMyScore() {
-        viewModel.getProfile {
-            val id = it.studentCode
-            // action
-            val bundle = bundleOf(
-                KEY_PASS_MINISTUDENT_ID to id,
-                KEY_PASS_IS_MY_MINISTUDENT_ID to true
-            )
-            navigateToFragment(R.id.studentDetailFragment, bundle)
-        }
+        val bundle = bundleOf(
+            KEY_PASS_MINISTUDENT_ID to ProfileSingleton().studentCode,
+            KEY_PASS_IS_MY_MINISTUDENT_ID to true
+        )
+        navigateToFragment(R.id.studentDetailFragment, bundle)
     }
 
     override fun onClickUpdateSchedule() {
@@ -175,7 +173,7 @@ class InformationFragment : BaseFragment(),
     }
 
     override fun onClickChat() {
-        Data.hideBottomNavView.value = true
+        MainBottomNavigation.setData(true)
         navigateToFragment(R.id.listChatFragment)
     }
 

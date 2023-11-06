@@ -2,8 +2,8 @@ package com.app.ekma.ui.score.details
 
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
-import com.app.ekma.common.Data
 import com.app.ekma.common.Resource
+import com.app.ekma.common.StudentScoreSingleton
 import com.app.ekma.common.gpaCalculator
 import com.app.ekma.data.models.Student
 import com.app.ekma.data.models.service.IScoreService
@@ -24,8 +24,8 @@ class StudentDetailViewModel @Inject constructor(
     fun getDetailStudent(
         callback: (student: Student?) -> Unit
     ) {
-        if (isMyStudentId && Data.myStudentInfo != null) {
-            callback(Data.myStudentInfo)
+        if (isMyStudentId && StudentScoreSingleton() != null) {
+            callback(StudentScoreSingleton())
             return
         }
         if (!isMyStudentId && this::student.isInitialized) {
@@ -38,7 +38,7 @@ class StudentDetailViewModel @Inject constructor(
                 student = studentRes.data
                 student.avgScore = gpaCalculator(student.scores)
                 if (isMyStudentId) {
-                    Data.myStudentInfo = student
+                    StudentScoreSingleton.setData(student)
                 }
                 callback(student)
             } else {

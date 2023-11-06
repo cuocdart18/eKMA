@@ -6,15 +6,15 @@ import com.app.ekma.data.models.Note
 
 interface INoteService {
 
-    suspend fun insertNote(note: Note)
+    suspend fun insertNote(note: Note, studentCode: String)
 
-    suspend fun deleteNote(note: Note)
+    suspend fun deleteNote(note: Note, studentCode: String)
 
-    suspend fun deleteAudioNote(context: Context, audioName: String)
+    suspend fun deleteAudioNote(context: Context, audioName: String, studentCode: String)
 
-    suspend fun updateNote(note: Note)
+    suspend fun updateNote(note: Note, studentCode: String)
 
-    suspend fun deleteNotes()
+    suspend fun deleteNotes(studentCode: String)
 
-    suspend fun getNotes(): Resource<List<Note>>
+    suspend fun getNotes(studentCode: String): Resource<List<Note>>
 }
