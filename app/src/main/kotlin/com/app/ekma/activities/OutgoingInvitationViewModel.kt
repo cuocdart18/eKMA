@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
+import com.app.ekma.common.BusyCalling
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.PENDING_INVITE_TIME
 import com.app.ekma.common.PUBLISHER_ROLE
@@ -19,7 +20,6 @@ import com.app.ekma.data.models.AgoraTokenRequest
 import com.app.ekma.data.models.FcmDataMessage
 import com.app.ekma.data.models.service.IAgoraService
 import com.app.ekma.data.models.service.IFcmService
-import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.firebase.KEY_ROOMS_COLL
 import com.app.ekma.firebase.KEY_ROOM_MEMBERS
 import com.app.ekma.firebase.MSG_CANCEL
@@ -36,7 +36,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OutgoingInvitationViewModel @Inject constructor(
-    private val profileService: IProfileService,
     private val fcmService: IFcmService,
     private val agoraService: IAgoraService
 ) : BaseViewModel() {
@@ -90,6 +89,7 @@ class OutgoingInvitationViewModel @Inject constructor(
             receiverCodes.forEach { code ->
                 sendMessageInvitation(code, MSG_CANCEL)
             }
+            BusyCalling.setData(false)
             callback()
         }
     }

@@ -12,9 +12,11 @@ import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ekma.base.activities.BaseActivity
+import com.app.ekma.common.BusyCalling
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.checkCallPermission
+import com.app.ekma.common.makeGone
 import com.app.ekma.databinding.ActivityIncomingInvitationBinding
 import com.app.ekma.firebase.MSG_ACCEPT
 import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
@@ -34,12 +36,10 @@ class IncomingInvitationActivity : BaseActivity() {
     private val viewModel by viewModels<IncomingInvitationViewModel>()
     private val requestAudioPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            logError("request audio permission = $it")
             if (it) onAccept() else onReject()
         }
     private val requestVideoPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            logError("request video permission = $it")
             if (it.getOrDefault(Manifest.permission.RECORD_AUDIO, false)
                 and
                 it.getOrDefault(Manifest.permission.CAMERA, false)
@@ -52,6 +52,7 @@ class IncomingInvitationActivity : BaseActivity() {
         setContentView(binding.root)
         getData()
         setupUI()
+        BusyCalling.setData(true)
     }
 
     private fun getData() {
@@ -67,8 +68,9 @@ class IncomingInvitationActivity : BaseActivity() {
         binding.btnAccept.setOnClickListener(onClickBtnAccept)
         binding.btnReject.setOnClickListener(onClickBtnReject)
         viewModel.isExpiredActivation.observe(this) { isExpired ->
-            if (isExpired)
+            if (isExpired) {
                 finish()
+            }
         }
     }
 
@@ -97,13 +99,24 @@ class IncomingInvitationActivity : BaseActivity() {
     private fun onAccept() {
         viewModel.sendMessageInvitationResponse(MSG_ACCEPT) {
             viewModel.channelTokenPending()
+            binding.btnAccept.makeGone()
+            binding.btnReject.makeGone()
         }
     }
 
     private fun onReject() {
         viewModel.sendMessageInvitationResponse(MSG_REJECT) {
+            BusyCalling.setData(false)
             finish()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            invitationResponseReceiver,
+            IntentFilter(MSG_OPERATION)
+        )
     }
 
     private val invitationResponseReceiver = object : BroadcastReceiver() {
@@ -115,6 +128,7 @@ class IncomingInvitationActivity : BaseActivity() {
                 logError(operation)
                 when (operation) {
                     MSG_CANCEL -> {
+                        BusyCalling.setData(false)
                         finish()
                     }
 
@@ -145,14 +159,6 @@ class IncomingInvitationActivity : BaseActivity() {
                 }
             }
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-            invitationResponseReceiver,
-            IntentFilter(MSG_OPERATION)
-        )
     }
 
     override fun onStop() {

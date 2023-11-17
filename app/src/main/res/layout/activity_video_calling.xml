@@ -36,8 +36,8 @@
         android:text="Switch camera" />
 
     <Button
-        android:id="@+id/btn_disable_camera"
+        android:id="@+id/btn_mute_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Disable camera" />
+        android:text="Mute camera" />
 </LinearLayout>
