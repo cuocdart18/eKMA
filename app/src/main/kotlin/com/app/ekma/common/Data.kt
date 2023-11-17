@@ -1,5 +1,6 @@
 package com.app.ekma.common
 
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.data.models.Note
 import com.app.ekma.data.models.Period
 import com.app.ekma.data.models.service.INoteService

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ekma.R
 import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.common.IMAGE_MSG
-import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.common.removeStudentCode

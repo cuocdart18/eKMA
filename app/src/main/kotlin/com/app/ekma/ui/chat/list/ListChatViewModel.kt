@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
-import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.firebase.KEY_ROOMS_COLL
 import com.app.ekma.firebase.KEY_ROOM_MEMBERS
 import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL

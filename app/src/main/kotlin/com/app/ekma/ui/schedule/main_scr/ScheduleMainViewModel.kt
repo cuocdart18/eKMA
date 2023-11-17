@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.app.ekma.alarm.AlarmEventsScheduler
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.Data
-import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.toDayMonthYear
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Event

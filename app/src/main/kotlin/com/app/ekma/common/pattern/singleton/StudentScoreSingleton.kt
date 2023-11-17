@@ -1,4 +1,4 @@
-package com.app.ekma.common
+package com.app.ekma.common.pattern.singleton
 
 import com.app.ekma.data.models.Student
 
@@ -8,10 +8,10 @@ object StudentScoreSingleton {
     operator fun invoke() = student
 
     fun setData(student: Student) = synchronized(this) {
-        this.student = student
+        StudentScoreSingleton.student = student
     }
 
     fun release() {
-        this.student = null
+        student = null
     }
 }

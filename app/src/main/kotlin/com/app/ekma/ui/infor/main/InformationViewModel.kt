@@ -11,12 +11,12 @@ import androidx.work.WorkManager
 import com.app.ekma.alarm.AlarmEventsScheduler
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.broadcast_receiver.BootCompletedReceiver
-import com.app.ekma.common.ClickedDay
+import com.app.ekma.common.pattern.singleton.ClickedDay
 import com.app.ekma.common.ConnReferenceKey
-import com.app.ekma.common.CurrentEventsRefresher
-import com.app.ekma.common.MainBottomNavigation
-import com.app.ekma.common.ProfileSingleton
-import com.app.ekma.common.StudentScoreSingleton
+import com.app.ekma.common.pattern.singleton.CurrentEventsRefresher
+import com.app.ekma.common.pattern.singleton.MainBottomNavigation
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.StudentScoreSingleton
 import com.app.ekma.common.TedImagePickerStarter
 import com.app.ekma.common.saveImageAndGetPath
 import com.app.ekma.data.data_source.app_data.IDataLocalManager

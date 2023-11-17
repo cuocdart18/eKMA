@@ -4,14 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
-import com.app.ekma.common.BusyCalling
+import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.PENDING_INVITE_TIME
 import com.app.ekma.common.PUBLISHER_ROLE
 import com.app.ekma.common.CountDownTimer
 import com.app.ekma.common.DEFAULT_UID
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
-import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.RTC_TOKEN_TYPE
 import com.app.ekma.common.Resource
 import com.app.ekma.common.TOKEN_EXPIRED_TIME

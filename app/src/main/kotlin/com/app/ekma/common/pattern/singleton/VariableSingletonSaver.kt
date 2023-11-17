@@ -1,4 +1,4 @@
-package com.app.ekma.common
+package com.app.ekma.common.pattern.singleton
 
 import androidx.lifecycle.MutableLiveData
 import com.kizitonwose.calendar.core.CalendarDay
@@ -13,11 +13,11 @@ object ClickedDay {
     operator fun invoke() = clickedDay
 
     fun setData(day: CalendarDay) = synchronized(this) {
-        this.clickedDay = day
+        clickedDay = day
     }
 
     fun release() {
-        this.clickedDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
+        clickedDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
     }
 }
 

@@ -9,7 +9,7 @@ import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.ConnReferenceKey
 import com.app.ekma.common.Data
 import com.app.ekma.common.GET_SCHEDULE_WORKER_TAG
-import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.UNIQUE_GET_SCHEDULE_WORK_NAME
 import com.app.ekma.data.models.service.ILoginService
 import com.app.ekma.data.models.service.INoteService

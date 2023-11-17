@@ -7,7 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.app.ekma.R
 import com.app.ekma.base.activities.BaseActivity
-import com.app.ekma.common.MainBottomNavigation
+import com.app.ekma.common.pattern.singleton.MainBottomNavigation
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible
 import com.app.ekma.data.data_source.database.AppDatabase

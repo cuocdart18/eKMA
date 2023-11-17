@@ -12,8 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
-import com.app.ekma.common.ClickedDay
-import com.app.ekma.common.CurrentEventsRefresher
+import com.app.ekma.common.pattern.singleton.ClickedDay
+import com.app.ekma.common.pattern.singleton.CurrentEventsRefresher
 import com.app.ekma.common.KEY_PASS_NOTE_OBJ
 import com.app.ekma.common.displayText
 import com.app.ekma.common.makeGone

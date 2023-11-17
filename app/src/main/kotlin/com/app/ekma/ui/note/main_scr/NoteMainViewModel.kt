@@ -11,7 +11,7 @@ import com.app.ekma.common.APP_EXTERNAL_MEDIA_FOLDER
 import com.app.ekma.common.Data
 import com.app.ekma.common.EXTERNAL_AUDIO_FOLDER
 import com.app.ekma.common.PAUSE_RECORDING
-import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.UPDATE_NOTE_MODE
 import com.app.ekma.common.copy
 import com.app.ekma.common.formatDoubleChar

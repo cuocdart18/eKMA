@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ekma.R
 import com.app.ekma.common.IMAGE_MSG
-import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible

@@ -18,11 +18,10 @@ import androidx.fragment.app.viewModels
 import com.app.ekma.R
 import com.app.ekma.activities.LoginActivity
 import com.app.ekma.base.fragment.BaseFragment
-import com.app.ekma.common.Data
 import com.app.ekma.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.app.ekma.common.KEY_PASS_MINISTUDENT_ID
-import com.app.ekma.common.MainBottomNavigation
-import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.MainBottomNavigation
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.databinding.FragmentInformationBinding
 import dagger.hilt.android.AndroidEntryPoint
 

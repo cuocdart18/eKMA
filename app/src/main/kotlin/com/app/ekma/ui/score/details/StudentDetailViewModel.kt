@@ -3,7 +3,7 @@ package com.app.ekma.ui.score.details
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.Resource
-import com.app.ekma.common.StudentScoreSingleton
+import com.app.ekma.common.pattern.singleton.StudentScoreSingleton
 import com.app.ekma.common.gpaCalculator
 import com.app.ekma.data.models.Student
 import com.app.ekma.data.models.service.IScoreService

@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.alarm.AlarmEventsScheduler
 import com.app.ekma.base.viewmodel.BaseViewModel
-import com.app.ekma.common.CurrentEventsRefresher
+import com.app.ekma.common.pattern.singleton.CurrentEventsRefresher
 import com.app.ekma.common.Data
-import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Note
 import com.app.ekma.data.models.service.INoteService

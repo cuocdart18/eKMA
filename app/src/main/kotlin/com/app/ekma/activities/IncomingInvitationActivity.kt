@@ -12,7 +12,7 @@ import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ekma.base.activities.BaseActivity
-import com.app.ekma.common.BusyCalling
+import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.checkCallPermission

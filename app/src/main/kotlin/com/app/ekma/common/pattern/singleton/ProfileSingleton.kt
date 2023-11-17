@@ -1,4 +1,4 @@
-package com.app.ekma.common
+package com.app.ekma.common.pattern.singleton
 
 import com.app.ekma.data.models.Profile
 
@@ -8,10 +8,10 @@ object ProfileSingleton {
     operator fun invoke() = profile
 
     fun setData(profile: Profile) = synchronized(this) {
-        this.profile = profile
+        ProfileSingleton.profile = profile
     }
 
     fun release() {
-        this.profile = Profile("", "", "", "")
+        profile = Profile("", "", "", "")
     }
 }

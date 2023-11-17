@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.APP_EXTERNAL_MEDIA_FOLDER
 import com.app.ekma.common.EXTERNAL_AUDIO_FOLDER
-import com.app.ekma.common.ProfileSingleton
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.io.File
