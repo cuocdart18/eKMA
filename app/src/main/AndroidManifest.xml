@@ -57,10 +57,16 @@
             android:exported="false" />
         <activity
             android:name=".activities.VideoCallingActivity"
-            android:exported="false" />
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:supportsPictureInPicture="true" />
         <activity
             android:name=".activities.AudioCallingActivity"
-            android:exported="false" />
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:supportsPictureInPicture="true" />
 
         <receiver android:name=".broadcast_receiver.AlarmReceiver" />
         <receiver
@@ -74,6 +80,9 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".broadcast_receiver.MyCallingReceiver"
+            android:exported="false" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

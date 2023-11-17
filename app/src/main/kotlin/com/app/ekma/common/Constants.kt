@@ -30,6 +30,23 @@ const val IMAGE_MSG = 2
 const val GIF_MSG = 3
 const val VIDEO_MSG = 4
 
+// for Chatting
+const val CALLING_OPERATION = "calling_operation"
+const val MUTE_MIC = "mute_mic"
+const val MUTE_MIC_REQUEST_CODE = 2000
+const val UNMUTE_MIC = "unmute_mic"
+const val UNMUTE_MIC_REQUEST_CODE = 2001
+const val MUTE_CAMERA = "mute_camera"
+const val MUTE_CAMERA_REQUEST_CODE = 2002
+const val UNMUTE_CAMERA = "unmute_camera"
+const val UNMUTE_CAMERA_REQUEST_CODE = 2003
+const val EARPIECE_AUDIO_ROUTE = "earpiece_audio_route"
+const val EARPIECE_AUDIO_ROUTE_REQUEST_CODE = 2004
+const val SPEAKER_AUDIO_ROUTE = "speaker_audio_route"
+const val SPEAKER_AUDIO_ROUTE_REQUEST_CODE = 2005
+const val LEAVE_ROOM = "leave_room"
+const val LEAVE_ROOM_REQUEST_CODE = 2006
+
 // for Recording
 const val START_RECORDING = 1001
 const val PAUSE_RECORDING = 1002

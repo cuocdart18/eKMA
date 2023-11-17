@@ -5,15 +5,25 @@ import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ekma.activities.IncomingInvitationActivity
+import com.app.ekma.common.BusyCalling
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.data.models.FcmDataMessage
+import com.app.ekma.data.models.service.IFcmService
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     private val TAG = MyFirebaseMessagingService::class.java.simpleName
+
+    @Inject
+    lateinit var fcmService: IFcmService
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
@@ -30,14 +40,27 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 MSG_INVITE -> {
                     val inviterCode = message.data[MSG_INVITER_CODE].toString()
                     val type = message.data[MSG_TYPE].toString()
-                    val intent = Intent(applicationContext, IncomingInvitationActivity::class.java)
-                    val bundle = bundleOf(
-                        MSG_INVITER_CODE to inviterCode,
-                        MSG_TYPE to type
-                    )
-                    intent.putExtras(bundle)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+                    if (BusyCalling()) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val senderToken = fcmService.getFcmToken(inviterCode)
+                            // send data
+                            val data = mapOf(
+                                MSG_OPERATION to MSG_REJECT
+                            )
+                            val fcmDataMessage = FcmDataMessage(senderToken, data)
+                            fcmService.sendCallInvitationMessage(fcmDataMessage)
+                        }
+                    } else {
+                        val intent =
+                            Intent(applicationContext, IncomingInvitationActivity::class.java)
+                        val bundle = bundleOf(
+                            MSG_INVITER_CODE to inviterCode,
+                            MSG_TYPE to type
+                        )
+                        intent.putExtras(bundle)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                    }
                 }
 
                 MSG_ACCEPT -> {

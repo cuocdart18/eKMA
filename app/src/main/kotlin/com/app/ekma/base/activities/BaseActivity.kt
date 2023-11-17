@@ -1,6 +1,9 @@
 package com.app.ekma.base.activities
 
+import android.app.PictureInPictureUiState
 import android.content.Intent
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.ProgressBar
@@ -26,6 +29,31 @@ open class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         logLifecycle("onResume")
+    }
+
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        logLifecycle("onUserInteraction")
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        logLifecycle("onUserLeaveHint")
+    }
+
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+            logLifecycle("onPictureInPictureModeChanged")
+        }
+    }
+
+    override fun onPictureInPictureUiStateChanged(pipState: PictureInPictureUiState) {
+        super.onPictureInPictureUiStateChanged(pipState)
+        logLifecycle("onPictureInPictureUiStateChanged")
     }
 
     override fun onPause() {

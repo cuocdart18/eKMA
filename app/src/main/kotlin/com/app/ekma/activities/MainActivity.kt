@@ -38,6 +38,7 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         setUiTemplates()
         viewModel.firstInitialize(this)
+        MainBottomNavigation.setData(false)
     }
 
     private fun setUiTemplates() {

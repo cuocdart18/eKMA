@@ -48,3 +48,32 @@ object MainBottomNavigation {
         hideBottomNav.value = false
     }
 }
+
+object BusyCalling {
+    private var isBusy = false
+
+    operator fun invoke() = isBusy
+
+    fun setData(value: Boolean) = synchronized(this) {
+        isBusy = value
+    }
+
+    fun release() {
+        isBusy = false
+    }
+}
+
+object CallingOperationResponse {
+    private var operation = MutableLiveData("")
+
+    operator fun invoke() = operation
+
+    fun setData(value: String) = synchronized(this) {
+        operation.value = value
+    }
+
+    fun release() {
+        operation.value = ""
+    }
+}
+
