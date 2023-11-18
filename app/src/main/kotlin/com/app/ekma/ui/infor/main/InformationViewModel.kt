@@ -12,7 +12,7 @@ import com.app.ekma.alarm.AlarmEventsScheduler
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.broadcast_receiver.BootCompletedReceiver
 import com.app.ekma.common.pattern.singleton.ClickedDay
-import com.app.ekma.common.ConnReferenceKey
+import com.app.ekma.common.pattern.singleton.ConnReferenceKey
 import com.app.ekma.common.pattern.singleton.CurrentEventsRefresher
 import com.app.ekma.common.pattern.singleton.MainBottomNavigation
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
@@ -52,9 +52,7 @@ class InformationViewModel @Inject constructor(
     val msgToast: LiveData<String>
         get() = _msgToast
 
-    fun getImageProfile(
-        callback: (uri: Uri) -> Unit
-    ) {
+    fun getImageProfile(callback: (uri: Uri) -> Unit) {
         if (this::uri.isInitialized) {
             callback(uri)
             return
@@ -66,10 +64,7 @@ class InformationViewModel @Inject constructor(
         }
     }
 
-    fun onChangeProfileImage(
-        context: Context,
-        callback: (uri: Uri) -> Unit
-    ) {
+    fun onChangeProfileImage(context: Context, callback: (uri: Uri) -> Unit) {
         TedImagePickerStarter.startImage(context) { uri ->
             viewModelScope.launch {
                 val myStudentCode = ProfileSingleton().studentCode
@@ -86,10 +81,7 @@ class InformationViewModel @Inject constructor(
         }
     }
 
-    fun updateSchedule(
-        context: Context,
-        callback: () -> Unit
-    ) {
+    fun updateSchedule(context: Context, callback: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             val workManager = WorkManager.getInstance(context)
             WorkRunner.runGetScheduleWorker(workManager)
@@ -100,11 +92,7 @@ class InformationViewModel @Inject constructor(
         }
     }
 
-    fun changedIsNotifyEvents(
-        context: Context,
-        data: Boolean,
-        callback: () -> Unit
-    ) {
+    fun changedIsNotifyEvents(context: Context, data: Boolean, callback: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             dataLocalManager.saveIsNotifyEvents(data)
             if (data) {
@@ -130,10 +118,7 @@ class InformationViewModel @Inject constructor(
         }
     }
 
-    fun signOut(
-        context: Context,
-        callback: () -> Unit
-    ) {
+    fun signOut(context: Context, callback: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             val myStudentCode = ProfileSingleton().studentCode
             // change active status

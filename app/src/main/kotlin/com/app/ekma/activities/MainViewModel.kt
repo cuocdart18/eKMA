@@ -6,7 +6,7 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import com.app.ekma.base.viewmodel.BaseViewModel
-import com.app.ekma.common.ConnReferenceKey
+import com.app.ekma.common.pattern.singleton.ConnReferenceKey
 import com.app.ekma.common.Data
 import com.app.ekma.common.GET_SCHEDULE_WORKER_TAG
 import com.app.ekma.common.pattern.singleton.ProfileSingleton

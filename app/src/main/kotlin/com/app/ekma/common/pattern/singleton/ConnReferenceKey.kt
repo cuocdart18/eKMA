@@ -1,4 +1,4 @@
-package com.app.ekma.common
+package com.app.ekma.common.pattern.singleton
 
 object ConnReferenceKey {
     private var key = ""
@@ -6,10 +6,10 @@ object ConnReferenceKey {
     operator fun invoke() = key
 
     fun setData(key: String) = synchronized(this) {
-        this.key = key
+        ConnReferenceKey.key = key
     }
 
     fun release() {
-        this.key = ""
+        key = ""
     }
 }

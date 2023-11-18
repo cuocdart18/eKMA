@@ -48,37 +48,36 @@ class LoginViewModel @Inject constructor(
         callback: () -> Unit
     ) {
         isValid.set(true)
-        if (username.isNotBlank() && unHashedPassword.isNotBlank()) {
-            // show for user: aware of request
-            isShowProgress.set(true)
-
-            val password = md5(unHashedPassword)
-            viewModelScope.launch {
-                val callAuth = loginService.auth(username, password, true)
-                if (callAuth is Resource.Success && callAuth.data.equals(AUTH_MESSAGE_SUCCESS)) {
-                    val profile = profileService.getProfile(username, password, true)
-                    if (profile is Resource.Success && profile.data != null) {
-                        val myStudentCode = profile.data.studentCode
-                        // save data
-                        profileService.saveProfile(profile.data)
-                        userService.saveUser(User(username, password, true))
-                        loginService.saveLoginState(true)
-                        // handle get remote data
-                        runGetDataWorker(context, myStudentCode)
-                        // get notes and set alarm
-                        setAlarmForNotes()
-                        // update UI
-                        showLoginAccept()
-                        callback()
-                    } else {
-                        showLoginRefused()      // if backend unavailable
-                    }
-                } else {
-                    showLoginRefused()      // if get or auth failed
-                }
-            }
-        } else {
+        if (username.isBlank() or unHashedPassword.isBlank()) {
             showLoginRefused()      // if invalid input
+            return
+        }
+        // show for user: aware of request
+        isShowProgress.set(true)
+        val password = md5(unHashedPassword)
+        viewModelScope.launch {
+            val callAuth = loginService.auth(username, password, true)
+            if (callAuth !is Resource.Success || !(callAuth.data.equals(AUTH_MESSAGE_SUCCESS))) {
+                showLoginRefused()      // if get or auth failed
+                return@launch
+            }
+            val profile = profileService.getProfile(username, password, true)
+            if (profile !is Resource.Success || profile.data == null) {
+                showLoginRefused()      // if backend unavailable
+                return@launch
+            }
+            val myStudentCode = profile.data.studentCode
+            // save data
+            profileService.saveProfile(profile.data)
+            userService.saveUser(User(username, password, true))
+            loginService.saveLoginState(true)
+            // handle get remote data
+            runGetDataWorker(context, myStudentCode)
+            // get notes and set alarm
+            setAlarmForNotes()
+            // update UI
+            showLoginAccept()
+            callback()
         }
     }
 
