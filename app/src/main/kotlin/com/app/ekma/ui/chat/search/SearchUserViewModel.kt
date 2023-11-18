@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -62,24 +63,23 @@ class SearchUserViewModel @Inject constructor(
         }
     }
 
-    private fun filterAvailableUsers(
+    private suspend fun filterAvailableUsers(
         miniStudents: List<MiniStudent>,
         callback: (miniStudents: List<MiniStudent>) -> Unit
     ) {
-        firestore.collection(KEY_USERS_COLL)
-            .get()
-            .addOnSuccessListener { documents ->
-                viewModelScope.launch(Dispatchers.IO) {
-                    val availableUsersId = mutableListOf<String>()
-                    for (document in documents) {
-                        availableUsersId.add(document.get(KEY_USER_ID).toString())
-                    }
-                    val filterUsers = miniStudents.filter { availableUsersId.contains(it.id) }
-                    withContext(Dispatchers.Main) {
-                        callback(filterUsers)
-                    }
-                }
+        withContext(Dispatchers.Default) {
+            val studentIdList = firestore.collection(KEY_USERS_COLL)
+                .whereNotEqualTo(KEY_USER_ID, ProfileSingleton().studentCode)
+                .get()
+                .await()
+                .map { it.id }
+            val res = miniStudents.filter {
+                studentIdList.contains(it.id)
             }
+            withContext(Dispatchers.Main) {
+                callback(res)
+            }
+        }
     }
 
     fun referenceToChatRoom(
