@@ -16,4 +16,6 @@ interface IProfileService {
     suspend fun clearProfile(myStudentCode: String)
 
     suspend fun getProfile(): Profile
+
+    suspend fun updateFcmToken()
 }

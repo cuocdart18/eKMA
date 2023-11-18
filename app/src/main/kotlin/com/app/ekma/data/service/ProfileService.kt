@@ -31,4 +31,9 @@ class ProfileService @Inject constructor(
     override suspend fun getProfile(): Profile {
         return profileRepository.getProfile()
     }
+
+    override suspend fun updateFcmToken() {
+        val myStudentCode = getProfile().studentCode
+        profileRepository.updateFcmTokenToFirestore(myStudentCode)
+    }
 }

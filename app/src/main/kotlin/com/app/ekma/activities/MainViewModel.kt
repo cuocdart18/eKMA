@@ -48,6 +48,10 @@ class MainViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             val state = loginService.getLoginState()
+            // update device's token to firestore
+            if (state) {
+                launch { profileService.updateFcmToken() }
+            }
             callback(state)
         }
     }

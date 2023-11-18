@@ -83,6 +83,19 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateFcmTokenToFirestore(myStudentCode: String) {
+        withContext(Dispatchers.IO) {
+            val token = FirebaseMessaging.getInstance().token.await()
+            val tokenMap = mapOf(
+                KEY_USER_TOKEN to token
+            )
+            firestore.collection(KEY_USERS_COLL)
+                .document(myStudentCode)
+                .update(tokenMap)
+                .await()
+        }
+    }
+
     override suspend fun getProfile(): Profile {
         return withContext(Dispatchers.Default) {
             jsonStringToObject(dataLocalManager.getProfile())

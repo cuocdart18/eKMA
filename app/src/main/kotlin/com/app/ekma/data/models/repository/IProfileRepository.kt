@@ -21,5 +21,7 @@ interface IProfileRepository {
 
     suspend fun getFcmToken(code: String): String
 
+    suspend fun updateFcmTokenToFirestore(myStudentCode: String)
+
     suspend fun getProfile(): Profile
 }
