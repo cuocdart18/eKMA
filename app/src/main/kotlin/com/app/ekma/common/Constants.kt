@@ -24,13 +24,15 @@ const val EVENTS_NOTIFY_ID = 1001
 const val UPDATE_SCHEDULE_ID = 872002
 const val GET_SCHEDULE_ID = 1812003
 
-// Message type
+// for Chatting
 const val TEXT_MSG = 1
 const val IMAGE_MSG = 2
 const val GIF_MSG = 3
 const val VIDEO_MSG = 4
+const val FROM_POSITION = "from"
+const val TO_POSITION = "to"
 
-// for Chatting
+// for Calling
 const val CALLING_OPERATION = "calling_operation"
 const val MUTE_MIC = "mute_mic"
 const val MUTE_MIC_REQUEST_CODE = 2000

@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
+import com.app.ekma.common.FROM_POSITION
+import com.app.ekma.common.TO_POSITION
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.firebase.KEY_ROOMS_COLL
 import com.app.ekma.firebase.KEY_ROOM_MEMBERS
@@ -35,47 +37,52 @@ class ListChatViewModel @Inject constructor() : BaseViewModel() {
     val rooms = mutableListOf<ChatRoom>()
     private lateinit var roomChangeListener: ListenerRegistration
 
+    private val _addedRoomPos = MutableLiveData(-1)
+    val addedRoomPos: LiveData<Int>
+        get() = _addedRoomPos
+
+    private val _movedRoomPos = MutableLiveData(
+        mapOf(
+            FROM_POSITION to -1,
+            TO_POSITION to -1
+        )
+    )
+    val movedRoomPos: LiveData<Map<String, Int>>
+        get() = _movedRoomPos
+
     private val _modifiedRoomPos = MutableLiveData(-1)
     val modifiedRoomPos: LiveData<Int>
         get() = _modifiedRoomPos
 
-    fun listenChatRoomsChanges(
-        callback: () -> Unit
-    ) {
+    fun listenChatRoomsChanges() {
         viewModelScope.launch {
             roomChangeListener = firestore.collection(KEY_ROOMS_COLL)
                 .whereArrayContains(KEY_ROOM_MEMBERS, ProfileSingleton().studentCode)
                 .addSnapshotListener { value, _ ->
                     if (value != null) {
-                        onChatRoomsChanged(value, callback)
+                        onChatRoomsChanged(value)
                     }
                 }
         }
     }
 
-    private fun onChatRoomsChanged(
-        value: QuerySnapshot,
-        callback: () -> Unit
-    ) {
+    private fun onChatRoomsChanged(value: QuerySnapshot) {
         viewModelScope.launch(Dispatchers.IO) {
             value.documentChanges.forEach { docChange ->
                 if (docChange.type == DocumentChange.Type.ADDED) {
-                    onRoomAdded(docChange, callback)
+                    onRoomAdded(docChange)
                 }
                 if (docChange.type == DocumentChange.Type.MODIFIED) {
-                    onRoomModified(docChange, callback)
+                    onRoomModified(docChange)
                 }
                 if (docChange.type == DocumentChange.Type.REMOVED) {
-                    onRoomRemoved(docChange, callback)
+                    onRoomRemoved(docChange)
                 }
             }
         }
     }
 
-    private suspend fun onRoomAdded(
-        docChange: DocumentChange,
-        callback: () -> Unit
-    ) {
+    private suspend fun onRoomAdded(docChange: DocumentChange) {
         val chatRoom =
             parseDataToChatRoom(docChange.document, ProfileSingleton().studentCode).await()
         val querySnapshot = docChange.document.reference
@@ -85,12 +92,57 @@ class ListChatViewModel @Inject constructor() : BaseViewModel() {
         if (querySnapshot.isEmpty) {
             return
         }
-        rooms.add(chatRoom)
-        rooms.sortByDescending { it.timestamp }
+        rooms.add(0, chatRoom)
         setActiveStatus(chatRoom)
         withContext(Dispatchers.Main) {
-            callback()
+            _addedRoomPos.value = 0
         }
+    }
+
+    private suspend fun onRoomModified(docChange: DocumentChange) {
+        val chatRoom =
+            parseDataToChatRoom(docChange.document, ProfileSingleton().studentCode).await()
+        val querySnapshot = docChange.document.reference
+            .collection(KEY_ROOM_MESSAGE_COLL)
+            .get()
+            .await()
+        // when a user sends the first message, room is displayed
+        if (querySnapshot.size() == 1) {
+            // if room has been exist, don't add
+            rooms.forEach {
+                if (it.id == chatRoom.id) return
+            }
+            rooms.add(0, chatRoom)
+            setActiveStatus(chatRoom)
+            withContext(Dispatchers.Main) {
+                _addedRoomPos.value = 0
+            }
+        }
+        // when a user sends the next message, room is moved to top
+        else if (querySnapshot.size() > 1) {
+            var from = -1
+            val to = 0
+            for (i in rooms.indices) {
+                if (rooms[i].id == chatRoom.id) {
+                    chatRoom.isOnline = rooms[i].isOnline
+                    from = i
+                    rooms.removeAt(from)
+                    rooms.add(to, chatRoom)
+                    break
+                }
+            }
+            withContext(Dispatchers.Main) {
+                _movedRoomPos.value = mapOf(
+                    FROM_POSITION to from,
+                    TO_POSITION to to
+                )
+            }
+        }
+    }
+
+    private fun onRoomRemoved(docChange: DocumentChange) {
+        val id = docChange.document.id
+        logError("REMOVED $id")
     }
 
     private fun setActiveStatus(chatRoom: ChatRoom) {
@@ -131,56 +183,6 @@ class ListChatViewModel @Inject constructor() : BaseViewModel() {
                 }
             }
         }
-    }
-
-    private suspend fun onRoomModified(
-        docChange: DocumentChange,
-        callback: () -> Unit
-    ) {
-        val chatRoom =
-            parseDataToChatRoom(docChange.document, ProfileSingleton().studentCode).await()
-        val querySnapshot = docChange.document.reference
-            .collection(KEY_ROOM_MESSAGE_COLL)
-            .get()
-            .await()
-        // when a user sends the first message, room is displayed
-        if (querySnapshot.size() == 1) {
-            // if room has been exist, don't add
-            rooms.forEach {
-                if (it.id == chatRoom.id)
-                    return
-            }
-            rooms.add(chatRoom)
-            rooms.sortByDescending { it.timestamp }
-            withContext(Dispatchers.Main) {
-                callback()
-            }
-        }
-        // when a user sends the next message, room is moved to top
-        else if (querySnapshot.size() > 1) {
-            rooms.forEach { room ->
-                if (room.id == chatRoom.id) {
-                    room.timestamp = chatRoom.timestamp
-                    room.content = chatRoom.content
-                    room.from = chatRoom.from
-                    room.type = chatRoom.type
-                    room.seenMembers = chatRoom.seenMembers
-                    return@forEach
-                }
-            }
-            rooms.sortByDescending { it.timestamp }
-            withContext(Dispatchers.Main) {
-                callback()
-            }
-        }
-    }
-
-    private fun onRoomRemoved(
-        docChange: DocumentChange,
-        callback: () -> Unit
-    ) {
-        val id = docChange.document.id
-        logError("REMOVED $id")
     }
 
     fun modifySeenMembersInRoom(roomId: String) {

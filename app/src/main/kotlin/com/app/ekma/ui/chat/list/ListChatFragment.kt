@@ -9,7 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
+import com.app.ekma.common.FROM_POSITION
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.TO_POSITION
 import com.app.ekma.databinding.FragmentListChatBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -44,16 +46,21 @@ class ListChatFragment : BaseFragment() {
 
     private fun showListChatRoom() {
         if (viewModel.rooms.isEmpty()) {
-            viewModel.listenChatRoomsChanges {
-                listChatAdapter.notifyItemRangeChanged(0, viewModel.rooms.size)
-            }
-        } else {
-            listChatAdapter.notifyItemRangeChanged(0, viewModel.rooms.size)
+            viewModel.listenChatRoomsChanges()
+        }
+        viewModel.addedRoomPos.observe(viewLifecycleOwner) { pos ->
+            if (pos == -1) return@observe
+            listChatAdapter.notifyItemInserted(0)
+        }
+        viewModel.movedRoomPos.observe(viewLifecycleOwner) { pos ->
+            val from = pos[FROM_POSITION] ?: -1
+            val to = pos[TO_POSITION] ?: -1
+            if (from == -1 || to == -1) return@observe
+            listChatAdapter.notifyItemRangeChanged(to, from - to + 1)
         }
         viewModel.modifiedRoomPos.observe(viewLifecycleOwner) { pos ->
-            if (pos != -1) {
-                listChatAdapter.notifyItemChanged(pos)
-            }
+            if (pos == -1) return@observe
+            listChatAdapter.notifyItemChanged(pos)
         }
     }
 
