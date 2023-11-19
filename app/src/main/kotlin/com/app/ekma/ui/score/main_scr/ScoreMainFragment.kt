@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.databinding.FragmentScoreMainBinding
+import com.app.ekma.ui.score.search.SearchDataDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,7 +40,9 @@ class ScoreMainFragment : BaseFragment() {
     }
 
     private fun onClickShowSearchDialog() {
-        logDebug("onClickShowSearchDialog")
-        navigateToFragment(R.id.searchDataDialogFragment)
+        SearchDataDialogFragment().show(
+            parentFragmentManager,
+            SearchDataDialogFragment::class.java.simpleName
+        )
     }
 }

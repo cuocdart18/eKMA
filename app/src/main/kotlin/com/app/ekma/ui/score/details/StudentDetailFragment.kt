@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
@@ -19,6 +20,12 @@ class StudentDetailFragment : BaseFragment() {
     override val TAG = StudentDetailFragment::class.java.simpleName
     private lateinit var binding: FragmentScoreStudentDetailBinding
     private val viewModel by viewModels<StudentDetailViewModel>()
+
+    val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            parentFragmentManager.popBackStack()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,5 +88,15 @@ class StudentDetailFragment : BaseFragment() {
 
     private fun showError(msg: String) {
         binding.layoutDogLoading.tvMessageHelper.text = msg
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        callback.remove()
     }
 }

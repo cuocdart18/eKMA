@@ -1,4 +1,4 @@
-package com.app.ekma.activities
+package com.app.ekma.activities.main
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
@@ -11,6 +11,8 @@ import com.app.ekma.common.Data
 import com.app.ekma.common.GET_SCHEDULE_WORKER_TAG
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.UNIQUE_GET_SCHEDULE_WORK_NAME
+import com.app.ekma.common.pattern.singleton.CurrentEventsRefresher
+import com.app.ekma.common.pattern.singleton.GetScheduleNoteSuccess
 import com.app.ekma.data.models.service.ILoginService
 import com.app.ekma.data.models.service.INoteService
 import com.app.ekma.data.models.service.IProfileService
@@ -86,7 +88,10 @@ class MainViewModel @Inject constructor(
     private fun getLocalData() {
         viewModelScope.launch(Dispatchers.IO) {
             ProfileSingleton.setData(profileService.getProfile())
-            Data.getLocalData(noteService, scheduleService) {}
+            Data.getLocalData(noteService, scheduleService) {
+                GetScheduleNoteSuccess.setData(true)
+                CurrentEventsRefresher.setData(true)
+            }
         }
     }
 

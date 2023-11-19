@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
@@ -32,6 +33,7 @@ import com.app.ekma.common.makeVisible
 import com.app.ekma.data.models.Note
 import com.app.ekma.databinding.FragmentNoteMainBinding
 import com.app.ekma.ui.note.audio_player.AudioPlayerFragment
+import com.app.ekma.ui.note.detail.NoteDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,6 +43,15 @@ class NoteMainFragment : BaseFragment() {
     private val viewModel by viewModels<NoteMainViewModel>()
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { audioPmsCallback(it) }
+
+    val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            parentFragmentManager.popBackStack(
+                NoteDetailFragment::class.java.simpleName,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,7 +73,6 @@ class NoteMainFragment : BaseFragment() {
         if (bundle != null) {
             viewModel.noteMode = bundle.getInt(KEY_PASS_NOTE_MODE)
             if (viewModel.noteMode == UPDATE_NOTE_MODE) {
-                regisOnBackPressed()
                 viewModel.oldNote = bundle.get(KEY_PASS_NOTE_OBJ) as Note
             }
         }
@@ -293,12 +303,14 @@ class NoteMainFragment : BaseFragment() {
         viewModel.saveNote(note) {
             viewModel.refreshNotesDayMapInDataObject {
                 viewModel.setAlarmForNote(note)
+                viewModel.refreshDataCurrentMonth(note)
                 onUpdateOrAddSuccessfully()
             }
         }
     }
 
     private fun onUpdateOrAddSuccessfully() {
+        viewModel.refreshDataInRecyclerView()
         if (viewModel.noteMode == ADD_NOTE_MODE) {
             // clear data in fragment
             binding.edtTitle.text?.clear()
@@ -307,24 +319,29 @@ class NoteMainFragment : BaseFragment() {
             binding.tilTitle.error = ""
         } else if (viewModel.noteMode == UPDATE_NOTE_MODE) {
             // reopen ScheduleMainFragment
-            navigateToFragment(R.id.action_noteMainFragment_to_scheduleMainFragment)
+            parentFragmentManager.popBackStack(
+                NoteDetailFragment::class.java.simpleName,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (viewModel.noteMode == UPDATE_NOTE_MODE) {
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (viewModel.noteMode == UPDATE_NOTE_MODE) {
+            callback.remove()
         }
     }
 
     override fun onStop() {
         super.onStop()
         viewModel.pauseRecorder()
-    }
-
-    private fun regisOnBackPressed() {
-        // This callback will only be called when MyFragment is at least Started.
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                    // Handle the back button event
-                    navigateToFragment(R.id.action_noteMainFragment_to_scheduleMainFragment)
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 }

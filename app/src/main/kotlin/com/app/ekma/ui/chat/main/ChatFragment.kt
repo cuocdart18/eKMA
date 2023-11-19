@@ -7,12 +7,15 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
-import com.app.ekma.activities.OutgoingInvitationActivity
+import com.app.ekma.activities.calling.OutgoingInvitationActivity
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.base.listeners.PaginationScrollListener
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
@@ -23,6 +26,7 @@ import com.app.ekma.databinding.FragmentChatBinding
 import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
 import com.app.ekma.firebase.MSG_TYPE
 import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
+import com.app.ekma.ui.chat.image_viewer.ImageViewerFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,6 +51,12 @@ class ChatFragment : BaseFragment() {
             }
         }
 
+    val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            parentFragmentManager.popBackStack()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,6 +68,7 @@ class ChatFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        regisOnBackPressed()
         getBundleData()
         initViews()
         viewModel.getMembersCode {
@@ -159,7 +170,11 @@ class ChatFragment : BaseFragment() {
         val bundle = bundleOf(
             KEY_PASS_IMAGE_URL to imgUrl
         )
-        navigateToFragment(R.id.imageViewerFragment, bundle)
+        parentFragmentManager.commit {
+            replace<ImageViewerFragment>(R.id.fragment_container_view, args = bundle)
+            setReorderingAllowed(true)
+            addToBackStack(ImageViewerFragment::class.java.simpleName)
+        }
     }
 
     private fun initMessaging() {
@@ -214,5 +229,9 @@ class ChatFragment : BaseFragment() {
         } else {
             binding.rcvMessages.smoothScrollToPosition(viewModel.messages.size - 1)
         }
+    }
+
+    private fun regisOnBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 }

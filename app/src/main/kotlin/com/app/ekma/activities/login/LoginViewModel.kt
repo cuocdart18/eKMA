@@ -1,4 +1,4 @@
-package com.app.ekma.activities
+package com.app.ekma.activities.login
 
 import android.content.Context
 import androidx.databinding.ObservableField

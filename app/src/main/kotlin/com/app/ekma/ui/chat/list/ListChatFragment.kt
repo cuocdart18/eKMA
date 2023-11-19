@@ -4,7 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
@@ -13,6 +16,8 @@ import com.app.ekma.common.FROM_POSITION
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.TO_POSITION
 import com.app.ekma.databinding.FragmentListChatBinding
+import com.app.ekma.ui.chat.main.ChatFragment
+import com.app.ekma.ui.chat.search.SearchUserFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,6 +26,12 @@ class ListChatFragment : BaseFragment() {
     private lateinit var binding: FragmentListChatBinding
     private val viewModel by viewModels<ListChatViewModel>()
     private val listChatAdapter by lazy { ListChatAdapter(requireContext(), onClickChatRoomItem) }
+
+    val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            parentFragmentManager.popBackStack()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,12 +44,19 @@ class ListChatFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        regisOnBackPressed()
         initView()
         showListChatRoom()
     }
 
     private fun initView() {
-        binding.btnSearch.setOnClickListener { navigateToFragment(R.id.searchUserFragment) }
+        binding.btnSearch.setOnClickListener {
+            parentFragmentManager.commit {
+                replace<SearchUserFragment>(R.id.fragment_container_view)
+                setReorderingAllowed(true)
+                addToBackStack(SearchUserFragment::class.java.simpleName)
+            }
+        }
         binding.rcvListChat.layoutManager = LinearLayoutManager(requireContext())
         listChatAdapter.setChatRooms(viewModel.rooms)
         binding.rcvListChat.adapter = listChatAdapter
@@ -69,6 +87,14 @@ class ListChatFragment : BaseFragment() {
         val bundle = bundleOf(
             KEY_PASS_CHAT_ROOM_ID to it
         )
-        navigateToFragment(R.id.chatFragment, bundle)
+        parentFragmentManager.commit {
+            replace<ChatFragment>(R.id.fragment_container_view, args = bundle)
+            setReorderingAllowed(true)
+            addToBackStack(ChatFragment::class.java.simpleName)
+        }
+    }
+
+    private fun regisOnBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 }

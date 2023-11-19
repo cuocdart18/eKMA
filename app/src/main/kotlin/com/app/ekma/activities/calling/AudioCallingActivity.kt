@@ -1,13 +1,11 @@
-package com.app.ekma.activities
+package com.app.ekma.activities.calling
 
 import android.app.PictureInPictureParams
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.util.Rational
-import android.view.SurfaceView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.app.ekma.base.activities.BaseActivity
@@ -16,16 +14,16 @@ import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.CALLING_OPERATION
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.pattern.singleton.CallingOperationResponse
+import com.app.ekma.common.EARPIECE_AUDIO_ROUTE
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.LEAVE_ROOM
-import com.app.ekma.common.MUTE_CAMERA
 import com.app.ekma.common.MUTE_MIC
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
-import com.app.ekma.common.UNMUTE_CAMERA
+import com.app.ekma.common.SPEAKER_AUDIO_ROUTE
 import com.app.ekma.common.UNMUTE_MIC
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible
-import com.app.ekma.databinding.ActivityVideoCallingBinding
+import com.app.ekma.databinding.ActivityAudioCallingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
@@ -33,24 +31,17 @@ import io.agora.rtc2.Constants.REMOTE_AUDIO_REASON_REMOTE_MUTED
 import io.agora.rtc2.Constants.REMOTE_AUDIO_REASON_REMOTE_UNMUTED
 import io.agora.rtc2.Constants.REMOTE_AUDIO_STATE_DECODING
 import io.agora.rtc2.Constants.REMOTE_AUDIO_STATE_STOPPED
-import io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_PLAYING
-import io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED
-import io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED
-import io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_STOPPED
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
-import io.agora.rtc2.video.VideoCanvas
 
 @AndroidEntryPoint
-class VideoCallingActivity : BaseActivity() {
-    override val TAG = VideoCallingActivity::class.java.simpleName
-    private lateinit var binding: ActivityVideoCallingBinding
-    private val viewModel by viewModels<VideoCallingViewModel>()
+class AudioCallingActivity : BaseActivity() {
+    override val TAG = AudioCallingActivity::class.java.simpleName
+    private lateinit var binding: ActivityAudioCallingBinding
+    private val viewModel by viewModels<AudioCallingViewModel>()
 
     private lateinit var agoraEngine: RtcEngine
-    private lateinit var localSurfaceView: SurfaceView
-    private lateinit var remoteSurfaceView: SurfaceView
 
     private val isPipSupported by lazy {
         packageManager.hasSystemFeature(
@@ -60,11 +51,11 @@ class VideoCallingActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityVideoCallingBinding.inflate(layoutInflater)
+        binding = ActivityAudioCallingBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getData()
         setupUI()
-        setupVideoSdkEngine {
+        setupVoiceSdkEngine {
             joinCall()
         }
         setupBackButtonEventListener()
@@ -81,16 +72,13 @@ class VideoCallingActivity : BaseActivity() {
 
     private fun setupUI() {
         binding.btnLeave.setOnClickListener {
-            onClickLeaveRoom()
+            onClickBtnLeaveRoom()
         }
         binding.btnMuteMic.setOnClickListener {
             onClickBtnMuteMic()
         }
-        binding.btnSwitchCamera.setOnClickListener {
-            onClickBtnSwitchCamera()
-        }
-        binding.btnMuteCamera.setOnClickListener {
-            onClickBtnMuteCamera()
+        binding.btnAudioRoute.setOnClickListener {
+            onClickBtnAudioRoute()
         }
     }
 
@@ -99,20 +87,11 @@ class VideoCallingActivity : BaseActivity() {
         override fun onUserJoined(uid: Int, elapsed: Int) {
             runOnUiThread {
                 showToast("$uid joined")
-                setupRemoteVideo(uid)
             }
         }
 
         override fun onLocalAudioStateChanged(state: Int, error: Int) {
             logError("onLocalAudioStateChanged: state=$state - error=$error")
-        }
-
-        override fun onLocalVideoStateChanged(
-            source: Constants.VideoSourceType?,
-            state: Int,
-            error: Int
-        ) {
-            logError("onLocalVideoStateChanged: state=$state - error=$error")
         }
 
         override fun onRemoteAudioStateChanged(uid: Int, state: Int, reason: Int, elapsed: Int) {
@@ -127,20 +106,6 @@ class VideoCallingActivity : BaseActivity() {
             }
         }
 
-        override fun onRemoteVideoStateChanged(uid: Int, state: Int, reason: Int, elapsed: Int) {
-            logError("onRemoteVideoStateChanged: uid=$uid - state=$state - reason=$reason - elapsed=$elapsed")
-            runOnUiThread {
-                if (state == REMOTE_VIDEO_STATE_STOPPED && reason == REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED) {
-                    remoteSurfaceView.makeGone()
-                    logError("mute camera roi")
-                }
-                if (state == REMOTE_VIDEO_STATE_PLAYING && reason == REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED) {
-                    remoteSurfaceView.makeVisible()
-                    logError("unmute camera roi")
-                }
-            }
-        }
-
         override fun onAudioRouteChanged(routing: Int) {
             logError("routing=$routing")
         }
@@ -148,21 +113,19 @@ class VideoCallingActivity : BaseActivity() {
         override fun onUserOffline(uid: Int, reason: Int) {
             runOnUiThread {
                 showToast("$uid offline")
-                remoteSurfaceView.makeGone()
                 finish()
             }
         }
     }
 
-    private fun setupVideoSdkEngine(callback: () -> Unit) {
+    private fun setupVoiceSdkEngine(callback: () -> Unit) {
         try {
             val config = RtcEngineConfig()
             config.mContext = baseContext
             config.mAppId = AGORA_APP_ID
             config.mEventHandler = rtcEventHandler
             agoraEngine = RtcEngine.create(config)
-            agoraEngine.enableVideo()
-            agoraEngine.setDefaultAudioRoutetoSpeakerphone(true)
+            agoraEngine.setDefaultAudioRoutetoSpeakerphone(false)
             callback()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -171,11 +134,9 @@ class VideoCallingActivity : BaseActivity() {
 
     private fun joinCall() {
         val option = ChannelMediaOptions()
-        option.channelProfile = Constants.CHANNEL_PROFILE_COMMUNICATION
+        option.autoSubscribeAudio = true
+        option.channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
         option.clientRoleType = Constants.CLIENT_ROLE_BROADCASTER
-        setupLocalVideo()
-        localSurfaceView.makeVisible()
-        agoraEngine.startPreview()
         agoraEngine.joinChannelWithUserAccount(
             viewModel.token,
             viewModel.roomId,
@@ -184,32 +145,7 @@ class VideoCallingActivity : BaseActivity() {
         )
     }
 
-    private fun setupRemoteVideo(uid: Int) {
-        remoteSurfaceView = SurfaceView(baseContext)
-        remoteSurfaceView.setZOrderMediaOverlay(true)
-        binding.remoteVideoViewContainer.addView(remoteSurfaceView)
-        agoraEngine.setupRemoteVideo(
-            VideoCanvas(
-                remoteSurfaceView,
-                VideoCanvas.RENDER_MODE_FIT,
-                uid
-            )
-        )
-    }
-
-    private fun setupLocalVideo() {
-        localSurfaceView = SurfaceView(baseContext)
-        binding.localVideoViewContainer.addView(localSurfaceView)
-        agoraEngine.setupLocalVideo(
-            VideoCanvas(
-                localSurfaceView,
-                VideoCanvas.RENDER_MODE_FIT,
-                0
-            )
-        )
-    }
-
-    private fun onClickLeaveRoom() {
+    private fun onClickBtnLeaveRoom() {
         finish()
     }
 
@@ -223,20 +159,14 @@ class VideoCallingActivity : BaseActivity() {
         viewModel.isMuteMic = !viewModel.isMuteMic
     }
 
-    private fun onClickBtnSwitchCamera() {
-        agoraEngine.switchCamera()
-    }
-
-    private fun onClickBtnMuteCamera() {
-        agoraEngine.muteLocalVideoStream(viewModel.isMuteCamera)
-        if (viewModel.isMuteCamera) {
-            localSurfaceView.makeGone()
-            binding.btnMuteCamera.text = "unmute camera"
+    private fun onClickBtnAudioRoute() {
+        agoraEngine.setEnableSpeakerphone(viewModel.isSpeakerphone)
+        if (viewModel.isSpeakerphone) {
+            binding.btnAudioRoute.text = "speakerphone"
         } else {
-            localSurfaceView.makeVisible()
-            binding.btnMuteCamera.text = "mute camera"
+            binding.btnAudioRoute.text = "earpiece"
         }
-        viewModel.isMuteCamera = !viewModel.isMuteCamera
+        viewModel.isSpeakerphone = !viewModel.isSpeakerphone
     }
 
     override fun onUserLeaveHint() {
@@ -259,27 +189,20 @@ class VideoCallingActivity : BaseActivity() {
             super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         }
         if (isInPictureInPictureMode) {
-            binding.btnLeave.makeGone()
             binding.btnMuteMic.makeGone()
-            binding.btnMuteCamera.makeGone()
-            binding.btnSwitchCamera.makeGone()
-            binding.localVideoViewContainer.makeGone()
+            binding.btnAudioRoute.makeGone()
+            binding.btnLeave.makeGone()
         } else {
-            binding.btnLeave.makeVisible()
             binding.btnMuteMic.makeVisible()
-            binding.btnMuteCamera.makeVisible()
-            binding.btnSwitchCamera.makeVisible()
-            binding.localVideoViewContainer.makeVisible()
+            binding.btnAudioRoute.makeVisible()
+            binding.btnLeave.makeVisible()
         }
     }
 
     private fun updatePictureInPictureParams(): PictureInPictureParams? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val rect = Rect()
-            binding.remoteVideoViewContainer.getGlobalVisibleRect(rect)
             val builder = PictureInPictureParams.Builder()
                 .setAspectRatio(Rational(9, 16))
-                .setSourceRectHint(rect)
                 .setActions(viewModel.getPiPRemoteActions(applicationContext))
             builder.build()
         } else {
@@ -309,11 +232,11 @@ class VideoCallingActivity : BaseActivity() {
             if (operation == MUTE_MIC || operation == UNMUTE_MIC) {
                 onClickBtnMuteMic()
             }
-            if (operation == MUTE_CAMERA || operation == UNMUTE_CAMERA) {
-                onClickBtnMuteCamera()
+            if (operation == EARPIECE_AUDIO_ROUTE || operation == SPEAKER_AUDIO_ROUTE) {
+                onClickBtnAudioRoute()
             }
             if (operation == LEAVE_ROOM) {
-                onClickLeaveRoom()
+                onClickBtnLeaveRoom()
             }
             updatePictureInPictureParams()?.let { params ->
                 setPictureInPictureParams(params)
@@ -330,10 +253,9 @@ class VideoCallingActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        agoraEngine.leaveChannel()
         CallingOperationResponse().removeObservers(this)
         CallingOperationResponse.release()
-        agoraEngine.stopPreview()
-        agoraEngine.leaveChannel()
 
         Thread {
             RtcEngine.destroy()

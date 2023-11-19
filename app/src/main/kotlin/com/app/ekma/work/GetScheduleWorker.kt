@@ -9,7 +9,6 @@ import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
-import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.app.ekma.R
 import com.app.ekma.alarm.AlarmEventsScheduler
@@ -19,6 +18,7 @@ import com.app.ekma.common.GET_SCHE_CHANNEL_ID
 import com.app.ekma.common.GetPeriodFailingException
 import com.app.ekma.common.GetSemesterCodesFailingException
 import com.app.ekma.common.Resource
+import com.app.ekma.common.pattern.singleton.DownloadScheduleSuccess
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Event
 import com.app.ekma.data.models.Period
@@ -101,6 +101,9 @@ class GetScheduleWorker @AssistedInject constructor(
                 setAlarmPeriodsInFirstTime(fullPeriod)
                 // update Data runtime
                 Data.getLocalPeriodsRuntime(scheduleService)
+                withContext(Dispatchers.Main) {
+                    DownloadScheduleSuccess.setData(true)
+                }
             } else {
                 throw semesterCodes.message?.let { GetSemesterCodesFailingException(it) }!!
             }

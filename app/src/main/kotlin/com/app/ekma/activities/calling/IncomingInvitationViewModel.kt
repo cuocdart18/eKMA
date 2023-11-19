@@ -1,4 +1,4 @@
-package com.app.ekma.activities
+package com.app.ekma.activities.calling
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -6,6 +6,7 @@ import com.kizitonwose.calendar.core.DayPosition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
+import java.time.YearMonth
 
 object ClickedDay {
     private var clickedDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate)
@@ -77,3 +78,58 @@ object CallingOperationResponse {
     }
 }
 
+object DownloadAvatarSuccess {
+    private val isSuccess = MutableLiveData("")
+
+    operator fun invoke() = isSuccess
+
+    fun setData(value: String) = synchronized(this) {
+        isSuccess.value = value
+    }
+
+    fun release() {
+        isSuccess.value = ""
+    }
+}
+
+object DownloadScheduleSuccess {
+    private val isSuccess = MutableLiveData(false)
+
+    operator fun invoke() = isSuccess
+
+    fun setData(value: Boolean) = synchronized(this) {
+        isSuccess.value = value
+    }
+
+    fun release() {
+        isSuccess.value = false
+    }
+}
+
+object GetScheduleNoteSuccess {
+    private val isSuccess = MutableLiveData(false)
+
+    operator fun invoke() = isSuccess
+
+    fun setData(value: Boolean) = synchronized(this) {
+        isSuccess.value = value
+    }
+
+    fun release() {
+        isSuccess.value = false
+    }
+}
+
+object MonthInCalendarRefresher {
+    private val month = MutableLiveData(YearMonth.now())
+
+    operator fun invoke() = month
+
+    fun setData(value: YearMonth) = synchronized(this) {
+        month.value = value
+    }
+
+    fun release() {
+        month.value = YearMonth.now()
+    }
+}
