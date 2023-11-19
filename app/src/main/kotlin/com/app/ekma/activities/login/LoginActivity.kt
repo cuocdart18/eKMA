@@ -1,10 +1,11 @@
-package com.app.ekma.activities
+package com.app.ekma.activities.login
 
 import android.os.Bundle
 import android.text.Html
 import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
 import com.app.ekma.R
+import com.app.ekma.activities.main.MainActivity
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint

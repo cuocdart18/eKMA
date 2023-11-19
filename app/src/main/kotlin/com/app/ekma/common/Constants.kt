@@ -1,6 +1,12 @@
 package com.app.ekma.common
 
 // Constants
+const val FRAGMENT_TYPE = "frm_type"
+const val SCORE_FRAGMENT = 0
+const val SCHEDULE_FRAGMENT = 1
+const val NOTE_FRAGMENT = 2
+const val INFORMATION_FRAGMENT = 3
+
 const val APP_EXTERNAL_MEDIA_FOLDER = "media"
 const val EXTERNAL_AUDIO_FOLDER = "audio"
 

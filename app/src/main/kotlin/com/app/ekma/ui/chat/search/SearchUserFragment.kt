@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +17,7 @@ import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.data.models.MiniStudent
 import com.app.ekma.databinding.FragmentSearchUserBinding
+import com.app.ekma.ui.chat.main.ChatFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.launch
@@ -24,6 +28,12 @@ class SearchUserFragment : BaseFragment() {
     private lateinit var binding: FragmentSearchUserBinding
     private val viewModel by viewModels<SearchUserViewModel>()
     private val searchUserAdapter: SearchUserAdapter by lazy { SearchUserAdapter(onItemClicked) }
+
+    val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            parentFragmentManager.popBackStack()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +46,7 @@ class SearchUserFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        regisOnBackPressed()
         setSearchAsyncEditText()
         setRecyclerViewProperties()
     }
@@ -73,7 +84,15 @@ class SearchUserFragment : BaseFragment() {
             val bundle = bundleOf(
                 KEY_PASS_CHAT_ROOM_ID to roomId
             )
-            navigateToFragment(R.id.chatFragment, bundle)
+            parentFragmentManager.commit {
+                replace<ChatFragment>(R.id.fragment_container_view, args = bundle)
+                setReorderingAllowed(true)
+                addToBackStack(ChatFragment::class.java.simpleName)
+            }
         }
+    }
+
+    private fun regisOnBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 }

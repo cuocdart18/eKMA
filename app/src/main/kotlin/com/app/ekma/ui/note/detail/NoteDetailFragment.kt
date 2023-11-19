@@ -9,6 +9,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
@@ -20,6 +21,7 @@ import com.app.ekma.common.makeVisible
 import com.app.ekma.data.models.Note
 import com.app.ekma.databinding.FragmentNoteDetailBinding
 import com.app.ekma.ui.note.audio_player.AudioPlayerFragment
+import com.app.ekma.ui.note.main_scr.NoteMainFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +29,12 @@ class NoteDetailFragment : BaseFragment() {
     override val TAG = NoteDetailFragment::class.java.simpleName
     private lateinit var binding: FragmentNoteDetailBinding
     private val viewModel by viewModels<NoteDetailViewModel>()
+
+    val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            parentFragmentManager.popBackStack()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,7 +47,6 @@ class NoteDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        regisOnBackPressed()
         receiveNote()
         setupView()
     }
@@ -77,7 +84,11 @@ class NoteDetailFragment : BaseFragment() {
             KEY_PASS_NOTE_MODE to UPDATE_NOTE_MODE
         )
         // navigate
-        navigateToFragment(R.id.noteMainFragment, bundle)
+        parentFragmentManager.commit {
+            add<NoteMainFragment>(R.id.fragment_container_view, args = bundle)
+            setReorderingAllowed(true)
+            addToBackStack(NoteMainFragment::class.java.simpleName)
+        }
     }
 
     private fun onClickBtnDelete() {
@@ -109,19 +120,17 @@ class NoteDetailFragment : BaseFragment() {
             viewModel.refreshDataInRecyclerView()
             viewModel.cancelAlarm(note)
             // reopen ScheduleMainFragment
-            navigateToFragment(R.id.action_noteDetailFragment_to_scheduleMainFragment)
+            parentFragmentManager.popBackStack()
         }
     }
 
-    private fun regisOnBackPressed() {
-        // This callback will only be called when MyFragment is at least Started.
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                    // Handle the back button event
-                    navigateToFragment(R.id.action_noteDetailFragment_to_scheduleMainFragment)
-                }
-            }
+    override fun onResume() {
+        super.onResume()
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        callback.remove()
     }
 }

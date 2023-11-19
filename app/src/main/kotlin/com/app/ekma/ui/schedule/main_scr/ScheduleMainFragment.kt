@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.children
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
@@ -18,11 +20,15 @@ import com.app.ekma.common.KEY_PASS_NOTE_OBJ
 import com.app.ekma.common.displayText
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.pattern.singleton.DownloadScheduleSuccess
+import com.app.ekma.common.pattern.singleton.GetScheduleNoteSuccess
+import com.app.ekma.common.pattern.singleton.MonthInCalendarRefresher
 import com.app.ekma.common.setTextColorRes
 import com.app.ekma.common.toYearMonth
 import com.app.ekma.data.models.Event
 import com.app.ekma.data.models.Note
 import com.app.ekma.databinding.FragmentScheduleMainBinding
+import com.app.ekma.ui.note.detail.NoteDetailFragment
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
@@ -77,8 +83,8 @@ class ScheduleMainFragment : BaseFragment() {
                 textView.text = title
             }
         val currentMonth = YearMonth.from(ClickedDay().date)
-        val startMonth = currentMonth.minusMonths(100)
-        val endMonth = currentMonth.plusMonths(100)
+        val startMonth = currentMonth.minusMonths(60)
+        val endMonth = currentMonth.plusMonths(60)
         binding.calendarView.dayBinder = dayBinder
         binding.calendarView.monthScrollListener = { updateTitle() }
         binding.calendarView.setup(startMonth, endMonth, daysOfWeek.first())
@@ -123,7 +129,11 @@ class ScheduleMainFragment : BaseFragment() {
             KEY_PASS_NOTE_OBJ to note
         )
         // navigate
-        navigateToFragment(R.id.noteDetailFragment, bundle)
+        parentFragmentManager.commit {
+            add<NoteDetailFragment>(R.id.fragment_container_view, args = bundle)
+            setReorderingAllowed(true)
+            addToBackStack(NoteDetailFragment::class.java.simpleName)
+        }
     }
 
     private fun onNoteCheckboxClicked(note: Note) {
@@ -135,6 +145,19 @@ class ScheduleMainFragment : BaseFragment() {
             if (state) {
                 getEventsDay(ClickedDay())
             }
+        }
+        DownloadScheduleSuccess().observe(viewLifecycleOwner) { state ->
+            if (state) {
+                binding.calendarView.notifyCalendarChanged()
+            }
+        }
+        GetScheduleNoteSuccess().observe(viewLifecycleOwner) { state ->
+            if (state) {
+                binding.calendarView.notifyCalendarChanged()
+            }
+        }
+        MonthInCalendarRefresher().observe(viewLifecycleOwner) { month ->
+            binding.calendarView.notifyMonthChanged(month)
         }
     }
 

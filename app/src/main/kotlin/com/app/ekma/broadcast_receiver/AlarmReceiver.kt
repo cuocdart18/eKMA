@@ -11,7 +11,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
 import com.app.ekma.R
-import com.app.ekma.activities.MainActivity
+import com.app.ekma.activities.main.MainActivity
 import com.app.ekma.common.EVENTS_NOTIFY_CHANNEL_ID
 import com.app.ekma.common.KEY_EVENT
 import com.app.ekma.common.KEY_PASS_NOTE_OBJ

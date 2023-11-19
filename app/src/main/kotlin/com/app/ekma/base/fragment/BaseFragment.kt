@@ -126,7 +126,6 @@ open class BaseFragment : Fragment() {
         findNavController().navigate(id, data)
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     internal fun openDatePickerDialog(
         callback: (view: DatePicker, year: Int, month: Int, dayOfMonth: Int) -> Unit
     ) {

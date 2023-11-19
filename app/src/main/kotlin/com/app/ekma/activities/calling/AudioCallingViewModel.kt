@@ -1,4 +1,4 @@
-package com.app.ekma.activities
+package com.app.ekma.activities.calling
 
 import android.app.RemoteAction
 import android.content.Context

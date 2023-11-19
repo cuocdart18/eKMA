@@ -4,7 +4,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.app.ekma.activities.IncomingInvitationActivity
+import com.app.ekma.activities.calling.IncomingInvitationActivity
 import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID

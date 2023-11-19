@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -36,6 +37,12 @@ class ImageViewerFragment : BaseFragment() {
             }
         }
 
+    val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            parentFragmentManager.popBackStack()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,6 +54,7 @@ class ImageViewerFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        regisOnBackPressed()
         val bundle = arguments
         bundle?.let {
             viewModel.imageUrl = it.getString(KEY_PASS_IMAGE_URL).toString()
@@ -89,5 +97,9 @@ class ImageViewerFragment : BaseFragment() {
                 showToast("Da download xong")
             }
         }
+    }
+
+    private fun regisOnBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 }

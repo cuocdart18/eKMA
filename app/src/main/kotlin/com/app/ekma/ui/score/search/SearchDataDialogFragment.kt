@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +14,7 @@ import com.app.ekma.base.dialogs.BaseDialogFragment
 import com.app.ekma.common.KEY_PASS_MINISTUDENT_ID
 import com.app.ekma.data.models.MiniStudent
 import com.app.ekma.databinding.DialogSearchBinding
+import com.app.ekma.ui.score.details.StudentDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
@@ -84,6 +87,11 @@ class SearchDataDialogFragment : BaseDialogFragment() {
         val bundle = bundleOf(
             KEY_PASS_MINISTUDENT_ID to miniStudent.id
         )
-        navigateToFragment(R.id.studentDetailFragment, bundle)
+        parentFragmentManager.commit {
+            replace<StudentDetailFragment>(R.id.fragment_container_view, args = bundle)
+            setReorderingAllowed(true)
+            addToBackStack(StudentDetailFragment::class.java.simpleName)
+        }
+        dismiss()
     }
 }

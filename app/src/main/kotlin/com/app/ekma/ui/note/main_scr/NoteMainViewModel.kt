@@ -15,8 +15,11 @@ import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.UPDATE_NOTE_MODE
 import com.app.ekma.common.copy
 import com.app.ekma.common.formatDoubleChar
+import com.app.ekma.common.pattern.singleton.CurrentEventsRefresher
+import com.app.ekma.common.pattern.singleton.MonthInCalendarRefresher
 import com.app.ekma.common.toDayMonthYear
 import com.app.ekma.common.toHourMinute
+import com.app.ekma.common.toLocalDate
 import com.app.ekma.common.toMilli
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Note
@@ -29,6 +32,7 @@ import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.YearMonth
 import javax.inject.Inject
 
 @HiltViewModel
@@ -189,6 +193,16 @@ class NoteMainViewModel @Inject constructor(
             Data.getLocalNotesRuntime(noteService)
             callback()
         }
+    }
+
+    fun refreshDataInRecyclerView() {
+        CurrentEventsRefresher.setData(true)
+    }
+
+    fun refreshDataCurrentMonth(note: Note) {
+        val noteDate = note.date.toLocalDate()
+        val month = YearMonth.of(noteDate.year, noteDate.month)
+        MonthInCalendarRefresher.setData(month)
     }
 
     fun setAlarmForNote(note: Note) {

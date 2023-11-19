@@ -37,7 +37,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.main.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -46,23 +46,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".activities.login.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activities.OutgoingInvitationActivity"
+            android:name=".activities.calling.OutgoingInvitationActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.IncomingInvitationActivity"
+            android:name=".activities.calling.IncomingInvitationActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.VideoCallingActivity"
+            android:name=".activities.calling.VideoCallingActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="false"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true" />
         <activity
-            android:name=".activities.AudioCallingActivity"
+            android:name=".activities.calling.AudioCallingActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="false"
             android:launchMode="singleTask"

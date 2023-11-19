@@ -14,15 +14,20 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.os.bundleOf
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import com.app.ekma.R
-import com.app.ekma.activities.LoginActivity
+import com.app.ekma.activities.login.LoginActivity
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.app.ekma.common.KEY_PASS_MINISTUDENT_ID
+import com.app.ekma.common.pattern.singleton.DownloadAvatarSuccess
 import com.app.ekma.common.pattern.singleton.MainBottomNavigation
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.databinding.FragmentInformationBinding
+import com.app.ekma.ui.chat.list.ListChatFragment
+import com.app.ekma.ui.score.details.StudentDetailFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -74,6 +79,10 @@ class InformationFragment : BaseFragment(),
     private fun setUpProfile() {
         binding.profile = ProfileSingleton()
         viewModel.getImageProfile { setImageUri(it) }
+        DownloadAvatarSuccess().observe(viewLifecycleOwner) { path ->
+            if (path.isEmpty()) return@observe
+            setImageUri(Uri.parse(path))
+        }
         binding.civProfileImage.setOnClickListener { onClickChangeProfile() }
     }
 
@@ -139,7 +148,11 @@ class InformationFragment : BaseFragment(),
             KEY_PASS_MINISTUDENT_ID to ProfileSingleton().studentCode,
             KEY_PASS_IS_MY_MINISTUDENT_ID to true
         )
-        navigateToFragment(R.id.studentDetailFragment, bundle)
+        parentFragmentManager.commit {
+            replace<StudentDetailFragment>(R.id.fragment_container_view, args = bundle)
+            setReorderingAllowed(true)
+            addToBackStack(StudentDetailFragment::class.java.simpleName)
+        }
     }
 
     override fun onClickUpdateSchedule() {
@@ -173,7 +186,11 @@ class InformationFragment : BaseFragment(),
 
     override fun onClickChat() {
         MainBottomNavigation.setData(true)
-        navigateToFragment(R.id.listChatFragment)
+        parentFragmentManager.commit {
+            replace<ListChatFragment>(R.id.fragment_container_view)
+            setReorderingAllowed(true)
+            addToBackStack(ListChatFragment::class.java.simpleName)
+        }
     }
 
     override fun onChangedLanguage() {

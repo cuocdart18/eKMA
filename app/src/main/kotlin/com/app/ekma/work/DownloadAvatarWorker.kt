@@ -7,6 +7,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.app.ekma.common.APP_EXTERNAL_MEDIA_FOLDER
 import com.app.ekma.common.INPUT_DATA_STUDENT_CODE
+import com.app.ekma.common.pattern.singleton.DownloadAvatarSuccess
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.firebase.USERS_DIR
@@ -61,6 +62,9 @@ class DownloadAvatarWorker @AssistedInject constructor(
             .await()
 
         dataLocalManager.saveImgFilePath(file.absolutePath)
+        withContext(Dispatchers.Main) {
+            DownloadAvatarSuccess.setData(file.absolutePath)
+        }
         Log.e(TAG, "downloadAvatar:\nfilePath=${file.absolutePath}")
     }
 }
