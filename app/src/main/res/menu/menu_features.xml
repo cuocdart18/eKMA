@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/score"
+        android:icon="@drawable/school_outline_white_24dp"
+        android:title="@string/item_menu_score" />
+    <item
+        android:id="@+id/schedule"
+        android:icon="@drawable/calendar_clear_outline_white_24dp"
+        android:title="@string/item_menu_schedule" />
+    <item
+        android:id="@+id/note"
+        android:icon="@drawable/calendar_outline_white_24dp"
+        android:title="@string/item_menu_note" />
+    <item
+        android:id="@+id/information"
+        android:icon="@drawable/person_outline_white_24dp"
+        android:title="@string/item_menu_account" />
+</menu>

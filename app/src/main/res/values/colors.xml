@@ -11,8 +11,39 @@
     <color name="gray_1">#757575</color>
     <color name="gray_2">#494949</color>
     <color name="green_nhat">#00C565</color>
+    <color name="green_nhat_hon">#7CE1B0</color>
+    <color name="yellow_nhat">#FFEB3B</color>
     <color name="red_nhat">#FF5252</color>
+    <color name="red_cuc_nhat">#FF7979</color>
     <color name="blue_nhat">#448AFF</color>
+    <color name="blue_nhat_hon">#9CE0FF</color>
     <color name="color_gray_of_dialog">#9E9E9E</color>
     <color name="gray_dam">#424242</color>
+
+    <color name="lab_black">#282828</color>
+    <color name="lab_medium_black">#333333</color>
+    <color name="lab_white">#F8F0E8</color>
+    <color name="lab_red">#FE6454</color>
+    <color name="lab_medium_red">#FF7668</color>
+    <color name="lab_light_red">#FF8989</color>
+    <color name="lab_dark_pink">#E06B90</color>
+    <color name="lab_green">#00C565</color>
+    <color name="lab_medium_green">#3BFFA0</color>
+    <color name="lab_light_green">#7CE1B0</color>
+    <color name="lab_yellow">#F3DC3C</color>
+    <color name="lab_dark_yellow">#EDA744</color>
+    <color name="lab_blue">#2196F3</color>
+    <color name="lab_medium_blue">#39A7FF</color>
+    <color name="lab_light_blue">#81C8FF</color>
+    <color name="lab_gray_input">#EFEFEF</color>
+    <color name="lab_medium_white">#F5F4F5</color>
+    <color name="lab_gray">#D3D3D3</color>
+    <color name="lab_gray_expired_note">#A6A6A6</color>
+
+    <array name="google_colors">
+        <item>@color/green_nhat</item>
+        <item>@color/red_nhat</item>
+        <item>@color/blue_nhat</item>
+        <item>@color/yellow_nhat</item>
+    </array>
 </resources>

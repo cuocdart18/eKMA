@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00.00"
+        android:layout_marginBottom="@dimen/base_normal_margin"
+        android:textColor="@color/lab_black"
+        android:textSize="@dimen/base_normal_header_text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/btn_delete"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/close_fill_red"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/btn_record"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="@dimen/base_xhigh_margin"
+            android:layout_marginEnd="@dimen/base_xhigh_margin"
+            android:contentDescription="@string/btn_record"
+            android:src="@drawable/record_circle_fill_red" />
+
+        <ImageView
+            android:id="@+id/btn_fit_record_ui"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/close_fill_red"
+            android:visibility="gone"
+            android:contentDescription="@string/btn_fit_record_ui" />
+    </LinearLayout>
+</LinearLayout>

@@ -3,15 +3,18 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
-    namespace 'com.example.kmatool'
+    namespace 'com.app.ekma'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.kmatool"
-        minSdk 22
+        applicationId "com.app.ekma"
+        minSdk 24
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -26,8 +29,13 @@ android {
         }
     }
     compileOptions {
+        // Enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -47,27 +55,59 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
+    // firebase
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.7.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
+    implementation 'com.google.firebase:firebase-database:20.3.0'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
+
+    // google OAuth2
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.19.0'
+
+    // splash
+    implementation "androidx.core:core-splashscreen:1.0.1"
+
+    // work manager
+    def work_version = "2.7.0"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation 'androidx.hilt:hilt-work:1.0.0'
+    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+
+    // crypt
+    implementation "androidx.security:security-crypto:1.0.0"
+
+    // preferences fragment
+    implementation "androidx.preference:preference-ktx:1.2.0"
+
     // navigation
     def nav_version = '2.5.2'
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
+    // viewpager2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
     //room
-    def room_version = "2.4.3"
+    def room_version = "2.5.0"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-
-    //okhttp
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
 
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0"
 
+    // jsoup
+    implementation "org.jsoup:jsoup:1.13.1"
+
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+
+    // okhttp
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
 
     //gson
     implementation "com.google.code.gson:gson:2.10.1"
@@ -79,5 +119,42 @@ dependencies {
 
     // glide
     implementation "com.github.bumptech.glide:glide:4.14.2"
-    annotationProcessor "com.github.bumptech.glide:compiler:4.14.2"
+    kapt "com.github.bumptech.glide:compiler:4.14.2"
+
+    // calendar theme
+    implementation "com.kizitonwose.calendar:view:2.0.2"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+
+    // progress bar
+    implementation "com.jpardogo.googleprogressbar:library:1.2.0"
+    implementation 'com.mikhaellopez:circularfillableloaders:1.4.0'
+
+    // data store
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation "androidx.datastore:datastore-preferences-core:1.0.0"
+
+    // DI
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
+
+    // notification support
+    def core_version = "1.6.0"
+    implementation "androidx.core:core:$core_version"
+
+    // CircleImageView
+    implementation "de.hdodenhof:circleimageview:3.1.0"
+
+    // TedImagePicker
+    implementation "io.github.ParkSangGwon:tedimagepicker:1.4.2"
+
+    // animation gif
+    implementation "com.airbnb.android:lottie:6.0.0"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
+
+    // Image operation
+    implementation 'com.github.MikeOrtiz:TouchImageView:1.4.1'
+
+    // Agora for call audio/video
+    implementation 'io.agora.rtc:full-sdk:4.0.1'
 }

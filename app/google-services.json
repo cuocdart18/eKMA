@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "527716698680",
+    "project_id": "ekma-c517e",
+    "storage_bucket": "ekma-c517e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527716698680:android:904a679e72ff9af39234cd",
+        "android_client_info": {
+          "package_name": "com.app.ekma"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuxBhEBAflNuHhY4JWLa0RAjVehh3WoKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

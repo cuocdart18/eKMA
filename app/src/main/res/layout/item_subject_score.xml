@@ -5,11 +5,11 @@
 
         <variable
             name="score"
-            type="com.example.kmatool.models.score.Score" />
+            type="com.app.ekma.data.models.Score" />
 
         <variable
             name="subject"
-            type="com.example.kmatool.models.score.Subject" />
+            type="com.app.ekma.data.models.Subject" />
 
         <import type="android.view.View" />
     </data>
@@ -22,92 +22,42 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@{score.index % 2 == 0 ? @color/gray_1 : @color/gray_2}"
+            android:background="@{score.index % 2 == 0 ? @color/lab_gray : @color/lab_medium_white}"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="10dp"
+            android:paddingTop="@dimen/base_normal_padding"
+            android:paddingBottom="@dimen/base_normal_padding"
             android:weightSum="13">
 
             <TextView
-                android:id="@+id/tv_subject_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
+                style="@style/BaseTextViewListOfScoreItem"
                 android:layout_weight="3"
-                android:text="@{score.subject.name}"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+                android:text="@{score.subject.name}" />
 
             <TextView
-                android:id="@+id/tv_first_component_score"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
+                style="@style/BaseTextViewListOfScoreItem"
                 android:layout_weight="2"
-                android:text="@{score.firstComponentScore}"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+                android:text="@{score.firstComponentScore}" />
 
             <TextView
-                android:id="@+id/tv_second_component_score"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
+                style="@style/BaseTextViewListOfScoreItem"
                 android:layout_weight="2"
-                android:text="@{score.secondComponentScore}"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+                android:text="@{score.secondComponentScore}" />
 
             <TextView
-                android:id="@+id/tv_exam_score"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
+                style="@style/BaseTextViewListOfScoreItem"
                 android:layout_weight="2"
-                android:text="@{score.examScore}"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+                android:text="@{score.examScore}" />
 
             <TextView
-                android:id="@+id/tv_avg_score"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
+                style="@style/BaseTextViewListOfScoreItem"
                 android:layout_weight="2"
-                android:text="@{score.avgScore}"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+                android:text="@{score.avgScore}" />
 
             <TextView
-                android:id="@+id/tv_alphabet_score"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                style="@style/BaseTextViewListOfScoreItem"
                 android:layout_weight="2"
-                android:text="@{score.alphabetScore}"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="normal" />
-
+                android:text="@{score.alphabetScore}" />
         </LinearLayout>
-
     </LinearLayout>
-
-
 </layout>

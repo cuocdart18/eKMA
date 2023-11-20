@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.app.ekma.activities.login.LoginViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/login_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lab_medium_white"
+            android:orientation="vertical"
+            android:padding="@dimen/base_xhigh_padding">
+
+            <ImageView
+                android:layout_width="@dimen/base_width_img"
+                android:layout_height="@dimen/base_height_img"
+                android:layout_gravity="center"
+                android:contentDescription="@string/img_login"
+                android:src="@drawable/mobile_login_bro" />
+
+            <TextView
+                android:id="@+id/tv_started_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/base_high_margin"
+                android:textColor="@color/lab_red"
+                android:textSize="@dimen/base_title_text"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_username"
+                style="@style/BaseTextInputLayoutForLogin"
+                android:hint="@string/edt_hint_username"
+                app:counterEnabled="true"
+                app:counterMaxLength="8"
+                app:startIconDrawable="@drawable/person_outline_red_24dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_username"
+                    style="@style/BaseEditTextForLogin"
+                    android:inputType="text"
+                    android:maxLength="8" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_password"
+                style="@style/BaseTextInputLayoutForLogin"
+                android:hint="@string/edt_hint_password"
+                app:endIconMode="password_toggle"
+                app:startIconDrawable="@drawable/lock_closed_outline_red_24dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_password"
+                    style="@style/BaseEditTextForLogin"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_invalid_username_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/invalid_username_password"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/lab_red"
+                android:textSize="@dimen/base_helper_text"
+                android:visibility="@{viewModel.isValid() ? View.INVISIBLE : View.VISIBLE}" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/base_normal_margin">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/loading_login_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/base_height_of_button_login"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bgr_rectangle_lab_black"
+                    android:visibility="@{viewModel.isShowProgress() ? View.VISIBLE : View.GONE}"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/loading_double_circle" />
+
+                <Button
+                    android:id="@+id/btn_login"
+                    style="@style/BaseButtonSubmit"
+                    android:layout_height="@dimen/base_height_of_button_login"
+                    android:text="@string/btn_login_continue"
+                    android:visibility="@{viewModel.isShowProgress() ? View.GONE : View.VISIBLE}" />
+            </FrameLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="note"
+            type="com.app.ekma.data.models.Note" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/base_xhigh_margin"
+        android:background="@drawable/bgr_rectangle_black_stroke_gray"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bgr_box_of_detail_note_header"
+            android:paddingStart="@dimen/base_high_padding"
+            android:paddingTop="@dimen/base_normal_padding"
+            android:paddingEnd="@dimen/base_normal_padding"
+            android:paddingBottom="@dimen/base_normal_padding"
+            android:text="@string/note_title_dialog"
+            android:textColor="@color/lab_red"
+            android:textSize="@dimen/base_normal_header_text"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_note_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_high_margin"
+            android:layout_marginTop="@dimen/base_high_margin"
+            android:layout_marginEnd="@dimen/base_high_margin"
+            android:layout_marginBottom="@dimen/base_normal_margin"
+            android:maxLines="3"
+            android:scrollbars="vertical"
+            android:text="@{note.title}"
+            android:textColor="@color/lab_red"
+            android:textSize="@dimen/base_big_header_text"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tv_note_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/base_high_margin"
+            android:layout_marginEnd="@dimen/base_high_margin"
+            android:maxLines="12"
+            android:scrollbarStyle="insideInset"
+            android:scrollbars="vertical"
+            android:text="@{note.content}"
+            android:textColor="@color/lab_red"
+            android:textSize="@dimen/base_normal_text" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/base_high_margin">
+
+            <Button
+                android:id="@+id/btn_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bgr_box_of_positive_button"
+                android:text="@string/btn_note_update_dialog"
+                android:textAllCaps="false"
+                android:textColor="@color/lab_white"
+                android:textSize="@dimen/base_normal_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_delete"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/btn_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bgr_box_negative_button"
+                android:text="@string/btn_note_delete_dialog"
+                android:textAllCaps="false"
+                android:textColor="@color/lab_red"
+                android:textSize="@dimen/base_normal_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_update" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

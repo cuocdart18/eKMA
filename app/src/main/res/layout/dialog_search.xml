@@ -5,7 +5,7 @@
 
         <variable
             name="searchDataVM"
-            type="com.example.kmatool.view_model.score.SearchDataViewModel" />
+            type="com.app.ekma.ui.score.search.SearchDataViewModel" />
     </data>
 
     <LinearLayout
@@ -13,35 +13,40 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bgr_rectangle_black_stroke_gray"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="@dimen/base_high_padding">
 
         <EditText
             android:id="@+id/edt_search_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/bgr_rectangle_black_radius_8dp"
-            android:drawableStart="@drawable/search_outline_24dp"
-            android:drawablePadding="8dp"
+            android:layout_marginBottom="@dimen/base_small_margin"
+            android:background="@drawable/bgr_input_dialog_search"
+            android:clickable="true"
+            android:drawableStart="@drawable/search_outline_red_24dp"
+            android:drawablePadding="@dimen/base_normal_padding"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:hint="@string/hint_search_data"
+            android:importantForAutofill="no"
             android:inputType="text"
             android:maxLines="1"
-            android:padding="8dp"
+            android:padding="@dimen/base_normal_padding"
             android:textColor="@color/white"
             android:textColorHint="@color/gray"
-            android:textSize="18sp" />
+            android:textSize="@dimen/base_normal_text" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/base_normal_margin"
             android:text="@{searchDataVM.isUserTyped ? @string/ket_qua_tim_kiem : @string/lich_su_tim_kiem}"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textColor="@color/lab_red"
+            android:textSize="@dimen/base_helper_text" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbars="none">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_search_query"

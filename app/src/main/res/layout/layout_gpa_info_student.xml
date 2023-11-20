@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="student"
+            type="com.app.ekma.data.models.Student" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bgr_box_of_gpa_info_student"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/base_ultra_padding"
+        android:paddingBottom="@dimen/base_gpa_info_student_bottom_padding">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/base_xhigh_margin">
+
+            <com.mikhaellopez.circularfillableloaders.CircularFillableLoaders
+                android:id="@+id/progress_circular_gpa"
+                android:layout_width="@dimen/base_width_gpa_progress"
+                android:layout_height="@dimen/base_height_gpa_progress"
+                android:layout_gravity="center"
+                app:cfl_border="true"
+                app:cfl_border_width="2dp"
+                app:cfl_wave_amplitude="0.015"
+                app:cfl_wave_color="@color/lab_red" />
+
+            <TextView
+                style="@style/BaseTextViewInGpaInfoStudent"
+                android:layout_gravity="center"
+                android:text="@{String.valueOf(student.avgScore)}"
+                android:textSize="@dimen/base_big_title_text" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_name"
+            style="@style/BaseTextViewInGpaInfoStudent"
+            android:layout_marginBottom="@dimen/base_normal_margin"
+            android:text="@{student.name}"
+            android:textSize="@dimen/base_big_header_text" />
+
+        <TextView
+            android:id="@+id/tv_id"
+            style="@style/BaseTextViewInGpaInfoStudent"
+            android:drawablePadding="@dimen/base_normal_padding"
+            android:text="@{student.id}"
+            android:textSize="@dimen/base_normal_text"
+            android:textStyle="normal"
+            app:drawableStartCompat="@drawable/person_circle_outline_white_16dp" />
+
+        <TextView
+            android:id="@+id/tv_class_in_school"
+            style="@style/BaseTextViewInGpaInfoStudent"
+            android:drawablePadding="@dimen/base_normal_padding"
+            android:text="@{student.classInSchool}"
+            android:textSize="@dimen/base_normal_text"
+            android:textStyle="normal"
+            app:drawableStartCompat="@drawable/flag_outline_white_16dp" />
+    </LinearLayout>
+</layout>

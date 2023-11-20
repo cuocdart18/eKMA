@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="note"
+            type="com.app.ekma.data.models.Note" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/layout_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/lab_black"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/base_ultra_margin"
+                    android:layout_marginBottom="@dimen/base_xxhigh_margin"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8"
+                        android:padding="@dimen/base_high_padding"
+                        android:text="@{note.title}"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/base_normal_header_text"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btn_delete_note"
+                        android:layout_width="0dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="2"
+                        android:contentDescription="@string/delete_note"
+                        android:src="@drawable/trash_outline_red" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bgr_box_of_events_rectangle_white_border"
+                    android:orientation="vertical"
+                    android:padding="@dimen/base_high_padding">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/base_xxxhigh_margin"
+                        android:weightSum="2">
+
+                        <TextView
+                            style="@style/BaseTextViewDateTime"
+                            android:text="@{note.date}"
+                            android:textSize="@dimen/base_normal_text"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/BaseTextViewDateTime"
+                            android:text="@{note.time}"
+                            android:textSize="@dimen/base_normal_text"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/base_normal_margin"
+                        android:layout_marginBottom="@dimen/base_xxhigh_margin"
+                        android:weightSum="2">
+
+                        <TextView
+                            style="@style/BaseTextViewDateTime"
+                            android:text="@string/note_date" />
+
+                        <TextView
+                            style="@style/BaseTextViewDateTime"
+                            android:text="@string/note_time" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/base_high_margin"
+                        android:contentDescription="@string/space_of_content"
+                        android:src="@drawable/caret_down_outline_red_24dp" />
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/frm_container_player"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/base_high_margin"
+                        android:layout_marginBottom="@dimen/base_normal_margin"
+                        android:text="@string/description_header"
+                        android:textColor="@color/lab_black"
+                        android:textSize="@dimen/base_helper_text"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/base_xxhigh_margin"
+                        android:text="@{note.content}"
+                        android:textColor="@color/lab_black"
+                        android:textSize="@dimen/base_normal_text"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="@dimen/base_width_img_present"
+                        android:layout_height="@dimen/base_height_img_present"
+                        android:layout_gravity="center_horizontal"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/checklist_rafiki_red_512dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_update_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/base_high_margin"
+            android:contentDescription="@string/desc_of_update_note_fab"
+            android:src="@drawable/create_outline_red_24dp"
+            app:backgroundTint="@color/lab_black"
+            app:fabSize="normal" />
+    </RelativeLayout>
+</layout>

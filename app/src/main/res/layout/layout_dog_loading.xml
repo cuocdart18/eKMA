@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_dog_loading_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lab_medium_white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="@dimen/base_width_anim_dog_loading"
+        android:layout_height="@dimen/base_height_anim_dog_loading"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/dog_loading" />
+
+    <TextView
+        android:id="@+id/tv_message_helper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/desc_loading"
+        android:textColor="@color/lab_black"
+        android:textSize="@dimen/base_helper_text" />
+</LinearLayout>

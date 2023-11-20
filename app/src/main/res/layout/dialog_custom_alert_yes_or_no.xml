@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/base_width_dialog_confirm"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/lab_black"
+    app:cardCornerRadius="@dimen/base_xhigh_border">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/base_xhigh_padding">
+
+        <ImageView
+            android:id="@+id/imv_present_action"
+            android:layout_width="@dimen/base_width_img_presentation_in_dialog"
+            android:layout_height="@dimen/base_height_img_presentation_in_dialog"
+            android:layout_marginBottom="@dimen/base_normal_margin"
+            android:contentDescription="@string/imv_present_action" />
+
+        <TextView
+            android:id="@+id/tv_dialog_title"
+            style="@style/BaseTextViewInConfirmDialogTitle"
+            android:layout_marginBottom="@dimen/base_normal_margin" />
+
+        <TextView
+            android:id="@+id/tv_dialog_message"
+            style="@style/BaseTextViewInConfirmDialogMessage"
+            android:layout_marginBottom="@dimen/base_xhigh_margin" />
+
+        <Button
+            android:id="@+id/btn_yes"
+            style="@style/BaseButtonInConfirmDialog"
+            android:background="@drawable/bgr_box_of_positive_button"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btn_no"
+            style="@style/BaseButtonInConfirmDialog"
+            android:layout_marginTop="@dimen/base_normal_margin"
+            android:background="@drawable/bgr_box_negative_button"
+            android:textColor="@color/lab_red" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

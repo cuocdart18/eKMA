@@ -1,16 +1,28 @@
 <resources>
-    <string name="app_name">KMA Tool</string>
-    <string name="item_menu_score">score</string>
-    <string name="item_menu_schedule">schedule</string>
-    <string name="item_menu_note">note</string>
-    <string name="item_menu_information">information</string>
+    <string name="app_name">eKMA</string>
+    <string name="item_menu_score">Điểm</string>
+    <string name="item_menu_schedule">Lịch</string>
+    <string name="item_menu_note">Ghi chú</string>
+    <string name="item_menu_account">Tài khoản</string>
     <string name="open_nav_drawer">open navDrawer</string>
     <string name="close_nav_drawer">close navDrawer</string>
 
     <!--SCORE FEATURE-->
     <string name="title_kma_score">./kma_score</string>
-    <string name="title_intro_statistics_fragment">Công cụ tra cứu điểm dành cho sinh viên KMA</string>
-    <string name="slogan_app">Tổng hợp điểm nhanh chóng và chính xác, sử dụng đơn giản, mã nguồn mở.</string>
+    <string name="title_intro_kma_score">KMA \nScore</string>
+    <string name="title_intro_score_main">
+        <![CDATA[
+        <html>
+            <body>
+                <span><font color="#FFFFFF">Score lookup tool for</font></span>
+                <br>
+                <span><font color="#282828">KMA students</font></span>
+            </body>
+        </html>
+        ]]>
+    </string>
+    <string name="slogan_score">Trên bước đường thành công, không có dấu chân cho kẻ lười biếng</string>
+    <string name="slogan_schedule">Cập nhật thời khóa biểu trực tiếp từ hệ thống, thông tin bảo mật, an toàn.</string>
     <string name="tong_so_sv">Tổng số sinh viên</string>
     <string name="so_sv_no_mon">Số sinh viên nợ môn</string>
     <string name="so_mon_hoc">Số môn học</string>
@@ -35,8 +47,82 @@
     <string name="designed_by_author">Designed by KIT</string>
     <string name="failed_students">Chưa hoàn thành môn</string>
     <string name="passed_students">Đã hoàn thành môn</string>
-    <string name="btn_tra_cuu_diem">Tra cứu điểm</string>
+    <string name="btn_tra_cuu_diem">Tìm kiếm</string>
+    <string name="log_in_title_schedule">Let\'s \nGet Started!</string>
+    <string name="log_in_title_app">
+        <![CDATA[
+        <html>
+            <body>
+                <span><font color="#282828">Đăng nhập</font></span>
+                <br>
+                <span><font color="#282828">để</font></span>
+                " "
+                <span><font color="#FE6454">Bắt đầu!</font></span>
+            </body>
+        </html>
+        ]]>
+    </string>
+    <string name="edt_hint_username">Mã sinh viên</string>
+    <string name="edt_hint_password">Mật khẩu</string>
+    <string name="invalid_username_password">Đăng nhập bị từ chối</string>
+    <string name="btn_login">Bắt đầu</string>
+    <string name="btn_view_schedule">Xem thời khóa biểu</string>
+    <string name="title_intro_schedule_fragment">Công cụ xem thời khóa biểu dành cho sinh viên KMA</string>
+    <string name="title_event_detail">Sự kiện trong ngày</string>
+    <string name="label_name_schedule">Thời khóa biểu</string>
+    <string name="label_name_score">Tra cứu điểm</string>
+    <string name="tv_notify_events_empty">Không có sự kiện nào</string>
     <string name="so_sinh_vien">Số sinh viên</string>
+    <string name="create_note">Tạo ghi chú</string>
+    <string name="note_title">Tiêu đề</string>
+    <string name="note_date">Ngày</string>
+    <string name="note_time">Giờ</string>
+    <string name="note_content">Nội dung</string>
+    <string name="note_save">Lưu</string>
+    <string name="empty_title_notify">Thông tin này không được bỏ trống</string>
+    <string name="note_title_dialog">Detail</string>
+    <string name="note_time_dialog">Time:\ </string>
+    <string name="note_content_dialog">Description:</string>
+    <string name="btn_note_update_dialog">Update</string>
+    <string name="btn_note_delete_dialog">Delete</string>
+    <string name="tv_note_head_add">Thêm ghi chú</string>
+    <string name="tv_note_head_update">Cập nhật ghi chú</string>
 
+    <string name="key_my_score_pref">my_score</string>
+    <string name="key_update_schedule_pref">update_schedule</string>
+    <string name="key_chat">chat</string>
+    <string name="key_notify_event_pref">notify_event</string>
+    <string name="key_dark_mode_pref">dark_mode</string>
+    <string name="key_language_pref">language</string>
+    <string name="key_about_me_pref">about_me</string>
+    <string name="key_rating_pref">rating</string>
+    <string name="key_log_out_pref">log_out</string>
+    <string name="btn_login_continue">Đăng nhập</string>
+    <string name="space_start_end_time">\ -\ </string>
+    <string name="desc_of_update_note_fab">Cập nhật ghi chú</string>
+    <string name="description_header">Nội dung</string>
+    <string name="img_login">img_login</string>
+    <string name="delete_note">delete_note</string>
+    <string name="space_of_content">space_of_content</string>
+    <string name="imv_present_action">imv_present_action</string>
+    <string name="button_confirm_yes">Yes</string>
+    <string name="button_confirm_no">No</string>
+    <string name="title_passed_subject">Đã hoàn thành</string>
+    <string name="title_failed_subject">Còn nợ</string>
+    <string name="score_detail_title">Điểm chi tiết</string>
+    <string name="desc_loading">Chờ chút nha. . .</string>
+    <string name="desc_error_loading">Có vẻ như đã xảy ra lỗi. . .</string>
+    <string name="splash_image">splash_image</string>
+    <string name="checkbox_outline">checkbox_outline</string>
+    <string name="tv_recording_text_helper">Ghi âm</string>
+    <string name="audio_recording">audio_recording</string>
+    <string name="btn_jump_plus">btn_jump_plus</string>
+    <string name="btn_jump_minus">btn_jump_minus</string>
+    <string name="btn_play_pause">btn_play_pause</string>
+    <string name="btn_delete_audio_old_note">btn_delete_audio_old_note</string>
+    <string name="btn_record">btn_record</string>
+    <string name="btn_fit_record_ui">btn_fit_record_ui</string>
+    <string name="image_message">image_message</string>
+    <string name="audio_file_is_not_exists">Bản ghi audio chưa được tải xuống</string>
 
 </resources>

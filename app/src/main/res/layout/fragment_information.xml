@@ -4,20 +4,67 @@
 
     <data>
 
+        <variable
+            name="profile"
+            type="com.app.ekma.data.models.Profile" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="INFOR"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="@color/lab_medium_white"
+            android:orientation="vertical"
+            android:weightSum="10">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:background="@drawable/bgr_box_of_profile_student_header"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_profile_image"
+                    android:layout_width="@dimen/base_width_img_profile"
+                    android:layout_height="@dimen/base_height_img_profile"
+                    android:layout_marginBottom="@dimen/base_high_margin"
+                    android:src="@drawable/user"
+                    app:civ_border_color="@color/lab_red"
+                    app:civ_border_width="1dp" />
+
+                <TextView
+                    android:id="@+id/tv_profile_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/base_small_margin"
+                    android:text="@{profile.displayName}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/base_normal_header_text"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_profile_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{profile.studentCode}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/base_normal_text"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/frm_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="6"
+                android:nestedScrollingEnabled="false" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

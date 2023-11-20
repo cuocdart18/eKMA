@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BoldText">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="NormalText">
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TestStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BaseTextInputLayoutForLogin">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeErrorColor">@color/lab_red</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="endIconTint">@color/lab_black</item>
+        <item name="errorEnabled">true</item>
+        <item name="hintTextColor">@color/lab_black</item>
+        <item name="startIconTint">@color/lab_black</item>
+    </style>
+
+    <style name="BaseTextInputLayoutForNote">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeErrorColor">@color/lab_red</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="endIconTint">@color/lab_red</item>
+        <item name="errorEnabled">true</item>
+        <item name="hintTextColor">@color/lab_red</item>
+        <item name="startIconTint">@color/lab_black</item>
+    </style>
+
+    <style name="BaseEditTextForLogin">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bgr_input_shape_corner</item>
+        <item name="android:inputType">text</item>
+        <item name="android:lines">1</item>
+        <item name="android:padding">@dimen/base_high_padding</item>
+        <item name="android:textColor">@color/lab_black</item>
+        <item name="android:textColorHighlight">@color/lab_black</item>
+        <item name="android:textColorLink">@color/lab_black</item>
+        <item name="android:textSize">@dimen/base_normal_text</item>
+    </style>
+
+    <style name="BaseEditTextForNote">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">start</item>
+        <item name="android:background">@drawable/bgr_input_shape_corner</item>
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:padding">@dimen/base_high_padding</item>
+        <item name="android:textColor">@color/lab_black</item>
+        <item name="android:textColorHighlight">@color/lab_black</item>
+        <item name="android:textColorLink">@color/lab_black</item>
+        <item name="android:textSize">@dimen/base_normal_text</item>
+    </style>
+
+    <style name="BaseTextViewStudentCodeClass">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bgr_rectangle_outline_for_ministudent</item>
+        <item name="android:drawablePadding">@dimen/base_small_padding</item>
+        <item name="android:padding">@dimen/base_small_padding</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/base_helper_text</item>
+    </style>
+
+    <style name="BaseButtonSubmit">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/bgr_rectangle_lab_black</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/lab_white</item>
+        <item name="android:textSize">@dimen/base_normal_text</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="BaseTextViewDateTimeSelector">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bgr_input_date_time_rectangle_corner</item>
+        <item name="android:padding">@dimen/base_high_padding</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/lab_red</item>
+        <item name="android:textSize">@dimen/base_normal_text</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="BaseLinearLayoutItemEventDay">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/base_high_padding</item>
+    </style>
+
+    <style name="BaseTextViewItemEventDay">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:drawablePadding">@dimen/base_small_padding</item>
+        <item name="android:textColor">@color/lab_black</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:scrollbars">none</item>
+    </style>
+
+    <style name="BaseTextViewTitleItemEventDay" parent="BaseTextViewItemEventDay">
+        <item name="android:textSize">@dimen/base_normal_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseTextViewDescItemEventDay" parent="BaseTextViewItemEventDay">
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/base_helper_text</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="BaseTextViewDateTime">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/lab_black</item>
+        <item name="android:textSize">@dimen/base_helper_text</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="BaseTextViewInConfirmDialog">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="BaseTextViewInConfirmDialogTitle" parent="BaseTextViewInConfirmDialog">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/base_normal_header_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseTextViewInConfirmDialogMessage" parent="BaseTextViewInConfirmDialog">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">@dimen/base_helper_text</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="BaseButtonInConfirmDialog">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/base_normal_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseTextViewInGpaInfoStudent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseLayoutPassedFailedSubject">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/base_normal_padding</item>
+    </style>
+
+    <style name="BaseTextViewPassedFailedSubject">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/lab_black</item>
+    </style>
+
+    <style name="BaseTextViewTitlePassedFailedSubject" parent="BaseTextViewPassedFailedSubject">
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/base_normal_text</item>
+    </style>
+
+    <style name="BaseTextViewContentPassedFailedSubject" parent="BaseTextViewPassedFailedSubject">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:padding">@dimen/base_normal_padding</item>
+        <item name="android:textSize">@dimen/base_passed_failed_subject_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseTextViewListOfScore">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:padding">@dimen/base_small_padding</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/lab_black</item>
+        <item name="android:textSize">@dimen/base_normal_text</item>
+    </style>
+
+    <style name="BaseTextViewListOfScoreHeader" parent="BaseTextViewListOfScore">
+        <item name="android:lines">2</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="BaseTextViewListOfScoreItem" parent="BaseTextViewListOfScore">
+        <item name="android:textStyle">normal</item>
+    </style>
+</resources>
