@@ -31,6 +31,7 @@ KMA trong quá trình học tập
 - Theo dõi lịch học (API: từ [eKMA-API](https://github.com/cuocdart18/eKma-api))
 - Thêm, sửa, xoá ghi chú, hỗ trợ kèm **Voice recorder**
 - Nhận thông báo về sự kiện
+#### Các chức năng đang trong quá trình hoàn thiện
 - Chatting: nhắn tin văn bản, hình ảnh giữa các sinh viên, theo dõi trạng thái hoạt động
 - Audio, Video calling: gọi trực tuyến, hỗ trợ **PiP mode**
 ## Screenshots
