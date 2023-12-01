@@ -25,9 +25,9 @@ object NetworkModule {
         return GsonConverterFactory.create()
     }
 
+    @AppSite
     @Provides
     @Singleton
-    @Named("AppSite")
     fun provideRetrofitAppSite(gsonConverterFactory: GsonConverterFactory): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_APP_URL)
@@ -36,13 +36,13 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideApiAppService(@Named("AppSite") retrofit: Retrofit): EKmaAPI {
+    fun provideApiAppService(@AppSite retrofit: Retrofit): EKmaAPI {
         return retrofit.create(EKmaAPI::class.java)
     }
 
+    @ScoreSite
     @Provides
     @Singleton
-    @Named("ScoreSite")
     fun provideRetrofitScoreSite(gsonConverterFactory: GsonConverterFactory): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_SCORE_URL)
@@ -51,13 +51,13 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideApiScoreService(@Named("ScoreSite") retrofit: Retrofit): ScoreAPI {
+    fun provideApiScoreService(@ScoreSite retrofit: Retrofit): ScoreAPI {
         return retrofit.create(ScoreAPI::class.java)
     }
 
+    @AgoraSite
     @Provides
     @Singleton
-    @Named("AgoraSite")
     fun provideRetrofitAgoraSite(gsonConverterFactory: GsonConverterFactory): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_AGORA_APP_URL)
@@ -66,7 +66,7 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideApiAgoraService(@Named("AgoraSite") retrofit: Retrofit): AgoraAPI {
+    fun provideApiAgoraService(@AgoraSite retrofit: Retrofit): AgoraAPI {
         return retrofit.create(AgoraAPI::class.java)
     }
 }
