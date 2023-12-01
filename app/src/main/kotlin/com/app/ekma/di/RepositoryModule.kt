@@ -18,85 +18,67 @@ import com.app.ekma.data.repository.PeriodRepositoryImpl
 import com.app.ekma.data.repository.ProfileRepositoryImpl
 import com.app.ekma.data.repository.StudentRepositoryImpl
 import com.app.ekma.data.repository.UserRepositoryImpl
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+abstract class RepositoryModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIAuth(
+    abstract fun provideIAuth(
         authImpl: AuthImpl
-    ): IAuth {
-        return authImpl
-    }
+    ): IAuth
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIMiniStudentRepository(
+    abstract fun provideIMiniStudentRepository(
         miniStudentRepositoryImpl: MiniStudentRepositoryImpl
-    ): IMiniStudentRepository {
-        return miniStudentRepositoryImpl
-    }
+    ): IMiniStudentRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideINoteRepository(
+    abstract fun provideINoteRepository(
         noteRepositoryImpl: NoteRepositoryImpl
-    ): INoteRepository {
-        return noteRepositoryImpl
-    }
+    ): INoteRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIPeriodRepository(
+    abstract fun provideIPeriodRepository(
         periodRepositoryImpl: PeriodRepositoryImpl
-    ): IPeriodRepository {
-        return periodRepositoryImpl
-    }
+    ): IPeriodRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIProfileRepository(
+    abstract fun provideIProfileRepository(
         profileRepositoryImpl: ProfileRepositoryImpl
-    ): IProfileRepository {
-        return profileRepositoryImpl
-    }
+    ): IProfileRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIStudentRepository(
+    abstract fun provideIStudentRepository(
         studentRepositoryImpl: StudentRepositoryImpl
-    ): IStudentRepository {
-        return studentRepositoryImpl
-    }
+    ): IStudentRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIUserRepository(
+    abstract fun provideIUserRepository(
         userRepositoryImpl: UserRepositoryImpl
-    ): IUserRepository {
-        return userRepositoryImpl
-    }
+    ): IUserRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIFcmRepository(
+    abstract fun provideIFcmRepository(
         fcmRepositoryImpl: FcmRepositoryImpl
-    ): IFcmRepository {
-        return fcmRepositoryImpl
-    }
+    ): IFcmRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIAgoraTokenRepository(
+    abstract fun provideIAgoraTokenRepository(
         agoraTokenRepositoryImpl: AgoraTokenRepositoryImpl
-    ): IAgoraTokenRepository {
-        return agoraTokenRepositoryImpl
-    }
+    ): IAgoraTokenRepository
 }

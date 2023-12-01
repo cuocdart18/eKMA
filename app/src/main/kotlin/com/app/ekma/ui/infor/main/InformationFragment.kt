@@ -70,10 +70,10 @@ class InformationFragment : BaseFragment(),
     }
 
     private fun setUpPreferencesSetting() {
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.frm_container, SettingFragment(this))
-            .commit()
+        childFragmentManager.commit {
+            replace(R.id.frm_container, SettingFragment(this@InformationFragment))
+            setReorderingAllowed(true)
+        }
     }
 
     private fun setUpProfile() {

@@ -16,77 +16,61 @@ import com.app.ekma.data.service.ProfileService
 import com.app.ekma.data.service.ScheduleService
 import com.app.ekma.data.service.ScoreService
 import com.app.ekma.data.service.UserService
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ServiceModule {
+abstract class ServiceModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideILoginService(
+    abstract fun provideILoginService(
         loginService: LoginService
-    ): ILoginService {
-        return loginService
-    }
+    ): ILoginService
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideINoteService(
+    abstract fun provideINoteService(
         noteService: NoteService
-    ): INoteService {
-        return noteService
-    }
+    ): INoteService
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIProfileService(
+    abstract fun provideIProfileService(
         profileService: ProfileService
-    ): IProfileService {
-        return profileService
-    }
+    ): IProfileService
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIScheduleService(
+    abstract fun provideIScheduleService(
         scheduleService: ScheduleService
-    ): IScheduleService {
-        return scheduleService
-    }
+    ): IScheduleService
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIScoreService(
+    abstract fun provideIScoreService(
         scoreService: ScoreService
-    ): IScoreService {
-        return scoreService
-    }
+    ): IScoreService
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIUserService(
+    abstract fun provideIUserService(
         userService: UserService
-    ): IUserService {
-        return userService
-    }
+    ): IUserService
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIFcmService(
+    abstract fun provideIFcmService(
         fcmService: FcmService
-    ): IFcmService {
-        return fcmService
-    }
+    ): IFcmService
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideIAgoraService(
+    abstract fun provideIAgoraService(
         agoraService: AgoraService
-    ): IAgoraService {
-        return agoraService
-    }
+    ): IAgoraService
 }

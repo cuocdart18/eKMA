@@ -2,14 +2,14 @@ package com.app.ekma.di
 
 import javax.inject.Qualifier
 
-@Retention(AnnotationRetention.RUNTIME)
 @Qualifier
-annotation class DefaultDispatcher()
+@Retention(AnnotationRetention.RUNTIME)
+annotation class DefaultDispatcher
 
-@Retention(AnnotationRetention.RUNTIME)
 @Qualifier
-annotation class IoDispatcher()
+@Retention(AnnotationRetention.RUNTIME)
+annotation class IoDispatcher
 
-@Retention(AnnotationRetention.RUNTIME)
 @Qualifier
-annotation class MainDispatcher()
+@Retention(AnnotationRetention.RUNTIME)
+annotation class MainDispatcher

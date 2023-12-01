@@ -17,7 +17,7 @@ KMA trong quá trình học tập
 
 **Multithreading:** Kotlin coroutines
 
-**DI:** Hitl
+**DI:** Hilt
 
 **Database:** Firebase Firestore, Storage, SQLite
 
@@ -31,7 +31,8 @@ KMA trong quá trình học tập
 - Theo dõi lịch học (API: từ [eKMA-API](https://github.com/cuocdart18/eKma-api))
 - Thêm, sửa, xoá ghi chú, hỗ trợ kèm **Voice recorder**
 - Nhận thông báo về sự kiện
-- Chatting: nhắn tin văn bản, hình ảnh giữa các sinh viên, theo dõi trạng thái hoạt động
+#### Các chức năng đang trong quá trình hoàn thiện
+- Chatting: nhắn tin văn bản, hình ảnh giữa các sinh viên, theo dõi trạng thái hoạt động, nhắn tin mã hoá đầu cuối (E2EE)
 - Audio, Video calling: gọi trực tuyến, hỗ trợ **PiP mode**
 ## Screenshots
 
@@ -64,6 +65,8 @@ KMA trong quá trình học tập
 
 - **Update schedule**
 ![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/Update%20schedule.png?raw=true)
+
+#### Các chức năng đang trong quá trình hoàn thiện
 
 - **ChatListFragment**
 ![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/ChatListFragment.png?raw=true)

@@ -32,12 +32,14 @@ abstract class AppDatabase : RoomDatabase() {
         fun getInstance(context: Context): AppDatabase {
             if (instance == null) {
                 synchronized(this) {
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        AppDatabase::class.java,
-                        DATABASE_NAME
-                    ).allowMainThreadQueries()
-                        .build()
+                    if (instance == null) {
+                        instance = Room.databaseBuilder(
+                            context.applicationContext,
+                            AppDatabase::class.java,
+                            DATABASE_NAME
+                        ).allowMainThreadQueries()
+                            .build()
+                    }
                 }
             }
             // Return database.
