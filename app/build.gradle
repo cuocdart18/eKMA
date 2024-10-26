@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
     id 'com.google.dagger.hilt.android'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
@@ -89,7 +90,7 @@ dependencies {
     // viewpager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
-    //room
+    // room
     def room_version = "2.5.0"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
@@ -109,7 +110,7 @@ dependencies {
     // okhttp
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
 
-    //gson
+    // gson
     implementation "com.google.code.gson:gson:2.10.1"
 
     // viewModel & liveData
@@ -129,9 +130,10 @@ dependencies {
     implementation "com.jpardogo.googleprogressbar:library:1.2.0"
     implementation 'com.mikhaellopez:circularfillableloaders:1.4.0'
 
-    // data store
+    // data store & Share preferences
     implementation "androidx.datastore:datastore-preferences:1.0.0"
     implementation "androidx.datastore:datastore-preferences-core:1.0.0"
+    implementation "com.orhanobut:hawk:2.0.1"
 
     // DI
     implementation "com.google.dagger:hilt-android:2.44"
@@ -157,4 +159,7 @@ dependencies {
 
     // Agora for call audio/video
     implementation 'io.agora.rtc:full-sdk:4.0.1'
+
+    //ffmpeg
+    implementation 'com.github.yangjie10930:EpMedia:v1.0.1'
 }

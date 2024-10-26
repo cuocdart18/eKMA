@@ -30,10 +30,12 @@ import com.app.ekma.common.formatRecordingTimer
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeInVisible
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.super_utils.app.hideKeyboard
 import com.app.ekma.data.models.Note
 import com.app.ekma.databinding.FragmentNoteMainBinding
 import com.app.ekma.ui.note.audio_player.AudioPlayerFragment
 import com.app.ekma.ui.note.detail.NoteDetailFragment
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -123,6 +125,11 @@ class NoteMainFragment : BaseFragment() {
     }
 
     private fun setupForBaseLayout() {
+        binding.root.setOnTouchListener { v, event ->
+            binding.root.hideKeyboard()
+            false
+        }
+
         binding.btnSave.setOnClickListener { onClickBtnSave() }
         binding.tvSelectDate.setOnClickListener {
             openDatePickerDialog { _, year, month, dayOfMonth ->

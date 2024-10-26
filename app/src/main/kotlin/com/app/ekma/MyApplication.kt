@@ -13,6 +13,7 @@ import com.app.ekma.common.GET_SCHE_CHANNEL
 import com.app.ekma.common.GET_SCHE_CHANNEL_ID
 import com.app.ekma.common.UPDATE_SCHE_CHANNEL
 import com.app.ekma.common.UPDATE_SCHE_CHANNEL_ID
+import com.orhanobut.hawk.Hawk
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -24,6 +25,8 @@ class MyApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        Hawk.init(applicationContext).build()
+
         createNotificationChannels()
     }
 

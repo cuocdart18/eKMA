@@ -4,7 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.view.ContextThemeWrapper
+import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
+import com.app.ekma.R
 import com.app.ekma.data.models.ChatRoom
 import com.app.ekma.data.models.Message
 import com.app.ekma.data.models.Score
@@ -255,4 +258,20 @@ fun formatAudioDuration(duration: Int): String {
         "%02d:%02d".format(minutes, seconds)
     }
     return formatted
+}
+
+fun createThemeInflater(context: Context): LayoutInflater {
+    val contextThemeWrapper = ContextThemeWrapper(
+        context, getTheme()
+    )
+    return LayoutInflater.from(context).cloneInContext(contextThemeWrapper)
+}
+
+private fun getTheme(): Int {
+//        val theme = FirebaseRemoteConfig.getInstance().getString("theme")
+//        if (theme == "red") {
+//            return R.style.AppTheme_Red
+//        }
+//        return R.style.AppTheme_Blue
+    return R.style.Theme_KMATool
 }

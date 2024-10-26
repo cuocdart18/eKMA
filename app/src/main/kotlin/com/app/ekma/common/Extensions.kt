@@ -74,3 +74,13 @@ fun View.makeInVisible() {
 fun View.makeGone() {
     visibility = View.GONE
 }
+
+fun <T> List<T>.chunkList(chunkSize: Int): List<List<T>> {
+    val result = mutableListOf<List<T>>()
+    var index = 0
+    while (index < size) {
+        result.add(subList(index, kotlin.math.min(index + chunkSize, size)))
+        index += chunkSize
+    }
+    return result
+}
