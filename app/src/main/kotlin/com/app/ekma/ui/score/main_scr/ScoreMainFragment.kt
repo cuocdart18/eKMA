@@ -1,10 +1,12 @@
 package com.app.ekma.ui.score.main_scr
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.app.ekma.activities.test_event.EventHandlingActivity
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.databinding.FragmentScoreMainBinding
 import com.app.ekma.ui.score.search.SearchDataDialogFragment
@@ -31,6 +33,9 @@ class ScoreMainFragment : BaseFragment() {
     }
 
     private fun setupUI() {
+        binding.btnTest.setOnClickListener {
+            startActivity(Intent(requireContext(), EventHandlingActivity::class.java))
+        }
         binding.btnSearchFeature.setOnClickListener { onClickShowSearchDialog() }
         binding.scoreMainViewModel = viewModel
     }

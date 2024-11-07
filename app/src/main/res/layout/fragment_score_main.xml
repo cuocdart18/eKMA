@@ -93,6 +93,13 @@
                         android:background="@drawable/bgr_search_btn_score_main"
                         android:padding="@dimen/base_high_padding"
                         android:text="@string/btn_tra_cuu_diem" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnTest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="test"
+                        android:visibility="gone" />
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>

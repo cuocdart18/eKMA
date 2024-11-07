@@ -1,5 +1,6 @@
 package com.app.ekma.common
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.view.View
 import android.widget.TextView
@@ -83,4 +84,16 @@ fun <T> List<T>.chunkList(chunkSize: Int): List<List<T>> {
         index += chunkSize
     }
     return result
+}
+
+fun View.runIntAnimator(from: Int, to: Int, duration: Long, doWork: (Int) -> Unit) {
+    clearAnimation()
+    val anim = ValueAnimator.ofInt(from, to)
+    anim.addUpdateListener {
+        runCatching {
+            doWork.invoke(it.animatedValue as Int)
+        }
+    }
+    anim.duration = duration
+    anim.start()
 }

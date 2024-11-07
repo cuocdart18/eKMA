@@ -1,4 +1,4 @@
-package com.app.ekma.common.super_utils.audio
+package com.app.ekma.common.super_utils.audio_video
 
 import android.content.Context
 import android.media.AudioManager

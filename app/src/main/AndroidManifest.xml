@@ -67,6 +67,9 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true" />
+        <activity
+            android:name=".activities.test_event.EventHandlingActivity"
+            android:exported="false" />
 
         <receiver android:name=".broadcast_receiver.AlarmReceiver" />
         <receiver

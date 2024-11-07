@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="dp_1">2dp</dimen>
+
     <dimen name="base_height_of_button_login">52dp</dimen>
 
     <dimen name="base_gpa_info_student_bottom_padding">80dp</dimen>
