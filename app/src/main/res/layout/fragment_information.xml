@@ -12,13 +12,13 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/lab_medium_white"
         android:fillViewport="true"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/lab_medium_white"
             android:orientation="vertical"
             android:weightSum="10">
 
@@ -27,13 +27,20 @@
                 android:layout_height="0dp"
                 android:layout_weight="4"
                 android:background="@drawable/bgr_box_of_profile_student_header"
-                android:gravity="center"
                 android:orientation="vertical">
+
+                <View
+                    android:id="@+id/viewFakeStatus"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    android:layout_gravity="top" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civ_profile_image"
                     android:layout_width="@dimen/base_width_img_profile"
                     android:layout_height="@dimen/base_height_img_profile"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="48dp"
                     android:layout_marginBottom="@dimen/base_high_margin"
                     android:src="@drawable/user"
                     app:civ_border_color="@color/lab_red"
@@ -43,6 +50,7 @@
                     android:id="@+id/tv_profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/base_small_margin"
                     android:text="@{profile.displayName}"
                     android:textColor="@color/white"
@@ -53,6 +61,7 @@
                     android:id="@+id/tv_profile_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:text="@{profile.studentCode}"
                     android:textColor="@color/white"
                     android:textSize="@dimen/base_normal_text"

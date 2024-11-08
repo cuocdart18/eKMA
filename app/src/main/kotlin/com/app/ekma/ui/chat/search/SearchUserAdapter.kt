@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ekma.common.super_utils.click.performClick
 import com.app.ekma.data.models.MiniStudent
 import com.app.ekma.databinding.ItemSearchUserBinding
 
@@ -37,15 +38,12 @@ class SearchUserAdapter(private val onItemClicked: (String) -> Unit) :
     inner class SearchUserViewHolder(
         val binding: ItemSearchUserBinding,
         private val onItemClicked: (String) -> Unit
-    ) :
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    ) : RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.root.setOnClickListener(this)
-        }
-
-        override fun onClick(v: View?) {
-            val position = adapterPosition
-            onItemClicked(miniStudents[position].id)
+            binding.root.performClick {
+                val position = adapterPosition
+                onItemClicked(miniStudents[position].id)
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ import androidx.core.widget.doOnTextChanged
 import com.app.ekma.R
 import com.app.ekma.activities.main.MainActivity
 import com.app.ekma.base.activities.BaseActivity
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +26,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun setUpUI() {
-        binding.btnLogin.setOnClickListener { onClickBtnLogin() }
+        binding.btnLogin.setOnSingleClickListener { onClickBtnLogin() }
         binding.tvStartedTitle.text = Html.fromHtml(getString(R.string.log_in_title_app))
         binding.edtUsername.doOnTextChanged { text, _, _, _ ->
             if (text.isNullOrEmpty())

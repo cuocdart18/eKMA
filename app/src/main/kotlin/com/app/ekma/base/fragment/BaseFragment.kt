@@ -6,7 +6,6 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,11 +19,11 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.app.ekma.R
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
 import java.time.LocalDate
 import java.time.LocalTime
@@ -134,6 +133,7 @@ open class BaseFragment : Fragment() {
         val currentDayOfMonth = LocalDate.now().dayOfMonth
         DatePickerDialog(
             requireContext(),
+            R.style.CustomPickerDialogTheme,
             { view, year, month, dayOfMonth ->
                 logInfo("pick day=$dayOfMonth - month=${month + 1} - year=$year")
                 callback(view, year, month + 1, dayOfMonth)
@@ -141,7 +141,10 @@ open class BaseFragment : Fragment() {
             currentYear,
             currentMonth,
             currentDayOfMonth
-        ).show()
+        ).apply {
+            window?.attributes?.windowAnimations = R.style.DialogAnim
+            show()
+        }
     }
 
     internal fun openTimePickerDialog(
@@ -151,6 +154,7 @@ open class BaseFragment : Fragment() {
         val currentMinute = LocalTime.now().minute
         TimePickerDialog(
             requireContext(),
+            R.style.CustomPickerDialogTheme,
             { view, hourOfDay, minute ->
                 logInfo("pick hour=$hourOfDay - minute=$minute")
                 callback(view, hourOfDay, minute)
@@ -158,7 +162,10 @@ open class BaseFragment : Fragment() {
             currentHour,
             currentMinute,
             true
-        ).show()
+        ).apply {
+            window?.attributes?.windowAnimations = R.style.DialogAnim
+            show()
+        }
     }
 
     internal fun showAlertDialog(
@@ -176,6 +183,7 @@ open class BaseFragment : Fragment() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(R.layout.dialog_custom_alert_yes_or_no)
+        dialog.window?.attributes?.windowAnimations = R.style.DialogAnim
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val imvPresentation = dialog.findViewById<ImageView>(R.id.imv_present_action)
         val tvTitle = dialog.findViewById<TextView>(R.id.tv_dialog_title)
@@ -191,10 +199,10 @@ open class BaseFragment : Fragment() {
         if (isAlert) {
             btnNo.visibility = View.GONE
         }
-        btnYes.setOnClickListener {
+        btnYes.setOnSingleClickListener {
             onClickConfirm()
         }
-        btnNo.setOnClickListener {
+        btnNo.setOnSingleClickListener {
             onClickRefuse()
         }
         return dialog

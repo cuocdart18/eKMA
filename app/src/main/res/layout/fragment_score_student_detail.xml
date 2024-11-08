@@ -6,24 +6,35 @@
 
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lab_medium_white">
+        android:background="@color/lab_medium_black">
 
         <include
             android:id="@+id/layout_dog_loading"
             layout="@layout/layout_dog_loading"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="visible" />
+
+        <View
+            android:id="@+id/viewFakeStatus"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/layout_detail_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:background="@color/lab_medium_black"
+            android:overScrollMode="never"
             android:scrollbars="none"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewFakeStatus">
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
@@ -61,6 +72,6 @@
                     app:layout_anchorGravity="center|bottom" />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </androidx.core.widget.NestedScrollView>
-    </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

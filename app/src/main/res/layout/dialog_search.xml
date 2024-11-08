@@ -9,6 +9,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/layoutRoot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bgr_rectangle_black_stroke_gray"
@@ -33,6 +34,7 @@
             android:padding="@dimen/base_normal_padding"
             android:textColor="@color/white"
             android:textColorHint="@color/gray"
+            android:textCursorDrawable="@drawable/text_cursor_color"
             android:textSize="@dimen/base_normal_text" />
 
         <TextView
@@ -51,7 +53,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_search_query"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layoutAnimation="@anim/rcv_layout_anim" />
         </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>

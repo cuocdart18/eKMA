@@ -62,6 +62,7 @@
         <item name="android:textColorHighlight">@color/lab_black</item>
         <item name="android:textColorLink">@color/lab_black</item>
         <item name="android:textSize">@dimen/base_normal_text</item>
+        <item name="android:textCursorDrawable">@drawable/text_cursor_color</item>
     </style>
 
     <style name="BaseTextViewStudentCodeClass">
@@ -211,5 +212,15 @@
 
     <style name="BaseTextViewListOfScoreItem" parent="BaseTextViewListOfScore">
         <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="CustomPickerDialogTheme" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowBackground">@drawable/bgr_picker_dialog</item>
+        <item name="android:textColorPrimary">@color/lab_red</item>
+        <item name="android:textColorSecondary">@color/lab_medium_red</item>
+        <item name="colorControlNormal">@color/lab_red</item>
+        <item name="colorAccent">@color/lab_red</item>
+        <item name="android:calendarTextColor">@color/lab_red</item>
+        <item name="colorButtonNormal">@color/lab_red</item>
     </style>
 </resources>

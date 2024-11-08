@@ -1,0 +1,28 @@
+package com.app.ekma.common.custom_view
+
+import android.content.Context
+import android.util.AttributeSet
+import androidx.core.content.ContextCompat
+import com.app.ekma.R
+import com.google.android.material.switchmaterial.SwitchMaterial
+
+class VoiceRecorderSwitchView(
+    context: Context,
+    attrs: AttributeSet?
+) : SwitchMaterial(context, attrs) {
+
+    init {
+        isChecked = false
+        thumbTintList = ContextCompat.getColorStateList(context, R.color.lab_red)
+        trackTintList = ContextCompat.getColorStateList(context, R.color.lab_gray)
+    }
+
+    override fun setChecked(checked: Boolean) {
+        super.setChecked(checked)
+        trackTintList = if (checked) {
+            ContextCompat.getColorStateList(context, R.color.lab_light_red)
+        } else {
+            ContextCompat.getColorStateList(context, R.color.lab_gray)
+        }
+    }
+}

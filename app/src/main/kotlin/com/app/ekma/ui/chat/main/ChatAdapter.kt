@@ -11,6 +11,7 @@ import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.data.models.Message
 import com.app.ekma.databinding.ItemFriendMessageBinding
 import com.app.ekma.databinding.ItemLoadingBinding
@@ -108,7 +109,7 @@ class ChatAdapter(
                 binding.tvMessage.makeVisible()
                 binding.imvMessage.makeGone()
             } else if (message.type == IMAGE_MSG) {
-                binding.imvMessage.setOnClickListener { imageCallback(message.content) }
+                binding.imvMessage.setOnSingleClickListener { imageCallback(message.content) }
                 Glide.with(context)
                     .load(Uri.parse(message.content))
                     .placeholder(R.drawable.default_image_message)
@@ -135,7 +136,7 @@ class ChatAdapter(
                 binding.tvMessage.makeVisible()
                 binding.imvMessage.makeGone()
             } else if (message.type == IMAGE_MSG) {
-                binding.imvMessage.setOnClickListener { imageCallback(message.content) }
+                binding.imvMessage.setOnSingleClickListener { imageCallback(message.content) }
                 Glide.with(context)
                     .load(Uri.parse(message.content))
                     .placeholder(R.drawable.default_image_message)

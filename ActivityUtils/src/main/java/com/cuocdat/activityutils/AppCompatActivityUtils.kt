@@ -1,16 +1,10 @@
-package com.app.ekma.common.super_utils.activity
+package com.cuocdat.activityutils
 
 import android.graphics.drawable.Drawable
 import androidx.annotation.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 //Setup toolbar
 fun AppCompatActivity.setupToolbar(
@@ -78,12 +72,4 @@ fun AppCompatActivity.customBackButton(drawable: Drawable?) {
 
 fun AppCompatActivity.customBackButton(drawableResource: Int) {
     supportActionBar?.setHomeAsUpIndicator(drawableResource)
-}
-
-fun <T> AppCompatActivity.collectLatestFlow(flow: Flow<T>, collect: suspend (T) -> Unit) {
-    lifecycleScope.launch {
-        repeatOnLifecycle(Lifecycle.State.STARTED) {
-            flow.collectLatest(collect)
-        }
-    }
 }

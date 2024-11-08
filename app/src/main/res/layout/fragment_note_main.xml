@@ -19,6 +19,11 @@
             android:orientation="vertical"
             android:padding="@dimen/base_xhigh_padding">
 
+            <View
+                android:id="@+id/viewFakeStatus"
+                android:layout_width="1dp"
+                android:layout_height="1dp" />
+
             <TextView
                 android:id="@+id/tv_note_head"
                 android:layout_width="wrap_content"
@@ -132,14 +137,11 @@
                     android:textColor="@color/lab_black"
                     android:textSize="@dimen/base_normal_text" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.app.ekma.common.custom_view.VoiceRecorderSwitchView
                     android:id="@+id/sw_voice_recorder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:checked="false"
-                    app:thumbTint="@color/lab_red"
-                    app:trackTint="@color/lab_light_red" />
+                    android:layout_gravity="end|center_vertical" />
             </FrameLayout>
 
             <include

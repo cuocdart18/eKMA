@@ -15,6 +15,7 @@ import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.FROM_POSITION
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.TO_POSITION
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.FragmentListChatBinding
 import com.app.ekma.ui.chat.main.ChatFragment
 import com.app.ekma.ui.chat.search.SearchUserFragment
@@ -50,7 +51,7 @@ class ListChatFragment : BaseFragment() {
     }
 
     private fun initView() {
-        binding.btnSearch.setOnClickListener {
+        binding.btnSearch.setOnSingleClickListener {
             parentFragmentManager.commit {
                 replace<SearchUserFragment>(R.id.fragment_container_view)
                 setReorderingAllowed(true)

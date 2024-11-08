@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
@@ -13,6 +15,7 @@ import com.app.ekma.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.app.ekma.common.KEY_PASS_MINISTUDENT_ID
 import com.app.ekma.data.models.Student
 import com.app.ekma.databinding.FragmentScoreStudentDetailBinding
+import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,6 +41,9 @@ class StudentDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            height = getStatusBarHeight
+        }
         showLoadingLayout()
         receiveData()
 

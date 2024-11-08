@@ -23,6 +23,7 @@ import com.app.ekma.common.SPEAKER_AUDIO_ROUTE
 import com.app.ekma.common.UNMUTE_MIC
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityAudioCallingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
@@ -71,13 +72,13 @@ class AudioCallingActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        binding.btnLeave.setOnClickListener {
+        binding.btnLeave.setOnSingleClickListener {
             onClickBtnLeaveRoom()
         }
-        binding.btnMuteMic.setOnClickListener {
+        binding.btnMuteMic.setOnSingleClickListener {
             onClickBtnMuteMic()
         }
-        binding.btnAudioRoute.setOnClickListener {
+        binding.btnAudioRoute.setOnSingleClickListener {
             onClickBtnAudioRoute()
         }
     }

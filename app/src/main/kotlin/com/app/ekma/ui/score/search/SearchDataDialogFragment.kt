@@ -1,5 +1,6 @@
 package com.app.ekma.ui.score.search
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
 import com.app.ekma.base.dialogs.BaseDialogFragment
 import com.app.ekma.common.KEY_PASS_MINISTUDENT_ID
+import com.app.ekma.common.super_utils.app.hideKeyboard
 import com.app.ekma.data.models.MiniStudent
 import com.app.ekma.databinding.DialogSearchBinding
 import com.app.ekma.ui.score.details.StudentDetailFragment
@@ -19,22 +21,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
 @AndroidEntryPoint
-class SearchDataDialogFragment : BaseDialogFragment() {
+class SearchDataDialogFragment : BaseDialogFragment<DialogSearchBinding>() {
     override val TAG = SearchDataDialogFragment::class.java.simpleName
-    private lateinit var binding: DialogSearchBinding
     private val viewModel by viewModels<SearchDataViewModel>()
     private val searchDataAdapter: SearchDataAdapter by lazy {
         SearchDataAdapter { miniStudent -> onClickListItem(miniStudent) }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = DialogSearchBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun getDataBinding() = DialogSearchBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,6 +44,7 @@ class SearchDataDialogFragment : BaseDialogFragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @OptIn(ObsoleteCoroutinesApi::class)
     private fun setSearchAsyncEditText() {
         // get data
@@ -66,6 +61,12 @@ class SearchDataDialogFragment : BaseDialogFragment() {
             lifecycleScope.launch {
                 viewModel.queryChannel.send(it.toString())
             }
+        }
+        binding.layoutRoot.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                binding.layoutRoot.hideKeyboard()
+            }
+            false
         }
     }
 

@@ -17,6 +17,7 @@ import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.checkCallPermission
 import com.app.ekma.common.makeGone
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityIncomingInvitationBinding
 import com.app.ekma.firebase.MSG_ACCEPT
 import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
@@ -65,8 +66,8 @@ class IncomingInvitationActivity : BaseActivity() {
 
     private fun setupUI() {
         binding.tvSenderName.text = viewModel.inviterCode
-        binding.btnAccept.setOnClickListener(onClickBtnAccept)
-        binding.btnReject.setOnClickListener(onClickBtnReject)
+        binding.btnAccept.setOnSingleClickListener(onClickBtnAccept)
+        binding.btnReject.setOnSingleClickListener(onClickBtnReject)
         viewModel.isExpiredActivation.observe(this) { isExpired ->
             if (isExpired) {
                 finish()

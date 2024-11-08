@@ -10,10 +10,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
@@ -25,9 +27,11 @@ import com.app.ekma.common.KEY_PASS_MINISTUDENT_ID
 import com.app.ekma.common.pattern.singleton.DownloadAvatarSuccess
 import com.app.ekma.common.pattern.singleton.MainBottomNavigation
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.FragmentInformationBinding
 import com.app.ekma.ui.chat.list.ListChatFragment
 import com.app.ekma.ui.score.details.StudentDetailFragment
+import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -57,6 +61,9 @@ class InformationFragment : BaseFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewFakeStatus.updateLayoutParams<LinearLayout.LayoutParams> {
+            height = getStatusBarHeight
+        }
         viewModel.msgToast.observe(viewLifecycleOwner) {
             showToast(it)
         }
@@ -83,7 +90,7 @@ class InformationFragment : BaseFragment(),
             if (path.isEmpty()) return@observe
             setImageUri(Uri.parse(path))
         }
-        binding.civProfileImage.setOnClickListener { onClickChangeProfile() }
+        binding.civProfileImage.setOnSingleClickListener { onClickChangeProfile() }
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)

@@ -13,25 +13,18 @@ import com.app.ekma.base.dialogs.BaseDialogFragment
 import com.app.ekma.common.KEY_PASS_NOTE_MODE
 import com.app.ekma.common.KEY_PASS_NOTE_OBJ
 import com.app.ekma.common.UPDATE_NOTE_MODE
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.data.models.Note
 import com.app.ekma.databinding.DialogNoteDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NoteDetailDialogFragment : BaseDialogFragment() {
+class NoteDetailDialogFragment : BaseDialogFragment<DialogNoteDetailBinding>() {
     override val TAG = NoteDetailDialogFragment::class.java.simpleName
-    private lateinit var binding: DialogNoteDetailBinding
     private val viewModel by viewModels<NoteDetailViewModel>()
     private var note: Note? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = DialogNoteDetailBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun getDataBinding() = DialogNoteDetailBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,8 +44,8 @@ class NoteDetailDialogFragment : BaseDialogFragment() {
     private fun setupView() {
         binding.tvNoteTitle.movementMethod = ScrollingMovementMethod()
         binding.tvNoteContent.movementMethod = ScrollingMovementMethod()
-        binding.btnUpdate.setOnClickListener { onClickBtnUpdate() }
-        binding.btnDelete.setOnClickListener { onClickBtnDelete() }
+        binding.btnUpdate.setOnSingleClickListener { onClickBtnUpdate() }
+        binding.btnDelete.setOnSingleClickListener { onClickBtnDelete() }
     }
 
     private fun onClickBtnUpdate() {

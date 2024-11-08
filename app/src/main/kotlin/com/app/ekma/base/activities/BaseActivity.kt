@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.app.ekma.R
+import com.cuocdat.activityutils.setStatusBarHomeTransparent
 import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
 
 open class BaseActivity : AppCompatActivity() {
@@ -19,6 +20,7 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         logLifecycle("onCreate")
+        setStatusBarHomeTransparent()
     }
 
     override fun onStart() {

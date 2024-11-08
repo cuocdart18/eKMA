@@ -25,6 +25,7 @@ import com.app.ekma.common.UNMUTE_CAMERA
 import com.app.ekma.common.UNMUTE_MIC
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityVideoCallingBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
@@ -80,16 +81,16 @@ class VideoCallingActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        binding.btnLeave.setOnClickListener {
+        binding.btnLeave.setOnSingleClickListener {
             onClickLeaveRoom()
         }
-        binding.btnMuteMic.setOnClickListener {
+        binding.btnMuteMic.setOnSingleClickListener {
             onClickBtnMuteMic()
         }
-        binding.btnSwitchCamera.setOnClickListener {
+        binding.btnSwitchCamera.setOnSingleClickListener {
             onClickBtnSwitchCamera()
         }
-        binding.btnMuteCamera.setOnClickListener {
+        binding.btnMuteCamera.setOnSingleClickListener {
             onClickBtnMuteCamera()
         }
     }

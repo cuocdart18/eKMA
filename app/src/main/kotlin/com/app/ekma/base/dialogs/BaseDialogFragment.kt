@@ -10,11 +10,17 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
+import androidx.viewbinding.ViewBinding
+import com.app.ekma.R
 import com.app.ekma.common.SCALE_LAYOUT_SEARCH_DATA_DIALOG_X
 import com.app.ekma.common.SCALE_LAYOUT_SEARCH_DATA_DIALOG_Y
 
-open class BaseDialogFragment : DialogFragment() {
+abstract class BaseDialogFragment<T : ViewBinding> : DialogFragment() {
     protected open val TAG = ""
+
+    private var _binding: T? = null
+    protected val binding: T
+        get() = _binding as T
 
     // LIFECYCLE
     override fun onAttach(context: Context) {
@@ -35,8 +41,12 @@ open class BaseDialogFragment : DialogFragment() {
         logLifecycle("onCreateView")
         // set theme for dialog
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        return super.onCreateView(inflater, container, savedInstanceState)
+        dialog?.window?.attributes?.windowAnimations = R.style.DialogAnim
+        _binding = getDataBinding()
+        return binding.root
     }
+
+    abstract fun getDataBinding(): T
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

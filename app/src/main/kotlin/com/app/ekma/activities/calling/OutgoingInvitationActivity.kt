@@ -12,6 +12,7 @@ import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityOugoingInvitationBinding
 import com.app.ekma.firebase.MSG_ACCEPT
 import com.app.ekma.firebase.MSG_OPERATION
@@ -54,7 +55,7 @@ class OutgoingInvitationActivity : BaseActivity() {
                 }
             }
         }
-        binding.btnCancel.setOnClickListener {
+        binding.btnCancel.setOnSingleClickListener {
             viewModel.cancelInvitation {
                 finish()
             }

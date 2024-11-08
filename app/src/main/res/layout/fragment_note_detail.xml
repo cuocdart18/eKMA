@@ -26,6 +26,11 @@
                 android:background="@color/lab_black"
                 android:orientation="vertical">
 
+                <View
+                    android:id="@+id/viewFakeStatus"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

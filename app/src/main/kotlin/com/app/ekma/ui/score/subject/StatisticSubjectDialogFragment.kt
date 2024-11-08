@@ -9,19 +9,11 @@ import com.app.ekma.databinding.DialogStatisticSubjectBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class StatisticSubjectDialogFragment : BaseDialogFragment() {
+class StatisticSubjectDialogFragment : BaseDialogFragment<DialogStatisticSubjectBinding>() {
     override val TAG = StatisticSubjectDialogFragment::class.java.simpleName
-    private lateinit var binding: DialogStatisticSubjectBinding
     private lateinit var statisticSubject: StatisticSubject
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = DialogStatisticSubjectBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun getDataBinding() = DialogStatisticSubjectBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

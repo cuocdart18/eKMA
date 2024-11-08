@@ -12,6 +12,7 @@ import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.common.removeStudentCode
+import com.app.ekma.common.super_utils.click.performClick
 import com.app.ekma.data.models.ChatRoom
 import com.app.ekma.databinding.ItemChatRoomBinding
 import com.app.ekma.firebase.storage
@@ -51,7 +52,7 @@ class ListChatAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.root.setOnClickListener { onClickItem(rooms[adapterPosition].id) }
+            binding.root.performClick { onClickItem(rooms[adapterPosition].id) }
         }
 
         @SuppressLint("SetTextI18n")

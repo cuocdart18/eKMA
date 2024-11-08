@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ekma.common.super_utils.click.performClick
 import com.app.ekma.data.models.Score
 import com.app.ekma.databinding.ItemSubjectScoreBinding
 
@@ -41,7 +42,7 @@ class StudentDetailAdapter(private val callback: (score: Score) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.root.setOnClickListener() {
+            binding.root.performClick {
                 val position = adapterPosition
                 callback(scores[position])
             }

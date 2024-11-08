@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
@@ -18,10 +20,12 @@ import com.app.ekma.common.KEY_PASS_NOTE_OBJ
 import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_NAME
 import com.app.ekma.common.UPDATE_NOTE_MODE
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.data.models.Note
 import com.app.ekma.databinding.FragmentNoteDetailBinding
 import com.app.ekma.ui.note.audio_player.AudioPlayerFragment
 import com.app.ekma.ui.note.main_scr.NoteMainFragment
+import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -60,6 +64,9 @@ class NoteDetailFragment : BaseFragment() {
     }
 
     private fun setupView() {
+        binding.viewFakeStatus.updateLayoutParams<LinearLayout.LayoutParams> {
+            height = getStatusBarHeight
+        }
         if (viewModel.note.audioName.isNotEmpty()) {
             if (childFragmentManager.fragments.size == 0) {
                 val bundle = bundleOf(
@@ -73,8 +80,8 @@ class NoteDetailFragment : BaseFragment() {
             }
             binding.frmContainerPlayer.makeVisible()
         }
-        binding.btnDeleteNote.setOnClickListener { onClickBtnDelete() }
-        binding.fabUpdateNote.setOnClickListener { onClickBtnUpdate() }
+        binding.btnDeleteNote.setOnSingleClickListener { onClickBtnDelete() }
+        binding.fabUpdateNote.setOnSingleClickListener { onClickBtnUpdate() }
     }
 
     private fun onClickBtnUpdate() {

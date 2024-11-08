@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.KEY_PASS_IMAGE_URL
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.FragmentImageViewerBinding
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,7 +70,7 @@ class ImageViewerFragment : BaseFragment() {
             .placeholder(R.drawable.default_image_message)
             .into(binding.imvImage)
 
-        binding.btnDownload.setOnClickListener {
+        binding.btnDownload.setOnSingleClickListener {
             checkWritePermission()
         }
     }

@@ -22,6 +22,7 @@ import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.KEY_PASS_IMAGE_URL
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.common.checkCallPermission
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.FragmentChatBinding
 import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
 import com.app.ekma.firebase.MSG_TYPE
@@ -93,11 +94,11 @@ class ChatFragment : BaseFragment() {
         chatAdapter.setMessages(viewModel.messages)
         binding.rcvMessages.adapter = chatAdapter
 
-        binding.btnImagePicker.setOnClickListener(onClickBtnImagePicker)
-        binding.btnSend.setOnClickListener(onClickBtnSend)
-        binding.btnInfo.setOnClickListener(onClickBtnInfo)
-        binding.btnAudioCall.setOnClickListener(onClickBtnAudioCall)
-        binding.btnVideoCall.setOnClickListener(onClickBtnVideoCall)
+        binding.btnImagePicker.setOnSingleClickListener(onClickBtnImagePicker)
+        binding.btnSend.setOnSingleClickListener(onClickBtnSend)
+        binding.btnInfo.setOnSingleClickListener(onClickBtnInfo)
+        binding.btnAudioCall.setOnSingleClickListener(onClickBtnAudioCall)
+        binding.btnVideoCall.setOnSingleClickListener(onClickBtnVideoCall)
         binding.rcvMessages.addOnScrollListener(object :
             PaginationScrollListener(linearLayoutManager) {
             override fun loadMore() {

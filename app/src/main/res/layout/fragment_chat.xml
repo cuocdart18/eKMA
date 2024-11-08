@@ -75,6 +75,7 @@
             android:id="@+id/edt_message_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textCursorDrawable="@drawable/text_cursor_color"
             android:layout_toStartOf="@id/btn_send"
             android:layout_toEndOf="@id/btn_image_picker" />
 

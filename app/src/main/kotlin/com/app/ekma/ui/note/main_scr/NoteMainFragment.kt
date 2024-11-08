@@ -1,16 +1,20 @@
 package com.app.ekma.ui.note.main_scr
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.add
@@ -30,12 +34,15 @@ import com.app.ekma.common.formatRecordingTimer
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeInVisible
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.super_utils.animation.gone
+import com.app.ekma.common.super_utils.animation.visible
 import com.app.ekma.common.super_utils.app.hideKeyboard
+import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.data.models.Note
 import com.app.ekma.databinding.FragmentNoteMainBinding
 import com.app.ekma.ui.note.audio_player.AudioPlayerFragment
 import com.app.ekma.ui.note.detail.NoteDetailFragment
-import com.bumptech.glide.Glide
+import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -81,6 +88,9 @@ class NoteMainFragment : BaseFragment() {
     }
 
     private fun setUpViews() {
+        binding.viewFakeStatus.updateLayoutParams<LinearLayout.LayoutParams> {
+            height = getStatusBarHeight
+        }
         regisDayTimeTextObserver()
         setTextTitleHeader()
         setInputTextHelper()
@@ -124,19 +134,22 @@ class NoteMainFragment : BaseFragment() {
         setupForRecorderLayout()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupForBaseLayout() {
-        binding.root.setOnTouchListener { v, event ->
-            binding.root.hideKeyboard()
+        binding.root.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                binding.root.hideKeyboard()
+            }
             false
         }
 
-        binding.btnSave.setOnClickListener { onClickBtnSave() }
-        binding.tvSelectDate.setOnClickListener {
+        binding.btnSave.setOnSingleClickListener { onClickBtnSave() }
+        binding.tvSelectDate.setOnSingleClickListener {
             openDatePickerDialog { _, year, month, dayOfMonth ->
                 viewModel.updateSelectDay(year, month, dayOfMonth)
             }
         }
-        binding.tvSelectTime.setOnClickListener {
+        binding.tvSelectTime.setOnSingleClickListener {
             openTimePickerDialog { _, hourOfDay, minute ->
                 viewModel.updateSelectTime(hourOfDay, minute)
             }
@@ -156,7 +169,7 @@ class NoteMainFragment : BaseFragment() {
                         add<AudioPlayerFragment>(binding.frmContainerPlayer.id, args = bundle)
                     }
                 }
-                binding.btnDeleteAudioOldNote.setOnClickListener {
+                binding.btnDeleteAudioOldNote.setOnSingleClickListener {
                     viewModel.deleteAudioOldNote(requireContext())
                     binding.layoutAudioPlayer.makeGone()
                 }
@@ -173,18 +186,18 @@ class NoteMainFragment : BaseFragment() {
         binding.swVoiceRecorder.setOnCheckedChangeListener { _, isChecked ->
             checkAudioPermission(isChecked) {
                 if (isChecked) {
-                    binding.layoutVoiceRecorder.rootView.makeVisible()
+                    binding.layoutVoiceRecorder.rootView.visible(true)
                 } else {
-                    binding.layoutVoiceRecorder.rootView.makeGone()
+                    binding.layoutVoiceRecorder.rootView.gone(true)
                     // if recorder has been started, stop it
                     deleteRecorder()
                 }
             }
         }
-        binding.layoutVoiceRecorder.btnRecord.setOnClickListener {
+        binding.layoutVoiceRecorder.btnRecord.setOnSingleClickListener {
             viewModel.onClickBtnRecord(requireContext())
         }
-        binding.layoutVoiceRecorder.btnDelete.setOnClickListener {
+        binding.layoutVoiceRecorder.btnDelete.setOnSingleClickListener {
             deleteRecorder()
         }
     }
@@ -240,7 +253,7 @@ class NoteMainFragment : BaseFragment() {
     private fun audioPmsCallback(isGranted: Boolean) {
         if (isGranted) {
             binding.swVoiceRecorder.isChecked = true
-            binding.layoutVoiceRecorder.rootView.makeVisible()
+            binding.layoutVoiceRecorder.rootView.visible(true)
         }
     }
 
@@ -303,6 +316,8 @@ class NoteMainFragment : BaseFragment() {
                 true
             )
             dialog.show()
+        } else {
+            showToast("Chưa nhập tiêu đề")
         }
     }
 
