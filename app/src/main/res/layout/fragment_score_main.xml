@@ -63,7 +63,7 @@
                         android:gravity="center_horizontal"
                         android:orientation="vertical">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="match_parent"
                             android:layout_height="500dp"
                             android:importantForAccessibility="no"
@@ -79,7 +79,7 @@
                         android:paddingStart="@dimen/base_xxhigh_padding"
                         android:paddingEnd="@dimen/base_xxhigh_padding">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/base_xhigh_margin"
@@ -89,7 +89,7 @@
                             android:textSize="@dimen/base_big_title_text"
                             android:textStyle="bold" />
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/base_xxhigh_margin"
@@ -99,7 +99,7 @@
                             android:textSize="@dimen/base_normal_text"
                             android:textStyle="normal" />
 
-                        <Button
+                        <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btn_search_feature"
                             style="@style/BaseButtonSubmit"
                             android:background="@drawable/bgr_search_btn_score_main"

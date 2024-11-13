@@ -17,7 +17,7 @@
         android:orientation="vertical"
         android:padding="@dimen/base_normal_padding">
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,14 +31,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_id"
                 style="@style/BaseTextViewStudentCodeClass"
                 android:layout_marginEnd="@dimen/base_normal_margin"
                 android:text="@{miniStudent.id}"
                 app:drawableStartCompat="@drawable/person_circle_outline_white_16dp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_class_in_school"
                 style="@style/BaseTextViewStudentCodeClass"
                 android:text="@{miniStudent.classInSchool}"

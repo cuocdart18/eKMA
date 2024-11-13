@@ -40,7 +40,7 @@
                     android:orientation="horizontal"
                     android:weightSum="10">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="8"
@@ -50,7 +50,7 @@
                         android:textSize="@dimen/base_normal_header_text"
                         android:textStyle="bold" />
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/btn_delete_note"
                         android:layout_width="0dp"
                         android:layout_height="24dp"
@@ -72,13 +72,13 @@
                         android:layout_marginTop="@dimen/base_xxxhigh_margin"
                         android:weightSum="2">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/BaseTextViewDateTime"
                             android:text="@{note.date}"
                             android:textSize="@dimen/base_normal_text"
                             android:textStyle="bold" />
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/BaseTextViewDateTime"
                             android:text="@{note.time}"
                             android:textSize="@dimen/base_normal_text"
@@ -92,16 +92,16 @@
                         android:layout_marginBottom="@dimen/base_xxhigh_margin"
                         android:weightSum="2">
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/BaseTextViewDateTime"
                             android:text="@string/note_date" />
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatTextView
                             style="@style/BaseTextViewDateTime"
                             android:text="@string/note_time" />
                     </LinearLayout>
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -115,7 +115,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="gone" />
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/base_high_margin"
@@ -125,7 +125,7 @@
                         android:textSize="@dimen/base_helper_text"
                         android:textStyle="normal" />
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/base_xxhigh_margin"
@@ -134,7 +134,7 @@
                         android:textSize="@dimen/base_normal_text"
                         android:textStyle="bold" />
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="@dimen/base_width_img_present"
                         android:layout_height="@dimen/base_height_img_present"
                         android:layout_gravity="center_horizontal"

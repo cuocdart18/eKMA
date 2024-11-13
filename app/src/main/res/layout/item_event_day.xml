@@ -36,7 +36,7 @@
             android:background="@drawable/bgr_box_of_item_period"
             android:visibility="gone">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/BaseTextViewTitleItemEventDay"
                 android:text="@{period.className}"
                 app:drawableEndCompat="@drawable/flame_outline_black_16dp" />
@@ -46,13 +46,13 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BaseTextViewDescItemEventDay"
                     android:layout_marginEnd="@dimen/base_normal_margin"
                     android:text="@{period.teacher}"
                     app:drawableStartCompat="@drawable/id_card_outline_black_16dp" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BaseTextViewDescItemEventDay"
                     android:text="@{period.room}"
                     app:drawableStartCompat="@drawable/location_outline_black_16dp" />
@@ -63,16 +63,16 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BaseTextViewDescItemEventDay"
                     android:text="@{period.startTime}"
                     app:drawableStartCompat="@drawable/time_outline_black_16dp" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BaseTextViewDescItemEventDay"
                     android:text="@string/space_start_end_time" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BaseTextViewDescItemEventDay"
                     android:text="@{period.endTime}" />
             </LinearLayout>
@@ -92,14 +92,14 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/cb_is_note_done"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginBottom="@dimen/base_normal_margin"
                     android:contentDescription="@string/checkbox_outline" />
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imv_audio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,17 +111,17 @@
                 style="@style/BaseLinearLayoutItemEventDay"
                 android:padding="0dp">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BaseTextViewTitleItemEventDay"
                     android:text="@{note.title}"
                     app:drawableEndCompat="@drawable/pin_outline_black_16dp" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BaseTextViewDescItemEventDay"
                     android:text="@{note.content}"
                     app:drawableStartCompat="@drawable/pricetags_outline_black_16dp" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     style="@style/BaseTextViewDescItemEventDay"
                     android:text="@{note.timeCompare}"
                     app:drawableStartCompat="@drawable/time_outline_black_16dp" />

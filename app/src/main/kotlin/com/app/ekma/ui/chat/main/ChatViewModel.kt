@@ -1,27 +1,32 @@
 package com.app.ekma.ui.chat.main
 
 import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.IMAGE_MSG
-import com.app.ekma.common.pattern.singleton.ProfileSingleton
-import com.app.ekma.firebase.KEY_MESSAGE_CONTENT_DOC
-import com.app.ekma.firebase.KEY_MESSAGE_FROM_DOC
-import com.app.ekma.firebase.KEY_MESSAGE_TIMESTAMP_DOC
-import com.app.ekma.firebase.KEY_MESSAGE_TYPE_DOC
-import com.app.ekma.firebase.KEY_ROOMS_COLL
-import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL
-import com.app.ekma.firebase.ROOMS_DIR
 import com.app.ekma.common.TedImagePickerStarter
 import com.app.ekma.common.parseDataToMessage
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.removeStudentCode
 import com.app.ekma.data.models.Message
 import com.app.ekma.firebase.ACTIVE_STATUS
+import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.firebase.CONNECTIONS
+import com.app.ekma.firebase.KEY_MESSAGE_CONTENT_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_FROM_DOC
 import com.app.ekma.firebase.KEY_MESSAGE_SEEN_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_TIMESTAMP_DOC
+import com.app.ekma.firebase.KEY_MESSAGE_TYPE_DOC
+import com.app.ekma.firebase.KEY_ROOMS_COLL
 import com.app.ekma.firebase.KEY_ROOM_MEMBERS
+import com.app.ekma.firebase.KEY_ROOM_MESSAGE_COLL
+import com.app.ekma.firebase.KEY_USERS_COLL
+import com.app.ekma.firebase.KEY_USER_NAME
+import com.app.ekma.firebase.ROOMS_DIR
+import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.firebase.database
 import com.app.ekma.firebase.firestore
 import com.app.ekma.firebase.storage
@@ -41,6 +46,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -58,9 +66,22 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
 
     private lateinit var membersCode: MutableList<String>
     var roomId = ""
-    private val _activeStatus = MutableLiveData(false)
-    val activeStatus: LiveData<Boolean>
-        get() = _activeStatus
+
+    private val _enableSendMsg = MutableStateFlow(false)
+    val enableSendMsg: StateFlow<Boolean>
+        get() = _enableSendMsg.asStateFlow()
+
+    private val _activeStatus = MutableStateFlow(false)
+    val activeStatus: StateFlow<Boolean>
+        get() = _activeStatus.asStateFlow()
+
+    private val _roomName = MutableStateFlow("Friend")
+    val roomName: StateFlow<String>
+        get() = _roomName.asStateFlow()
+
+    private val _roomImage = MutableStateFlow<Uri?>(null)
+    val roomImage: StateFlow<Uri?>
+        get() = _roomImage.asStateFlow()
 
     val messages = mutableListOf<Message>()
     private val messagePerPage = 30L
@@ -73,6 +94,38 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
     val modifiedMsgPosition: LiveData<Int>
         get() = _modifiedMsgPosition
     private var lastMsgPosition = -1
+
+    fun setEnableBtnSendMsg(hasEnable: Boolean) {
+        viewModelScope.launch {
+            _enableSendMsg.value = hasEnable
+        }
+    }
+
+    fun getChatRoomNameAndImage() {
+        viewModelScope.launch {
+            firestore.collection(KEY_ROOMS_COLL)
+                .document(roomId)
+                .get()
+                .addOnSuccessListener { snap ->
+                    val membersCode = snap.get(KEY_ROOM_MEMBERS) as List<String>
+                    val friendCode =
+                        removeStudentCode(membersCode, ProfileSingleton().studentCode).first()
+                    firestore.collection(KEY_USERS_COLL)
+                        .document(friendCode)
+                        .get()
+                        .addOnSuccessListener { snap ->
+                            _roomName.value = snap.getString(KEY_USER_NAME) ?: "Friend"
+                        }
+                    storage.child("$USERS_DIR/$friendCode/$AVATAR_FILE")
+                        .downloadUrl
+                        .addOnSuccessListener { uri ->
+                            _roomImage.value = uri
+                        }.addOnFailureListener {
+                            _roomImage.value = null
+                        }
+                }
+        }
+    }
 
     fun getMembersCode(
         callback: () -> Unit

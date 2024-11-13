@@ -7,12 +7,12 @@
     android:orientation="vertical"
     android:visibility="gone">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00:00.00"
         android:layout_marginBottom="@dimen/base_normal_margin"
+        android:text="00:00.00"
         android:textColor="@color/lab_black"
         android:textSize="@dimen/base_normal_header_text" />
 
@@ -22,14 +22,14 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btn_delete"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:src="@drawable/close_fill_red"
             android:visibility="gone" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btn_record"
             android:layout_width="52dp"
             android:layout_height="52dp"
@@ -38,12 +38,12 @@
             android:contentDescription="@string/btn_record"
             android:src="@drawable/record_circle_fill_red" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btn_fit_record_ui"
             android:layout_width="28dp"
             android:layout_height="28dp"
+            android:contentDescription="@string/btn_fit_record_ui"
             android:src="@drawable/close_fill_red"
-            android:visibility="gone"
-            android:contentDescription="@string/btn_fit_record_ui" />
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

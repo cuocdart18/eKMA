@@ -16,10 +16,12 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/dog_loading" />
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_message_helper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/circularstd_book"
+        android:includeFontPadding="false"
         android:text="@string/desc_loading"
         android:textColor="@color/lab_black"
         android:textSize="@dimen/base_helper_text" />

@@ -58,6 +58,9 @@ dependencies {
 
     // local  module
     implementation project(path: ':ActivityUtils')
+    implementation project(path: ':GoogleProgressBar')
+    implementation project(path: ':CircularFillableLoaders')
+    implementation project(path: ':CircleImageView')
 
     // firebase
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'
@@ -134,10 +137,6 @@ dependencies {
     implementation "com.kizitonwose.calendar:view:2.0.2"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
 
-    // progress bar
-    implementation "com.jpardogo.googleprogressbar:library:1.2.0"
-    implementation 'com.mikhaellopez:circularfillableloaders:1.4.0'
-
     // data store & Share preferences
     implementation "androidx.datastore:datastore-preferences:1.0.0"
     implementation "androidx.datastore:datastore-preferences-core:1.0.0"
@@ -151,9 +150,6 @@ dependencies {
     // notification support
     def core_version = "1.6.0"
     implementation "androidx.core:core:$core_version"
-
-    // CircleImageView
-    implementation "de.hdodenhof:circleimageview:3.1.0"
 
     // TedImagePicker
     implementation "io.github.ParkSangGwon:tedimagepicker:1.4.2"

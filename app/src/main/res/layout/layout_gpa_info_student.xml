@@ -34,21 +34,21 @@
                 app:cfl_wave_amplitude="0.015"
                 app:cfl_wave_color="@color/lab_red" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/BaseTextViewInGpaInfoStudent"
                 android:layout_gravity="center"
                 android:text="@{String.valueOf(student.avgScore)}"
                 android:textSize="@dimen/base_big_title_text" />
         </FrameLayout>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_name"
             style="@style/BaseTextViewInGpaInfoStudent"
             android:layout_marginBottom="@dimen/base_normal_margin"
             android:text="@{student.name}"
             android:textSize="@dimen/base_big_header_text" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_id"
             style="@style/BaseTextViewInGpaInfoStudent"
             android:drawablePadding="@dimen/base_normal_padding"
@@ -57,7 +57,7 @@
             android:textStyle="normal"
             app:drawableStartCompat="@drawable/person_circle_outline_white_16dp" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_class_in_school"
             style="@style/BaseTextViewInGpaInfoStudent"
             android:drawablePadding="@dimen/base_normal_padding"

@@ -13,6 +13,10 @@ import androidx.core.view.marginTop
 - How to use
 
 1. declare viewTreeObserver here
+    private val androidRoot by lazy {
+        requireActivity().window?.decorView?.findViewById<View>(android.R.id.content)
+    }
+
     private val globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
         val rect = Rect()
         val rootView = androidRoot

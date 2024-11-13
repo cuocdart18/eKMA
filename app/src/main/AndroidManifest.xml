@@ -55,8 +55,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.chat.activity.ChatActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustPan" />
+            android:exported="true" />
         <activity
             android:name=".ui.calling.OutgoingInvitationActivity"
             android:exported="false" />

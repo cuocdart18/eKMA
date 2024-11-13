@@ -46,7 +46,7 @@
                     app:civ_border_color="@color/lab_red"
                     app:civ_border_width="1dp" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                     android:textSize="@dimen/base_normal_header_text"
                     android:textStyle="bold" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_profile_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

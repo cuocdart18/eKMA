@@ -24,7 +24,7 @@
                 android:layout_width="1dp"
                 android:layout_height="1dp" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_note_head"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_select_date"
                         style="@style/BaseTextViewDateTimeSelector"
                         app:drawableEndCompat="@drawable/alarm_outline_red_24dp" />
@@ -79,7 +79,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_select_time"
                         style="@style/BaseTextViewDateTimeSelector"
                         app:drawableEndCompat="@drawable/calendar_outline_red_24dp" />
@@ -115,7 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/btn_delete_audio_old_note"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -129,7 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/base_normal_margin" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_save"
                 style="@style/BaseButtonSubmit"
                 android:layout_marginTop="@dimen/base_xhigh_margin"

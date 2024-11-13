@@ -17,12 +17,12 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civAvatar"
             android:layout_width="@dimen/base_width_avatar"
+            android:layout_height="@dimen/base_height_avatar"
+            android:src="@drawable/user"
             app:civ_circle_background_color="@color/lab_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_height="@dimen/base_height_avatar"
-            android:src="@drawable/user" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imvActive"
@@ -49,15 +49,16 @@
                 android:id="@+id/tvRoomName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Ngo Cuoc Dat"
                 android:lines="1"
                 android:maxLength="40"
-                app:layout_constraintEnd_toStartOf="@id/tvTime"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:fontFamily="@font/circularstd_bold"
+                android:includeFontPadding="false"
+                android:text="Ngo Cuoc Dat"
                 android:textColor="@color/lab_black"
                 android:textSize="@dimen/base_normal_text"
-                android:textStyle="bold" />
+                app:layout_constraintEnd_toStartOf="@id/tvTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvContent"
@@ -67,23 +68,27 @@
                 android:lines="1"
                 android:maxLength="40"
                 android:text="Em an com chua"
+                android:fontFamily="@font/circularstd_book"
+                android:includeFontPadding="false"
+                android:textColor="@color/lab_black"
+                android:textSize="@dimen/base_helper_text"
                 app:layout_constraintEnd_toStartOf="@id/tvTime"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvRoomName"
-                android:textColor="@color/lab_black"
-                android:textSize="@dimen/base_helper_text" />
+                app:layout_constraintTop_toBottomOf="@id/tvRoomName" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3h"
                 android:layout_marginEnd="16dp"
+                android:fontFamily="@font/circularstd_book"
+                android:includeFontPadding="false"
+                android:text="3h"
+                android:textColor="@color/lab_black"
+                android:textSize="@dimen/base_helper_text"
                 app:layout_constraintBottom_toBottomOf="@id/tvContent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvContent"
-                android:textColor="@color/lab_black"
-                android:textSize="@dimen/base_helper_text" />
+                app:layout_constraintTop_toTopOf="@id/tvContent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

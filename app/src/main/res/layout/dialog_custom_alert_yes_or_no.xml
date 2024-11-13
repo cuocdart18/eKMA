@@ -13,30 +13,30 @@
         android:orientation="vertical"
         android:padding="@dimen/base_xhigh_padding">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imv_present_action"
             android:layout_width="@dimen/base_width_img_presentation_in_dialog"
             android:layout_height="@dimen/base_height_img_presentation_in_dialog"
             android:layout_marginBottom="@dimen/base_normal_margin"
             android:contentDescription="@string/imv_present_action" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_dialog_title"
             style="@style/BaseTextViewInConfirmDialogTitle"
             android:layout_marginBottom="@dimen/base_normal_margin" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_dialog_message"
             style="@style/BaseTextViewInConfirmDialogMessage"
             android:layout_marginBottom="@dimen/base_xhigh_margin" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_yes"
             style="@style/BaseButtonInConfirmDialog"
             android:background="@drawable/bgr_box_of_positive_button"
             android:textColor="@color/white" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_no"
             style="@style/BaseButtonInConfirmDialog"
             android:layout_marginTop="@dimen/base_normal_margin"

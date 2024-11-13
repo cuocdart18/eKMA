@@ -2,11 +2,13 @@ package com.app.ekma.ui.chat.main
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -17,19 +19,26 @@ import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
-import com.app.ekma.ui.calling.OutgoingInvitationActivity
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.base.listeners.PaginationScrollListener
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.KEY_PASS_IMAGE_URL
 import com.app.ekma.common.TEXT_MSG
+import com.app.ekma.common.afterTextChanged
 import com.app.ekma.common.checkCallPermission
+import com.app.ekma.common.super_utils.activity.collectLatestFlow
+import com.app.ekma.common.super_utils.animation.MarginType
+import com.app.ekma.common.super_utils.animation.animateMargin
+import com.app.ekma.common.super_utils.animation.invisible
+import com.app.ekma.common.super_utils.animation.visible
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.FragmentChatBinding
 import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
 import com.app.ekma.firebase.MSG_TYPE
 import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
+import com.app.ekma.ui.calling.OutgoingInvitationActivity
 import com.app.ekma.ui.chat.image_viewer.ImageViewerFragment
+import com.bumptech.glide.Glide
 import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,6 +48,25 @@ class ChatFragment : BaseFragment() {
     private lateinit var binding: FragmentChatBinding
     private val viewModel by viewModels<ChatViewModel>()
     private val chatAdapter by lazy { ChatAdapter(requireContext(), imageCallback) }
+
+    private val androidRoot by lazy {
+        requireActivity().window?.decorView?.findViewById<View>(android.R.id.content)
+    }
+    private val globalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
+        val rect = Rect()
+        val rootView = androidRoot
+        rootView?.getWindowVisibleDisplayFrame(rect)
+        val screenHeight = binding.root.height
+        val keyboardHeight = screenHeight - rect.bottom // calculate size
+        removeListen()
+        binding.layoutFooter.animateMargin(
+            marginType = MarginType.BOTTOM,
+            duration = 250,
+            newMargin = if (keyboardHeight < 0) 0 else keyboardHeight,
+            onEnd = ::addListen
+        )
+    }
+
     private val requestAudioPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
@@ -75,6 +103,7 @@ class ChatFragment : BaseFragment() {
         regisOnBackPressed()
         getBundleData()
         initViews()
+        viewModel.getChatRoomNameAndImage()
         viewModel.getMembersCode {
             if (viewModel.messages.isEmpty()) {
                 initMessaging()
@@ -90,13 +119,39 @@ class ChatFragment : BaseFragment() {
     }
 
     private fun initViews() {
-        binding.tvNameTitle.text = viewModel.roomId
-
         val linearLayoutManager = LinearLayoutManager(requireContext())
         binding.rcvMessages.layoutManager = linearLayoutManager
         chatAdapter.setMessages(viewModel.messages)
         binding.rcvMessages.adapter = chatAdapter
 
+        collectLatestFlow(viewModel.roomName) {
+            binding.tvNameTitle.text = it
+        }
+        collectLatestFlow(viewModel.activeStatus) {
+            if (it) {
+                binding.tvActiveStatus.text = "Online"
+                binding.imvActive.setImageResource(R.drawable.ic_dot_online)
+            } else {
+                binding.tvActiveStatus.text = "Offline"
+                binding.imvActive.setImageResource(R.drawable.ic_dot_offline)
+            }
+        }
+        collectLatestFlow(viewModel.roomImage) {
+            it?.let {
+                Glide.with(requireContext())
+                    .load(it)
+                    .placeholder(R.drawable.user)
+                    .error(R.drawable.user)
+                    .into(binding.imvAvatar)
+            }
+        }
+        collectLatestFlow(viewModel.enableSendMsg) {
+            if (it) binding.btnSend.visible(true)
+            else binding.btnSend.invisible(true)
+        }
+        binding.edtMessageInput.afterTextChanged { viewModel.setEnableBtnSendMsg(it.isNotEmpty()) }
+
+        binding.btnBack.setOnSingleClickListener { parentFragmentManager.popBackStack() }
         binding.btnImagePicker.setOnSingleClickListener(onClickBtnImagePicker)
         binding.btnSend.setOnSingleClickListener(onClickBtnSend)
         binding.btnInfo.setOnSingleClickListener(onClickBtnInfo)
@@ -114,14 +169,6 @@ class ChatFragment : BaseFragment() {
 
             override fun isLastPage() = viewModel.isLastPage
         })
-
-        viewModel.activeStatus.observe(viewLifecycleOwner) { state ->
-            if (state) {
-                logError("online")
-            } else {
-                logError("offline")
-            }
-        }
     }
 
     private val onClickBtnSend: (View) -> Unit = {
@@ -134,7 +181,7 @@ class ChatFragment : BaseFragment() {
     }
 
     private val onClickBtnInfo: (View) -> Unit = {
-
+        showToast("Coming soon")
     }
 
     private val onClickBtnAudioCall: (View) -> Unit = {
@@ -242,7 +289,25 @@ class ChatFragment : BaseFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        addListen()
+    }
+
     private fun regisOnBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    private fun addListen() {
+        androidRoot?.viewTreeObserver?.addOnGlobalLayoutListener(globalLayoutListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        removeListen()
+    }
+
+    private fun removeListen() {
+        androidRoot?.viewTreeObserver?.removeOnGlobalLayoutListener(globalLayoutListener)
     }
 }

@@ -7,15 +7,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ekma.R
 import com.app.ekma.common.IMAGE_MSG
-import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.common.makeGone
+import com.app.ekma.common.makeInVisible
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.data.models.Message
 import com.app.ekma.databinding.ItemFriendMessageBinding
 import com.app.ekma.databinding.ItemLoadingBinding
 import com.app.ekma.databinding.ItemMyMessageBinding
+import com.app.ekma.firebase.AVATAR_FILE
+import com.app.ekma.firebase.USERS_DIR
+import com.app.ekma.firebase.storage
 import com.bumptech.glide.Glide
 import java.util.Date
 
@@ -77,10 +81,10 @@ class ChatAdapter(
         val message = messages[position]
         if (holder.itemViewType == ITEM_MY_MSG_TYPE) {
             holder as MyMessageViewHolder
-            holder.bind(message)
+            holder.bind(message, position)
         } else if (holder.itemViewType == ITEM_FRIEND_MSG_TYPE) {
             holder as FriendMessageViewHolder
-            holder.bind(message)
+            holder.bind(message, position)
         }
     }
 
@@ -103,24 +107,38 @@ class ChatAdapter(
         private val imageCallback: (imgUrl: String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(message: Message) {
+        fun bind(message: Message, position: Int) {
             if (message.type == TEXT_MSG) {
                 binding.tvMessage.text = message.content
                 binding.tvMessage.makeVisible()
-                binding.imvMessage.makeGone()
+                binding.imgContainer.makeGone()
             } else if (message.type == IMAGE_MSG) {
                 binding.imvMessage.setOnSingleClickListener { imageCallback(message.content) }
                 Glide.with(context)
                     .load(Uri.parse(message.content))
                     .placeholder(R.drawable.default_image_message)
                     .into(binding.imvMessage)
-                binding.imvMessage.makeVisible()
+                binding.imgContainer.makeVisible()
                 binding.tvMessage.makeGone()
             }
+
             if (message.isLastSeenMessage) {
                 binding.tvSeen.makeVisible()
             } else {
                 binding.tvSeen.makeGone()
+            }
+
+            runCatching {
+                if (position == 0) {
+                    binding.tvMessage.setBackgroundResource(R.drawable.bgr_my_text_msg_open)
+                    return
+                }
+                if (messages[position - 1].from == message.from) {
+                    binding.tvMessage.setBackgroundResource(R.drawable.bgr_my_text_msg_close)
+                    return
+                } else {
+                    binding.tvMessage.setBackgroundResource(R.drawable.bgr_my_text_msg_open)
+                }
             }
         }
     }
@@ -130,20 +148,48 @@ class ChatAdapter(
         private val imageCallback: (imgUrl: String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(message: Message) {
+        fun bind(message: Message, position: Int) {
             if (message.type == TEXT_MSG) {
                 binding.tvMessage.text = message.content
                 binding.tvMessage.makeVisible()
-                binding.imvMessage.makeGone()
+                binding.imgContainer.makeGone()
             } else if (message.type == IMAGE_MSG) {
                 binding.imvMessage.setOnSingleClickListener { imageCallback(message.content) }
                 Glide.with(context)
                     .load(Uri.parse(message.content))
                     .placeholder(R.drawable.default_image_message)
                     .into(binding.imvMessage)
-                binding.imvMessage.makeVisible()
+                binding.imgContainer.makeVisible()
                 binding.tvMessage.makeGone()
             }
+            runCatching {
+                if (position == 0) {
+                    showFriendAvatar(message.from)
+                    binding.tvMessage.setBackgroundResource(R.drawable.bgr_friend_text_msg_open)
+                    return
+                }
+                if (messages[position - 1].from == message.from) {
+                    binding.tvMessage.setBackgroundResource(R.drawable.bgr_friend_text_msg_close)
+                    binding.imvAvatar.makeInVisible()
+                    return
+                } else {
+                    showFriendAvatar(message.from)
+                    binding.tvMessage.setBackgroundResource(R.drawable.bgr_friend_text_msg_open)
+                }
+            }
+        }
+
+        private fun showFriendAvatar(friendCode: String) {
+            storage.child("$USERS_DIR/$friendCode/$AVATAR_FILE")
+                .downloadUrl
+                .addOnSuccessListener {
+                    Glide.with(context)
+                        .load(it)
+                        .placeholder(R.drawable.user)
+                        .error(R.drawable.user)
+                        .into(binding.imvAvatar)
+                    binding.imvAvatar.makeVisible()
+                }
         }
     }
 

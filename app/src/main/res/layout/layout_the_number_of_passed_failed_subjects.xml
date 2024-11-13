@@ -18,11 +18,11 @@
             style="@style/BaseLayoutPassedFailedSubject"
             android:background="@drawable/bgr_box_of_passed_subject">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/BaseTextViewTitlePassedFailedSubject"
                 android:text="@string/title_passed_subject" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/BaseTextViewContentPassedFailedSubject"
                 android:text="@{String.valueOf(student.passedSubjects)}" />
         </LinearLayout>
@@ -31,11 +31,11 @@
             style="@style/BaseLayoutPassedFailedSubject"
             android:background="@drawable/bgr_box_of_failed_subject">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/BaseTextViewTitlePassedFailedSubject"
                 android:text="@string/title_failed_subject" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 style="@style/BaseTextViewContentPassedFailedSubject"
                 android:text="@{String.valueOf(student.failedSubjects)}" />
         </LinearLayout>

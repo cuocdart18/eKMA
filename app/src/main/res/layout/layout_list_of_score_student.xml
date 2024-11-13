@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/base_list_of_score_student_top_padding">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/base_xhigh_margin"

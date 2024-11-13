@@ -1,46 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="16dp">
 
-        <TextView
-            android:id="@+id/tv_message"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="@dimen/base_high_margin"
-            android:text="day la mot doan tin nhan"
-            android:textColor="@color/lab_black"
-            android:textSize="@dimen/base_normal_text"
-            android:visibility="gone" />
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bgr_my_text_msg_open"
+            android:fontFamily="@font/circularstd_book"
+            android:includeFontPadding="false"
+            android:paddingHorizontal="13dp"
+            android:paddingVertical="10dp"
+            android:text="Nhưng thật cay đắng khi biết là, ú oà"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/tvSeen"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <ImageView
-            android:id="@+id/imv_message"
-            android:layout_width="@dimen/base_width_image_msg"
-            android:layout_height="@dimen/base_height_image_msg"
-            android:layout_gravity="end"
-            android:layout_margin="@dimen/base_high_margin"
-            android:contentDescription="@string/image_message"
-            android:visibility="gone" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/imgContainer"
+            android:layout_width="200dp"
+            android:layout_height="256dp"
+            android:layout_marginBottom="4dp"
+            android:visibility="gone"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:layout_constraintBottom_toTopOf="@id/tvSeen"
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/tv_seen"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/play_store_512" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSeen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginStart="@dimen/base_high_margin"
-            android:layout_marginEnd="@dimen/base_high_margin"
-            android:layout_marginBottom="@dimen/base_high_margin"
-            android:text="Da xem"
-            android:textColor="@color/lab_black"
-            android:textSize="@dimen/base_helper_text"
-            android:visibility="gone" />
-    </LinearLayout>
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/circularstd_book"
+            android:includeFontPadding="false"
+            android:text="Seen"
+            android:textColor="@color/lab_medium_red"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

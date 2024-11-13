@@ -16,7 +16,7 @@
         android:orientation="vertical"
         android:padding="@dimen/base_high_padding">
 
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edt_search_data"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
             android:textCursorDrawable="@drawable/text_cursor_color"
             android:textSize="@dimen/base_normal_text" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/base_normal_margin"
@@ -56,6 +56,5 @@
                 android:layout_height="match_parent"
                 android:layoutAnimation="@anim/rcv_layout_anim" />
         </androidx.core.widget.NestedScrollView>
-
     </LinearLayout>
 </layout>

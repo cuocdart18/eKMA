@@ -18,3 +18,6 @@ dependencyResolutionManagement {
 rootProject.name = "eKMA"
 include ':app'
 include ':ActivityUtils'
+include ':GoogleProgressBar'
+include ':CircularFillableLoaders'
+include ':CircleImageView'
