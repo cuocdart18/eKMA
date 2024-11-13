@@ -1,67 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/base_normal_margin">
+        android:layout_marginBottom="@dimen/base_normal_margin"
+        android:background="@color/white"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/civ_avatar"
+            android:id="@+id/civAvatar"
             android:layout_width="@dimen/base_width_avatar"
+            app:civ_circle_background_color="@color/lab_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_height="@dimen/base_height_avatar"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
             android:src="@drawable/user" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_toEndOf="@id/civ_avatar"
-            android:orientation="vertical">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imvActive"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="3dp"
+            android:src="@drawable/ic_dot_online"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/civAvatar"
+            app:layout_constraintEnd_toEndOf="@id/civAvatar" />
 
-            <TextView
-                android:id="@+id/tv_room_name"
-                android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="4dp"
+            android:paddingStart="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/civAvatar"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRoomName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/base_small_margin"
                 android:text="Ngo Cuoc Dat"
+                android:lines="1"
+                android:maxLength="40"
+                app:layout_constraintEnd_toStartOf="@id/tvTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:textColor="@color/lab_black"
                 android:textSize="@dimen/base_normal_text"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tv_content"
-                android:layout_width="wrap_content"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvContent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/base_small_margin"
-                android:text="Vai lon luon"
+                android:layout_marginEnd="16dp"
+                android:lines="1"
+                android:maxLength="40"
+                android:text="Em an com chua"
+                app:layout_constraintEnd_toStartOf="@id/tvTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRoomName"
                 android:textColor="@color/lab_black"
                 android:textSize="@dimen/base_helper_text" />
 
-            <TextView
-                android:id="@+id/tv_time"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/base_small_margin"
                 android:text="3h"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@id/tvContent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvContent"
                 android:textColor="@color/lab_black"
                 android:textSize="@dimen/base_helper_text" />
-
-            <TextView
-                android:id="@+id/tv_active_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/base_small_margin"
-                android:text="Offline"
-                android:textColor="@color/lab_black"
-                android:textSize="@dimen/base_helper_text"
-                android:visibility="visible" />
-        </LinearLayout>
-    </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

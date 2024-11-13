@@ -6,15 +6,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ekma.R
-import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.common.IMAGE_MSG
-import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.TEXT_MSG
-import com.app.ekma.firebase.USERS_DIR
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.removeStudentCode
 import com.app.ekma.common.super_utils.click.performClick
+import com.app.ekma.common.super_utils.number_string_date.convertTimeSessionUpcoming
 import com.app.ekma.data.models.ChatRoom
 import com.app.ekma.databinding.ItemChatRoomBinding
+import com.app.ekma.firebase.AVATAR_FILE
+import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.firebase.storage
 import com.bumptech.glide.Glide
 
@@ -75,7 +76,10 @@ class ListChatAdapter(
                 }
             }
 
-            binding.tvTime.text = "${room.timestamp.hours}h"
+            binding.tvTime.text = String.format(
+                context.getString(R.string.dot_time_stamp),
+                room.timestamp.time.convertTimeSessionUpcoming()
+            )
 
             if (room.seenMembers.contains(myStudentCode)) {
                 binding.tvContent.setTextAppearance(R.style.NormalText)
@@ -86,9 +90,9 @@ class ListChatAdapter(
             }
 
             if (room.isOnline) {
-                binding.tvActiveStatus.text = "Online"
+                binding.imvActive.setImageResource(R.drawable.ic_dot_online)
             } else {
-                binding.tvActiveStatus.text = "Offline"
+                binding.imvActive.setImageResource(R.drawable.ic_dot_offline)
             }
 
             // show avatar

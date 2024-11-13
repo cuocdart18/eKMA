@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/scheduleMainFragment"
-        android:name="com.app.ekma.ui.schedule.main_scr.ScheduleMainFragment"
+        android:name="com.app.ekma.ui.schedule.ScheduleMainFragment"
         android:label="@string/label_name_schedule"
         tools:layout="@layout/fragment_schedule_main">
         <action

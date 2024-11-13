@@ -9,13 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
-import com.app.ekma.activities.calling.OutgoingInvitationActivity
+import com.app.ekma.ui.calling.OutgoingInvitationActivity
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.base.listeners.PaginationScrollListener
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
@@ -28,6 +30,7 @@ import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
 import com.app.ekma.firebase.MSG_TYPE
 import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
 import com.app.ekma.ui.chat.image_viewer.ImageViewerFragment
+import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -123,7 +126,7 @@ class ChatFragment : BaseFragment() {
 
     private val onClickBtnSend: (View) -> Unit = {
         viewModel.sendMessage(binding.edtMessageInput.text.toString(), TEXT_MSG)
-        binding.edtMessageInput.text.clear()
+        binding.edtMessageInput.text?.clear()
     }
 
     private val onClickBtnImagePicker: (View) -> Unit = {
@@ -172,7 +175,7 @@ class ChatFragment : BaseFragment() {
             KEY_PASS_IMAGE_URL to imgUrl
         )
         parentFragmentManager.commit {
-            replace<ImageViewerFragment>(R.id.fragment_container_view, args = bundle)
+            replace<ImageViewerFragment>(R.id.frmContainer, args = bundle)
             setReorderingAllowed(true)
             addToBackStack(ImageViewerFragment::class.java.simpleName)
         }
@@ -229,6 +232,13 @@ class ChatFragment : BaseFragment() {
             binding.rcvMessages.scrollToPosition(viewModel.messages.size - 1)
         } else {
             binding.rcvMessages.smoothScrollToPosition(viewModel.messages.size - 1)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            height = getStatusBarHeight
         }
     }
 

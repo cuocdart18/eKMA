@@ -1,9 +1,9 @@
-package com.app.ekma.activities.main
+package com.app.ekma.ui.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.app.ekma.R
-import com.app.ekma.activities.login.LoginActivity
+import com.app.ekma.ui.login.LoginActivity
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.INFORMATION_FRAGMENT
 import com.app.ekma.common.NOTE_FRAGMENT

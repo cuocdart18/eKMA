@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.app.ekma.activities.login.LoginViewModel" />
+            type="com.app.ekma.ui.login.LoginViewModel" />
 
         <import type="android.view.View" />
     </data>

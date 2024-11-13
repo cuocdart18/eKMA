@@ -37,7 +37,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.splash.SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -46,33 +46,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activities.login.LoginActivity"
+            android:name=".ui.login.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activities.calling.OutgoingInvitationActivity"
+            android:name=".ui.chat.activity.ChatActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.calling.OutgoingInvitationActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.calling.IncomingInvitationActivity"
+            android:name=".ui.calling.IncomingInvitationActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.calling.VideoCallingActivity"
+            android:name=".ui.calling.VideoCallingActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="false"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true" />
         <activity
-            android:name=".activities.calling.AudioCallingActivity"
+            android:name=".ui.calling.AudioCallingActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="false"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true" />
         <activity
-            android:name=".activities.test_event.EventHandlingActivity"
+            android:name=".ui.test_event.EventHandlingActivity"
             android:exported="false" />
 
         <receiver android:name=".broadcast_receiver.AlarmReceiver" />

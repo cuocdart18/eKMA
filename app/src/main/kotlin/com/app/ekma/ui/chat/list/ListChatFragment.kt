@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
@@ -15,10 +17,13 @@ import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.FROM_POSITION
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.TO_POSITION
+import com.app.ekma.common.makeInVisible
+import com.app.ekma.common.makeVisible
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.FragmentListChatBinding
 import com.app.ekma.ui.chat.main.ChatFragment
 import com.app.ekma.ui.chat.search.SearchUserFragment
+import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,7 +35,7 @@ class ListChatFragment : BaseFragment() {
 
     val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            parentFragmentManager.popBackStack()
+            requireActivity().finish()
         }
     }
 
@@ -45,6 +50,9 @@ class ListChatFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
+//            height = getStatusBarHeight
+//        }
         regisOnBackPressed()
         initView()
         showListChatRoom()
@@ -53,7 +61,7 @@ class ListChatFragment : BaseFragment() {
     private fun initView() {
         binding.btnSearch.setOnSingleClickListener {
             parentFragmentManager.commit {
-                replace<SearchUserFragment>(R.id.fragment_container_view)
+                replace<SearchUserFragment>(R.id.frmContainer)
                 setReorderingAllowed(true)
                 addToBackStack(SearchUserFragment::class.java.simpleName)
             }
@@ -64,22 +72,32 @@ class ListChatFragment : BaseFragment() {
     }
 
     private fun showListChatRoom() {
+        showListConversation(false)
         if (viewModel.rooms.isEmpty()) {
             viewModel.listenChatRoomsChanges()
         }
         viewModel.addedRoomPos.observe(viewLifecycleOwner) { pos ->
-            if (pos == -1) return@observe
+            if (pos == -1) {
+                return@observe
+            }
             listChatAdapter.notifyItemInserted(0)
+            showListConversation(true)
         }
         viewModel.movedRoomPos.observe(viewLifecycleOwner) { pos ->
             val from = pos[FROM_POSITION] ?: -1
             val to = pos[TO_POSITION] ?: -1
-            if (from == -1 || to == -1) return@observe
+            if (from == -1 || to == -1) {
+                return@observe
+            }
             listChatAdapter.notifyItemRangeChanged(to, from - to + 1)
+            showListConversation(true)
         }
         viewModel.modifiedRoomPos.observe(viewLifecycleOwner) { pos ->
-            if (pos == -1) return@observe
+            if (pos == -1) {
+                return@observe
+            }
             listChatAdapter.notifyItemChanged(pos)
+            showListConversation(true)
         }
     }
 
@@ -89,7 +107,7 @@ class ListChatFragment : BaseFragment() {
             KEY_PASS_CHAT_ROOM_ID to it
         )
         parentFragmentManager.commit {
-            replace<ChatFragment>(R.id.fragment_container_view, args = bundle)
+            replace<ChatFragment>(R.id.frmContainer, args = bundle)
             setReorderingAllowed(true)
             addToBackStack(ChatFragment::class.java.simpleName)
         }
@@ -97,5 +115,15 @@ class ListChatFragment : BaseFragment() {
 
     private fun regisOnBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
+
+    private fun showListConversation(hasShow: Boolean) {
+        if (hasShow) {
+            binding.rcvListChat.makeVisible()
+            binding.tvNoMsg.makeInVisible()
+        } else {
+            binding.rcvListChat.makeInVisible()
+            binding.tvNoMsg.makeVisible()
+        }
     }
 }

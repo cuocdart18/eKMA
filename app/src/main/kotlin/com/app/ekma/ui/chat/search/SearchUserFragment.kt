@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
@@ -18,6 +20,7 @@ import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.data.models.MiniStudent
 import com.app.ekma.databinding.FragmentSearchUserBinding
 import com.app.ekma.ui.chat.main.ChatFragment
+import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.launch
@@ -85,10 +88,17 @@ class SearchUserFragment : BaseFragment() {
                 KEY_PASS_CHAT_ROOM_ID to roomId
             )
             parentFragmentManager.commit {
-                replace<ChatFragment>(R.id.fragment_container_view, args = bundle)
+                replace<ChatFragment>(R.id.frmContainer, args = bundle)
                 setReorderingAllowed(true)
                 addToBackStack(ChatFragment::class.java.simpleName)
             }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            height = getStatusBarHeight
         }
     }
 

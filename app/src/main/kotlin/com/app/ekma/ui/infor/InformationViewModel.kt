@@ -1,4 +1,4 @@
-package com.app.ekma.ui.infor.main
+package com.app.ekma.ui.infor
 
 import android.content.ComponentName
 import android.content.Context

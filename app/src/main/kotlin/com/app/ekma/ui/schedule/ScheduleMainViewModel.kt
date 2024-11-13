@@ -1,4 +1,4 @@
-package com.app.ekma.ui.schedule.main_scr
+package com.app.ekma.ui.schedule
 
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.alarm.AlarmEventsScheduler

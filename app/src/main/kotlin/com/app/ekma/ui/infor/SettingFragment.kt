@@ -1,4 +1,4 @@
-package com.app.ekma.ui.infor.main
+package com.app.ekma.ui.infor
 
 import android.content.SharedPreferences
 import android.os.Bundle

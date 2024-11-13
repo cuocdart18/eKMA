@@ -1,4 +1,4 @@
-package com.app.ekma.activities.splash
+package com.app.ekma.ui.splash
 
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel

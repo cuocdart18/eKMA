@@ -1,4 +1,4 @@
-package com.app.ekma.activities.main
+package com.app.ekma.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,9 +13,9 @@ import com.app.ekma.common.NOTE_FRAGMENT
 import com.app.ekma.common.SCHEDULE_FRAGMENT
 import com.app.ekma.common.SCORE_FRAGMENT
 import com.app.ekma.databinding.FragmentItemViewpagerBaseBinding
-import com.app.ekma.ui.infor.main.InformationFragment
+import com.app.ekma.ui.infor.InformationFragment
 import com.app.ekma.ui.note.main_scr.NoteMainFragment
-import com.app.ekma.ui.schedule.main_scr.ScheduleMainFragment
+import com.app.ekma.ui.schedule.ScheduleMainFragment
 import com.app.ekma.ui.score.main_scr.ScoreMainFragment
 
 class ItemViewPagerBaseFragment : Fragment() {

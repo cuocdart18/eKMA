@@ -1,4 +1,4 @@
-package com.app.ekma.activities.main
+package com.app.ekma.ui.main
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope

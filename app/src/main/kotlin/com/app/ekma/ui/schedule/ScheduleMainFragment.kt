@@ -1,4 +1,4 @@
-package com.app.ekma.ui.schedule.main_scr
+package com.app.ekma.ui.schedule
 
 import android.annotation.SuppressLint
 import android.os.Bundle

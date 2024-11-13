@@ -1,4 +1,4 @@
-package com.app.ekma.activities.main
+package com.app.ekma.ui.main
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

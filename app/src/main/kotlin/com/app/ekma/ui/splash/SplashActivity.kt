@@ -1,11 +1,11 @@
-package com.app.ekma.activities.splash
+package com.app.ekma.ui.splash
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.app.ekma.activities.login.LoginActivity
-import com.app.ekma.activities.main.MainActivity
+import com.app.ekma.ui.login.LoginActivity
+import com.app.ekma.ui.main.MainActivity
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.databinding.ActivitySplashBinding
 import dagger.hilt.android.AndroidEntryPoint

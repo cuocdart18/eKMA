@@ -3,7 +3,7 @@ package com.app.ekma.common.pattern.factory_method
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
-import com.app.ekma.activities.main.ItemViewPagerBaseFragment
+import com.app.ekma.ui.main.ItemViewPagerBaseFragment
 import com.app.ekma.common.FRAGMENT_TYPE
 
 class MyFragmentFactory() : FragmentFactory() {

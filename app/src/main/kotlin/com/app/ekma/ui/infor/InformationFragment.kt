@@ -1,4 +1,4 @@
-package com.app.ekma.ui.infor.main
+package com.app.ekma.ui.infor
 
 import android.Manifest
 import android.app.Dialog
@@ -20,7 +20,8 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import com.app.ekma.R
-import com.app.ekma.activities.login.LoginActivity
+import com.app.ekma.ui.chat.activity.ChatActivity
+import com.app.ekma.ui.login.LoginActivity
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.app.ekma.common.KEY_PASS_MINISTUDENT_ID
@@ -29,7 +30,6 @@ import com.app.ekma.common.pattern.singleton.MainBottomNavigation
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.FragmentInformationBinding
-import com.app.ekma.ui.chat.list.ListChatFragment
 import com.app.ekma.ui.score.details.StudentDetailFragment
 import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
@@ -192,12 +192,14 @@ class InformationFragment : BaseFragment(),
     }
 
     override fun onClickChat() {
-        MainBottomNavigation.setData(true)
-        parentFragmentManager.commit {
-            replace<ListChatFragment>(R.id.fragment_container_view)
-            setReorderingAllowed(true)
-            addToBackStack(ListChatFragment::class.java.simpleName)
-        }
+//        MainBottomNavigation.setData(true)
+//        parentFragmentManager.commit {
+//            replace<ListChatFragment>(R.id.fragment_container_view)
+//            setReorderingAllowed(true)
+//            addToBackStack(ListChatFragment::class.java.simpleName)
+//        }
+        val intent = Intent(requireContext(), ChatActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onChangedLanguage() {
