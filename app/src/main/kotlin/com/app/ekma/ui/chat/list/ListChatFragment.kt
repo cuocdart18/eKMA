@@ -56,7 +56,7 @@ class ListChatFragment : BaseFragment() {
     }
 
     private fun initView() {
-        binding.btnSearch.setOnSingleClickListener {
+        binding.layoutSearch.setOnSingleClickListener {
             parentFragmentManager.commit {
                 replace<SearchUserFragment>(R.id.frmContainer)
                 setReorderingAllowed(true)

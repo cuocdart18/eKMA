@@ -1,40 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
-        <variable
-            name="miniStudent"
-            type="com.app.ekma.data.models.MiniStudent" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginBottom="@dimen/base_normal_margin"
+        android:background="@color/white"
+        android:paddingVertical="10dp">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{miniStudent.name}"
-            android:textColor="@color/lab_black"
-            android:textSize="@dimen/base_normal_text" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civAvatar"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:src="@drawable/user"
+            app:civ_circle_background_color="@color/lab_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_id"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{miniStudent.id}"
-            android:textColor="@color/lab_black"
-            android:textSize="@dimen/base_helper_text" />
+            android:paddingVertical="4dp"
+            android:paddingStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/civAvatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/civAvatar"
+            app:layout_constraintTop_toTopOf="@id/civAvatar">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_class_in_school"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{miniStudent.classInSchool}"
-            android:textColor="@color/lab_black"
-            android:textSize="@dimen/base_helper_text" />
-    </LinearLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/circularstd_bold"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="40"
+                android:text="Ngo Cuoc Dat"
+                android:textColor="@color/lab_black"
+                android:textSize="@dimen/base_normal_text"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/circularstd_book"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="8"
+                android:text="CT060407"
+                android:textColor="@color/gray_2"
+                android:textSize="@dimen/base_helper_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvName" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvClassInSchool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/circularstd_book"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:text="CT6D"
+                android:textColor="@color/gray_2"
+                android:textSize="@dimen/base_helper_text"
+                app:layout_constraintBottom_toBottomOf="@id/tvId"
+                app:layout_constraintStart_toEndOf="@id/tvId"
+                app:layout_constraintTop_toTopOf="@id/tvId" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

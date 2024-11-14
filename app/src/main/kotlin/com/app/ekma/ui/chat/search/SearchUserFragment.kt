@@ -17,7 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
-import com.app.ekma.data.models.MiniStudent
+import com.app.ekma.common.super_utils.activity.collectLatestFlow
+import com.app.ekma.common.super_utils.animation.gone
+import com.app.ekma.common.super_utils.animation.invisible
+import com.app.ekma.common.super_utils.animation.visible
+import com.app.ekma.common.super_utils.click.performClick
 import com.app.ekma.databinding.FragmentSearchUserBinding
 import com.app.ekma.ui.chat.main.ChatFragment
 import com.cuocdat.activityutils.getStatusBarHeight
@@ -30,7 +34,7 @@ class SearchUserFragment : BaseFragment() {
     override val TAG = SearchUserFragment::class.java.simpleName
     private lateinit var binding: FragmentSearchUserBinding
     private val viewModel by viewModels<SearchUserViewModel>()
-    private val searchUserAdapter: SearchUserAdapter by lazy { SearchUserAdapter(onItemClicked) }
+    private val searchUserAdapter by lazy { SearchUserAdapter(requireContext(), onItemClicked) }
 
     val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -56,18 +60,32 @@ class SearchUserFragment : BaseFragment() {
 
     @OptIn(ObsoleteCoroutinesApi::class)
     private fun setSearchAsyncEditText() {
-        viewModel.searchResult.observe(viewLifecycleOwner) { query ->
-            viewModel.onSearchEditTextObserved(query) { data ->
-                if (data != null) {
-                    showMiniStudentToUI(data)
-                } else {
-                    showToast("Something went wrong")
-                }
-            }
-        }
         binding.edtSearchUser.doAfterTextChanged {
             lifecycleScope.launch {
-                viewModel.queryChannel.send(it.toString())
+                val text = it.toString()
+                viewModel.setShowSearchIcon(text.isNotEmpty())
+                viewModel.queryChannel.send(text)
+            }
+        }
+
+        collectLatestFlow(viewModel.searchResult) { query ->
+            viewModel.onSearchEditTextObserved(query)
+        }
+
+        collectLatestFlow(viewModel.miniStudentsRes) { data ->
+            if (data.isEmpty()) {
+                binding.tvNoMsg.visible(true)
+            } else {
+                binding.tvNoMsg.invisible(true)
+            }
+            searchUserAdapter.setMiniStudents(data)
+        }
+
+        collectLatestFlow(viewModel.showSearchIcon) {
+            if (it) {
+                binding.layoutIcon.visible(true)
+            } else {
+                binding.layoutIcon.invisible(true)
             }
         }
     }
@@ -75,10 +93,6 @@ class SearchUserFragment : BaseFragment() {
     private fun setRecyclerViewProperties() {
         val linearLayoutManager = LinearLayoutManager(requireContext())
         binding.rcvUsersResult.layoutManager = linearLayoutManager
-    }
-
-    private fun showMiniStudentToUI(miniStudents: List<MiniStudent>) {
-        searchUserAdapter.setMiniStudents(miniStudents)
         binding.rcvUsersResult.adapter = searchUserAdapter
     }
 
@@ -104,5 +118,8 @@ class SearchUserFragment : BaseFragment() {
 
     private fun regisOnBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        binding.btnBack.performClick {
+            parentFragmentManager.popBackStack()
+        }
     }
 }
