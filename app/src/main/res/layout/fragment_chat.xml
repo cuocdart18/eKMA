@@ -135,9 +135,24 @@
             android:layout_height="0dp"
             android:background="@color/lab_medium_white"
             android:overScrollMode="never"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/layoutFooter"
             app:layout_constraintTop_toBottomOf="@id/layoutHeader"
             app:stackFromEnd="true" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNoMsg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/circularstd_book"
+            android:includeFontPadding="false"
+            android:text="Không có tin nhắn nào"
+            android:textAlignment="center"
+            android:textColor="@color/lab_red"
+            android:textSize="14sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/layoutFooter"
+            app:layout_constraintTop_toBottomOf="@id/layoutHeader" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutFooter"

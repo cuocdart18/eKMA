@@ -18,6 +18,7 @@ import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.firebase.storage
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class ListChatAdapter(
     private val context: Context,
@@ -62,17 +63,21 @@ class ListChatAdapter(
 
             binding.tvRoomName.text = room.name
 
-            if (room.type == TEXT_MSG) {
-                if (room.from == myStudentCode) {
-                    binding.tvContent.text = "Bạn: ${room.content}"
-                } else {
-                    binding.tvContent.text = room.content
+            when (room.type) {
+                TEXT_MSG -> {
+                    if (room.from == myStudentCode) {
+                        binding.tvContent.text = "Bạn: ${room.content}"
+                    } else {
+                        binding.tvContent.text = room.content
+                    }
                 }
-            } else if (room.type == IMAGE_MSG) {
-                if (room.from == myStudentCode) {
-                    binding.tvContent.text = "Bạn: Đã gửi một ảnh"
-                } else {
-                    binding.tvContent.text = "Đã gửi một ảnh"
+
+                IMAGE_MSG -> {
+                    if (room.from == myStudentCode) {
+                        binding.tvContent.text = "Bạn: Đã gửi một ảnh"
+                    } else {
+                        binding.tvContent.text = "Đã gửi một ảnh"
+                    }
                 }
             }
 
@@ -102,6 +107,7 @@ class ListChatAdapter(
                 .addOnSuccessListener { uri ->
                     Glide.with(context)
                         .load(uri)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.user)
                         .error(R.drawable.user)
                         .into(binding.civAvatar)

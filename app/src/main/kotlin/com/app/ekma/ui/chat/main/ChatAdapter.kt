@@ -21,13 +21,17 @@ import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.firebase.storage
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import java.util.Date
+
+const val SMALL_AVT_W_H = 80
 
 class ChatAdapter(
     private val context: Context,
     private val imageCallback: (imgUrl: String) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var messages: MutableList<Message>
+    private var cacheFriendAvtUri: Uri? = null
 
     private val ITEM_MY_MSG_TYPE = 1
     private val ITEM_FRIEND_MSG_TYPE = 2
@@ -108,18 +112,23 @@ class ChatAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(message: Message, position: Int) {
-            if (message.type == TEXT_MSG) {
-                binding.tvMessage.text = message.content
-                binding.tvMessage.makeVisible()
-                binding.imgContainer.makeGone()
-            } else if (message.type == IMAGE_MSG) {
-                binding.imvMessage.setOnSingleClickListener { imageCallback(message.content) }
-                Glide.with(context)
-                    .load(Uri.parse(message.content))
-                    .placeholder(R.drawable.default_image_message)
-                    .into(binding.imvMessage)
-                binding.imgContainer.makeVisible()
-                binding.tvMessage.makeGone()
+            when (message.type) {
+                TEXT_MSG -> {
+                    binding.tvMessage.text = message.content
+                    binding.tvMessage.makeVisible()
+                    binding.imgContainer.makeGone()
+                }
+
+                IMAGE_MSG -> {
+                    binding.imvMessage.setOnSingleClickListener { imageCallback(message.content) }
+                    Glide.with(context)
+                        .load(Uri.parse(message.content))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.default_image_message)
+                        .into(binding.imvMessage)
+                    binding.imgContainer.makeVisible()
+                    binding.tvMessage.makeGone()
+                }
             }
 
             if (message.isLastSeenMessage) {
@@ -149,18 +158,23 @@ class ChatAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(message: Message, position: Int) {
-            if (message.type == TEXT_MSG) {
-                binding.tvMessage.text = message.content
-                binding.tvMessage.makeVisible()
-                binding.imgContainer.makeGone()
-            } else if (message.type == IMAGE_MSG) {
-                binding.imvMessage.setOnSingleClickListener { imageCallback(message.content) }
-                Glide.with(context)
-                    .load(Uri.parse(message.content))
-                    .placeholder(R.drawable.default_image_message)
-                    .into(binding.imvMessage)
-                binding.imgContainer.makeVisible()
-                binding.tvMessage.makeGone()
+            when (message.type) {
+                TEXT_MSG -> {
+                    binding.tvMessage.text = message.content
+                    binding.tvMessage.makeVisible()
+                    binding.imgContainer.makeGone()
+                }
+
+                IMAGE_MSG -> {
+                    binding.imvMessage.setOnSingleClickListener { imageCallback(message.content) }
+                    Glide.with(context)
+                        .load(Uri.parse(message.content))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(R.drawable.default_image_message)
+                        .into(binding.imvMessage)
+                    binding.imgContainer.makeVisible()
+                    binding.tvMessage.makeGone()
+                }
             }
             runCatching {
                 if (position == 0) {
@@ -180,16 +194,30 @@ class ChatAdapter(
         }
 
         private fun showFriendAvatar(friendCode: String) {
-            storage.child("$USERS_DIR/$friendCode/$AVATAR_FILE")
-                .downloadUrl
-                .addOnSuccessListener {
-                    Glide.with(context)
-                        .load(it)
-                        .placeholder(R.drawable.user)
-                        .error(R.drawable.user)
-                        .into(binding.imvAvatar)
-                    binding.imvAvatar.makeVisible()
-                }
+            if (cacheFriendAvtUri == null) {
+                storage.child("$USERS_DIR/$friendCode/$AVATAR_FILE")
+                    .downloadUrl
+                    .addOnSuccessListener {
+                        cacheFriendAvtUri = it
+                        Glide.with(context.applicationContext)
+                            .load(cacheFriendAvtUri)
+                            .override(SMALL_AVT_W_H, SMALL_AVT_W_H)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.user)
+                            .error(R.drawable.user)
+                            .into(binding.imvAvatar)
+                        binding.imvAvatar.makeVisible()
+                    }
+            } else {
+                Glide.with(context.applicationContext)
+                    .load(cacheFriendAvtUri)
+                    .override(SMALL_AVT_W_H, SMALL_AVT_W_H)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.user)
+                    .error(R.drawable.user)
+                    .into(binding.imvAvatar)
+                binding.imvAvatar.makeVisible()
+            }
         }
     }
 

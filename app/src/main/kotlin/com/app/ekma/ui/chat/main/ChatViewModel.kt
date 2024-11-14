@@ -90,9 +90,9 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
     var isLoading = false
     var isLastPage = false
 
-    private val _modifiedMsgPosition = MutableLiveData(-1)
-    val modifiedMsgPosition: LiveData<Int>
-        get() = _modifiedMsgPosition
+    private val _modifiedMsgPosition = MutableStateFlow(-1)
+    val modifiedMsgPosition: StateFlow<Int>
+        get() = _modifiedMsgPosition.asStateFlow()
     private var lastMsgPosition = -1
 
     fun setEnableBtnSendMsg(hasEnable: Boolean) {

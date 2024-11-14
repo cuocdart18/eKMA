@@ -26,6 +26,8 @@ import com.app.ekma.common.KEY_PASS_IMAGE_URL
 import com.app.ekma.common.TEXT_MSG
 import com.app.ekma.common.afterTextChanged
 import com.app.ekma.common.checkCallPermission
+import com.app.ekma.common.makeInVisible
+import com.app.ekma.common.makeVisible
 import com.app.ekma.common.super_utils.activity.collectLatestFlow
 import com.app.ekma.common.super_utils.animation.MarginType
 import com.app.ekma.common.super_utils.animation.animateMargin
@@ -119,6 +121,9 @@ class ChatFragment : BaseFragment() {
     }
 
     private fun initViews() {
+        binding.rcvMessages.makeInVisible()
+        binding.tvNoMsg.makeVisible()
+
         val linearLayoutManager = LinearLayoutManager(requireContext())
         binding.rcvMessages.layoutManager = linearLayoutManager
         chatAdapter.setMessages(viewModel.messages)
@@ -233,6 +238,10 @@ class ChatFragment : BaseFragment() {
 
         viewModel.getTotalMessageCount {
             viewModel.getOlderMessage { itemCount ->
+                if (itemCount != 0) {
+                    binding.rcvMessages.makeVisible()
+                    binding.tvNoMsg.makeInVisible()
+                }
                 chatAdapter.notifyItemRangeInserted(0, itemCount)
                 binding.rcvMessages.scrollToPosition(viewModel.messages.size - 1)
                 viewModel.isLoading = false
@@ -244,9 +253,18 @@ class ChatFragment : BaseFragment() {
             }
         }
 
-        viewModel.observeMessageChanges(addEleCallback)
+        viewModel.observeMessageChanges { itemCount ->
+            binding.rcvMessages.makeVisible()
+            binding.tvNoMsg.makeInVisible()
+            chatAdapter.notifyItemRangeInserted(viewModel.messages.size - itemCount, itemCount)
+            if (itemCount == 0) {
+                binding.rcvMessages.scrollToPosition(viewModel.messages.size - 1)
+            } else {
+                binding.rcvMessages.smoothScrollToPosition(viewModel.messages.size - 1)
+            }
+        }
 
-        viewModel.modifiedMsgPosition.observe(viewLifecycleOwner) { pos ->
+        collectLatestFlow(viewModel.modifiedMsgPosition) { pos ->
             if (pos != -1) {
                 chatAdapter.notifyItemRangeChanged(pos, viewModel.messages.size - pos)
             }
@@ -271,15 +289,6 @@ class ChatFragment : BaseFragment() {
                 }
             }
         }, 600L)
-    }
-
-    private val addEleCallback: (itemCount: Int) -> Unit = { itemCount ->
-        chatAdapter.notifyItemRangeInserted(viewModel.messages.size - itemCount, itemCount)
-        if (itemCount == 0) {
-            binding.rcvMessages.scrollToPosition(viewModel.messages.size - 1)
-        } else {
-            binding.rcvMessages.smoothScrollToPosition(viewModel.messages.size - 1)
-        }
     }
 
     override fun onStart() {
