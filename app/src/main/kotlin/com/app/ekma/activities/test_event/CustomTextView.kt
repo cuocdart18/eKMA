@@ -84,7 +84,7 @@ class CustomTextView @JvmOverloads constructor(
         }
         val value = super.onTouchEvent(event)
         Log.i(TAG, "onTouchEvent: return $value")
-        return true
+        return value
     }
 
     override fun onDraw(canvas: Canvas?) {

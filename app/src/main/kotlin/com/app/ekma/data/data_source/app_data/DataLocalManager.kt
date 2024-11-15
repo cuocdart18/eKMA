@@ -12,6 +12,7 @@ class DataLocalManager(
     private val KEY_LOGIN_STATE = "login_state_sPref"
     private val KEY_IMG_PATH = "img_path_sPref"
     private val KEY_PROFILE = "profile_sPref"
+    private val KEY_PROFILE_DETAIL = "profile_detail_sPref"
     private val KEY_NOTIFY_EVENTS = "notify_events_sPref"
     private val KEY_USERNAME = "username_sPref"
     private val KEY_PASSWORD = "password_sPref"
@@ -74,6 +75,16 @@ class DataLocalManager(
     override suspend fun getProfile(): String {
         return withContext(Dispatchers.IO) {
             mySharePreferences.getStringValueEncrypted(KEY_PROFILE).toString()
+        }
+    }
+
+    override suspend fun saveProfileDetail(data: String) = withContext(Dispatchers.IO) {
+        mySharePreferences.putStringValueEncrypted(KEY_PROFILE_DETAIL, data)
+    }
+
+    override suspend fun getProfileDetail(): String {
+        return withContext(Dispatchers.IO) {
+            mySharePreferences.getStringValueEncrypted(KEY_PROFILE_DETAIL).toString()
         }
     }
 

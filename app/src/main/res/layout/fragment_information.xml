@@ -4,76 +4,106 @@
 
     <data>
 
-        <variable
-            name="profile"
-            type="com.app.ekma.data.models.Profile" />
     </data>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lab_medium_white"
+        android:background="@color/lab_gray"
         android:fillViewport="true"
+        android:overScrollMode="never"
         android:scrollbars="none">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:weightSum="10">
+            android:layout_height="match_parent"
+            android:paddingBottom="18dp">
 
-            <LinearLayout
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/viewFakeStatus"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_height="1dp"
+                android:src="@color/lab_black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="22dp"
                 android:background="@drawable/bgr_box_of_profile_student_header"
-                android:orientation="vertical">
-
-                <View
-                    android:id="@+id/viewFakeStatus"
-                    android:layout_width="1dp"
-                    android:layout_height="1dp"
-                    android:layout_gravity="top" />
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/civ_profile_image"
-                    android:layout_width="@dimen/base_width_img_profile"
-                    android:layout_height="@dimen/base_height_img_profile"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="48dp"
-                    android:layout_marginBottom="@dimen/base_high_margin"
-                    android:src="@drawable/user"
-                    app:civ_border_color="@color/lab_red"
-                    app:civ_border_width="1dp" />
+                app:layout_constraintTop_toBottomOf="@id/viewFakeStatus">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_profile_name"
+                    android:id="@+id/tvProfileTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/base_small_margin"
-                    android:text="@{profile.displayName}"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/circularstd_bold"
+                    android:includeFontPadding="false"
+                    android:text="Tài khoản"
+                    android:textColor="@color/lab_red"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civProfileImage"
+                    android:layout_width="@dimen/base_width_img_profile"
+                    android:layout_height="@dimen/base_height_img_profile"
+                    android:src="@drawable/user"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvProfileTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvProfileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:includeFontPadding="false"
+                    android:text="Student name"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@id/civProfileImage"
+                    app:layout_constraintStart_toStartOf="@id/civProfileImage"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/base_normal_header_text"
+                    app:layout_constraintTop_toBottomOf="@id/civProfileImage"
                     android:textStyle="bold" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_profile_id"
+                    android:id="@+id/tvProfileId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@{profile.studentCode}"
-                    android:textColor="@color/white"
+                    android:layout_marginTop="6dp"
+                    android:includeFontPadding="false"
+                    android:text="Student code"
                     android:textSize="@dimen/base_normal_text"
-                    android:textStyle="normal" />
-            </LinearLayout>
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="@id/tvProfileName"
+                    app:layout_constraintStart_toStartOf="@id/tvProfileName"
+                    app:layout_constraintTop_toBottomOf="@id/tvProfileName" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/frm_container"
+            <include
+                android:id="@+id/layoutInfor"
+                layout="@layout/layout_student_infor"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="6"
-                android:nestedScrollingEnabled="false" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/layoutProfile" />
+
+            <include
+                android:id="@+id/layoutSetting"
+                layout="@layout/layout_profile_setting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/layoutInfor" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

@@ -1,18 +1,18 @@
 package com.app.ekma.data.repository
 
 import com.app.ekma.base.repositories.BaseRepositories
-import com.app.ekma.firebase.KEY_USER_DOB
-import com.app.ekma.firebase.KEY_USER_GENDER
-import com.app.ekma.firebase.KEY_USER_ID
-import com.app.ekma.firebase.KEY_USER_NAME
 import com.app.ekma.common.Resource
 import com.app.ekma.common.jsonStringToObject
 import com.app.ekma.data.data_source.apis.EKmaAPI
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
 import com.app.ekma.data.models.Profile
+import com.app.ekma.data.models.ProfileDetail
 import com.app.ekma.data.models.repository.IProfileRepository
 import com.app.ekma.firebase.KEY_USERS_COLL
-import com.app.ekma.firebase.KEY_USER_STATUS
+import com.app.ekma.firebase.KEY_USER_DOB
+import com.app.ekma.firebase.KEY_USER_GENDER
+import com.app.ekma.firebase.KEY_USER_ID
+import com.app.ekma.firebase.KEY_USER_NAME
 import com.app.ekma.firebase.KEY_USER_TOKEN
 import com.app.ekma.firebase.firestore
 import com.google.firebase.firestore.FieldValue
@@ -37,8 +37,22 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getProfileDetail(
+        username: String,
+        password: String,
+        hashed: Boolean
+    ): Resource<ProfileDetail> {
+        return safeApiCall {
+            eKmaApi.getProfileDetail(username, password, hashed).toProfileDetail()
+        }
+    }
+
     override suspend fun saveProfile(profile: Profile) = withContext(Dispatchers.Default) {
         dataLocalManager.saveProfile(profile.toProfileShPref())
+    }
+
+    override suspend fun saveProfile(profile: ProfileDetail) = withContext(Dispatchers.Default) {
+        dataLocalManager.saveProfileDetail(profile.toProfileDetailShPref())
     }
 
     override suspend fun saveProfileToFirestore(profile: Profile) {
@@ -60,6 +74,7 @@ class ProfileRepositoryImpl @Inject constructor(
 
     override suspend fun clearProfile() {
         dataLocalManager.saveProfile("")
+        dataLocalManager.saveProfileDetail("")
     }
 
     override suspend fun clearFcmToken(myStudentCode: String) {
@@ -99,6 +114,16 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun getProfile(): Profile {
         return withContext(Dispatchers.Default) {
             jsonStringToObject(dataLocalManager.getProfile())
+        }
+    }
+
+    override suspend fun getProfileDetail(): ProfileDetail? {
+        return withContext(Dispatchers.Default) {
+            try {
+                jsonStringToObject(dataLocalManager.getProfileDetail())
+            } catch (e: Exception) {
+                null
+            }
         }
     }
 }

@@ -26,6 +26,10 @@ interface IDataLocalManager {
 
     suspend fun getProfile(): String
 
+    suspend fun saveProfileDetail(data: String)
+
+    suspend fun getProfileDetail(): String
+
     suspend fun saveIsNotifyEvents(data: Boolean)
 
     suspend fun getIsNotifyEvents(): Boolean

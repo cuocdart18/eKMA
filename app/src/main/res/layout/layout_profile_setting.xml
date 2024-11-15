@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bgr_layout_infor"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="20dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSettingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/circularstd_bold"
+            android:includeFontPadding="false"
+            android:text="Cài đặt"
+            android:textColor="@color/lab_red"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutMyScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:paddingVertical="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSettingTitle">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icMyScore"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/school_outline_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvMyScore"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:fontFamily="@font/circularstd_medium"
+                android:includeFontPadding="false"
+                android:text="Điểm của tôi"
+                android:textColor="@color/lab_black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/icMyScore"
+                app:layout_constraintEnd_toStartOf="@id/icMyScoreNext"
+                app:layout_constraintStart_toEndOf="@id/icMyScore"
+                app:layout_constraintTop_toTopOf="@id/icMyScore" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icMyScoreNext"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_next_screen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/indicatorMyScore"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="6dp"
+            android:background="@color/lab_gray"
+            app:layout_constraintTop_toBottomOf="@id/layoutMyScore" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingVertical="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutMyScore">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icUpdate"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/cloud_download_outline_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvUpdate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:fontFamily="@font/circularstd_medium"
+                android:includeFontPadding="false"
+                android:text="Cập nhật thời khoá biểu"
+                android:textColor="@color/lab_black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/icUpdate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/icUpdate"
+                app:layout_constraintTop_toTopOf="@id/icUpdate" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/indicatorUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="6dp"
+            android:background="@color/lab_gray"
+            app:layout_constraintTop_toBottomOf="@id/layoutUpdate" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutNoti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingVertical="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/indicatorUpdate">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icNoti"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/notifications_outline_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNoti"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:fontFamily="@font/circularstd_medium"
+                android:includeFontPadding="false"
+                android:text="Thông báo"
+                android:textColor="@color/lab_black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/icNoti"
+                app:layout_constraintEnd_toStartOf="@id/swNoti"
+                app:layout_constraintStart_toEndOf="@id/icNoti"
+                app:layout_constraintTop_toTopOf="@id/icNoti" />
+
+            <com.app.ekma.common.custom_view.NotifyEventSwitchView
+                android:id="@+id/swNoti"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/indicatorNoti"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="6dp"
+            android:background="@color/lab_gray"
+            app:layout_constraintTop_toBottomOf="@id/layoutNoti" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutAboutMe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/indicatorNoti">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icAboutMe"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/logo_github_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvAboutMe"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:fontFamily="@font/circularstd_medium"
+                android:includeFontPadding="false"
+                android:text="Giới thiệu"
+                android:textColor="@color/lab_black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/icAboutMe"
+                app:layout_constraintEnd_toStartOf="@id/icAboutMeNext"
+                app:layout_constraintStart_toEndOf="@id/icAboutMe"
+                app:layout_constraintTop_toTopOf="@id/icAboutMe" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icAboutMeNext"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_next_screen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/indicatorAboutMe"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="6dp"
+            android:background="@color/lab_gray"
+            app:layout_constraintTop_toBottomOf="@id/layoutAboutMe" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/indicatorAboutMe">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icRate"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/star_outline_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvRate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:fontFamily="@font/circularstd_medium"
+                android:includeFontPadding="false"
+                android:text="Đánh giá"
+                android:textColor="@color/lab_black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/icRate"
+                app:layout_constraintEnd_toStartOf="@id/icRateNext"
+                app:layout_constraintStart_toEndOf="@id/icRate"
+                app:layout_constraintTop_toTopOf="@id/icRate" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icRateNext"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_next_screen"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/indicatorRate"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="6dp"
+            android:background="@color/lab_gray"
+            app:layout_constraintTop_toBottomOf="@id/layoutRate" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutLogOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingVertical="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/indicatorRate">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icLogOut"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/log_out_outline_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvLogOut"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:fontFamily="@font/circularstd_medium"
+                android:includeFontPadding="false"
+                android:text="Đăng xuất"
+                android:textColor="@color/lab_black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/icLogOut"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/icLogOut"
+                app:layout_constraintTop_toTopOf="@id/icLogOut" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

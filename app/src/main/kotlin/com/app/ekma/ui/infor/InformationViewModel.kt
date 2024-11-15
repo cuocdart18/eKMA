@@ -4,22 +4,21 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
 import com.app.ekma.alarm.AlarmEventsScheduler
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.broadcast_receiver.BootCompletedReceiver
+import com.app.ekma.common.TedImagePickerStarter
 import com.app.ekma.common.pattern.singleton.ClickedDay
 import com.app.ekma.common.pattern.singleton.ConnReferenceKey
 import com.app.ekma.common.pattern.singleton.CurrentEventsRefresher
 import com.app.ekma.common.pattern.singleton.MainBottomNavigation
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.pattern.singleton.StudentScoreSingleton
-import com.app.ekma.common.TedImagePickerStarter
 import com.app.ekma.common.saveImageAndGetPath
 import com.app.ekma.data.data_source.app_data.IDataLocalManager
+import com.app.ekma.data.models.ProfileDetail
 import com.app.ekma.data.models.service.ILoginService
 import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.data.models.service.IScheduleService
@@ -32,6 +31,9 @@ import com.app.ekma.work.WorkRunner
 import com.google.firebase.database.ServerValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -48,9 +50,17 @@ class InformationViewModel @Inject constructor(
     override val TAG = InformationViewModel::class.java.simpleName
     private lateinit var uri: Uri
 
-    private val _msgToast = MutableLiveData<String>()
-    val msgToast: LiveData<String>
-        get() = _msgToast
+    private val _profileDetail = MutableStateFlow<ProfileDetail?>(null)
+    val profileDetail: StateFlow<ProfileDetail?>
+        get() = _profileDetail.asStateFlow()
+
+    fun getProfileDetail() {
+        viewModelScope.launch {
+            profileService.getProfileDetail().collect {
+                _profileDetail.value = it
+            }
+        }
+    }
 
     fun getImageProfile(callback: (uri: Uri) -> Unit) {
         if (this::uri.isInitialized) {
@@ -92,7 +102,13 @@ class InformationViewModel @Inject constructor(
         }
     }
 
-    fun changedIsNotifyEvents(context: Context, data: Boolean, callback: () -> Unit) {
+    fun getIsNotifyEvent(callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            callback(dataLocalManager.getIsNotifyEvents())
+        }
+    }
+
+    fun changedIsNotifyEvents(context: Context, data: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             dataLocalManager.saveIsNotifyEvents(data)
             if (data) {
@@ -111,9 +127,6 @@ class InformationViewModel @Inject constructor(
                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                     PackageManager.DONT_KILL_APP
                 )
-            }
-            withContext(Dispatchers.Main) {
-                callback()
             }
         }
     }

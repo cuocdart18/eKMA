@@ -18,7 +18,11 @@ import com.app.ekma.data.models.service.IProfileService
 import com.app.ekma.data.models.service.IUserService
 import com.app.ekma.work.WorkRunner
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -67,6 +71,14 @@ class LoginViewModel @Inject constructor(
                 return@launch
             }
             val myStudentCode = profile.data.studentCode
+
+            GlobalScope.launch {
+                profileService.getProfileDetail(username, password, true).collectLatest {
+                    if (it is Resource.Success && it.data != null) {
+                        profileService.saveProfile(it.data)
+                    }
+                }
+            }
             // save data
             profileService.saveProfile(profile.data)
             userService.saveUser(User(username, password, true))

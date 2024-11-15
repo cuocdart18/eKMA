@@ -18,9 +18,9 @@ import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.super_utils.activity.collectLatestFlow
-import com.app.ekma.common.super_utils.animation.gone
 import com.app.ekma.common.super_utils.animation.invisible
 import com.app.ekma.common.super_utils.animation.visible
+import com.app.ekma.common.super_utils.app.showKeyboard
 import com.app.ekma.common.super_utils.click.performClick
 import com.app.ekma.databinding.FragmentSearchUserBinding
 import com.app.ekma.ui.chat.main.ChatFragment
@@ -53,6 +53,8 @@ class SearchUserFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.edtSearchUser.requestFocus()
+        binding.edtSearchUser.showKeyboard()
         regisOnBackPressed()
         setSearchAsyncEditText()
         setRecyclerViewProperties()

@@ -9,6 +9,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/lab_black">
@@ -32,5 +33,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/frm_host"
             app:menu="@menu/menu_features" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/chatShortcut"
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="100dp"
+            android:translationZ="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/chat_shortcut_anim" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

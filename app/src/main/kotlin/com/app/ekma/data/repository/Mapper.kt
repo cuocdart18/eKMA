@@ -4,11 +4,12 @@ import com.app.ekma.common.convertPeriodsToStartEndTime
 import com.app.ekma.common.jsonObjectToString
 import com.app.ekma.data.data_source.apis.dto.AgoraTokenRequestDto
 import com.app.ekma.data.data_source.apis.dto.AgoraTokenResponseDto
+import com.app.ekma.data.data_source.apis.dto.FcmDataMessageDto
 import com.app.ekma.data.data_source.apis.dto.MessageResult
 import com.app.ekma.data.data_source.apis.dto.MiniStudentDto
 import com.app.ekma.data.data_source.apis.dto.PeriodDto
+import com.app.ekma.data.data_source.apis.dto.ProfileDetailDto
 import com.app.ekma.data.data_source.apis.dto.ProfileDto
-import com.app.ekma.data.data_source.apis.dto.FcmDataMessageDto
 import com.app.ekma.data.data_source.apis.dto.ScoreDto
 import com.app.ekma.data.data_source.apis.dto.StudentDto
 import com.app.ekma.data.data_source.apis.dto.SubjectDto
@@ -22,6 +23,7 @@ import com.app.ekma.data.models.MiniStudent
 import com.app.ekma.data.models.Note
 import com.app.ekma.data.models.Period
 import com.app.ekma.data.models.Profile
+import com.app.ekma.data.models.ProfileDetail
 import com.app.ekma.data.models.Score
 import com.app.ekma.data.models.Student
 import com.app.ekma.data.models.Subject
@@ -132,6 +134,20 @@ fun ProfileDto.toProfile() = Profile(
 )
 
 fun Profile.toProfileShPref(): String {
+    return jsonObjectToString(this)
+}
+
+fun ProfileDetailDto.toProfileDetail() = ProfileDetail(
+    displayName = displayName,
+    studentCode = studentCode,
+    gender = gender,
+    birthday = birthday,
+    hometown = hometown,
+    phoneNumber = phoneNumber,
+    email = email
+)
+
+fun ProfileDetail.toProfileDetailShPref(): String {
     return jsonObjectToString(this)
 }
 

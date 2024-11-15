@@ -2,6 +2,7 @@ package com.app.ekma.data.models.repository
 
 import com.app.ekma.common.Resource
 import com.app.ekma.data.models.Profile
+import com.app.ekma.data.models.ProfileDetail
 
 interface IProfileRepository {
 
@@ -11,7 +12,15 @@ interface IProfileRepository {
         hashed: Boolean
     ): Resource<Profile>
 
+    suspend fun getProfileDetail(
+        username: String,
+        password: String,
+        hashed: Boolean
+    ): Resource<ProfileDetail>
+
     suspend fun saveProfile(profile: Profile)
+
+    suspend fun saveProfile(profile: ProfileDetail)
 
     suspend fun saveProfileToFirestore(profile: Profile)
 
@@ -24,4 +33,6 @@ interface IProfileRepository {
     suspend fun updateFcmTokenToFirestore(myStudentCode: String)
 
     suspend fun getProfile(): Profile
+
+    suspend fun getProfileDetail(): ProfileDetail?
 }

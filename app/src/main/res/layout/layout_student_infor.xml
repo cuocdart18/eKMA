@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bgr_layout_infor"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="20dp">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvGeneralInfor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/circularstd_bold"
+            android:includeFontPadding="false"
+            android:text="Thông tin chung"
+            android:textColor="@color/lab_red"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDoBTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/circularstd_bold"
+            android:includeFontPadding="false"
+            android:text="Ngày sinh"
+            android:textColor="@color/lab_black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvGeneralInfor" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDoBContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:includeFontPadding="false"
+            android:text=""
+            android:textColor="@color/lab_black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDoBTitle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvGenderTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/circularstd_bold"
+            android:includeFontPadding="false"
+            android:text="Giới tính"
+            android:textColor="@color/lab_black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDoBContent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvGenderContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:includeFontPadding="false"
+            android:text=""
+            android:textColor="@color/lab_black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvGenderTitle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvHometownTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/circularstd_bold"
+            android:includeFontPadding="false"
+            android:text="Quê quán"
+            android:textColor="@color/lab_black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvGenderContent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvHometownContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:includeFontPadding="false"
+            android:text=""
+            android:textColor="@color/lab_black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvHometownTitle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNumberTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/circularstd_bold"
+            android:includeFontPadding="false"
+            android:text="Số điện thoại"
+            android:textColor="@color/lab_black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvHometownContent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvNumberContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:includeFontPadding="false"
+            android:text=""
+            android:textColor="@color/lab_black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNumberTitle" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvEmailTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/circularstd_bold"
+            android:includeFontPadding="false"
+            android:text="Email"
+            android:textColor="@color/lab_black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvNumberContent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvEmailContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:includeFontPadding="false"
+            android:text=""
+            android:textColor="@color/lab_black"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvEmailTitle" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

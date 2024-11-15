@@ -10,9 +10,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.os.bundleOf
 import androidx.core.view.updateLayoutParams
@@ -20,35 +20,32 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import com.app.ekma.R
-import com.app.ekma.ui.chat.activity.ChatActivity
-import com.app.ekma.ui.login.LoginActivity
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.app.ekma.common.KEY_PASS_MINISTUDENT_ID
 import com.app.ekma.common.pattern.singleton.DownloadAvatarSuccess
 import com.app.ekma.common.pattern.singleton.MainBottomNavigation
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
+import com.app.ekma.common.super_utils.activity.collectLatestFlow
+import com.app.ekma.common.super_utils.app.openWeb
+import com.app.ekma.common.super_utils.click.performClick
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.FragmentInformationBinding
+import com.app.ekma.ui.chat.activity.ChatActivity
+import com.app.ekma.ui.login.LoginActivity
 import com.app.ekma.ui.score.details.StudentDetailFragment
 import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class InformationFragment : BaseFragment(),
-    SettingFragment.ICallbackOnPreferencesClickListener {
+class InformationFragment : BaseFragment() {
     override val TAG = InformationFragment::class.java.simpleName
     private lateinit var binding: FragmentInformationBinding
     private val viewModel by viewModels<InformationViewModel>()
 
-    private val requestPermissionLauncher =
-        registerForActivityResult(
+    private val requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-            } else {
-            }
-        }
+    ) {}
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,36 +58,73 @@ class InformationFragment : BaseFragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewFakeStatus.updateLayoutParams<LinearLayout.LayoutParams> {
+        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
             height = getStatusBarHeight
         }
-        viewModel.msgToast.observe(viewLifecycleOwner) {
-            showToast(it)
-        }
         MainBottomNavigation.setData(false)
-        setUpPreferencesSetting()
+
         setUpProfile()
+        setUpSetting()
+
         // ask permission
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermission()
         }
     }
 
-    private fun setUpPreferencesSetting() {
-        childFragmentManager.commit {
-            replace(R.id.frm_container, SettingFragment(this@InformationFragment))
-            setReorderingAllowed(true)
-        }
-    }
-
     private fun setUpProfile() {
-        binding.profile = ProfileSingleton()
+        binding.tvProfileName.text = ProfileSingleton().displayName
+        binding.tvProfileId.text = ProfileSingleton().studentCode
         viewModel.getImageProfile { setImageUri(it) }
         DownloadAvatarSuccess().observe(viewLifecycleOwner) { path ->
             if (path.isEmpty()) return@observe
             setImageUri(Uri.parse(path))
         }
         binding.civProfileImage.setOnSingleClickListener { onClickChangeProfile() }
+
+        viewModel.getProfileDetail()
+        collectLatestFlow(viewModel.profileDetail) {
+            it?.let {
+                binding.layoutInfor.tvDoBContent.text = it.birthday
+                binding.layoutInfor.tvGenderContent.text = it.gender
+                binding.layoutInfor.tvHometownContent.text = it.hometown
+                binding.layoutInfor.tvNumberContent.text = it.phoneNumber
+                binding.layoutInfor.tvEmailContent.text = it.email
+            }
+        }
+    }
+
+    private fun setUpSetting() {
+        viewModel.getIsNotifyEvent {
+            binding.layoutSetting.swNoti.isChecked = it
+        }
+
+        binding.layoutSetting.layoutMyScore.performClick {
+            onClickMyScore()
+        }
+
+        binding.layoutSetting.layoutUpdate.performClick {
+            onClickUpdateSchedule()
+        }
+
+        binding.layoutSetting.layoutNoti.performClick {
+            binding.layoutSetting.swNoti.apply {
+                isChecked = !isChecked
+                onChangedNotifyEvent(isChecked)
+            }
+        }
+
+        binding.layoutSetting.layoutAboutMe.performClick {
+            requireContext().openWeb("https://github.com/cuocdart18")
+        }
+
+        binding.layoutSetting.layoutRate.performClick {
+            requireContext().openWeb("https://github.com/cuocdart18")
+        }
+
+        binding.layoutSetting.layoutLogOut.performClick {
+            onClickLogOut()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -150,7 +184,7 @@ class InformationFragment : BaseFragment(),
         }
     }
 
-    override fun onClickMyScore() {
+    private fun onClickMyScore() {
         val bundle = bundleOf(
             KEY_PASS_MINISTUDENT_ID to ProfileSingleton().studentCode,
             KEY_PASS_IS_MY_MINISTUDENT_ID to true
@@ -162,7 +196,7 @@ class InformationFragment : BaseFragment(),
         }
     }
 
-    override fun onClickUpdateSchedule() {
+    private fun onClickUpdateSchedule() {
         var dialog: Dialog? = null
         fun onClickYes() {
             viewModel.updateSchedule(requireContext()) {
@@ -187,25 +221,19 @@ class InformationFragment : BaseFragment(),
         dialog.show()
     }
 
-    override fun onChangedNotifyEvent(data: Boolean) {
-        viewModel.changedIsNotifyEvents(requireContext(), data) { }
+    private fun onChangedNotifyEvent(data: Boolean) {
+        viewModel.changedIsNotifyEvents(requireContext(), data)
     }
 
-    override fun onClickChat() {
-//        MainBottomNavigation.setData(true)
-//        parentFragmentManager.commit {
-//            replace<ListChatFragment>(R.id.fragment_container_view)
-//            setReorderingAllowed(true)
-//            addToBackStack(ListChatFragment::class.java.simpleName)
-//        }
+    private fun onClickChat() {
         val intent = Intent(requireContext(), ChatActivity::class.java)
         startActivity(intent)
     }
 
-    override fun onChangedLanguage() {
+    private fun onChangedLanguage() {
     }
 
-    override fun onClickLogOut() {
+    private fun onClickLogOut() {
         var dialog: Dialog? = null
         fun onClickYes() {
             viewModel.signOut(requireContext()) {

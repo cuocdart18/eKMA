@@ -2,6 +2,7 @@ package com.app.ekma.data.data_source.apis
 
 import com.app.ekma.data.data_source.apis.dto.FcmDataMessageDto
 import com.app.ekma.data.data_source.apis.dto.MessageResult
+import com.app.ekma.data.data_source.apis.dto.ProfileDetailDto
 import com.app.ekma.data.data_source.apis.dto.ProfileDto
 import com.app.ekma.data.data_source.apis.dto.ScheduleDto
 import retrofit2.http.Body
@@ -39,6 +40,13 @@ interface EKmaAPI {
         @Query("password") password: String,
         @Query("hashed") hashed: Boolean
     ): ProfileDto
+
+    @GET("/profile-detail")
+    suspend fun getProfileDetail(
+        @Query("username") username: String,
+        @Query("password") password: String,
+        @Query("hashed") hashed: Boolean
+    ): ProfileDetailDto
 
     @GET("/semester-codes")
     suspend fun getSemesterCodes(): List<String>

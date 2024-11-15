@@ -75,7 +75,7 @@
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true" />
         <activity
-            android:name=".ui.test_event.EventHandlingActivity"
+            android:name=".activities.test_event.EventHandlingActivity"
             android:exported="false" />
 
         <receiver android:name=".broadcast_receiver.AlarmReceiver" />
