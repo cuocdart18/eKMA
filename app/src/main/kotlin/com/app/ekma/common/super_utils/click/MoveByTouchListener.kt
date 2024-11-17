@@ -14,7 +14,6 @@ class MoveByTouchListener(
     private var firstEvent: PointF? = null
 
     override fun onTouch(view: View, event: MotionEvent): Boolean {
-
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 firstEvent = PointF(event.rawX, event.rawY)
@@ -23,9 +22,9 @@ class MoveByTouchListener(
             }
 
             MotionEvent.ACTION_MOVE -> {
-                val newX = (event.rawX + dX).coerceIn(0f, (parentWidth - view.width).toFloat())
+                val newX = (event.rawX + dX).coerceIn(20f, parentWidth - view.width - 20f)
                 val newY =
-                    (event.rawY + dY).coerceIn(0f, (parentHeight - 2 * view.height).toFloat())
+                    (event.rawY + dY).coerceIn(20f, parentHeight - 2 * view.height - 20f)
 
                 view.animate()
                     .x(newX)
@@ -37,7 +36,19 @@ class MoveByTouchListener(
             MotionEvent.ACTION_UP -> {
                 val isClick =
                     abs(event.rawX - firstEvent!!.x) < 10 && abs(event.rawY - firstEvent!!.y) < 10
-                if (isClick) view.performClick()
+                if (isClick) {
+                    view.performClick()
+                } else {
+                    val newX = if (event.rawX <= parentWidth / 2) {
+                        20f
+                    } else {
+                        parentWidth - view.width - 20f
+                    }
+                    view.animate()
+                        .x(newX)
+                        .setDuration(100)
+                        .start()
+                }
                 firstEvent = null
             }
 
