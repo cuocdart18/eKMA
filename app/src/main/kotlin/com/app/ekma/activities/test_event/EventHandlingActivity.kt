@@ -12,9 +12,14 @@ class EventHandlingActivity : BaseActivity() {
     override val TAG = EventHandlingActivity::class.java.simpleName
     private lateinit var binding: ActivityEventHandlingBinding
 
+    override fun observeViewModel() {}
+
+    override fun initViewBinding() {
+        binding = ActivityEventHandlingBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityEventHandlingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.loadingView.startAnim(30000L)

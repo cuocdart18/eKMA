@@ -13,14 +13,19 @@ import com.app.ekma.R
 import com.cuocdat.activityutils.setStatusBarHomeTransparent
 import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
     protected open val TAG = ""
+
+    abstract fun observeViewModel()
+    protected abstract fun initViewBinding()
 
     // LIFECYCLE
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         logLifecycle("onCreate")
         setStatusBarHomeTransparent()
+        initViewBinding()
+        observeViewModel()
     }
 
     override fun onStart() {

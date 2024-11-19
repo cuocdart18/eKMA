@@ -2,16 +2,13 @@ package com.app.ekma.ui.note.detail
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
@@ -29,9 +26,8 @@ import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NoteDetailFragment : BaseFragment() {
+class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
     override val TAG = NoteDetailFragment::class.java.simpleName
-    private lateinit var binding: FragmentNoteDetailBinding
     private val viewModel by viewModels<NoteDetailViewModel>()
 
     val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -40,14 +36,7 @@ class NoteDetailFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentNoteDetailBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun getDataBinding() = FragmentNoteDetailBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

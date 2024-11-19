@@ -1,13 +1,12 @@
 package com.app.ekma.ui.chat.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,9 +44,8 @@ import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChatFragment : BaseFragment() {
+class ChatFragment : BaseFragment<FragmentChatBinding>() {
     override val TAG = ChatFragment::class.java.simpleName
-    private lateinit var binding: FragmentChatBinding
     private val viewModel by viewModels<ChatViewModel>()
     private val chatAdapter by lazy { ChatAdapter(requireContext(), imageCallback) }
 
@@ -91,14 +89,7 @@ class ChatFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentChatBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun getDataBinding() = FragmentChatBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -120,9 +111,15 @@ class ChatFragment : BaseFragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initViews() {
-        binding.rcvMessages.makeInVisible()
-        binding.tvNoMsg.makeVisible()
+        if (viewModel.messages.isEmpty()) {
+            binding.rcvMessages.makeInVisible()
+            binding.tvNoMsg.makeVisible()
+        } else {
+            binding.rcvMessages.makeVisible()
+            binding.tvNoMsg.makeInVisible()
+        }
 
         val linearLayoutManager = LinearLayoutManager(requireContext())
         binding.rcvMessages.layoutManager = linearLayoutManager

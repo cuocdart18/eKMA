@@ -31,6 +31,12 @@ class MainActivity : BaseActivity() {
     private val viewPagerAdapter by lazy { MainViewPagerAdapter(this) }
     private val viewModel by viewModels<MainViewModel>()
 
+    override fun observeViewModel() {}
+
+    override fun initViewBinding() {
+        binding = ActivityMainBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // auth
@@ -44,7 +50,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun onAuthSuccessfully() {
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel.firstInitialize(this)
         setUiTemplates()

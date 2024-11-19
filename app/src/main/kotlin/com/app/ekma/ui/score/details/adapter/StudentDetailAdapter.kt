@@ -1,4 +1,4 @@
-package com.app.ekma.ui.score.details
+package com.app.ekma.ui.score.details.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

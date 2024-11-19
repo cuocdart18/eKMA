@@ -16,9 +16,14 @@ class ChatActivity : BaseActivity() {
     private lateinit var binding: ActivityChatBinding
     private val viewModel by viewModels<ChatViewModel>()
 
+    override fun observeViewModel() {}
+
+    override fun initViewBinding() {
+        binding = ActivityChatBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupUI()
     }

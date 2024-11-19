@@ -1,9 +1,7 @@
 package com.app.ekma.ui.chat.search
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
@@ -30,9 +28,8 @@ import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchUserFragment : BaseFragment() {
+class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>() {
     override val TAG = SearchUserFragment::class.java.simpleName
-    private lateinit var binding: FragmentSearchUserBinding
     private val viewModel by viewModels<SearchUserViewModel>()
     private val searchUserAdapter by lazy { SearchUserAdapter(requireContext(), onItemClicked) }
 
@@ -42,14 +39,7 @@ class SearchUserFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSearchUserBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun getDataBinding() = FragmentSearchUserBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

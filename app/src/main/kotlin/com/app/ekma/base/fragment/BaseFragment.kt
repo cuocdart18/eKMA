@@ -21,6 +21,7 @@ import android.widget.TimePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.viewbinding.ViewBinding
 import com.app.ekma.R
 import com.app.ekma.common.makeVisible
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
@@ -28,8 +29,20 @@ import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawa
 import java.time.LocalDate
 import java.time.LocalTime
 
-open class BaseFragment : Fragment() {
+abstract class BaseFragment<T : ViewBinding> : Fragment() {
     protected open val TAG = ""
+
+    private var _binding: T? = null
+    protected val binding: T
+        get() = _binding as T
+
+    abstract fun getDataBinding(): T
+    open fun initDataByArgs() {}
+    open fun initViewModel() {}
+    open fun initView() {}
+    open fun addEvent() {}
+    open fun addObservers() {}
+    open fun initData() {}
 
     // LIFECYCLE
     override fun onAttach(context: Context) {
@@ -48,12 +61,19 @@ open class BaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         logLifecycle("onCreateView")
-        return super.onCreateView(inflater, container, savedInstanceState)
+        _binding = getDataBinding()
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         logLifecycle("onViewCreated")
+        initDataByArgs()
+        initViewModel()
+        initView()
+        addEvent()
+        addObservers()
+        initData()
     }
 
     override fun onStart() {

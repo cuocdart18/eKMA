@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutGpa"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/lab_black"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/circularstd_bold"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="30"
+                android:text="Ngo Cuoc Dat"
+                android:textColor="@color/lab_red"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toStartOf="@id/pgrGpa"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imvId"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/person_circle_outline_white_16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvName" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/circularstd_book"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="8"
+                android:text="CT060407"
+                android:textColor="@color/lab_white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/imvId"
+                app:layout_constraintEnd_toStartOf="@id/pgrGpa"
+                app:layout_constraintStart_toEndOf="@id/imvId"
+                app:layout_constraintTop_toTopOf="@id/imvId" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imvClass"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/flag_outline_white_16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvId" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvClass"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/circularstd_book"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="8"
+                android:text="CT6D"
+                android:textColor="@color/lab_white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/imvClass"
+                app:layout_constraintEnd_toStartOf="@id/pgrGpa"
+                app:layout_constraintStart_toEndOf="@id/imvClass"
+                app:layout_constraintTop_toTopOf="@id/imvClass" />
+
+            <com.mikhaellopez.circularfillableloaders.CircularFillableLoaders
+                android:id="@+id/pgrGpa"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                app:cfl_border="true"
+                app:cfl_border_width="2dp"
+                app:cfl_wave_amplitude="0.015"
+                app:cfl_wave_color="@color/lab_red"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvGpa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/circularstd_bold"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="8"
+                android:text="2.99"
+                android:textColor="@color/lab_white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@id/pgrGpa"
+                app:layout_constraintEnd_toEndOf="@id/pgrGpa"
+                app:layout_constraintStart_toStartOf="@id/pgrGpa"
+                app:layout_constraintTop_toTopOf="@id/pgrGpa" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutPassed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/lab_black"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvPassedSubject1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/circularstd_bold"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="30"
+                android:text="Số môn"
+                android:textColor="@color/lab_white"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@id/pgrPassedSubject"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/pgrPassedSubject" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvPassedSubject2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/circularstd_bold"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="30"
+                android:text="ĐÃ HOÀN THÀNH"
+                android:textColor="@color/lab_green"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toStartOf="@id/pgrPassedSubject"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvPassedSubject1" />
+
+            <com.mikhaellopez.circularfillableloaders.CircularFillableLoaders
+                android:id="@+id/pgrPassedSubject"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                app:cfl_border="true"
+                app:cfl_border_width="2dp"
+                app:cfl_wave_amplitude="0.015"
+                app:cfl_wave_color="@color/lab_green"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvPassedSubject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/circularstd_bold"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="8"
+                android:text="50/50"
+                android:textColor="@color/lab_white"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/pgrPassedSubject"
+                app:layout_constraintEnd_toEndOf="@id/pgrPassedSubject"
+                app:layout_constraintStart_toStartOf="@id/pgrPassedSubject"
+                app:layout_constraintTop_toTopOf="@id/pgrPassedSubject" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutFailed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/lab_black"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvFailedSubject1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/circularstd_bold"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="30"
+                android:text="Số môn"
+                android:textColor="@color/lab_white"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toStartOf="@id/pgrFailedSubject"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/pgrFailedSubject" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvFailedSubject2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/circularstd_bold"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="30"
+                android:text="CHƯA HOÀN THÀNH"
+                android:textColor="@color/lab_dark_yellow"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toStartOf="@id/pgrFailedSubject"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFailedSubject1" />
+
+            <com.mikhaellopez.circularfillableloaders.CircularFillableLoaders
+                android:id="@+id/pgrFailedSubject"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                app:cfl_border="true"
+                app:cfl_border_width="2dp"
+                app:cfl_wave_amplitude="0.015"
+                app:cfl_wave_color="@color/lab_dark_yellow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvFailedSubject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/circularstd_bold"
+                android:includeFontPadding="false"
+                android:lines="1"
+                android:maxLength="8"
+                android:text="50/50"
+                android:textColor="@color/lab_white"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/pgrFailedSubject"
+                app:layout_constraintEnd_toEndOf="@id/pgrFailedSubject"
+                app:layout_constraintStart_toStartOf="@id/pgrFailedSubject"
+                app:layout_constraintTop_toTopOf="@id/pgrFailedSubject" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

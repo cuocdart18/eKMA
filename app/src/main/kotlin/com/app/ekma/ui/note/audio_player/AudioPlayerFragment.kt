@@ -1,9 +1,7 @@
 package com.app.ekma.ui.note.audio_player
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.viewModels
 import com.app.ekma.R
@@ -17,19 +15,12 @@ import com.app.ekma.databinding.LayoutVoicePlayerBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class AudioPlayerFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
+class AudioPlayerFragment : BaseFragment<LayoutVoicePlayerBinding>(),
+    SeekBar.OnSeekBarChangeListener {
     override val TAG = AudioPlayerFragment::class.java.simpleName
-    private lateinit var binding: LayoutVoicePlayerBinding
     private val viewModel by viewModels<AudioPlayerViewModel>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = LayoutVoicePlayerBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun getDataBinding() = LayoutVoicePlayerBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

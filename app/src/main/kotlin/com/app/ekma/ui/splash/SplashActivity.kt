@@ -4,10 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.app.ekma.ui.login.LoginActivity
-import com.app.ekma.ui.main.MainActivity
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.databinding.ActivitySplashBinding
+import com.app.ekma.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -18,9 +17,14 @@ class SplashActivity : BaseActivity() {
     lateinit var binding: ActivitySplashBinding
     private val viewModel by viewModels<SplashViewModel>()
 
+    override fun observeViewModel() {}
+
+    override fun initViewBinding() {
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         lifecycleScope.launch {

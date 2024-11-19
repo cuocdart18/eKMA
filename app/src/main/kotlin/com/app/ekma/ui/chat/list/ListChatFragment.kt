@@ -1,9 +1,7 @@
 package com.app.ekma.ui.chat.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
@@ -24,9 +22,8 @@ import com.app.ekma.ui.chat.search.SearchUserFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ListChatFragment : BaseFragment() {
+class ListChatFragment : BaseFragment<FragmentListChatBinding>() {
     override val TAG = ListChatFragment::class.java.simpleName
-    private lateinit var binding: FragmentListChatBinding
     private val viewModel by viewModels<ListChatViewModel>()
     private val listChatAdapter by lazy { ListChatAdapter(requireContext(), onClickChatRoomItem) }
 
@@ -36,26 +33,16 @@ class ListChatFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentListChatBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun getDataBinding() = FragmentListChatBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
-//            height = getStatusBarHeight
-//        }
         regisOnBackPressed()
         initView()
         showListChatRoom()
     }
 
-    private fun initView() {
+    override fun initView() {
         binding.layoutSearch.setOnSingleClickListener {
             parentFragmentManager.commit {
                 replace<SearchUserFragment>(R.id.frmContainer)

@@ -2,9 +2,7 @@ package com.app.ekma.ui.schedule
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.os.bundleOf
@@ -44,9 +42,8 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @AndroidEntryPoint
-class ScheduleMainFragment : BaseFragment() {
+class ScheduleMainFragment : BaseFragment<FragmentScheduleMainBinding>() {
     override val TAG = ScheduleMainFragment::class.java.simpleName
-    private lateinit var binding: FragmentScheduleMainBinding
     private val viewModel by viewModels<ScheduleMainViewModel>()
     private val eventsDayAdapter: EventsDayAdapter by lazy {
         EventsDayAdapter({ onNoteClicked(it) }, { onNoteCheckboxClicked(it) })
@@ -56,14 +53,7 @@ class ScheduleMainFragment : BaseFragment() {
             { binding.calendarView.notifyDateChanged(it) }, { getEventsDay(it) })
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentScheduleMainBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun getDataBinding() = FragmentScheduleMainBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -100,6 +90,7 @@ class ScheduleMainFragment : BaseFragment() {
         dayBinder.selectedDate(ClickedDay())
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getEventsDay(day: CalendarDay) {
         ClickedDay.setData(day)
         // action

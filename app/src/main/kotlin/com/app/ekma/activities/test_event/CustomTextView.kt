@@ -87,7 +87,7 @@ class CustomTextView @JvmOverloads constructor(
         return value
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
     }
 

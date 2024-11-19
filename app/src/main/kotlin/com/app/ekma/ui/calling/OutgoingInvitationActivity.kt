@@ -9,9 +9,9 @@ import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ekma.base.activities.BaseActivity
-import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityOugoingInvitationBinding
 import com.app.ekma.firebase.MSG_ACCEPT
@@ -27,9 +27,14 @@ class OutgoingInvitationActivity : BaseActivity() {
     private lateinit var binding: ActivityOugoingInvitationBinding
     private val viewModel by viewModels<OutgoingInvitationViewModel>()
 
+    override fun observeViewModel() {}
+
+    override fun initViewBinding() {
+        binding = ActivityOugoingInvitationBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityOugoingInvitationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getData()
         setupUI()

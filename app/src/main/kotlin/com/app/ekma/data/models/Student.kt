@@ -8,4 +8,6 @@ data class Student(
     val passedSubjects: Int,
     val failedSubjects: Int,
     val scores: List<Score>
-)
+) {
+    var sizeScores = scores.size
+}

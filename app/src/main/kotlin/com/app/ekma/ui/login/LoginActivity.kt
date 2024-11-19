@@ -5,10 +5,10 @@ import android.text.Html
 import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
 import com.app.ekma.R
-import com.app.ekma.ui.main.MainActivity
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityLoginBinding
+import com.app.ekma.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,9 +17,14 @@ class LoginActivity : BaseActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val viewModel by viewModels<LoginViewModel>()
 
+    override fun observeViewModel() {}
+
+    override fun initViewBinding() {
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.viewModel = viewModel
         setUpUI()

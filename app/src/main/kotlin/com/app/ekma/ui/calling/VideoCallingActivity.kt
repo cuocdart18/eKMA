@@ -12,19 +12,19 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.AGORA_APP_ID
-import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.CALLING_OPERATION
 import com.app.ekma.common.CHANNEL_TOKEN
-import com.app.ekma.common.pattern.singleton.CallingOperationResponse
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.LEAVE_ROOM
 import com.app.ekma.common.MUTE_CAMERA
 import com.app.ekma.common.MUTE_MIC
-import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.UNMUTE_CAMERA
 import com.app.ekma.common.UNMUTE_MIC
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.pattern.singleton.BusyCalling
+import com.app.ekma.common.pattern.singleton.CallingOperationResponse
+import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityVideoCallingBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,9 +59,14 @@ class VideoCallingActivity : BaseActivity() {
         )
     }
 
+    override fun observeViewModel() {}
+
+    override fun initViewBinding() {
+        binding = ActivityVideoCallingBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityVideoCallingBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getData()
         setupUI()

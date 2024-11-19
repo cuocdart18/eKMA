@@ -11,14 +11,14 @@ plugins {
 
 android {
     namespace 'com.app.ekma'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.app.ekma"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -95,6 +95,7 @@ dependencies {
 
     // viewpager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation "com.tbuonomo:dotsindicator:5.0"
 
     // room
     def room_version = "2.5.0"

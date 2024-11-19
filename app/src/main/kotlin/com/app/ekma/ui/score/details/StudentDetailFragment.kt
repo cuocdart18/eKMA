@@ -1,9 +1,7 @@
 package com.app.ekma.ui.score.details
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
@@ -13,15 +11,21 @@ import com.app.ekma.R
 import com.app.ekma.base.fragment.BaseFragment
 import com.app.ekma.common.KEY_PASS_IS_MY_MINISTUDENT_ID
 import com.app.ekma.common.KEY_PASS_MINISTUDENT_ID
+import com.app.ekma.common.jsonObjectToString
+import com.app.ekma.common.makeGone
+import com.app.ekma.common.makeVisible
+import com.app.ekma.common.super_utils.activity.collectLatestFlow
 import com.app.ekma.data.models.Student
 import com.app.ekma.databinding.FragmentScoreStudentDetailBinding
+import com.app.ekma.ui.score.details.adapter.ItemScoreBannerFragment
+import com.app.ekma.ui.score.details.adapter.ScoreViewPagerAdapter
+import com.app.ekma.ui.score.details.adapter.StudentDetailAdapter
 import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class StudentDetailFragment : BaseFragment() {
+class StudentDetailFragment : BaseFragment<FragmentScoreStudentDetailBinding>() {
     override val TAG = StudentDetailFragment::class.java.simpleName
-    private lateinit var binding: FragmentScoreStudentDetailBinding
     private val viewModel by viewModels<StudentDetailViewModel>()
 
     val callback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -30,14 +34,7 @@ class StudentDetailFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentScoreStudentDetailBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun getDataBinding() = FragmentScoreStudentDetailBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,30 +63,38 @@ class StudentDetailFragment : BaseFragment() {
     }
 
     private fun showDetailStudent(student: Student) {
-        binding.layoutGpaInfoStudent.student = student
-        binding.layoutTheNumberOfPassedFailedSubjects.student = student
-        // set adapter data for rcv
-        val studentDetailAdapter = StudentDetailAdapter() { score -> }
+        // setup for score banner
+        val studentBanner = jsonObjectToString(
+            student.copy(scores = listOf()).apply { sizeScores = student.scores.size })
+        val fragments = List(viewModel.sizeOfBanner) {
+            ItemScoreBannerFragment.newInstance(it, studentBanner)
+        }
+        val adapter = ScoreViewPagerAdapter(requireActivity(), fragments)
+        binding.vpBanner.adapter = adapter
+        binding.vpIndicator.attachTo(binding.vpBanner)
+        viewModel.startAutoScroll()
+        collectLatestFlow(viewModel.autoScrollableBanner) { pos ->
+            binding.vpBanner.setCurrentItem(pos, true)
+        }
+
+        // setup for detail score
+        val studentDetailAdapter = StudentDetailAdapter { _ -> }
         studentDetailAdapter.setScores(student.scores)
 
-        // update list to UI
-        binding.layoutListOfScoreStudent.rvScores.layoutManager =
-            LinearLayoutManager(context?.applicationContext)
-        binding.layoutListOfScoreStudent.rvScores.isFocusable = false
-        binding.layoutListOfScoreStudent.rvScores.isNestedScrollingEnabled = false
-        binding.layoutListOfScoreStudent.rvScores.adapter = studentDetailAdapter
-        binding.layoutGpaInfoStudent.progressCircularGpa
-            .setProgress(100 - ((student.avgScore.toFloat() / 4.0f) * 100).toInt())
+        binding.rvScore.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvScore.isFocusable = false
+        binding.rvScore.itemAnimator = null
+        binding.rvScore.adapter = studentDetailAdapter
     }
 
     private fun showLoadingLayout() {
-        binding.layoutDogLoading.layoutDogLoadingContainer.visibility = View.VISIBLE
-        binding.layoutDetailContainer.visibility = View.GONE
+        binding.layoutDogLoading.layoutDogLoadingContainer.makeVisible()
+        binding.layoutScoreRoot.makeGone()
     }
 
     private fun hideLoadingLayout() {
-        binding.layoutDogLoading.layoutDogLoadingContainer.visibility = View.GONE
-        binding.layoutDetailContainer.visibility = View.VISIBLE
+        binding.layoutDogLoading.layoutDogLoadingContainer.makeGone()
+        binding.layoutScoreRoot.makeVisible()
     }
 
     private fun showError(msg: String) {

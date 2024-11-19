@@ -66,8 +66,12 @@ class ImageViewerViewModel @Inject constructor() : BaseViewModel() {
         try {
             context.contentResolver.insert(imageCollection, contentValues)?.also { uri ->
                 context.contentResolver.openOutputStream(uri).use { outputStream ->
-                    if (!imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
+                    if (outputStream == null) {
                         logError("Couldn't save image bitmap")
+                    } else {
+                        if (!imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
+                            logError("Couldn't save image bitmap")
+                        }
                     }
                 }
             }
