@@ -26,7 +26,7 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/tvSeen"
+            app:layout_constraintBottom_toTopOf="@id/imvAvatarSeen"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.cardview.widget.CardView
@@ -37,7 +37,7 @@
             android:visibility="gone"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:layout_constraintBottom_toTopOf="@id/tvSeen"
+            app:layout_constraintBottom_toTopOf="@id/imvAvatarSeen"
             app:layout_constraintEnd_toEndOf="parent">
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -48,17 +48,15 @@
                 android:src="@drawable/play_store_512" />
         </androidx.cardview.widget.CardView>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvSeen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imvAvatarSeen"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
             android:layout_marginBottom="4dp"
-            android:fontFamily="@font/circularstd_book"
-            android:includeFontPadding="false"
-            android:text="Seen"
-            android:textColor="@color/lab_medium_red"
-            android:textSize="12sp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/user"
             android:visibility="gone"
+            app:civ_circle_background_color="@color/lab_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

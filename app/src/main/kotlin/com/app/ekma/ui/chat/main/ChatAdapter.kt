@@ -12,6 +12,7 @@ import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeInVisible
 import com.app.ekma.common.makeVisible
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
+import com.app.ekma.common.removeStudentCode
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.data.models.Message
 import com.app.ekma.databinding.ItemFriendMessageBinding
@@ -131,10 +132,10 @@ class ChatAdapter(
                 }
             }
 
-            if (message.isLastSeenMessage) {
-                binding.tvSeen.makeVisible()
+            if (message.isLastSeenMessage) runCatching {
+                showFriendAvatar(removeStudentCode(message.seen, message.from).first())
             } else {
-                binding.tvSeen.makeGone()
+                binding.imvAvatarSeen.makeGone()
             }
 
             runCatching {
@@ -150,6 +151,33 @@ class ChatAdapter(
                 }
             }
         }
+
+        private fun showFriendAvatar(friendCode: String) {
+            if (cacheFriendAvtUri == null) {
+                storage.child("$USERS_DIR/$friendCode/$AVATAR_FILE")
+                    .downloadUrl
+                    .addOnSuccessListener {
+                        cacheFriendAvtUri = it
+                        Glide.with(context.applicationContext)
+                            .load(cacheFriendAvtUri)
+                            .override(SMALL_AVT_W_H, SMALL_AVT_W_H)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .placeholder(R.drawable.user)
+                            .error(R.drawable.user)
+                            .into(binding.imvAvatarSeen)
+                        binding.imvAvatarSeen.makeVisible()
+                    }
+            } else {
+                Glide.with(context.applicationContext)
+                    .load(cacheFriendAvtUri)
+                    .override(SMALL_AVT_W_H, SMALL_AVT_W_H)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .placeholder(R.drawable.user)
+                    .error(R.drawable.user)
+                    .into(binding.imvAvatarSeen)
+                binding.imvAvatarSeen.makeVisible()
+            }
+        }
     }
 
     inner class FriendMessageViewHolder(
@@ -161,7 +189,7 @@ class ChatAdapter(
             when (message.type) {
                 TEXT_MSG -> {
                     binding.tvMessage.text = message.content
-                    binding.tvMessage.makeVisible()
+                    binding.layoutTextMsg.makeVisible()
                     binding.imgContainer.makeGone()
                 }
 
@@ -173,7 +201,7 @@ class ChatAdapter(
                         .placeholder(R.drawable.default_image_message)
                         .into(binding.imvMessage)
                     binding.imgContainer.makeVisible()
-                    binding.tvMessage.makeGone()
+                    binding.layoutTextMsg.makeGone()
                 }
             }
             runCatching {

@@ -14,6 +14,9 @@ import com.google.firebase.storage.StorageException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.Date
@@ -25,11 +28,16 @@ class ImageViewerViewModel @Inject constructor() : BaseViewModel() {
     lateinit var imageUrl: String
     private val maxBytesBuffer = 50_000_000L
 
+    private val _showDownloadLoading = MutableStateFlow(false)
+    val showDownloadLoading: StateFlow<Boolean>
+        get() = _showDownloadLoading.asStateFlow()
+
     fun downloadImage(
         context: Context,
         callback: () -> Unit
     ) {
         GlobalScope.launch(Dispatchers.IO) {
+            _showDownloadLoading.value = true
             val httpsReference = httpsStorageRef.getReferenceFromUrl(imageUrl)
             httpsReference.metadata.addOnSuccessListener { data ->
                 val name = data.name ?: Date().time.toString()
@@ -41,10 +49,12 @@ class ImageViewerViewModel @Inject constructor() : BaseViewModel() {
                 httpsReference.getBytes(maxBytesBuffer).addOnSuccessListener { bytes ->
                     val image = Image(fileName, type, dateAdded, extensionFile, bytes)
                     saveImageToExternalStorage(context, image)
+                    _showDownloadLoading.value = false
                     callback()
                 }.addOnFailureListener {
                     it as StorageException
                     logError(it.toString())
+                    _showDownloadLoading.value = true
                 }
             }
         }

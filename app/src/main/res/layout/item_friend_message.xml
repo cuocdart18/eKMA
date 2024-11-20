@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginBottom="2dp"
         android:orientation="vertical">
 
@@ -24,22 +23,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvMessage"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutTextMsg"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:background="@drawable/bgr_friend_text_msg_open"
-            android:fontFamily="@font/circularstd_book"
-            android:includeFontPadding="false"
-            android:paddingHorizontal="13dp"
-            android:paddingVertical="10dp"
-            android:text="Nhưng thật cay đắng khi biết là, ú oà"
-            android:textColor="@color/lab_black"
-            android:textSize="14sp"
+            android:layout_marginEnd="32dp"
             android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/imvAvatar"
-            app:layout_constraintTop_toTopOf="@id/imvAvatar" />
+            app:layout_constraintTop_toTopOf="@id/imvAvatar">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bgr_friend_text_msg_open"
+                android:fontFamily="@font/circularstd_book"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="13dp"
+                android:paddingVertical="10dp"
+                android:text="Nhưng thật cay đắng khi biết là, ú oàNhưng thật cay đắng khi biết là, ú oà"
+                android:textColor="@color/lab_black"
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/imgContainer"
