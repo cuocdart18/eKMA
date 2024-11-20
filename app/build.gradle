@@ -77,7 +77,7 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.1"
 
     // work manager
-    def work_version = "2.7.0"
+    def work_version = "2.9.0"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     implementation 'androidx.hilt:hilt-work:1.0.0'
     kapt 'androidx.hilt:hilt-compiler:1.0.0'

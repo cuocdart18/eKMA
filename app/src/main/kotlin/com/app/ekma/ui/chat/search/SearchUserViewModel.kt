@@ -17,13 +17,9 @@ import com.app.ekma.firebase.firestore
 import com.google.firebase.firestore.FieldValue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,12 +35,12 @@ class SearchUserViewModel @Inject constructor(
     override val TAG = SearchUserViewModel::class.java.simpleName
 
     // instant EditText
-    @OptIn(ObsoleteCoroutinesApi::class)
-    internal val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
+    internal val queryFlow = MutableSharedFlow<String>(
+        replay = 0,
+        extraBufferCapacity = 1
+    )
 
-    @OptIn(ObsoleteCoroutinesApi::class, FlowPreview::class)
-    val searchResult = queryChannel
-        .asFlow()
+    val searchResult = queryFlow
         .debounce(400L)
         .filterNot { it.isBlank() }
         .distinctUntilChanged()

@@ -45,7 +45,6 @@ class SearchDataDialogFragment : BaseDialogFragment<DialogSearchBinding>() {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    @OptIn(ObsoleteCoroutinesApi::class)
     private fun setSearchAsyncEditText() {
         // get data
         viewModel.searchResult.observe(this) { query ->
@@ -59,7 +58,7 @@ class SearchDataDialogFragment : BaseDialogFragment<DialogSearchBinding>() {
         }
         binding.edtSearchData.doAfterTextChanged {
             lifecycleScope.launch {
-                viewModel.queryChannel.send(it.toString())
+                viewModel.queryFlow.emit(it.toString())
             }
         }
         binding.layoutRoot.setOnTouchListener { _, event ->

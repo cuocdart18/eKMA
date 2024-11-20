@@ -50,13 +50,12 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>() {
         setRecyclerViewProperties()
     }
 
-    @OptIn(ObsoleteCoroutinesApi::class)
     private fun setSearchAsyncEditText() {
         binding.edtSearchUser.doAfterTextChanged {
             lifecycleScope.launch {
                 val text = it.toString()
                 viewModel.setShowSearchIcon(text.isNotEmpty())
-                viewModel.queryChannel.send(text)
+                viewModel.queryFlow.emit(text)
             }
         }
 

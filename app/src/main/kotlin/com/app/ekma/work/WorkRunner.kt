@@ -58,7 +58,7 @@ object WorkRunner {
                 .setConstraints(constraints)
                 .setBackoffCriteria(
                     BackoffPolicy.LINEAR,
-                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                    10_000L,
                     TimeUnit.MILLISECONDS
                 )
                 .setInputData(
@@ -90,7 +90,7 @@ object WorkRunner {
                 .setConstraints(constraints)
                 .setBackoffCriteria(
                     BackoffPolicy.LINEAR,
-                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                    10_000L,
                     TimeUnit.MILLISECONDS
                 )
                 .setInputData(
@@ -122,7 +122,7 @@ object WorkRunner {
                 .setConstraints(constraints)
                 .setBackoffCriteria(
                     BackoffPolicy.LINEAR,
-                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                    10_000L,
                     TimeUnit.MILLISECONDS
                 )
                 .setInputData(
@@ -154,7 +154,7 @@ object WorkRunner {
                 .setConstraints(constraints)
                 .setBackoffCriteria(
                     BackoffPolicy.LINEAR,
-                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                    10_000L,
                     TimeUnit.MILLISECONDS
                 )
                 .setInputData(
@@ -186,7 +186,7 @@ object WorkRunner {
                 .setConstraints(constraints)
                 .setBackoffCriteria(
                     BackoffPolicy.LINEAR,
-                    OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
+                    10_000L,
                     TimeUnit.MILLISECONDS
                 )
                 .setInputData(

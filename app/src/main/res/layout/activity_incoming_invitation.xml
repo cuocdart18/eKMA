@@ -1,32 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Incoming invitation"
-        android:textColor="@color/black" />
+    <data>
 
-    <TextView
-        android:id="@+id/tv_sender_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/black" />
+    </data>
 
-    <Button
-        android:id="@+id/btn_accept"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Accept" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lab_black"
+        android:gravity="center">
 
-    <Button
-        android:id="@+id/btn_reject"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reject" />
-</LinearLayout>
+        <View
+            android:id="@+id/viewFakeStatus"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imvAvatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="48dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/user"
+            app:civ_circle_background_color="@color/lab_white"
+            app:layout_constraintBottom_toTopOf="@id/btnReject"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSenderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/circularstd_bold"
+            android:includeFontPadding="false"
+            android:text="Ngo Cuoc Dat"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@id/imvAvatar"
+            app:layout_constraintStart_toStartOf="@id/imvAvatar"
+            app:layout_constraintTop_toBottomOf="@id/imvAvatar" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCallFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/circularstd_book"
+            android:includeFontPadding="false"
+            android:text="Call from eKMA"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/imvAvatar"
+            app:layout_constraintStart_toStartOf="@id/imvAvatar"
+            app:layout_constraintTop_toBottomOf="@id/tvSenderName" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btnReject"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bgr_selector_btn_reject"
+            app:layout_constraintBottom_toTopOf="@id/tvReject"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_phone_reject"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvReject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"
+            android:fontFamily="@font/circularstd_book"
+            android:includeFontPadding="false"
+            android:text="DECLINE"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/btnReject"
+            app:layout_constraintStart_toStartOf="@id/btnReject" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btnAccept"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bgr_selector_btn_accept"
+            app:layout_constraintBottom_toTopOf="@id/tvAccept"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_phone_accept"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"
+            android:fontFamily="@font/circularstd_book"
+            android:includeFontPadding="false"
+            android:text="ANSWER"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/btnAccept"
+            app:layout_constraintStart_toStartOf="@id/btnAccept" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

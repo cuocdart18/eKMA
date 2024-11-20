@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -36,6 +37,7 @@
         android:theme="@style/Theme.KMATool"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
@@ -45,40 +47,49 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".ui.chat.activity.ChatActivity"
             android:exported="true" />
+
         <activity
             android:name=".ui.calling.OutgoingInvitationActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.calling.IncomingInvitationActivity"
             android:exported="false" />
+
         <activity
             android:name=".ui.calling.VideoCallingActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="false"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true" />
+
         <activity
             android:name=".ui.calling.AudioCallingActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="false"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true" />
+
         <activity
             android:name=".activities.test_event.EventHandlingActivity"
             android:exported="false" />
 
         <receiver android:name=".broadcast_receiver.AlarmReceiver" />
+
         <receiver
             android:name=".broadcast_receiver.BootCompletedReceiver"
             android:enabled="false"
@@ -90,6 +101,7 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".broadcast_receiver.MyCallingReceiver"
             android:exported="false" />
@@ -106,6 +118,12 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-    </application>
 
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            android:exported="false"
+            android:stopWithTask="false"
+            tools:node="merge"/>
+    </application>
 </manifest>

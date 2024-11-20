@@ -25,12 +25,12 @@ class SearchDataViewModel @Inject constructor(
     var isUserTyped = ObservableField<Boolean>()
 
     // instant EditText
-    @OptIn(ObsoleteCoroutinesApi::class)
-    internal val queryChannel = BroadcastChannel<String>(Channel.CONFLATED)
+    internal val queryFlow = MutableSharedFlow<String>(
+        replay = 0,
+        extraBufferCapacity = 1
+    )
 
-    @OptIn(ObsoleteCoroutinesApi::class, FlowPreview::class)
-    val searchResult = queryChannel
-        .asFlow()
+    val searchResult = queryFlow
         .debounce(600L)
         .filterNot { it.isBlank() }
         .distinctUntilChanged()

@@ -15,6 +15,7 @@ import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.TO_POSITION
 import com.app.ekma.common.makeInVisible
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.super_utils.animation.gone
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.FragmentListChatBinding
 import com.app.ekma.ui.chat.main.ChatFragment
@@ -43,6 +44,11 @@ class ListChatFragment : BaseFragment<FragmentListChatBinding>() {
     }
 
     override fun initView() {
+        binding.btnBack.setOnSingleClickListener {
+            binding.btnBack.gone(true) {
+                requireActivity().finish()
+            }
+        }
         binding.layoutSearch.setOnSingleClickListener {
             parentFragmentManager.commit {
                 replace<SearchUserFragment>(R.id.frmContainer)

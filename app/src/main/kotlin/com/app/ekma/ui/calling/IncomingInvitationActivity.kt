@@ -1,22 +1,26 @@
 package com.app.ekma.ui.calling
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.app.ekma.R
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.checkCallPermission
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.pattern.singleton.BusyCalling
+import com.app.ekma.common.super_utils.activity.collectLatestFlow
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityIncomingInvitationBinding
 import com.app.ekma.firebase.MSG_ACCEPT
@@ -28,7 +32,9 @@ import com.app.ekma.firebase.MSG_REJECT
 import com.app.ekma.firebase.MSG_SEND_CHANNEL_TOKEN
 import com.app.ekma.firebase.MSG_TYPE
 import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class IncomingInvitationActivity : BaseActivity() {
@@ -58,6 +64,7 @@ class IncomingInvitationActivity : BaseActivity() {
         setContentView(binding.root)
         getData()
         setupUI()
+        addCollect()
         BusyCalling.setData(true)
     }
 
@@ -66,17 +73,46 @@ class IncomingInvitationActivity : BaseActivity() {
         bundlePasser?.let {
             viewModel.inviterCode = it.getString(MSG_INVITER_CODE, "")
             viewModel.callType = it.getString(MSG_TYPE, "")
+            viewModel.setCallTypeName(viewModel.callType)
         }
     }
 
     private fun setupUI() {
-        binding.tvSenderName.text = viewModel.inviterCode
+        viewModel.getSenderInformation()
         binding.btnAccept.setOnSingleClickListener(onClickBtnAccept)
         binding.btnReject.setOnSingleClickListener(onClickBtnReject)
-        viewModel.isExpiredActivation.observe(this) { isExpired ->
-            if (isExpired) {
+        onBackPressedDispatcher.addCallback(this) {
+            binding.btnReject.isEnabled = false
+            onReject()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun addCollect() {
+        collectLatestFlow(viewModel.isExpiredActivation) {
+            if (it) {
+                delay(1000L)
                 finish()
             }
+        }
+
+        collectLatestFlow(viewModel.imageAvatarUri) {
+            it?.let {
+                Glide.with(this)
+                    .load(it)
+                    .override(SMALL_AVT_W_H, SMALL_AVT_W_H)
+                    .placeholder(R.drawable.user)
+                    .error(R.drawable.user)
+                    .into(binding.imvAvatar)
+            }
+        }
+
+        collectLatestFlow(viewModel.friendName) {
+            binding.tvSenderName.text = it
+        }
+
+        collectLatestFlow(viewModel.callTypeName) {
+            binding.tvCallFrom.text = "$it call from eKMA"
         }
     }
 
@@ -84,21 +120,26 @@ class IncomingInvitationActivity : BaseActivity() {
         if (checkCallPermission(this, viewModel.callType)) {
             onAccept()
         } else {
-            if (viewModel.callType == MSG_AUDIO_CALL_TYPE) {
-                requestAudioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-            } else if (viewModel.callType == MSG_VIDEO_CALL_TYPE) {
-                requestVideoPermissionLauncher.launch(
-                    arrayOf(
-                        Manifest.permission.RECORD_AUDIO,
-                        Manifest.permission.CAMERA
+            when (viewModel.callType) {
+                MSG_AUDIO_CALL_TYPE -> {
+                    requestAudioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                }
+
+                MSG_VIDEO_CALL_TYPE -> {
+                    requestVideoPermissionLauncher.launch(
+                        arrayOf(
+                            Manifest.permission.RECORD_AUDIO,
+                            Manifest.permission.CAMERA
+                        )
                     )
-                )
+                }
             }
             showToast("Bạn cần cấp quyền")
         }
     }
 
     private val onClickBtnReject: (View) -> Unit = {
+        binding.btnReject.isEnabled = false
         onReject()
     }
 
@@ -170,10 +211,5 @@ class IncomingInvitationActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(invitationResponseReceiver)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.isExpiredActivation.removeObservers(this)
     }
 }

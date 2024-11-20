@@ -5,13 +5,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.updateLayoutParams
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.app.ekma.R
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.pattern.singleton.BusyCalling
+import com.app.ekma.common.super_utils.activity.collectLatestFlow
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityOugoingInvitationBinding
 import com.app.ekma.firebase.MSG_ACCEPT
@@ -19,7 +24,12 @@ import com.app.ekma.firebase.MSG_OPERATION
 import com.app.ekma.firebase.MSG_REJECT
 import com.app.ekma.firebase.MSG_TYPE
 import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
+import com.bumptech.glide.Glide
+import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+
+const val SMALL_AVT_W_H = 100
 
 @AndroidEntryPoint
 class OutgoingInvitationActivity : BaseActivity() {
@@ -38,7 +48,8 @@ class OutgoingInvitationActivity : BaseActivity() {
         setContentView(binding.root)
         getData()
         setupUI()
-        initVideoInvitation()
+        addCollect()
+        viewModel.getReceivers()
         // set isBusyCalling state in this device
         BusyCalling.setData(true)
     }
@@ -52,25 +63,49 @@ class OutgoingInvitationActivity : BaseActivity() {
     }
 
     private fun setupUI() {
-        // cancel activity after not receive a response
-        viewModel.isExpiredActivation.observe(this) { isExpired ->
-            if (isExpired) {
-                viewModel.cancelInvitation {
-                    finish()
-                }
-            }
+        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            height = getStatusBarHeight
         }
+
         binding.btnCancel.setOnSingleClickListener {
-            viewModel.cancelInvitation {
-                finish()
-            }
+            binding.btnCancel.isEnabled = false
+            viewModel.cancelInvitation()
+        }
+
+        onBackPressedDispatcher.addCallback(this) {
+            binding.btnCancel.isEnabled = false
+            viewModel.cancelInvitation()
         }
     }
 
-    private fun initVideoInvitation() {
-        viewModel.getReceivers { name ->
-            binding.tvReceiverName.text = "Call ${viewModel.callType} for $name"
-            viewModel.inviteReceiver()
+    private fun addCollect() {
+        // cancel activity after not receive a response
+        collectLatestFlow(viewModel.isExpiredActivation) {
+            if (it) {
+                viewModel.cancelInvitation()
+            }
+        }
+
+        collectLatestFlow(viewModel.imageAvatarUri) {
+            it?.let {
+                Glide.with(this)
+                    .load(it)
+                    .override(SMALL_AVT_W_H, SMALL_AVT_W_H)
+                    .placeholder(R.drawable.user)
+                    .error(R.drawable.user)
+                    .into(binding.imvAvatar)
+            }
+        }
+
+        collectLatestFlow(viewModel.friendName) {
+            binding.tvReceiverName.text = it
+        }
+
+        collectLatestFlow(viewModel.onCancelInvite) {
+            if (it) {
+                delay(1000L)
+                finish()
+            }
         }
     }
 
@@ -96,9 +131,7 @@ class OutgoingInvitationActivity : BaseActivity() {
 
     private val getTokenCallback: (String) -> Unit = { token ->
         if (token.isEmpty()) {
-            viewModel.cancelInvitation {
-                finish()
-            }
+            viewModel.cancelInvitation()
         } else {
             viewModel.sendChannelTokenToReceiver(token) {
                 // move to calling activity
@@ -130,10 +163,5 @@ class OutgoingInvitationActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(invitationResponseReceiver)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.isExpiredActivation.removeObservers(this)
     }
 }

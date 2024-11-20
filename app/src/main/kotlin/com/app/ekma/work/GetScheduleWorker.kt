@@ -2,6 +2,7 @@ package com.app.ekma.work
 
 import android.app.ForegroundServiceStartNotAllowedException
 import android.content.Context
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -128,6 +129,15 @@ class GetScheduleWorker @AssistedInject constructor(
             .setProgress(100, 0, true)
             .build()
 
-        return ForegroundInfo(GET_SCHEDULE_ID, notification)
+        val foregroundInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            ForegroundInfo(
+                GET_SCHEDULE_ID,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
+            ForegroundInfo(GET_SCHEDULE_ID, notification)
+        }
+        return foregroundInfo
     }
 }
