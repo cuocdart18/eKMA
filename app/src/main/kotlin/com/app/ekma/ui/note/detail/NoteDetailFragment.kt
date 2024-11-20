@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.add
@@ -17,6 +18,7 @@ import com.app.ekma.common.KEY_PASS_NOTE_OBJ
 import com.app.ekma.common.KEY_PASS_VOICE_AUDIO_NAME
 import com.app.ekma.common.UPDATE_NOTE_MODE
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.super_utils.animation.gone
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.data.models.Note
 import com.app.ekma.databinding.FragmentNoteDetailBinding
@@ -53,7 +55,7 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
     }
 
     private fun setupView() {
-        binding.viewFakeStatus.updateLayoutParams<LinearLayout.LayoutParams> {
+        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
             height = getStatusBarHeight
         }
         if (viewModel.note.audioName.isNotEmpty()) {
@@ -71,6 +73,11 @@ class NoteDetailFragment : BaseFragment<FragmentNoteDetailBinding>() {
         }
         binding.btnDeleteNote.setOnSingleClickListener { onClickBtnDelete() }
         binding.fabUpdateNote.setOnSingleClickListener { onClickBtnUpdate() }
+        binding.btnBack.setOnSingleClickListener {
+            binding.btnBack.gone(true) {
+                parentFragmentManager.popBackStack()
+            }
+        }
     }
 
     private fun onClickBtnUpdate() {

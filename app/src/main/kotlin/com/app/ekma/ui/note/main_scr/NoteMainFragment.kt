@@ -98,9 +98,11 @@ class NoteMainFragment : BaseFragment<FragmentNoteMainBinding>() {
 
     private fun setTextTitleHeader() {
         if (viewModel.noteMode == ADD_NOTE_MODE) {
+            binding.btnBack.makeGone()
             binding.tvNoteHead.text = getString(R.string.tv_note_head_add)
             viewModel.getCurrentDayAndTime()
         } else if (viewModel.noteMode == UPDATE_NOTE_MODE) {
+            binding.btnBack.makeVisible()
             binding.tvNoteHead.text = getString(R.string.tv_note_head_update)
             binding.edtTitle.setText(viewModel.oldNote.title)
             binding.edtContent.setText(viewModel.oldNote.content)
@@ -122,6 +124,14 @@ class NoteMainFragment : BaseFragment<FragmentNoteMainBinding>() {
         setupForBaseLayout()
         addVoicePlayerLayout()
         setupForRecorderLayout()
+        binding.btnBack.setOnSingleClickListener {
+            binding.btnBack.gone(true) {
+                parentFragmentManager.popBackStack(
+                    NoteDetailFragment::class.java.simpleName,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")

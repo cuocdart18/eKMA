@@ -50,17 +50,27 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="210dp">
+                        android:layout_height="wrap_content">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/btnBack"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="12dp"
+                            android:src="@drawable/ic_back_chat"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/cvBanner"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_margin="16dp"
+                            android:layout_height="165dp"
+                            android:layout_marginHorizontal="16dp"
+                            android:layout_marginVertical="12dp"
                             android:elevation="2dp"
                             app:cardCornerRadius="24dp"
-                            app:layout_constraintBottom_toTopOf="@id/vpIndicator"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toBottomOf="@id/btnBack">
 
                             <androidx.viewpager2.widget.ViewPager2
                                 android:id="@+id/vpBanner"
@@ -76,8 +86,8 @@
                             android:paddingVertical="4dp"
                             app:dotsColor="@color/lab_gray"
                             app:dotsSize="8dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/cvBanner"
                             app:layout_constraintStart_toStartOf="parent"
                             app:selectedDotColor="@color/lab_red" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -89,7 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="10dp"
                     app:layout_collapseMode="pin"
                     app:layout_collapseParallaxMultiplier="0.7"
                     app:layout_constraintTop_toBottomOf="@+id/vpIndicator" />

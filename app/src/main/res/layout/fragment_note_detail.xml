@@ -19,52 +19,61 @@
             android:fillViewport="true"
             android:scrollbars="none">
 
-            <LinearLayout
-                android:id="@+id/layout_main"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutMain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/lab_black"
-                android:orientation="vertical">
+                android:background="@color/lab_black">
 
                 <View
                     android:id="@+id/viewFakeStatus"
                     android:layout_width="1dp"
-                    android:layout_height="1dp" />
+                    android:layout_height="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:src="@drawable/ic_back_chat"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/viewFakeStatus" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/btnDeleteNote"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_delete_note"
+                    android:tint="@color/lab_red"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/viewFakeStatus" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvNoteTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/base_ultra_margin"
-                    android:layout_marginBottom="@dimen/base_xxhigh_margin"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="10">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="8"
-                        android:padding="@dimen/base_high_padding"
-                        android:text="@{note.title}"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/base_normal_header_text"
-                        android:textStyle="bold" />
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/btn_delete_note"
-                        android:layout_width="0dp"
-                        android:layout_height="24dp"
-                        android:layout_weight="2"
-                        android:contentDescription="@string/delete_note"
-                        android:src="@drawable/trash_outline_red" />
-                </LinearLayout>
+                    android:layout_marginTop="24dp"
+                    android:padding="@dimen/base_high_padding"
+                    android:text="@{note.title}"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/base_normal_header_text"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/btnDeleteNote" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="32dp"
                     android:background="@drawable/bgr_box_of_events_rectangle_white_border"
                     android:orientation="vertical"
-                    android:padding="@dimen/base_high_padding">
+                    android:padding="@dimen/base_high_padding"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvNoteTitle">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -94,11 +103,13 @@
 
                         <androidx.appcompat.widget.AppCompatTextView
                             style="@style/BaseTextViewDateTime"
-                            android:text="@string/note_date" />
+                            android:text="@string/note_date"
+                            android:textColor="@color/lab_red" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             style="@style/BaseTextViewDateTime"
-                            android:text="@string/note_time" />
+                            android:text="@string/note_time"
+                            android:textColor="@color/lab_red" />
                     </LinearLayout>
 
                     <androidx.appcompat.widget.AppCompatImageView
@@ -121,7 +132,7 @@
                         android:layout_marginTop="@dimen/base_high_margin"
                         android:layout_marginBottom="@dimen/base_normal_margin"
                         android:text="@string/description_header"
-                        android:textColor="@color/lab_black"
+                        android:textColor="@color/lab_red"
                         android:textSize="@dimen/base_helper_text"
                         android:textStyle="normal" />
 
@@ -141,7 +152,7 @@
                         android:importantForAccessibility="no"
                         android:src="@drawable/checklist_rafiki_red_512dp" />
                 </LinearLayout>
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

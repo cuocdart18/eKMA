@@ -30,6 +30,7 @@ import com.app.ekma.common.makeVisible
 import com.app.ekma.common.super_utils.activity.collectLatestFlow
 import com.app.ekma.common.super_utils.animation.MarginType
 import com.app.ekma.common.super_utils.animation.animateMargin
+import com.app.ekma.common.super_utils.animation.gone
 import com.app.ekma.common.super_utils.animation.invisible
 import com.app.ekma.common.super_utils.animation.visible
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
@@ -153,7 +154,11 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
         }
         binding.edtMessageInput.afterTextChanged { viewModel.setEnableBtnSendMsg(it.isNotEmpty()) }
 
-        binding.btnBack.setOnSingleClickListener { parentFragmentManager.popBackStack() }
+        binding.btnBack.setOnSingleClickListener {
+            binding.btnBack.gone(true) {
+                parentFragmentManager.popBackStack()
+            }
+        }
         binding.btnImagePicker.setOnSingleClickListener(onClickBtnImagePicker)
         binding.btnSend.setOnSingleClickListener(onClickBtnSend)
         binding.btnInfo.setOnSingleClickListener(onClickBtnInfo)

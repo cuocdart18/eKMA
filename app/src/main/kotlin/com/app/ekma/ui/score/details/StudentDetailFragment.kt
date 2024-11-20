@@ -15,6 +15,8 @@ import com.app.ekma.common.jsonObjectToString
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible
 import com.app.ekma.common.super_utils.activity.collectLatestFlow
+import com.app.ekma.common.super_utils.animation.gone
+import com.app.ekma.common.super_utils.click.performClick
 import com.app.ekma.data.models.Student
 import com.app.ekma.databinding.FragmentScoreStudentDetailBinding
 import com.app.ekma.ui.score.details.adapter.ItemScoreBannerFragment
@@ -38,10 +40,7 @@ class StudentDetailFragment : BaseFragment<FragmentScoreStudentDetailBinding>() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
-            height = getStatusBarHeight
-        }
-        showLoadingLayout()
+        setupUI()
         receiveData()
 
         viewModel.getDetailStudent { student ->
@@ -85,6 +84,20 @@ class StudentDetailFragment : BaseFragment<FragmentScoreStudentDetailBinding>() 
         binding.rvScore.isFocusable = false
         binding.rvScore.itemAnimator = null
         binding.rvScore.adapter = studentDetailAdapter
+    }
+
+    private fun setupUI() {
+        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            height = getStatusBarHeight
+        }
+
+        showLoadingLayout()
+
+        binding.btnBack.performClick {
+            binding.btnBack.gone(true) {
+                parentFragmentManager.popBackStack()
+            }
+        }
     }
 
     private fun showLoadingLayout() {
