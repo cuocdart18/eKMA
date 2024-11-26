@@ -61,6 +61,7 @@ dependencies {
     implementation project(path: ':GoogleProgressBar')
     implementation project(path: ':CircularFillableLoaders')
     implementation project(path: ':CircleImageView')
+    implementation project(path: ':ContextUtils')
 
     // firebase
     implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.2'

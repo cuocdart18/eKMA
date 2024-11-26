@@ -2,8 +2,6 @@ package com.app.ekma.ui.chat.main
 
 import android.content.Context
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.IMAGE_MSG
@@ -67,6 +65,10 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
     private lateinit var membersCode: MutableList<String>
     var roomId = ""
 
+    private val _showScrollPopUp = MutableStateFlow(false)
+    val showScrollPopUp: StateFlow<Boolean>
+        get() = _showScrollPopUp.asStateFlow()
+
     private val _enableSendMsg = MutableStateFlow(false)
     val enableSendMsg: StateFlow<Boolean>
         get() = _enableSendMsg.asStateFlow()
@@ -94,6 +96,12 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
     val modifiedMsgPosition: StateFlow<Int>
         get() = _modifiedMsgPosition.asStateFlow()
     private var lastMsgPosition = -1
+
+    fun setShowScrollPopUp(hasShow: Boolean) {
+        viewModelScope.launch {
+            _showScrollPopUp.value = hasShow
+        }
+    }
 
     fun setEnableBtnSendMsg(hasEnable: Boolean) {
         viewModelScope.launch {

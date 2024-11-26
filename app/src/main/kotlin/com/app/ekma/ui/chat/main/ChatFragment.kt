@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.animation.AnticipateOvershootInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -34,6 +35,7 @@ import com.app.ekma.common.super_utils.animation.gone
 import com.app.ekma.common.super_utils.animation.invisible
 import com.app.ekma.common.super_utils.animation.visible
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
+import com.app.ekma.common.super_utils.number_string_date.dp
 import com.app.ekma.databinding.FragmentChatBinding
 import com.app.ekma.firebase.MSG_AUDIO_CALL_TYPE
 import com.app.ekma.firebase.MSG_TYPE
@@ -60,6 +62,9 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
         val screenHeight = binding.root.height
         val keyboardHeight = screenHeight - rect.bottom // calculate size
         removeListen()
+        if (viewModel.showScrollPopUp.value) {
+            setShowScrollPopUp(true)
+        }
         binding.layoutFooter.animateMargin(
             marginType = MarginType.BOTTOM,
             duration = 250,
@@ -152,8 +157,18 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
             if (it) binding.btnSend.visible(true)
             else binding.btnSend.invisible(true)
         }
+        collectLatestFlow(viewModel.showScrollPopUp) {
+            setShowScrollPopUp(state = it)
+        }
         binding.edtMessageInput.afterTextChanged { viewModel.setEnableBtnSendMsg(it.isNotEmpty()) }
 
+        binding.btnScroll.setOnSingleClickListener {
+            try {
+                binding.rcvMessages.smoothScrollToPosition(viewModel.messages.size - 1)
+            } catch (e: Exception) {
+                binding.rcvMessages.scrollToPosition(viewModel.messages.size - 1)
+            }
+        }
         binding.btnBack.setOnSingleClickListener {
             binding.btnBack.gone(true) {
                 parentFragmentManager.popBackStack()
@@ -164,18 +179,22 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
         binding.btnInfo.setOnSingleClickListener(onClickBtnInfo)
         binding.btnAudioCall.setOnSingleClickListener(onClickBtnAudioCall)
         binding.btnVideoCall.setOnSingleClickListener(onClickBtnVideoCall)
-        binding.rcvMessages.addOnScrollListener(object :
-            PaginationScrollListener(linearLayoutManager) {
-            override fun loadMore() {
-                viewModel.isLoading = true
-                (viewModel.currentPage)++
-                loadNextPage()
-            }
+        binding.rcvMessages.addOnScrollListener(
+            object : PaginationScrollListener(linearLayoutManager) {
+                override fun loadMore() {
+                    viewModel.isLoading = true
+                    (viewModel.currentPage)++
+                    loadNextPage()
+                }
 
-            override fun isLoading() = viewModel.isLoading
+                override fun isLoading() = viewModel.isLoading
 
-            override fun isLastPage() = viewModel.isLastPage
-        })
+                override fun isLastPage() = viewModel.isLastPage
+
+                override fun setShowScrollPopUp(state: Boolean) {
+                    viewModel.setShowScrollPopUp(state)
+                }
+            })
     }
 
     private val onClickBtnSend: (View) -> Unit = {
@@ -320,5 +339,32 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
 
     private fun removeListen() {
         androidRoot?.viewTreeObserver?.removeOnGlobalLayoutListener(globalLayoutListener)
+    }
+
+    private fun setShowScrollPopUp(state: Boolean) {
+        binding.btnScroll.clearAnimation()
+        val xPos = (binding.layoutRoot.width / 2 - binding.btnScroll.width / 2).toFloat()
+        val yPosShow = binding.layoutFooter.y - 50f.dp
+        val yPosHide = (binding.layoutRoot.height + binding.btnScroll.height).toFloat()
+        if (state) {
+            binding.btnScroll.makeInVisible()
+            binding.btnScroll.animate()
+                .x(xPos)
+                .y(yPosHide)
+                .withEndAction {
+                    binding.btnScroll.makeVisible()
+                    binding.btnScroll.animate()
+                        .x(xPos)
+                        .y(yPosShow)
+                        .setInterpolator(AnticipateOvershootInterpolator())
+                        .setDuration(300L)
+                }
+        } else {
+            binding.btnScroll.animate()
+                .x(xPos)
+                .y(yPosHide)
+                .setInterpolator(AnticipateOvershootInterpolator())
+                .setDuration(300L)
+        }
     }
 }

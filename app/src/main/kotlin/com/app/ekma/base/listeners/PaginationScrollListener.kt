@@ -3,8 +3,9 @@ package com.app.ekma.base.listeners
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class PaginationScrollListener(private val linearLayoutManager: LinearLayoutManager) :
-    RecyclerView.OnScrollListener() {
+abstract class PaginationScrollListener(
+    private val linearLayoutManager: LinearLayoutManager
+) : RecyclerView.OnScrollListener() {
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
@@ -12,6 +13,8 @@ abstract class PaginationScrollListener(private val linearLayoutManager: LinearL
         val lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition()
         val visibleItemCount = linearLayoutManager.childCount
         val totalItemCount = linearLayoutManager.itemCount
+
+        setShowScrollPopUp(totalItemCount - lastVisibleItemPosition > 1)
 
         if (isLoading() or isLastPage()) return
 
@@ -23,4 +26,5 @@ abstract class PaginationScrollListener(private val linearLayoutManager: LinearL
     abstract fun loadMore()
     abstract fun isLoading(): Boolean
     abstract fun isLastPage(): Boolean
+    abstract fun setShowScrollPopUp(state: Boolean)
 }
