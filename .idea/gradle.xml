@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/ActivityUtils" />
             <option value="$PROJECT_DIR$/CircleImageView" />
             <option value="$PROJECT_DIR$/CircularFillableLoaders" />
+            <option value="$PROJECT_DIR$/ContextUtils" />
             <option value="$PROJECT_DIR$/GoogleProgressBar" />
             <option value="$PROJECT_DIR$/app" />
           </set>

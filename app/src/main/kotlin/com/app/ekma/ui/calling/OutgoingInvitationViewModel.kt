@@ -136,9 +136,7 @@ class OutgoingInvitationViewModel @Inject constructor(
         fcmService.sendCallInvitationMessage(fcmDataMessage)
     }
 
-    fun createChannelAndGetToken(
-        callback: (String) -> Unit
-    ) {
+    fun createChannelAndGetToken(callback: (String, String) -> Unit) {
         timer.count = PENDING_INVITE_TIME
         viewModelScope.launch {
             val request = AgoraTokenRequest(
@@ -152,10 +150,10 @@ class OutgoingInvitationViewModel @Inject constructor(
             if (tokenResource is Resource.Success) {
                 val token = tokenResource.data?.token ?: ""
                 logError("token=$token")
-                callback(token)
+                callback(token, receiverCodes.first())
             } else if (tokenResource is Resource.Error) {
                 logError("error=${tokenResource.message}")
-                callback("")
+                callback("", receiverCodes.first())
             }
         }
     }

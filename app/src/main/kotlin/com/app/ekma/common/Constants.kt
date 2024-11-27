@@ -61,6 +61,12 @@ const val PAUSE_RECORDING = 1002
 const val RESUME_RECORDING = 1003
 const val STOP_RECORDING = 1004
 
+// for Call timer
+const val START_CALL_TIMER = 1101
+const val PAUSE_CALL_TIMER = 1102
+const val RESUME_CALL_TIMER = 1103
+const val STOP_CALL_TIMER = 1104
+
 // for Playing
 const val START_PLAYING = 1005
 const val PAUSE_PLAYING = 1006

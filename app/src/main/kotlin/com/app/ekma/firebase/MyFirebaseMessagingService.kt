@@ -4,12 +4,12 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.app.ekma.ui.calling.IncomingInvitationActivity
-import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.data.models.FcmDataMessage
 import com.app.ekma.data.models.service.IFcmService
+import com.app.ekma.ui.calling.IncomingInvitationActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,8 +53,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         fcmService.sendCallInvitationMessage(fcmDataMessage)
                     }
                 } else {
-                    val intent =
-                        Intent(applicationContext, IncomingInvitationActivity::class.java)
+                    val intent = Intent(applicationContext, IncomingInvitationActivity::class.java)
                     val bundle = bundleOf(
                         MSG_INVITER_CODE to inviterCode,
                         MSG_TYPE to type

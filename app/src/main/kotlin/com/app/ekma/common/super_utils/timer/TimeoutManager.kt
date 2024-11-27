@@ -8,9 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class TimeoutManager (
-    private val builder: Builder
-) {
+class TimeoutManager(private val builder: Builder) {
     private var isLoaded = false
 
     init {

@@ -21,6 +21,7 @@ import com.app.ekma.common.checkCallPermission
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.super_utils.activity.collectLatestFlow
+import com.app.ekma.common.super_utils.animation.gone
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityIncomingInvitationBinding
 import com.app.ekma.firebase.MSG_ACCEPT
@@ -95,7 +96,6 @@ class IncomingInvitationActivity : BaseActivity() {
                 finish()
             }
         }
-
         collectLatestFlow(viewModel.imageAvatarUri) {
             it?.let {
                 Glide.with(this)
@@ -106,11 +106,9 @@ class IncomingInvitationActivity : BaseActivity() {
                     .into(binding.imvAvatar)
             }
         }
-
         collectLatestFlow(viewModel.friendName) {
             binding.tvSenderName.text = it
         }
-
         collectLatestFlow(viewModel.callTypeName) {
             binding.tvCallFrom.text = "$it call from eKMA"
         }
@@ -146,8 +144,8 @@ class IncomingInvitationActivity : BaseActivity() {
     private fun onAccept() {
         viewModel.sendMessageInvitationResponse(MSG_ACCEPT) {
             viewModel.channelTokenPending()
-            binding.btnAccept.makeGone()
-            binding.btnReject.makeGone()
+            binding.btnAccept.gone(true) { binding.tvAccept.makeGone() }
+            binding.btnReject.gone(true) { binding.tvReject.makeGone() }
         }
     }
 
@@ -198,6 +196,7 @@ class IncomingInvitationActivity : BaseActivity() {
                         val bundleAcceptCall = bundleOf(
                             CHANNEL_TOKEN to token,
                             KEY_PASS_CHAT_ROOM_ID to roomId,
+                            MSG_INVITER_CODE to viewModel.inviterCode,
                         )
                         intentAcceptCall.putExtras(bundleAcceptCall)
                         startActivity(intentAcceptCall)

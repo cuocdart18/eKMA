@@ -8,7 +8,7 @@
     android:visibility="gone">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_duration"
+        android:id="@+id/tvDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/base_normal_margin"
@@ -23,14 +23,14 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/btn_delete"
+            android:id="@+id/btnDelete"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:src="@drawable/close_fill_red"
             android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/btn_record"
+            android:id="@+id/btnRecord"
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:layout_marginStart="@dimen/base_xhigh_margin"
@@ -39,7 +39,7 @@
             android:src="@drawable/record_circle_fill_red" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/btn_fit_record_ui"
+            android:id="@+id/btnFitRecordUi"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:contentDescription="@string/btn_fit_record_ui"

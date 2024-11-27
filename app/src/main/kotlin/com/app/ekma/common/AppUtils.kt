@@ -122,6 +122,16 @@ fun genChatRoomId(studentId: String, myStudentId: String): String {
     }
 }
 
+fun getFriendCodeFromChatRoomId(roomId: String, myStudentId: String): String {
+    val firstCode = roomId.substring(0, 7)
+    val secondCode = roomId.substring(8, 15)
+    return if (firstCode == myStudentId) {
+        secondCode
+    } else {
+        firstCode
+    }
+}
+
 suspend fun formatMembersToRoomName(members: List<String>): String {
     return firestore.collection(KEY_USERS_COLL)
         .document(members.first())
@@ -241,6 +251,19 @@ fun formatRecordingTimer(duration: Int): String {
         "%02d:%02d:%02d.%02d".format(hours, minutes, seconds, millis)
     } else {
         "%02d:%02d.%02d".format(minutes, seconds, millis)
+    }
+    return formatted
+}
+
+fun formatCallingTimer(duration: Long): String {
+    val millis = (duration % 1000) / 10
+    val seconds = (duration / 1000) % 60
+    val minutes = (duration / (1000 * 60)) % 60
+    val hours = (duration / (1000 * 60 * 60))
+    val formatted = if (hours > 0) {
+        "%02d:%02d:%02d".format(hours, minutes, seconds)
+    } else {
+        "%02d:%02d".format(minutes, seconds)
     }
     return formatted
 }

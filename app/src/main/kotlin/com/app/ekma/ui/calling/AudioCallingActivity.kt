@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.util.Rational
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
+import com.app.ekma.R
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.AGORA_APP_ID
 import com.app.ekma.common.CALLING_OPERATION
@@ -18,13 +21,18 @@ import com.app.ekma.common.LEAVE_ROOM
 import com.app.ekma.common.MUTE_MIC
 import com.app.ekma.common.SPEAKER_AUDIO_ROUTE
 import com.app.ekma.common.UNMUTE_MIC
-import com.app.ekma.common.makeGone
-import com.app.ekma.common.makeVisible
 import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.pattern.singleton.CallingOperationResponse
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
+import com.app.ekma.common.super_utils.activity.collectLatestFlow
+import com.app.ekma.common.super_utils.animation.gone
+import com.app.ekma.common.super_utils.animation.visible
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityAudioCallingBinding
+import com.app.ekma.firebase.MSG_INVITER_CODE
+import com.app.ekma.firebase.MSG_RECEIVER_CODE
+import com.bumptech.glide.Glide
+import com.cuocdat.activityutils.getStatusBarHeight
 import dagger.hilt.android.AndroidEntryPoint
 import io.agora.rtc2.ChannelMediaOptions
 import io.agora.rtc2.Constants
@@ -73,27 +81,69 @@ class AudioCallingActivity : BaseActivity() {
         bundle?.let {
             viewModel.token = it.getString(CHANNEL_TOKEN, "")
             viewModel.roomId = it.getString(KEY_PASS_CHAT_ROOM_ID, "")
+            viewModel.friendCode =
+                it.getString(MSG_INVITER_CODE) ?: it.getString(MSG_RECEIVER_CODE, "")
         }
     }
 
     private fun setupUI() {
+        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            height = getStatusBarHeight
+        }
+        viewModel.getSenderInformation()
+
         binding.btnLeave.setOnSingleClickListener {
-            onClickBtnLeaveRoom()
+            binding.layoutControl.gone(true) {
+                onClickBtnLeaveRoom()
+            }
         }
         binding.btnMuteMic.setOnSingleClickListener {
-            onClickBtnMuteMic()
+            viewModel.toggleMicState()
         }
         binding.btnAudioRoute.setOnSingleClickListener {
-            onClickBtnAudioRoute()
+            viewModel.toggleSpeakerState()
+        }
+        binding.layoutControl.visible(true)
+
+        collectLatestFlow(viewModel.imageAvatarUri) {
+            it?.let {
+                Glide.with(this)
+                    .load(it)
+                    .override(SMALL_AVT_W_H, SMALL_AVT_W_H)
+                    .placeholder(R.drawable.user)
+                    .error(R.drawable.user)
+                    .into(binding.imvAvatar)
+            }
+        }
+        collectLatestFlow(viewModel.friendName) {
+            binding.tvSenderName.text = it
+        }
+        collectLatestFlow(viewModel.isMuteMic) {
+            agoraEngine.muteLocalAudioStream(it)
+            if (it) {
+                binding.btnMuteMic.setImageResource(R.drawable.ic_micro_mute)
+            } else {
+                binding.btnMuteMic.setImageResource(R.drawable.ic_micro_unmute)
+            }
+        }
+        collectLatestFlow(viewModel.isSpeakerphone) {
+            agoraEngine.setEnableSpeakerphone(it)
+            if (it) {
+                binding.btnAudioRoute.setImageResource(R.drawable.ic_speakerphone)
+            } else {
+                binding.btnAudioRoute.setImageResource(R.drawable.ic_earpiece)
+            }
+        }
+        collectLatestFlow(viewModel.callTimer) {
+            runCatching {
+                binding.tvCallDescript.text = it
+            }
         }
     }
 
     private val rtcEventHandler: IRtcEngineEventHandler = object : IRtcEngineEventHandler() {
-
         override fun onUserJoined(uid: Int, elapsed: Int) {
-            runOnUiThread {
-                showToast("$uid joined")
-            }
+            viewModel.startCallTimer()
         }
 
         override fun onLocalAudioStateChanged(state: Int, error: Int) {
@@ -104,10 +154,10 @@ class AudioCallingActivity : BaseActivity() {
             logError("onRemoteAudioStateChanged: uid=$uid - state=$state - reason=$reason - elapsed=$elapsed")
             runOnUiThread {
                 if (state == REMOTE_AUDIO_STATE_STOPPED && reason == REMOTE_AUDIO_REASON_REMOTE_MUTED) {
-                    logError("mute mic roi")
+                    binding.btnMuteMicFriend.setImageResource(R.drawable.ic_micro_mute)
                 }
                 if (state == REMOTE_AUDIO_STATE_DECODING && reason == REMOTE_AUDIO_REASON_REMOTE_UNMUTED) {
-                    logError("unmute mic roi")
+                    binding.btnMuteMicFriend.setImageResource(R.drawable.ic_micro_unmute)
                 }
             }
         }
@@ -118,8 +168,7 @@ class AudioCallingActivity : BaseActivity() {
 
         override fun onUserOffline(uid: Int, reason: Int) {
             runOnUiThread {
-                showToast("$uid offline")
-                finish()
+                finishAndRemoveTask()
             }
         }
     }
@@ -152,27 +201,7 @@ class AudioCallingActivity : BaseActivity() {
     }
 
     private fun onClickBtnLeaveRoom() {
-        finish()
-    }
-
-    private fun onClickBtnMuteMic() {
-        agoraEngine.muteLocalAudioStream(viewModel.isMuteMic)
-        if (viewModel.isMuteMic) {
-            binding.btnMuteMic.text = "unmute mic"
-        } else {
-            binding.btnMuteMic.text = "mute mic"
-        }
-        viewModel.isMuteMic = !viewModel.isMuteMic
-    }
-
-    private fun onClickBtnAudioRoute() {
-        agoraEngine.setEnableSpeakerphone(viewModel.isSpeakerphone)
-        if (viewModel.isSpeakerphone) {
-            binding.btnAudioRoute.text = "speakerphone"
-        } else {
-            binding.btnAudioRoute.text = "earpiece"
-        }
-        viewModel.isSpeakerphone = !viewModel.isSpeakerphone
+        finishAndRemoveTask()
     }
 
     override fun onUserLeaveHint() {
@@ -195,13 +224,9 @@ class AudioCallingActivity : BaseActivity() {
             super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         }
         if (isInPictureInPictureMode) {
-            binding.btnMuteMic.makeGone()
-            binding.btnAudioRoute.makeGone()
-            binding.btnLeave.makeGone()
+            binding.layoutControl.gone(true)
         } else {
-            binding.btnMuteMic.makeVisible()
-            binding.btnAudioRoute.makeVisible()
-            binding.btnLeave.makeVisible()
+            binding.layoutControl.visible(true)
         }
     }
 
@@ -236,10 +261,10 @@ class AudioCallingActivity : BaseActivity() {
                 return@observe
             }
             if (operation == MUTE_MIC || operation == UNMUTE_MIC) {
-                onClickBtnMuteMic()
+                viewModel.toggleMicState()
             }
             if (operation == EARPIECE_AUDIO_ROUTE || operation == SPEAKER_AUDIO_ROUTE) {
-                onClickBtnAudioRoute()
+                viewModel.toggleSpeakerState()
             }
             if (operation == LEAVE_ROOM) {
                 onClickBtnLeaveRoom()
@@ -253,12 +278,13 @@ class AudioCallingActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         if (isInPictureInPictureMode) {
-            finish()
+            finishAndRemoveTask()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        viewModel.stopCallTimer()
         agoraEngine.leaveChannel()
         CallingOperationResponse().removeObservers(this)
         CallingOperationResponse.release()

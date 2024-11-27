@@ -46,7 +46,7 @@ class PiPRemoteActionFactory {
                         putExtra(CALLING_OPERATION, MUTE_MIC)
                     }
                 RemoteAction(
-                    Icon.createWithResource(context, R.drawable.mic_outline_white_24dp),
+                    Icon.createWithResource(context, R.drawable.mic_off_outline_white_24dp),
                     "Mute mic",
                     "Mute mic",
                     PendingIntent.getBroadcast(
@@ -64,7 +64,7 @@ class PiPRemoteActionFactory {
                         putExtra(CALLING_OPERATION, UNMUTE_MIC)
                     }
                 RemoteAction(
-                    Icon.createWithResource(context, R.drawable.mic_off_outline_white_24dp),
+                    Icon.createWithResource(context, R.drawable.mic_outline_white_24dp),
                     "Unmute mic",
                     "Unmute mic",
                     PendingIntent.getBroadcast(
@@ -82,7 +82,7 @@ class PiPRemoteActionFactory {
                         putExtra(CALLING_OPERATION, MUTE_CAMERA)
                     }
                 RemoteAction(
-                    Icon.createWithResource(context, R.drawable.videocam_outline_white_24dp),
+                    Icon.createWithResource(context, R.drawable.videocam_off_outline_white_24dp),
                     "Mute camera",
                     "Mute camera",
                     PendingIntent.getBroadcast(
@@ -100,7 +100,7 @@ class PiPRemoteActionFactory {
                         putExtra(CALLING_OPERATION, UNMUTE_CAMERA)
                     }
                 RemoteAction(
-                    Icon.createWithResource(context, R.drawable.videocam_off_outline_white_24dp),
+                    Icon.createWithResource(context, R.drawable.videocam_outline_white_24dp),
                     "Unmute camera",
                     "Unmute camera",
                     PendingIntent.getBroadcast(
@@ -118,7 +118,7 @@ class PiPRemoteActionFactory {
                         putExtra(CALLING_OPERATION, EARPIECE_AUDIO_ROUTE)
                     }
                 RemoteAction(
-                    Icon.createWithResource(context, R.drawable.volume_high_outline_white_24dp),
+                    Icon.createWithResource(context, R.drawable.volume_low_outline_white_24dp),
                     "Earpiece audio route",
                     "Earpiece audio route",
                     PendingIntent.getBroadcast(
@@ -136,7 +136,7 @@ class PiPRemoteActionFactory {
                         putExtra(CALLING_OPERATION, SPEAKER_AUDIO_ROUTE)
                     }
                 RemoteAction(
-                    Icon.createWithResource(context, R.drawable.volume_low_outline_white_24dp),
+                    Icon.createWithResource(context, R.drawable.volume_high_outline_white_24dp),
                     "Speaker audio route",
                     "Speaker audio route",
                     PendingIntent.getBroadcast(

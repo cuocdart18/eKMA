@@ -21,6 +21,7 @@ import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityOugoingInvitationBinding
 import com.app.ekma.firebase.MSG_ACCEPT
 import com.app.ekma.firebase.MSG_OPERATION
+import com.app.ekma.firebase.MSG_RECEIVER_CODE
 import com.app.ekma.firebase.MSG_REJECT
 import com.app.ekma.firebase.MSG_TYPE
 import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
@@ -129,7 +130,7 @@ class OutgoingInvitationActivity : BaseActivity() {
         }
     }
 
-    private val getTokenCallback: (String) -> Unit = { token ->
+    private val getTokenCallback: (String, String) -> Unit = { token, friendCode ->
         if (token.isEmpty()) {
             viewModel.cancelInvitation()
         } else {
@@ -143,7 +144,8 @@ class OutgoingInvitationActivity : BaseActivity() {
                 // put data
                 val bundleAcceptCall = bundleOf(
                     KEY_PASS_CHAT_ROOM_ID to viewModel.roomId,
-                    CHANNEL_TOKEN to token
+                    CHANNEL_TOKEN to token,
+                    MSG_RECEIVER_CODE to friendCode
                 )
                 intentAcceptCall.putExtras(bundleAcceptCall)
                 startActivity(intentAcceptCall)
