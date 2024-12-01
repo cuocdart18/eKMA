@@ -5,12 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import com.app.ekma.R
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.INFORMATION_FRAGMENT
 import com.app.ekma.common.NOTE_FRAGMENT
 import com.app.ekma.common.SCHEDULE_FRAGMENT
 import com.app.ekma.common.SCORE_FRAGMENT
+import com.app.ekma.common.custom_view.ItemBottomView.ACCOUNT
+import com.app.ekma.common.custom_view.ItemBottomView.NOTE
+import com.app.ekma.common.custom_view.ItemBottomView.SCHEDULE
+import com.app.ekma.common.custom_view.ItemBottomView.SCORE
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.makeVisible
 import com.app.ekma.common.pattern.singleton.MainBottomNavigation
@@ -58,6 +61,7 @@ class MainActivity : BaseActivity() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setUiTemplates() {
+        binding.bottomNav.setInitItem()
         setUpHostFragment()
         MainBottomNavigation().observe(this) {
             if (it)
@@ -87,24 +91,12 @@ class MainActivity : BaseActivity() {
         binding.frmHost.isUserInputEnabled = false
         // for bottom navigation view
         binding.bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.score -> {
-                    binding.frmHost.setCurrentItem(SCORE_FRAGMENT, false)
-                }
-
-                R.id.schedule -> {
-                    binding.frmHost.setCurrentItem(SCHEDULE_FRAGMENT, false)
-                }
-
-                R.id.note -> {
-                    binding.frmHost.setCurrentItem(NOTE_FRAGMENT, false)
-                }
-
-                R.id.information -> {
-                    binding.frmHost.setCurrentItem(INFORMATION_FRAGMENT, false)
-                }
+            when (item) {
+                SCORE -> binding.frmHost.setCurrentItem(SCORE_FRAGMENT, false)
+                SCHEDULE -> binding.frmHost.setCurrentItem(SCHEDULE_FRAGMENT, false)
+                NOTE -> binding.frmHost.setCurrentItem(NOTE_FRAGMENT, false)
+                ACCOUNT -> binding.frmHost.setCurrentItem(INFORMATION_FRAGMENT, false)
             }
-            true
         }
     }
 

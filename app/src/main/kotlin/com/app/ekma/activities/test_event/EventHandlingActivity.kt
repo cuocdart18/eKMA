@@ -21,9 +21,9 @@ class EventHandlingActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        binding.loadingView.startAnim(30000L)
     }
+
+
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         when (ev?.action) {
@@ -97,6 +97,5 @@ class EventHandlingActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.loadingView.release()
     }
 }

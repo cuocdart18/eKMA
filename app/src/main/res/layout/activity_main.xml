@@ -15,24 +15,18 @@
         android:background="@color/lab_black">
 
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/frm_host"
+            android:id="@+id/frmHost"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_nav"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            app:itemIconTint="@color/custom_color_bot_nav"
-            app:itemTextColor="@color/custom_color_bot_nav"
+        <com.app.ekma.common.custom_view.MainBottomView
+            android:id="@+id/bottomNav"
+            android:layout_width="wrap_content"
+            android:layout_height="74dp"
+            android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/frm_host"
-            app:menu="@menu/menu_features" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/chatShortcut"

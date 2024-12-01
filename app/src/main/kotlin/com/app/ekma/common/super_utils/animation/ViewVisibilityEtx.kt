@@ -4,39 +4,39 @@ import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 
-fun View.gone(hasAnim: Boolean = false, keepWithIsGone: Boolean = false) {
+fun View.gone(hasAnim: Boolean = false, keepWithIsGone: Boolean = false, duration: Long = 250L) {
     if (keepWithIsGone && isGone) return
-    gone(hasAnim)
+    gone(hasAnim, duration)
 }
 
-fun View.gone(hasAnim: Boolean = false) {
+fun View.gone(hasAnim: Boolean = false, duration: Long = 250L) {
     if (!hasAnim) {
         this.visibility = View.GONE
     } else {
-        animateScale(1f, 0f, 1f, 0f, 250) {
+        animateScale(1f, 0f, 1f, 0f, duration) {
             this.visibility = View.GONE
         }
     }
 }
 
-fun View.gone(hasAnim: Boolean = false, onEnd: () -> Unit = {}) {
+fun View.gone(hasAnim: Boolean = false, duration: Long = 250L, onEnd: () -> Unit = {}) {
     if (!hasAnim) {
         this.visibility = View.GONE
         onEnd.invoke()
     } else {
-        animateScale(1f, 0f, 1f, 0f, 250) {
+        animateScale(1f, 0f, 1f, 0f, duration) {
             this.visibility = View.GONE
             onEnd.invoke()
         }
     }
 }
 
-fun View.visible(hasAnim: Boolean = false, keepWithIsGone: Boolean = false) {
+fun View.visible(hasAnim: Boolean = false, keepWithIsGone: Boolean = false, duration: Long = 250L) {
     if (keepWithIsGone && isVisible) return
-    visible(hasAnim)
+    visible(hasAnim, duration)
 }
 
-fun View.visible(hasAnim: Boolean = false) {
+fun View.visible(hasAnim: Boolean = false, duration: Long = 250L) {
     if (!hasAnim) {
         this.visibility = View.VISIBLE
         if (scaleX == 0f || scaleY == 0f || alpha == 0f) {
@@ -45,11 +45,16 @@ fun View.visible(hasAnim: Boolean = false) {
     } else {
         setScale(0f)
         this.visibility = View.VISIBLE
-        animateScale(0f, 1f, 0f, 1f, 250)
+        animateScale(0f, 1f, 0f, 1f, duration)
     }
 }
 
-fun View.onVisible(isVisible: Boolean, isGone: Boolean = true, hasAnim: Boolean = false) {
+fun View.onVisible(
+    isVisible: Boolean,
+    isGone: Boolean = true,
+    hasAnim: Boolean = false,
+    duration: Long = 250L
+) {
     if (isVisible) visible(hasAnim) else if (isGone) gone(hasAnim) else invisible(hasAnim)
 }
 
