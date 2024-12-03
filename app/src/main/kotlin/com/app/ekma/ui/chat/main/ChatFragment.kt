@@ -154,7 +154,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
             }
         }
         collectLatestFlow(viewModel.enableSendMsg) {
-            if (it) binding.btnSend.visible(true)
+            if (it) binding.btnSend.visible(true) {}
             else binding.btnSend.invisible(true)
         }
         collectLatestFlow(viewModel.showScrollPopUp) {

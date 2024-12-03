@@ -36,16 +36,19 @@ fun View.visible(hasAnim: Boolean = false, keepWithIsGone: Boolean = false, dura
     visible(hasAnim, duration)
 }
 
-fun View.visible(hasAnim: Boolean = false, duration: Long = 250L) {
+fun View.visible(hasAnim: Boolean = false, duration: Long = 250L, onEnd: () -> Unit = {}) {
     if (!hasAnim) {
         this.visibility = View.VISIBLE
         if (scaleX == 0f || scaleY == 0f || alpha == 0f) {
             setScale(1f)
         }
+        onEnd.invoke()
     } else {
         setScale(0f)
         this.visibility = View.VISIBLE
-        animateScale(0f, 1f, 0f, 1f, duration)
+        animateScale(0f, 1f, 0f, 1f, duration) {
+            onEnd.invoke()
+        }
     }
 }
 
@@ -55,7 +58,7 @@ fun View.onVisible(
     hasAnim: Boolean = false,
     duration: Long = 250L
 ) {
-    if (isVisible) visible(hasAnim) else if (isGone) gone(hasAnim) else invisible(hasAnim)
+    if (isVisible) visible(hasAnim) {} else if (isGone) gone(hasAnim) else invisible(hasAnim)
 }
 
 fun View.invisible(hasAnim: Boolean = false, keepWithIsGone: Boolean = false) {
@@ -74,7 +77,7 @@ fun View.invisible(hasAnim: Boolean = false) {
 }
 
 fun View.toggled(hasAnim: Boolean = false) {
-    if (isVisible) gone(hasAnim) else visible(hasAnim)
+    if (isVisible) gone(hasAnim) else visible(hasAnim) {}
 }
 
 fun View.setScale(value: Float) {

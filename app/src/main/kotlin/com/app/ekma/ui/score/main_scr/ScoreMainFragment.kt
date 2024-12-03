@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import com.app.ekma.activities.test_event.EventHandlingActivity
@@ -27,7 +28,7 @@ class ScoreMainFragment : BaseFragment<FragmentScoreMainBinding>() {
     }
 
     private fun setupUI() {
-        binding.viewFakeStatus.updateLayoutParams<LinearLayout.LayoutParams> {
+        binding.viewFakeStatus.updateLayoutParams<ConstraintLayout.LayoutParams> {
             height = getStatusBarHeight
         }
         binding.btnTest.setOnClickListener {

@@ -65,7 +65,7 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>() {
 
         collectLatestFlow(viewModel.miniStudentsRes) { data ->
             if (data.isEmpty()) {
-                binding.tvNoMsg.visible(true)
+                binding.tvNoMsg.visible(true) {}
             } else {
                 binding.tvNoMsg.invisible(true)
             }
@@ -74,7 +74,7 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>() {
 
         collectLatestFlow(viewModel.showSearchIcon) {
             if (it) {
-                binding.layoutIcon.visible(true)
+                binding.layoutIcon.visible(true) {}
             } else {
                 binding.layoutIcon.invisible(true)
             }

@@ -6,157 +6,184 @@
 
     </data>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="74dp"
-        android:background="@drawable/bgr_main_bottom_view"
-        android:orientation="horizontal"
-        android:padding="12dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="78dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutScore"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/bgr_item_main_bottom_view"
-            android:paddingEnd="10dp">
+        <LinearLayout
+            android:id="@+id/layoutRoot"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="-4dp"
+            android:background="@drawable/bgr_main_bottom_view"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewSelected">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/icScore"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginVertical="6dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/ic_score_fill"
-                android:tint="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvScore"
+            <LinearLayout
+                android:id="@+id/layoutItem"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/circularstd_book"
-                android:includeFontPadding="false"
-                android:paddingStart="10dp"
-                android:paddingEnd="2dp"
-                android:text="Điểm"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/icScore"
-                app:layout_constraintStart_toEndOf="@id/icScore"
-                app:layout_constraintTop_toTopOf="@id/icScore" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutSchedule"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/bgr_item_main_bottom_view_unselect"
-            android:paddingEnd="10dp">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/bgr_item_main_bottom_view"
+                    android:paddingEnd="12dp">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/icSchedule"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginVertical="6dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/ic_calendar_outline"
-                android:tint="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/icScore"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginVertical="6dp"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/ic_score_fill"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvSchedule"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/circularstd_book"
-                android:includeFontPadding="false"
-                android:paddingStart="10dp"
-                android:paddingEnd="2dp"
-                android:text="Lịch"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/icSchedule"
-                app:layout_constraintStart_toEndOf="@id/icSchedule"
-                app:layout_constraintTop_toTopOf="@id/icSchedule" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/circularstd_book"
+                        android:includeFontPadding="false"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="2dp"
+                        android:text="Điểm thi"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@id/icScore"
+                        app:layout_constraintStart_toEndOf="@id/icScore"
+                        app:layout_constraintTop_toTopOf="@id/icScore" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutNote"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/bgr_item_main_bottom_view_unselect"
-            android:paddingEnd="10dp">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutSchedule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/bgr_item_main_bottom_view_unselect"
+                    android:paddingEnd="12dp">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/icNote"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginVertical="6dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/ic_note_outline"
-                android:tint="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/icSchedule"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginVertical="6dp"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/ic_calendar_outline"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvNote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/circularstd_book"
-                android:includeFontPadding="false"
-                android:paddingStart="10dp"
-                android:paddingEnd="2dp"
-                android:text="Ghi chú"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/icNote"
-                app:layout_constraintStart_toEndOf="@id/icNote"
-                app:layout_constraintTop_toTopOf="@id/icNote" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvSchedule"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/circularstd_book"
+                        android:includeFontPadding="false"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="2dp"
+                        android:text="Lịch học"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/icSchedule"
+                        app:layout_constraintStart_toEndOf="@id/icSchedule"
+                        app:layout_constraintTop_toTopOf="@id/icSchedule" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/bgr_item_main_bottom_view_unselect"
-            android:paddingEnd="10dp">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutNote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/bgr_item_main_bottom_view_unselect"
+                    android:paddingEnd="12dp">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/icAccount"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginVertical="6dp"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/ic_user_outline"
-                android:tint="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/icNote"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginVertical="6dp"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/ic_note_outline"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/circularstd_book"
-                android:includeFontPadding="false"
-                android:paddingStart="10dp"
-                android:paddingEnd="2dp"
-                android:text="Tài khoản"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/icAccount"
-                app:layout_constraintStart_toEndOf="@id/icAccount"
-                app:layout_constraintTop_toTopOf="@id/icAccount" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvNote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/circularstd_book"
+                        android:includeFontPadding="false"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="2dp"
+                        android:text="Ghi chú"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/icNote"
+                        app:layout_constraintStart_toEndOf="@id/icNote"
+                        app:layout_constraintTop_toTopOf="@id/icNote" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layoutAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bgr_item_main_bottom_view_unselect"
+                    android:paddingEnd="12dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/icAccount"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_marginVertical="6dp"
+                        android:layout_marginStart="12dp"
+                        android:src="@drawable/ic_user_outline"
+                        android:tint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvAccount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/circularstd_book"
+                        android:includeFontPadding="false"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="2dp"
+                        android:text="Tài khoản"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@id/icAccount"
+                        app:layout_constraintStart_toEndOf="@id/icAccount"
+                        app:layout_constraintTop_toTopOf="@id/icAccount" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/viewSelected"
+            android:layout_width="8dp"
+            android:layout_height="4dp"
+            android:background="@drawable/view_select_item"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

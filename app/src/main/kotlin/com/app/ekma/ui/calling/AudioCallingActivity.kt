@@ -103,7 +103,7 @@ class AudioCallingActivity : BaseActivity() {
         binding.btnAudioRoute.setOnSingleClickListener {
             viewModel.toggleSpeakerState()
         }
-        binding.layoutControl.visible(true)
+        binding.layoutControl.visible(true) {}
 
         collectLatestFlow(viewModel.imageAvatarUri) {
             it?.let {
@@ -226,7 +226,7 @@ class AudioCallingActivity : BaseActivity() {
         if (isInPictureInPictureMode) {
             binding.layoutControl.gone(true)
         } else {
-            binding.layoutControl.visible(true)
+            binding.layoutControl.visible(true) {}
         }
     }
 

@@ -186,7 +186,7 @@ class NoteMainFragment : BaseFragment<FragmentNoteMainBinding>() {
         binding.swVoiceRecorder.setOnCheckedChangeListener { _, isChecked ->
             checkAudioPermission(isChecked) {
                 if (isChecked) {
-                    binding.layoutVoiceRecorder.rootView.visible(true)
+                    binding.layoutVoiceRecorder.rootView.visible(true) {}
                 } else {
                     binding.layoutVoiceRecorder.rootView.gone(true)
                     // if recorder has been started, stop it
@@ -253,7 +253,7 @@ class NoteMainFragment : BaseFragment<FragmentNoteMainBinding>() {
     private fun audioPmsCallback(isGranted: Boolean) {
         if (isGranted) {
             binding.swVoiceRecorder.isChecked = true
-            binding.layoutVoiceRecorder.rootView.visible(true)
+            binding.layoutVoiceRecorder.rootView.visible(true) {}
         }
     }
 

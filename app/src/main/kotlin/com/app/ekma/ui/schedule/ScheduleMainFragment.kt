@@ -166,7 +166,7 @@ class ScheduleMainFragment : BaseFragment<FragmentScheduleMainBinding>() {
         binding.tvYearTitle.text = month.year.toString()
         binding.tvMonthTitle.gone(true) {
             binding.tvMonthTitle.text = month.month.displayText(short = false)
-            binding.tvMonthTitle.visible(true)
+            binding.tvMonthTitle.visible(true) {}
         }
     }
 }

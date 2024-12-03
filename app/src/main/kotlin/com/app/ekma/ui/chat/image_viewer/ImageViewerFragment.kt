@@ -75,7 +75,7 @@ class ImageViewerFragment : BaseFragment<FragmentImageViewerBinding>() {
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    binding.pgrLoading.visible(true)
+                    binding.pgrLoading.visible(true) {}
                     return false
                 }
 
@@ -108,7 +108,7 @@ class ImageViewerFragment : BaseFragment<FragmentImageViewerBinding>() {
     override fun addObservers() {
         collectLatestFlow(viewModel.showDownloadLoading) {
             if (it) {
-                binding.pgrLoading.visible(true)
+                binding.pgrLoading.visible(true) {}
             } else {
                 binding.pgrLoading.gone(true)
             }

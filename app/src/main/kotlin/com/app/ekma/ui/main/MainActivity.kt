@@ -70,7 +70,7 @@ class MainActivity : BaseActivity() {
                 binding.bottomNav.makeVisible()
         }
 
-        binding.chatShortcut.visible(true)
+        binding.chatShortcut.visible(true) {}
         binding.chatShortcut.performClick {
             val intent = Intent(this, ChatActivity::class.java)
             startActivity(intent)
@@ -103,7 +103,7 @@ class MainActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
         if (this::binding.isInitialized) runCatching {
-            binding.chatShortcut.visible(true)
+            binding.chatShortcut.visible(true) {}
         }
     }
 

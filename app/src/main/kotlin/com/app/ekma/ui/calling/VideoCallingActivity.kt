@@ -46,7 +46,6 @@ import io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_MUTED
 import io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_REASON_REMOTE_UNMUTED
 import io.agora.rtc2.Constants.REMOTE_VIDEO_STATE_STOPPED
 import io.agora.rtc2.Constants.VIDEO_MIRROR_MODE_AUTO
-import io.agora.rtc2.Constants.VIDEO_MIRROR_MODE_ENABLED
 import io.agora.rtc2.IRtcEngineEventHandler
 import io.agora.rtc2.RtcEngine
 import io.agora.rtc2.RtcEngineConfig
@@ -98,7 +97,7 @@ class VideoCallingActivity : BaseActivity() {
 
     private fun setupUI() {
         viewModel.getSenderInformation()
-        binding.layoutControl.visible(true)
+        binding.layoutControl.visible(true) {}
 
         binding.btnBack.setOnSingleClickListener {
             updatePictureInPictureParams()?.let { params ->
@@ -316,8 +315,8 @@ class VideoCallingActivity : BaseActivity() {
             binding.btnBack.makeGone()
             binding.localVideoViewContainer.makeGone()
         } else {
-            binding.layoutHeader.visible(true)
-            binding.layoutControl.visible(true)
+            binding.layoutHeader.visible(true) {}
+            binding.layoutControl.visible(true) {}
             binding.btnBack.makeVisible()
             binding.localVideoViewContainer.makeVisible()
         }
