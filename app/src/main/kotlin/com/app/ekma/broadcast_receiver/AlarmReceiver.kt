@@ -11,13 +11,13 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.NavDeepLinkBuilder
 import com.app.ekma.R
-import com.app.ekma.ui.main.MainActivity
 import com.app.ekma.common.EVENTS_NOTIFY_CHANNEL_ID
 import com.app.ekma.common.KEY_EVENT
 import com.app.ekma.common.KEY_PASS_NOTE_OBJ
 import com.app.ekma.common.NOTE_TYPE
 import com.app.ekma.data.models.Event
 import com.app.ekma.data.models.Note
+import com.app.ekma.ui.main.MainActivity
 
 class AlarmReceiver : BroadcastReceiver() {
     private val TAG = AlarmReceiver::class.java.simpleName

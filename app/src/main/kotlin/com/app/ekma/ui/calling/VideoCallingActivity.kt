@@ -16,6 +16,7 @@ import com.app.ekma.common.AGORA_APP_ID
 import com.app.ekma.common.CALLING_OPERATION
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.KEY_PASS_IS_IN_PIP
 import com.app.ekma.common.LEAVE_ROOM
 import com.app.ekma.common.MUTE_CAMERA
 import com.app.ekma.common.MUTE_MIC
@@ -60,7 +61,7 @@ class VideoCallingActivity : BaseActivity() {
     private lateinit var agoraEngine: RtcEngine
     private lateinit var localSurfaceView: SurfaceView
     private lateinit var remoteSurfaceView: SurfaceView
-
+    private var isFirstOpen = true
     private val isPipSupported by lazy {
         packageManager.hasSystemFeature(
             PackageManager.FEATURE_PICTURE_IN_PICTURE
@@ -288,6 +289,26 @@ class VideoCallingActivity : BaseActivity() {
 
     private fun onClickLeaveRoom() {
         finishAndRemoveTask()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isFirstOpen) {
+            isFirstOpen = false
+            intent.extras?.let {
+                val isInPiP = it.getBoolean(KEY_PASS_IS_IN_PIP, false)
+                if (isInPiP) {
+                    binding.layoutControl.gone(true)
+                    updatePictureInPictureParams()?.let { params ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            enterPictureInPictureMode(params)
+                        }
+                    }
+                } else {
+                    binding.layoutControl.visible(true) {}
+                }
+            }
+        }
     }
 
     override fun onUserLeaveHint() {

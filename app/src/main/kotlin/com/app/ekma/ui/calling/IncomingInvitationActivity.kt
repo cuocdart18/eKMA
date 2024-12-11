@@ -8,16 +8,21 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ekma.R
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.CHANNEL_TOKEN
+import com.app.ekma.common.INCOMING_CALL_ID
+import com.app.ekma.common.KEY_PASS_AUTO_JOIN_CALL
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
 import com.app.ekma.common.checkCallPermission
+import com.app.ekma.common.hideNotification
 import com.app.ekma.common.makeGone
 import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.super_utils.activity.collectLatestFlow
@@ -36,6 +41,7 @@ import com.app.ekma.firebase.MSG_VIDEO_CALL_TYPE
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class IncomingInvitationActivity : BaseActivity() {
@@ -62,16 +68,33 @@ class IncomingInvitationActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        )
         setContentView(binding.root)
         getData()
         setupUI()
         addCollect()
         BusyCalling.setData(true)
+        hideNotification(this, INCOMING_CALL_ID)
+
+        intent.extras?.let {
+            val isAutoJoinCall = it.getBoolean(KEY_PASS_AUTO_JOIN_CALL, false)
+            if (isAutoJoinCall) {
+                lifecycleScope.launch {
+                    binding.btnReject.isEnabled = false
+                    binding.btnAccept.performClick()
+                    binding.btnAccept.isEnabled = false
+                }
+            }
+        }
     }
 
     private fun getData() {
-        val bundlePasser = intent.extras
-        bundlePasser?.let {
+        intent.extras?.let {
             viewModel.inviterCode = it.getString(MSG_INVITER_CODE, "")
             viewModel.callType = it.getString(MSG_TYPE, "")
             viewModel.setCallTypeName(viewModel.callType)
@@ -93,7 +116,8 @@ class IncomingInvitationActivity : BaseActivity() {
         collectLatestFlow(viewModel.isExpiredActivation) {
             if (it) {
                 delay(1000L)
-                finish()
+                binding.btnReject.isEnabled = false
+                onReject()
             }
         }
         collectLatestFlow(viewModel.imageAvatarUri) {

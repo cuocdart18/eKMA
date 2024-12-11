@@ -64,6 +64,20 @@ object BusyCalling {
     }
 }
 
+object IsAppRunning {
+    private var isRunning = false
+
+    operator fun invoke() = isRunning
+
+    fun setData(value: Boolean) = synchronized(this) {
+        isRunning = value
+    }
+
+    fun release() {
+        isRunning = false
+    }
+}
+
 object CallingOperationResponse {
     private var operation = MutableLiveData("")
 

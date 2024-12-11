@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.app.ekma.R
+import com.app.ekma.common.pattern.singleton.IsAppRunning
 import com.cuocdat.activityutils.setStatusBarHomeTransparent
 import com.jpardogo.android.googleprogressbar.library.ChromeFloatingCirclesDrawable
 
@@ -36,6 +37,8 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         logLifecycle("onResume")
+        IsAppRunning.setData(true)
+        logInfo("appRunning=true")
     }
 
     override fun onUserInteraction() {
@@ -66,6 +69,8 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         logLifecycle("onPause")
+        IsAppRunning.setData(false)
+        logInfo("appRunning=false")
     }
 
     override fun onStop() {

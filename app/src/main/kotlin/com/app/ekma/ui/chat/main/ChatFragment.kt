@@ -28,6 +28,7 @@ import com.app.ekma.common.afterTextChanged
 import com.app.ekma.common.checkCallPermission
 import com.app.ekma.common.makeInVisible
 import com.app.ekma.common.makeVisible
+import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.super_utils.activity.collectLatestFlow
 import com.app.ekma.common.super_utils.animation.MarginType
 import com.app.ekma.common.super_utils.animation.animateMargin
@@ -211,23 +212,31 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
     }
 
     private val onClickBtnAudioCall: (View) -> Unit = {
-        if (checkCallPermission(requireContext(), MSG_AUDIO_CALL_TYPE)) {
-            navigateToOutgoingActivity(MSG_AUDIO_CALL_TYPE)
+        if (BusyCalling()) {
+            showToast("Bạn đang thực hiện cuộc gọi")
         } else {
-            requestAudioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            if (checkCallPermission(requireContext(), MSG_AUDIO_CALL_TYPE)) {
+                navigateToOutgoingActivity(MSG_AUDIO_CALL_TYPE)
+            } else {
+                requestAudioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            }
         }
     }
 
     private val onClickBtnVideoCall: (View) -> Unit = {
-        if (checkCallPermission(requireContext(), MSG_VIDEO_CALL_TYPE)) {
-            navigateToOutgoingActivity(MSG_VIDEO_CALL_TYPE)
+        if (BusyCalling()) {
+            showToast("Bạn đang thực hiện cuộc gọi")
         } else {
-            requestVideoPermissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.CAMERA
+            if (checkCallPermission(requireContext(), MSG_VIDEO_CALL_TYPE)) {
+                navigateToOutgoingActivity(MSG_VIDEO_CALL_TYPE)
+            } else {
+                requestVideoPermissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.CAMERA
+                    )
                 )
-            )
+            }
         }
     }
 

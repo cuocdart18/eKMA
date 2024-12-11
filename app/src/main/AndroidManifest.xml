@@ -8,6 +8,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
@@ -18,6 +19,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -69,6 +71,8 @@
         <activity
             android:name=".ui.calling.OutgoingInvitationActivity"
             android:exported="false"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:supportsPictureInPicture="true"
             android:screenOrientation="portrait" />
 
         <activity
@@ -115,6 +119,18 @@
             android:name=".broadcast_receiver.MyCallingReceiver"
             android:exported="false" />
 
+        <receiver
+            android:name=".broadcast_receiver.AnswerCallReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".broadcast_receiver.DeclineCallReceiver"
+            android:exported="false" />
+
+        <receiver
+            android:name=".broadcast_receiver.HangupCallReceiver"
+            android:exported="false" />
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
@@ -127,6 +143,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".service.MyBoundService"
+            android:exported="false" />
 
         <service
             android:name="androidx.work.impl.foreground.SystemForegroundService"

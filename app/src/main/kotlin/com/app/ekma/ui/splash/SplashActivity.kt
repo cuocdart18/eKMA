@@ -29,7 +29,9 @@ class SplashActivity : BaseActivity() {
 
         lifecycleScope.launch {
             delay(3000L)
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            startActivity(Intent(this@SplashActivity, MainActivity::class.java).apply {
+                intent.extras?.let { putExtras(it) }
+            })
             finish()
         }
     }

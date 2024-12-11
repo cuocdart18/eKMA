@@ -12,6 +12,8 @@ import com.app.ekma.broadcast_receiver.MyCallingReceiver
 import com.app.ekma.common.CALLING_OPERATION
 import com.app.ekma.common.EARPIECE_AUDIO_ROUTE
 import com.app.ekma.common.EARPIECE_AUDIO_ROUTE_REQUEST_CODE
+import com.app.ekma.common.HANG_UP
+import com.app.ekma.common.HANG_UP_REQUEST_CODE
 import com.app.ekma.common.LEAVE_ROOM
 import com.app.ekma.common.LEAVE_ROOM_REQUEST_CODE
 import com.app.ekma.common.MUTE_CAMERA
@@ -32,7 +34,8 @@ enum class RemoteActionType {
     UNMUTE_CAMERA,
     EARPIECE_AUDIO_ROUTE,
     SPEAKER_AUDIO_ROUTE,
-    LEAVE_ROOM
+    LEAVE_ROOM,
+    HANG_UP
 }
 
 class PiPRemoteActionFactory {
@@ -161,6 +164,24 @@ class PiPRemoteActionFactory {
                         context,
                         LEAVE_ROOM_REQUEST_CODE,
                         leaveRoomIntent,
+                        PendingIntent.FLAG_IMMUTABLE
+                    )
+                )
+            }
+
+            RemoteActionType.HANG_UP -> {
+                val hangUpIntent =
+                    Intent(context, MyCallingReceiver::class.java).apply {
+                        putExtra(CALLING_OPERATION, HANG_UP)
+                    }
+                RemoteAction(
+                    Icon.createWithResource(context, R.drawable.call_outline_white_24dp),
+                    "Hang up",
+                    "Hang up",
+                    PendingIntent.getBroadcast(
+                        context,
+                        HANG_UP_REQUEST_CODE,
+                        hangUpIntent,
                         PendingIntent.FLAG_IMMUTABLE
                     )
                 )

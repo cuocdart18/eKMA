@@ -54,6 +54,10 @@ const val MSG_INVITER_CODE = "inviterCode"
 const val MSG_RECEIVER_CODE = "receiverCode"
 const val MSG_INVITER_TOKEN = "inviterToken"
 
+const val MSG_INVITER_CODE_FROM_WORKER = "inviterCodeFromWorker"
+const val MSG_RECEIVER_CODE_FROM_WORKER = "receiverCodeFromWorker"
+const val MSG_TYPE_FROM_WORKER = "typeFromWorker"
+
 const val MSG_OPERATION = "operation"
 const val MSG_INVITE = "invite"
 const val MSG_CANCEL = "cancel"

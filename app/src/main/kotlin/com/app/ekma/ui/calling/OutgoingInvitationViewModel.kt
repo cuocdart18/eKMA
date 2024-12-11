@@ -1,7 +1,11 @@
 package com.app.ekma.ui.calling
 
+import android.app.RemoteAction
+import android.content.Context
 import android.net.Uri
+import android.os.Build
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.CountDownTimer
@@ -12,6 +16,8 @@ import com.app.ekma.common.PUBLISHER_ROLE
 import com.app.ekma.common.RTC_TOKEN_TYPE
 import com.app.ekma.common.Resource
 import com.app.ekma.common.TOKEN_EXPIRED_TIME
+import com.app.ekma.common.pattern.factory_method.PiPRemoteActionFactory
+import com.app.ekma.common.pattern.factory_method.RemoteActionType
 import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.removeStudentCode
@@ -33,7 +39,9 @@ import com.app.ekma.firebase.MSG_TYPE
 import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.firebase.firestore
 import com.app.ekma.firebase.storage
+import com.app.ekma.work.WorkRunner
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -113,6 +121,18 @@ class OutgoingInvitationViewModel @Inject constructor(
         }
     }
 
+    fun cancelInvitationByWorker(context: Context, callback: suspend CoroutineScope.() -> Unit) {
+        viewModelScope.launch {
+            WorkRunner.runCancelInvitationWorker(
+                workManager = WorkManager.getInstance(context),
+                receiverCodes = receiverCodes,
+                myCode = myStudentCode,
+                type = callType
+            )
+            callback()
+        }
+    }
+
     fun cancelInvitation() {
         viewModelScope.launch {
             // get regisToken and send message invitation
@@ -175,6 +195,16 @@ class OutgoingInvitationViewModel @Inject constructor(
                 fcmService.sendCallInvitationMessage(fcmDataMessage)
             }
             callback()
+        }
+    }
+
+    fun getPiPRemoteActions(context: Context): List<RemoteAction> {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val leaveRoomAction =
+                PiPRemoteActionFactory.create(context, RemoteActionType.HANG_UP)
+            listOf(leaveRoomAction)
+        } else {
+            emptyList()
         }
     }
 

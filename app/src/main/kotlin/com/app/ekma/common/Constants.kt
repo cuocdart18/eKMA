@@ -19,6 +19,7 @@ const val NOTE_TYPE = 1
 const val ADD_NOTE_MODE = 101
 const val UPDATE_NOTE_MODE = 102
 
+// for Notification
 const val EVENTS_NOTIFY_CHANNEL = "Events"
 const val EVENTS_NOTIFY_CHANNEL_ID = "events_id"
 const val UPDATE_SCHE_CHANNEL = "Update schedule"
@@ -27,8 +28,10 @@ const val UPDATE_SCHE_CHANNEL_ID = "update_sche_id"
 const val GET_SCHE_CHANNEL_ID = "get_sche_id"
 const val KEY_EVENT = "sent_event_from_AM_to_BR"
 const val EVENTS_NOTIFY_ID = 1001
-const val UPDATE_SCHEDULE_ID = 872002
 const val GET_SCHEDULE_ID = 1812003
+const val INCOMING_CALL_NOTIFY_CHANNEL = "Call"
+const val INCOMING_CALL_NOTIFY_CHANNEL_ID = "incoming_call_id"
+const val INCOMING_CALL_ID = 872002
 
 // for Chatting
 const val TEXT_MSG = 1
@@ -54,6 +57,8 @@ const val SPEAKER_AUDIO_ROUTE = "speaker_audio_route"
 const val SPEAKER_AUDIO_ROUTE_REQUEST_CODE = 2005
 const val LEAVE_ROOM = "leave_room"
 const val LEAVE_ROOM_REQUEST_CODE = 2006
+const val HANG_UP = "hang_up"
+const val HANG_UP_REQUEST_CODE = 2007
 
 // for Recording
 const val START_RECORDING = 1001
@@ -77,6 +82,9 @@ const val STOP_PLAYING = 1008
 const val INPUT_DATA_STUDENT_CODE = "student_code"
 const val INPUT_DATA_IMAGE_URI = "image_uri"
 const val INPUT_DATA_AUDIO_NOTE_NAME = "audio_note_name"
+const val INPUT_DATA_INVITER_CODE = "inviterCode"
+const val INPUT_DATA_RECEIVER_CODES = "receiverCodes"
+const val INPUT_DATA_CALL_TYPE = "callType"
 
 const val UPDATE_SCHEDULE_WORKER_TAG = "update_schedule_tag"
 const val GET_SCHEDULE_WORKER_TAG = "get_schedule_tag"
@@ -85,6 +93,9 @@ const val UPLOAD_AUDIO_NOTE_WORKER_TAG = "upload_audio_note_tag"
 const val DELETE_AUDIO_NOTE_WORKER_TAG = "delete_audio_note_tag"
 const val DOWNLOAD_AVATAR_WORKER_TAG = "download_avatar_tag"
 const val DOWNLOAD_AUDIO_NOTES_WORKER_TAG = "download_audio_notes_tag"
+const val CALL_WORKER_TAG = "call_tag"
+const val INCOMING_CALL_WORKER_TAG = "incoming_call_tag"
+const val REJECT_CALL_WORKER_TAG = "reject_call_tag"
 
 const val UNIQUE_UPDATE_SCHEDULE_WORK_NAME = "update_schedule"
 const val UNIQUE_GET_SCHEDULE_WORK_NAME = "get_schedule"
@@ -93,6 +104,10 @@ const val UNIQUE_UPLOAD_AUDIO_NOTE_WORK_NAME = "upload_audio_note"
 const val UNIQUE_DELETE_AUDIO_NOTE_WORK_NAME = "delete_audio_note"
 const val UNIQUE_DOWNLOAD_AVATAR_WORK_NAME = "download_avatar"
 const val UNIQUE_DOWNLOAD_AUDIO_NOTES_WORK_NAME = "download_audio_notes"
+const val INCOMING_CALL_WORKER_NAME = "incoming_call"
+const val REJECT_CALL_WORKER_NAME = "reject_call"
+const val CANCEL_INVITATION_WORKER_NAME = "cancel_invitation_call"
+const val CANCEL_INCOMING_NOTIFICATION_WORKER_NAME = "cancel_incoming_notification_call"
 
 // for data Passing
 const val KEY_PASS_IMAGE_URL = "image_url"
@@ -104,6 +119,8 @@ const val KEY_PASS_NOTE_MODE = "note_mode"
 const val KEY_PASS_VOICE_AUDIO_NAME = "voice_audio_name"
 const val KEY_PASS_MY_STUDENT_CODE = "my_student_code"
 const val KEY_PASS_STATISTIC_SUBJECT = "statistic_subject"
+const val KEY_PASS_IS_IN_PIP = "isInPiP"
+const val KEY_PASS_AUTO_JOIN_CALL = "isAutoJoinCall"
 
 const val DATABASE_NAME = "app_database.db"
 
@@ -126,4 +143,6 @@ const val SUBSCRIBER_ROLE = "subscriber"
 const val DEFAULT_UID = "0"
 const val TOKEN_EXPIRED_TIME = 120
 const val CHANNEL_TOKEN = "channelToken"
+const val PENDING_RESPONSE_TIME = 35000L
+const val PENDING_RESPONSE_TOKEN_TIME = 15000L
 const val PENDING_INVITE_TIME = 30000L

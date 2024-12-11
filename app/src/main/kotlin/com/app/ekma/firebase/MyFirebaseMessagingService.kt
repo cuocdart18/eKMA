@@ -4,12 +4,16 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.work.WorkManager
+import com.app.ekma.common.CALL_WORKER_TAG
 import com.app.ekma.common.CHANNEL_TOKEN
+import com.app.ekma.common.INCOMING_CALL_ID
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.hideNotification
 import com.app.ekma.common.pattern.singleton.BusyCalling
 import com.app.ekma.data.models.FcmDataMessage
 import com.app.ekma.data.models.service.IFcmService
-import com.app.ekma.ui.calling.IncomingInvitationActivity
+import com.app.ekma.work.WorkRunner
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,14 +57,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         fcmService.sendCallInvitationMessage(fcmDataMessage)
                     }
                 } else {
-                    val intent = Intent(applicationContext, IncomingInvitationActivity::class.java)
-                    val bundle = bundleOf(
-                        MSG_INVITER_CODE to inviterCode,
-                        MSG_TYPE to type
+                    WorkRunner.runIncomingCallWorker(
+                        workManager = WorkManager.getInstance(applicationContext),
+                        inviterCode = inviterCode,
+                        type = type
                     )
-                    intent.putExtras(bundle)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
                 }
             }
 
@@ -96,12 +97,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
 
             MSG_CANCEL -> {
+                hideNotification(applicationContext, INCOMING_CALL_ID)
+                WorkManager.getInstance(applicationContext).cancelAllWorkByTag(CALL_WORKER_TAG)
                 val intent = Intent(MSG_OPERATION)
                 val bundle = bundleOf(
                     MSG_OPERATION to MSG_CANCEL
                 )
                 intent.putExtras(bundle)
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
+                BusyCalling.setData(false)
             }
         }
     }

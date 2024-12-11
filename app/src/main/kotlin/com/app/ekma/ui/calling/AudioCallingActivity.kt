@@ -17,6 +17,7 @@ import com.app.ekma.common.CALLING_OPERATION
 import com.app.ekma.common.CHANNEL_TOKEN
 import com.app.ekma.common.EARPIECE_AUDIO_ROUTE
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.KEY_PASS_IS_IN_PIP
 import com.app.ekma.common.LEAVE_ROOM
 import com.app.ekma.common.MUTE_MIC
 import com.app.ekma.common.SPEAKER_AUDIO_ROUTE
@@ -51,7 +52,7 @@ class AudioCallingActivity : BaseActivity() {
     private val viewModel by viewModels<AudioCallingViewModel>()
 
     private lateinit var agoraEngine: RtcEngine
-
+    private var isFirstOpen = true
     private val isPipSupported by lazy {
         packageManager.hasSystemFeature(
             PackageManager.FEATURE_PICTURE_IN_PICTURE
@@ -202,6 +203,26 @@ class AudioCallingActivity : BaseActivity() {
 
     private fun onClickBtnLeaveRoom() {
         finishAndRemoveTask()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isFirstOpen) {
+            isFirstOpen = false
+            intent.extras?.let {
+                val isInPiP = it.getBoolean(KEY_PASS_IS_IN_PIP, false)
+                if (isInPiP) {
+                    binding.layoutControl.gone(true)
+                    updatePictureInPictureParams()?.let { params ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            enterPictureInPictureMode(params)
+                        }
+                    }
+                } else {
+                    binding.layoutControl.visible(true) {}
+                }
+            }
+        }
     }
 
     override fun onUserLeaveHint() {

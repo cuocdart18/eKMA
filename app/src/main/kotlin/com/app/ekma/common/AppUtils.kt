@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.app.ekma.R
 import com.app.ekma.data.models.ChatRoom
@@ -39,6 +41,19 @@ import java.util.Date
 import kotlin.math.round
 
 // Global method
+fun hideNotification(context: Context, id: Int) {
+    with(NotificationManagerCompat.from(context)) {
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        cancel(id)
+    }
+}
+
 suspend fun parseDataToChatRoom(
     document: DocumentSnapshot,
     myStudentCode: String

@@ -4,7 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.CountDownTimer
-import com.app.ekma.common.PENDING_INVITE_TIME
+import com.app.ekma.common.PENDING_RESPONSE_TIME
+import com.app.ekma.common.PENDING_RESPONSE_TOKEN_TIME
 import com.app.ekma.data.models.FcmDataMessage
 import com.app.ekma.data.models.service.IFcmService
 import com.app.ekma.firebase.AVATAR_FILE
@@ -47,8 +48,12 @@ class IncomingInvitationViewModel @Inject constructor(
     private val _isExpiredActivation = MutableStateFlow(false)
     val isExpiredActivation: StateFlow<Boolean>
         get() = _isExpiredActivation.asStateFlow()
-    private val timer = CountDownTimer(PENDING_INVITE_TIME) {
+    private val timer = CountDownTimer(PENDING_RESPONSE_TIME) {
         _isExpiredActivation.value = true
+    }
+
+    init {
+        timer.start()
     }
 
     fun setCallTypeName(type: String) {
@@ -98,7 +103,7 @@ class IncomingInvitationViewModel @Inject constructor(
     }
 
     fun channelTokenPending() {
-        timer.start()
+        timer.count = PENDING_RESPONSE_TOKEN_TIME
     }
 
     override fun onCleared() {

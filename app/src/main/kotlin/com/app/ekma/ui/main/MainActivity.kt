@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.os.bundleOf
 import com.app.ekma.base.activities.BaseActivity
 import com.app.ekma.common.INFORMATION_FRAGMENT
+import com.app.ekma.common.KEY_PASS_AUTO_JOIN_CALL
 import com.app.ekma.common.NOTE_FRAGMENT
 import com.app.ekma.common.SCHEDULE_FRAGMENT
 import com.app.ekma.common.SCORE_FRAGMENT
@@ -23,6 +25,7 @@ import com.app.ekma.common.super_utils.click.MoveByTouchListener
 import com.app.ekma.common.super_utils.click.performClick
 import com.app.ekma.data.data_source.database.AppDatabase
 import com.app.ekma.databinding.ActivityMainBinding
+import com.app.ekma.ui.calling.IncomingInvitationActivity
 import com.app.ekma.ui.chat.activity.ChatActivity
 import com.app.ekma.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,6 +60,14 @@ class MainActivity : BaseActivity() {
         viewModel.firstInitialize(this)
         setUiTemplates()
         MainBottomNavigation.setData(false)
+        intent.extras?.let {
+            startActivity(
+                Intent(this, IncomingInvitationActivity::class.java).apply {
+                    putExtras(it)
+                    putExtras(bundleOf(KEY_PASS_AUTO_JOIN_CALL to true))
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                })
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")

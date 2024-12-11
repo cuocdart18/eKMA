@@ -1,10 +1,15 @@
 package com.app.ekma.ui.calling
 
+import android.app.PictureInPictureParams
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
+import android.util.Rational
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -13,10 +18,16 @@ import androidx.core.view.updateLayoutParams
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.ekma.R
 import com.app.ekma.base.activities.BaseActivity
+import com.app.ekma.common.CALLING_OPERATION
 import com.app.ekma.common.CHANNEL_TOKEN
+import com.app.ekma.common.HANG_UP
 import com.app.ekma.common.KEY_PASS_CHAT_ROOM_ID
+import com.app.ekma.common.KEY_PASS_IS_IN_PIP
 import com.app.ekma.common.pattern.singleton.BusyCalling
+import com.app.ekma.common.pattern.singleton.CallingOperationResponse
 import com.app.ekma.common.super_utils.activity.collectLatestFlow
+import com.app.ekma.common.super_utils.animation.gone
+import com.app.ekma.common.super_utils.animation.visible
 import com.app.ekma.common.super_utils.click.setOnSingleClickListener
 import com.app.ekma.databinding.ActivityOugoingInvitationBinding
 import com.app.ekma.firebase.MSG_ACCEPT
@@ -38,6 +49,13 @@ class OutgoingInvitationActivity : BaseActivity() {
     private lateinit var binding: ActivityOugoingInvitationBinding
     private val viewModel by viewModels<OutgoingInvitationViewModel>()
 
+    private var isKeepCalling = false
+    private val isPipSupported by lazy {
+        packageManager.hasSystemFeature(
+            PackageManager.FEATURE_PICTURE_IN_PICTURE
+        )
+    }
+
     override fun observeViewModel() {}
 
     override fun initViewBinding() {
@@ -51,6 +69,7 @@ class OutgoingInvitationActivity : BaseActivity() {
         setupUI()
         addCollect()
         viewModel.getReceivers()
+        callingOperationListener()
         // set isBusyCalling state in this device
         BusyCalling.setData(true)
     }
@@ -74,8 +93,11 @@ class OutgoingInvitationActivity : BaseActivity() {
         }
 
         onBackPressedDispatcher.addCallback(this) {
-            binding.btnCancel.isEnabled = false
-            viewModel.cancelInvitation()
+            updatePictureInPictureParams()?.let { params ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    enterPictureInPictureMode(params)
+                }
+            }
         }
     }
 
@@ -86,7 +108,6 @@ class OutgoingInvitationActivity : BaseActivity() {
                 viewModel.cancelInvitation()
             }
         }
-
         collectLatestFlow(viewModel.imageAvatarUri) {
             it?.let {
                 Glide.with(this)
@@ -97,15 +118,13 @@ class OutgoingInvitationActivity : BaseActivity() {
                     .into(binding.imvAvatar)
             }
         }
-
         collectLatestFlow(viewModel.friendName) {
             binding.tvReceiverName.text = it
         }
-
         collectLatestFlow(viewModel.onCancelInvite) {
             if (it) {
                 delay(1000L)
-                finish()
+                finishAndRemoveTask()
             }
         }
     }
@@ -123,7 +142,7 @@ class OutgoingInvitationActivity : BaseActivity() {
 
                     MSG_REJECT -> {
                         BusyCalling.setData(false)
-                        finish()
+                        finishAndRemoveTask()
                     }
                 }
             }
@@ -145,11 +164,20 @@ class OutgoingInvitationActivity : BaseActivity() {
                 val bundleAcceptCall = bundleOf(
                     KEY_PASS_CHAT_ROOM_ID to viewModel.roomId,
                     CHANNEL_TOKEN to token,
-                    MSG_RECEIVER_CODE to friendCode
+                    MSG_RECEIVER_CODE to friendCode,
+                    KEY_PASS_IS_IN_PIP to isInPictureInPictureMode
                 )
                 intentAcceptCall.putExtras(bundleAcceptCall)
-                startActivity(intentAcceptCall)
+                isKeepCalling = true
+
+                if (isInPictureInPictureMode) {
+                    val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
+                    launchIntent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    startActivity(launchIntent)
+                }
+
                 finish()
+                startActivity(intentAcceptCall)
             }
         }
     }
@@ -162,8 +190,77 @@ class OutgoingInvitationActivity : BaseActivity() {
         )
     }
 
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (!isPipSupported) {
+            return
+        }
+        updatePictureInPictureParams()?.let { params ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                enterPictureInPictureMode(params)
+            }
+        }
+    }
+
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        }
+        if (isInPictureInPictureMode) {
+            binding.btnCancel.gone(true)
+        } else {
+            binding.btnCancel.visible(true) {}
+        }
+    }
+
+    private fun updatePictureInPictureParams(): PictureInPictureParams? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val builder = PictureInPictureParams.Builder()
+                .setAspectRatio(Rational(9, 16))
+                .setActions(viewModel.getPiPRemoteActions(applicationContext))
+            builder.build()
+        } else {
+            return null
+        }
+    }
+
+    private fun callingOperationListener() {
+        CallingOperationResponse().observe(this) { operation ->
+            logInfo("$CALLING_OPERATION:$operation")
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                return@observe
+            }
+            if ("" == operation) {
+                return@observe
+            }
+            if (operation == HANG_UP) {
+                binding.btnCancel.isEnabled = false
+                viewModel.cancelInvitation()
+            }
+            updatePictureInPictureParams()?.let { params ->
+                setPictureInPictureParams(params)
+            }
+        }
+    }
+
     override fun onStop() {
         super.onStop()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(invitationResponseReceiver)
+        if (isInPictureInPictureMode and !isKeepCalling) {
+            binding.btnCancel.isEnabled = false
+            viewModel.cancelInvitationByWorker(this) {
+                delay(1000L)
+                finishAndRemoveTask()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        CallingOperationResponse().removeObservers(this)
+        CallingOperationResponse.release()
     }
 }
