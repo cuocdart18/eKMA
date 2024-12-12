@@ -55,4 +55,9 @@ interface EKmaAPI {
     suspend fun sendCallInvitationMessage(
         @Body fcmDataMessageDto: FcmDataMessageDto
     )
+
+    @POST("/send-new-message")
+    suspend fun sendNewMessage(
+        @Body fcmDataMessageDto: FcmDataMessageDto
+    )
 }

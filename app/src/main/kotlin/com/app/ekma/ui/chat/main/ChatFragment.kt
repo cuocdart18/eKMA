@@ -199,7 +199,11 @@ class ChatFragment : BaseFragment<FragmentChatBinding>() {
     }
 
     private val onClickBtnSend: (View) -> Unit = {
-        viewModel.sendMessage(binding.edtMessageInput.text.toString(), TEXT_MSG)
+        viewModel.sendMessage(
+            context = requireContext(),
+            content = binding.edtMessageInput.text.toString(),
+            type = TEXT_MSG
+        )
         binding.edtMessageInput.text?.clear()
     }
 

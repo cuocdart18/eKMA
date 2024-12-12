@@ -13,6 +13,8 @@ import com.app.ekma.common.GET_SCHE_CHANNEL
 import com.app.ekma.common.GET_SCHE_CHANNEL_ID
 import com.app.ekma.common.INCOMING_CALL_NOTIFY_CHANNEL
 import com.app.ekma.common.INCOMING_CALL_NOTIFY_CHANNEL_ID
+import com.app.ekma.common.NEW_MSG_NOTIFY_CHANNEL
+import com.app.ekma.common.NEW_MSG_NOTIFY_CHANNEL_ID
 import com.app.ekma.common.UPDATE_SCHE_CHANNEL
 import com.app.ekma.common.UPDATE_SCHE_CHANNEL_ID
 import com.orhanobut.hawk.Hawk
@@ -74,6 +76,17 @@ class MyApplication : Application(), Configuration.Provider {
                 vibrationPattern =
                     longArrayOf(0, 500, 500, 500) // Pattern rung: delay, rung, delay, rung
             }
+            // Create the NotificationChannel for notify new message
+            val msgNotifyChannel = NotificationChannel(
+                NEW_MSG_NOTIFY_CHANNEL_ID,
+                NEW_MSG_NOTIFY_CHANNEL,
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Channel for incoming call notifications"
+                enableVibration(true)
+                vibrationPattern =
+                    longArrayOf(0, 500, 500, 500) // Pattern rung: delay, rung, delay, rung
+            }
 
             // Register the channel with the system. You can't change the importance
             // or other notification behaviors after this.
@@ -84,7 +97,8 @@ class MyApplication : Application(), Configuration.Provider {
                     eventNotifyChannel,
                     updateScheChannel,
                     getScheChannel,
-                    callNotifyChannel
+                    callNotifyChannel,
+                    msgNotifyChannel
                 )
             )
         }

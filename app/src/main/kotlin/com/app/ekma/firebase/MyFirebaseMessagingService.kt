@@ -107,6 +107,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
                 BusyCalling.setData(false)
             }
+
+            MSG_NEW_MESSAGE -> {
+                WorkRunner.runShowNewMsgNotificationWorker(
+                    WorkManager.getInstance(applicationContext),
+                    message.data[MSG_DATA].toString()
+                )
+            }
         }
     }
 }

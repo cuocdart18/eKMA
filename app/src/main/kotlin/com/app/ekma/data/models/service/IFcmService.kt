@@ -9,4 +9,8 @@ interface IFcmService {
     suspend fun sendCallInvitationMessage(
         fcmDataMessage: FcmDataMessage
     )
+
+    suspend fun sendNewMessage(
+        fcmDataMessage: FcmDataMessage
+    )
 }

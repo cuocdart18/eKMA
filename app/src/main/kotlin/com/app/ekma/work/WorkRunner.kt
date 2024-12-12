@@ -19,9 +19,15 @@ import com.app.ekma.common.INPUT_DATA_AUDIO_NOTE_NAME
 import com.app.ekma.common.INPUT_DATA_CALL_TYPE
 import com.app.ekma.common.INPUT_DATA_IMAGE_URI
 import com.app.ekma.common.INPUT_DATA_INVITER_CODE
+import com.app.ekma.common.INPUT_DATA_NEW_MSG
+import com.app.ekma.common.INPUT_DATA_NEW_MSG_NOTIFICATION
 import com.app.ekma.common.INPUT_DATA_RECEIVER_CODES
 import com.app.ekma.common.INPUT_DATA_STUDENT_CODE
+import com.app.ekma.common.MESSAGE_NOTIFICATION_WORKER_TAG
+import com.app.ekma.common.MESSAGE_WORKER_TAG
+import com.app.ekma.common.NOTIFY_NEW_MSG_WORKER_NAME
 import com.app.ekma.common.REJECT_CALL_WORKER_NAME
+import com.app.ekma.common.SHOW_NEW_MSG_WORKER_NAME
 import com.app.ekma.common.UNIQUE_DELETE_AUDIO_NOTE_WORK_NAME
 import com.app.ekma.common.UNIQUE_DOWNLOAD_AUDIO_NOTES_WORK_NAME
 import com.app.ekma.common.UNIQUE_DOWNLOAD_AVATAR_WORK_NAME
@@ -302,6 +308,56 @@ object WorkRunner {
             CANCEL_INCOMING_NOTIFICATION_WORKER_NAME,
             ExistingWorkPolicy.REPLACE,
             cancelIncomingNotificationWorkRequest
+        )
+    }
+
+    fun runNotifyNewMsgWorker(
+        workManager: WorkManager,
+        receiverCodes: List<String>,
+        msgData: String
+    ) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        val notifyNewMsgWorkRequest =
+            OneTimeWorkRequestBuilder<NotifyNewMessageWorker>()
+                .addTag(MESSAGE_WORKER_TAG)
+                .setConstraints(constraints)
+                .setInputData(
+                    workDataOf(
+                        INPUT_DATA_RECEIVER_CODES to receiverCodes.toTypedArray(),
+                        INPUT_DATA_NEW_MSG to msgData
+                    )
+                )
+                .build()
+        workManager.enqueueUniqueWork(
+            NOTIFY_NEW_MSG_WORKER_NAME,
+            ExistingWorkPolicy.APPEND,
+            notifyNewMsgWorkRequest
+        )
+    }
+
+    fun runShowNewMsgNotificationWorker(
+        workManager: WorkManager,
+        msgData: String
+    ) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        val notifyNewMsgWorkRequest =
+            OneTimeWorkRequestBuilder<ShowNewMessageNotificationWorker>()
+                .addTag(MESSAGE_NOTIFICATION_WORKER_TAG)
+                .setConstraints(constraints)
+                .setInputData(
+                    workDataOf(
+                        INPUT_DATA_NEW_MSG_NOTIFICATION to msgData
+                    )
+                )
+                .build()
+        workManager.enqueueUniqueWork(
+            SHOW_NEW_MSG_WORKER_NAME,
+            ExistingWorkPolicy.APPEND,
+            notifyNewMsgWorkRequest
         )
     }
 }

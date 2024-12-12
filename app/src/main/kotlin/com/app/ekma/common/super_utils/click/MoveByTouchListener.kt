@@ -21,7 +21,7 @@ class MoveByTouchListener(
                 dY = view.y - event.rawY
             }
 
-            MotionEvent.ACTION_MOVE -> {
+            MotionEvent.ACTION_MOVE -> runCatching {
                 val newX = (event.rawX + dX).coerceIn(20f, parentWidth - view.width - 20f)
                 val newY =
                     (event.rawY + dY).coerceIn(20f, parentHeight - 2 * view.height - 20f)

@@ -18,4 +18,8 @@ class FcmService @Inject constructor(
     override suspend fun sendCallInvitationMessage(fcmDataMessage: FcmDataMessage) {
         fcmRepository.sendCallInvitationMessage(fcmDataMessage)
     }
+
+    override suspend fun sendNewMessage(fcmDataMessage: FcmDataMessage) {
+        fcmRepository.sendNewMessage(fcmDataMessage)
+    }
 }

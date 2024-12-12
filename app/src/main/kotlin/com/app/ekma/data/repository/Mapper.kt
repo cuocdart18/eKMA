@@ -5,6 +5,7 @@ import com.app.ekma.common.jsonObjectToString
 import com.app.ekma.data.data_source.apis.dto.AgoraTokenRequestDto
 import com.app.ekma.data.data_source.apis.dto.AgoraTokenResponseDto
 import com.app.ekma.data.data_source.apis.dto.FcmDataMessageDto
+import com.app.ekma.data.data_source.apis.dto.FcmDataNewMessageDto
 import com.app.ekma.data.data_source.apis.dto.MessageResult
 import com.app.ekma.data.data_source.apis.dto.MiniStudentDto
 import com.app.ekma.data.data_source.apis.dto.PeriodDto
@@ -19,6 +20,7 @@ import com.app.ekma.data.data_source.database.entities.PeriodEntity
 import com.app.ekma.data.models.AgoraTokenRequest
 import com.app.ekma.data.models.AgoraTokenResponse
 import com.app.ekma.data.models.FcmDataMessage
+import com.app.ekma.data.models.FcmDataNewMessage
 import com.app.ekma.data.models.MiniStudent
 import com.app.ekma.data.models.Note
 import com.app.ekma.data.models.Period
@@ -182,6 +184,11 @@ fun StudentDto.toStudent() = Student(
 )
 
 fun FcmDataMessage.toFcmDataMessageDto() = FcmDataMessageDto(
+    token = token,
+    data = data
+)
+
+fun FcmDataNewMessage.toFcmDataNewMessageDto() = FcmDataNewMessageDto(
     token = token,
     data = data
 )

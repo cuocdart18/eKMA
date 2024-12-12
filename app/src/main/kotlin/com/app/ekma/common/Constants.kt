@@ -32,6 +32,8 @@ const val GET_SCHEDULE_ID = 1812003
 const val INCOMING_CALL_NOTIFY_CHANNEL = "Call"
 const val INCOMING_CALL_NOTIFY_CHANNEL_ID = "incoming_call_id"
 const val INCOMING_CALL_ID = 872002
+const val NEW_MSG_NOTIFY_CHANNEL = "Message"
+const val NEW_MSG_NOTIFY_CHANNEL_ID = "new_msg_id"
 
 // for Chatting
 const val TEXT_MSG = 1
@@ -40,6 +42,7 @@ const val GIF_MSG = 3
 const val VIDEO_MSG = 4
 const val FROM_POSITION = "from"
 const val TO_POSITION = "to"
+const val NOTIFY_NEW_MSG_TIME = "notifyMsgTime"
 
 // for Calling
 const val CALLING_OPERATION = "calling_operation"
@@ -85,6 +88,8 @@ const val INPUT_DATA_AUDIO_NOTE_NAME = "audio_note_name"
 const val INPUT_DATA_INVITER_CODE = "inviterCode"
 const val INPUT_DATA_RECEIVER_CODES = "receiverCodes"
 const val INPUT_DATA_CALL_TYPE = "callType"
+const val INPUT_DATA_NEW_MSG = "newMsg"
+const val INPUT_DATA_NEW_MSG_NOTIFICATION = "newMsgNotification"
 
 const val UPDATE_SCHEDULE_WORKER_TAG = "update_schedule_tag"
 const val GET_SCHEDULE_WORKER_TAG = "get_schedule_tag"
@@ -94,6 +99,8 @@ const val DELETE_AUDIO_NOTE_WORKER_TAG = "delete_audio_note_tag"
 const val DOWNLOAD_AVATAR_WORKER_TAG = "download_avatar_tag"
 const val DOWNLOAD_AUDIO_NOTES_WORKER_TAG = "download_audio_notes_tag"
 const val CALL_WORKER_TAG = "call_tag"
+const val MESSAGE_WORKER_TAG = "msg_tag"
+const val MESSAGE_NOTIFICATION_WORKER_TAG = "msg_notification_tag"
 const val INCOMING_CALL_WORKER_TAG = "incoming_call_tag"
 const val REJECT_CALL_WORKER_TAG = "reject_call_tag"
 
@@ -108,6 +115,8 @@ const val INCOMING_CALL_WORKER_NAME = "incoming_call"
 const val REJECT_CALL_WORKER_NAME = "reject_call"
 const val CANCEL_INVITATION_WORKER_NAME = "cancel_invitation_call"
 const val CANCEL_INCOMING_NOTIFICATION_WORKER_NAME = "cancel_incoming_notification_call"
+const val NOTIFY_NEW_MSG_WORKER_NAME = "notify_new_msg"
+const val SHOW_NEW_MSG_WORKER_NAME = "show_new_msg"
 
 // for data Passing
 const val KEY_PASS_IMAGE_URL = "image_url"

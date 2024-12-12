@@ -65,6 +65,7 @@ const val MSG_SEND_CHANNEL_TOKEN = "sendChannelToken"
 const val MSG_RESPONSE_OPERATION = "responseOperation"
 const val MSG_ACCEPT = "accept"
 const val MSG_REJECT = "reject"
+const val MSG_NEW_MESSAGE = "newMsg"
 
 const val MSG_TYPE = "type"
 const val MSG_AUDIO_CALL_TYPE = "audioCallType"

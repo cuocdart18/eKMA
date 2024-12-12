@@ -7,4 +7,8 @@ interface IFcmRepository {
     suspend fun sendCallInvitationMessage(
         fcmDataMessage: FcmDataMessage
     )
+
+    suspend fun sendNewMessage(
+        fcmDataMessage: FcmDataMessage
+    )
 }

@@ -15,4 +15,10 @@ class FcmRepositoryImpl @Inject constructor(
             eKmaApi.sendCallInvitationMessage(fcmDataMessage.toFcmDataMessageDto())
         }
     }
+
+    override suspend fun sendNewMessage(fcmDataMessage: FcmDataMessage) {
+        safeApiCall {
+            eKmaApi.sendNewMessage(fcmDataMessage.toFcmDataMessageDto())
+        }
+    }
 }

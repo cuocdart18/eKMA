@@ -3,13 +3,16 @@ package com.app.ekma.ui.chat.main
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkManager
 import com.app.ekma.base.viewmodel.BaseViewModel
 import com.app.ekma.common.IMAGE_MSG
 import com.app.ekma.common.TedImagePickerStarter
+import com.app.ekma.common.jsonObjectToString
 import com.app.ekma.common.parseDataToMessage
 import com.app.ekma.common.pattern.singleton.ProfileSingleton
 import com.app.ekma.common.removeStudentCode
 import com.app.ekma.data.models.Message
+import com.app.ekma.data.models.service.IFcmService
 import com.app.ekma.firebase.ACTIVE_STATUS
 import com.app.ekma.firebase.AVATAR_FILE
 import com.app.ekma.firebase.CONNECTIONS
@@ -28,6 +31,7 @@ import com.app.ekma.firebase.USERS_DIR
 import com.app.ekma.firebase.database
 import com.app.ekma.firebase.firestore
 import com.app.ekma.firebase.storage
+import com.app.ekma.work.WorkRunner
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -55,7 +59,9 @@ import javax.inject.Inject
 import kotlin.math.ceil
 
 @HiltViewModel
-class ChatViewModel @Inject constructor() : BaseViewModel() {
+class ChatViewModel @Inject constructor(
+    private val fcmService: IFcmService
+) : BaseViewModel() {
     override val TAG = ChatViewModel::class.java.simpleName
 
     private lateinit var msgCollRef: CollectionReference
@@ -188,16 +194,18 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    fun sendMessage(content: String, type: Int) {
+    fun sendMessage(context: Context, content: String, type: Int) {
         val message = content.trim()
         if (message.isEmpty()) return
 
+        val timeStamp = FieldValue.serverTimestamp()
+        val myCode = ProfileSingleton().studentCode
         val messageMap = mapOf(
-            KEY_MESSAGE_TIMESTAMP_DOC to FieldValue.serverTimestamp(),
+            KEY_MESSAGE_TIMESTAMP_DOC to timeStamp,
             KEY_MESSAGE_CONTENT_DOC to message,
-            KEY_MESSAGE_FROM_DOC to ProfileSingleton().studentCode,
+            KEY_MESSAGE_FROM_DOC to myCode,
             KEY_MESSAGE_TYPE_DOC to type,
-            KEY_MESSAGE_SEEN_DOC to listOf(ProfileSingleton().studentCode)
+            KEY_MESSAGE_SEEN_DOC to listOf(myCode)
         )
         val docRoomRef = firestore
             .collection(KEY_ROOMS_COLL)
@@ -207,6 +215,12 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
             .add(messageMap)
             .addOnSuccessListener {
                 docRoomRef.update(messageMap)
+
+                WorkRunner.runNotifyNewMsgWorker(
+                    workManager = WorkManager.getInstance(context),
+                    receiverCodes = membersCode.filter { it != myCode },
+                    msgData = jsonObjectToString(messageMap)
+                )
             }
     }
 
@@ -219,7 +233,11 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
                     imageRef.downloadUrl.addOnCompleteListener { task ->
                         if (!task.isSuccessful) return@addOnCompleteListener
                         val url = task.result.toString()
-                        sendMessage(url, IMAGE_MSG)
+                        sendMessage(
+                            context = context,
+                            content = url,
+                            type = IMAGE_MSG
+                        )
                     }.addOnFailureListener {
                         it as StorageException
                         logError(it.toString())
