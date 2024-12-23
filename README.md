@@ -36,64 +36,44 @@ KMA trong quá trình học tập
 - Audio, Video calling: gọi trực tuyến, hỗ trợ **PiP mode**
 ## Screenshots
 
-- **LoginActivity**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/LoginActivity.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953272/login1_loxgzw.png)
 
-- **ScoreMainFragment**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/ScoreMainFragment.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953270/score1_dsyuhw.png)
 
-- **SearchDataDialogFragment**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/SearchDataDialogFragment.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953270/score2_zv4mva.png)
 
-- **StudentDetailFragment**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/StudentDetailFragment.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953271/score3_ts4eu4.png)
 
-- **ScheduleMainFragment**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/ScheduleMainFragment.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953271/score4_kftynj.png)
 
-- **NoteDetailFragment**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/NoteDetailFragment.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953273/schedule1_vjuqam.png)
 
-- **NoteMainFragment 1**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/NoteMainFragment%201.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953273/schedule2_h04dns.png)
 
-- **NoteMainFragment 2**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/NoteMainFragment%202.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953273/schedule3_bi3sps.png)
 
-- **InformationFragment**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/InformationFragment.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953272/note1_lw3zwj.png)
 
-- **Update schedule**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/Update%20schedule.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953273/note2_lxjt2j.png)
 
-#### Các chức năng đang trong quá trình hoàn thiện
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953273/note3_lsbthx.png)
 
-- **ChatListFragment**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/ChatListFragment.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953272/infor1_lw4pft.png)
 
-- **ChatFragment**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/ChatFragment.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953272/infor2_dv9pmu.png)
 
-- **ImageViewerFragment**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/ImageViewerFragment.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953272/infor3_eaieqq.png)
 
-- **OutgoingInvitationActivity**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/OutgoingInvitationActivity.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953272/chat1_rf4bhf.png)
 
-- **IncomingInvitationActivity**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/IncomingInvitationActivity.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953272/chat2_a0g1uk.png)
 
-- **AudioCallingActivity**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/AudioCallingActivity.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953270/call1_k6wu9w.png)
 
-- **Audio PiP 1**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/Audio%20PiP%201.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953270/call2_g0qnqx.png)
 
-- **Audio PiP 2**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/Audio%20PiP%202.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953276/call3_ftimq9.png)
 
-- **VideoCallingActivity**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/VideoCallingActivity.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953271/call4_yeuo1c.png)
 
-- **Video PiP**
-![App Screenshot](https://github.com/cuocdart18/eKMA/blob/develop/Screenshots/Video%20PiP.png?raw=true)
+![App Screenshot](https://res.cloudinary.com/dudmseznd/image/upload/v1734953271/call5_jwd7xg.png)
